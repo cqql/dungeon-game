@@ -2,3 +2,11 @@ apply plugin: "application"
 apply plugin: "java"
 
 mainClassName = "dungeon.Main"
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile "junit:junit:4.11"
+}
