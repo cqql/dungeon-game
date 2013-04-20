@@ -2,6 +2,7 @@ apply plugin: "application"
 apply plugin: "java"
 apply plugin: "checkstyle"
 apply plugin: "jdepend"
+apply plugin: "findbugs"
 
 mainClassName = "dungeon.Main"
 
