@@ -14,3 +14,5 @@ repositories {
 dependencies {
   testCompile "junit:junit:4.11"
 }
+
+defaultTasks "test"
