@@ -4,3 +4,6 @@
 
 # Gradle runtime files (hashes, locks)
 /.gradle
+
+# Build artifacts
+/build
