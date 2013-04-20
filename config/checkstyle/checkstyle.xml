@@ -112,10 +112,6 @@
       <property name="format" value="^[A-Z][a-zA-Z]*$" />
     </module>
   </module>
-  <!-- Code Duplication -->
-  <module name="StrictDuplicateCode">
-    <property name="min" value="8" />
-  </module>
 
   <!-- Do not use tabs for indentation -->
   <module name="FileTabCharacter" />
