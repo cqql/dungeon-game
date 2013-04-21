@@ -1,6 +1,14 @@
 Dungeon-Game für das Programmierpraktikum
 =========================================
 
+Anforderungen
+-------------
+
+Um das Programm kompilieren zu können, braucht man:
+
+- JDK7
+
+
 Testing
 -------
 
