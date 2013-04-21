@@ -91,22 +91,22 @@
     <module name="MethodTypeParameterName" />
     <module name="ConstantName" />
     <module name="LocalFinalVariableName">
-      <property name="format" value="^[a-z][a-zA-Z]*$" />
+      <property name="format" value="^[ik]|([a-z][a-zA-Z]+)$" />
     </module>
     <module name="LocalVariableName">
-      <property name="format" value="^[a-z][a-zA-Z]*$" />
+      <property name="format" value="^[ik]|([a-z][a-zA-Z]+)$" />
     </module>
     <module name="MemberName">
-      <property name="format" value="^[a-z][a-zA-Z]*$" />
+      <property name="format" value="^[ik]|([a-z][a-zA-Z]+)$" />
     </module>
     <module name="MethodName">
-      <property name="format" value="^[a-z][a-zA-Z]*$" />
+      <property name="format" value="^[ik]|([a-z][a-zA-Z]+)$" />
     </module>
     <module name="ParameterName">
-      <property name="format" value="^[a-z][a-zA-Z]*$" />
+      <property name="format" value="^[ik]|([a-z][a-zA-Z]+)$" />
     </module>
     <module name="StaticVariableName">
-      <property name="format" value="^[a-z][a-zA-Z]*$" />
+      <property name="format" value="^[ik]|([a-z][a-zA-Z]+)$" />
     </module>
     <module name="TypeName">
       <property name="format" value="^[A-Z][a-zA-Z]*$" />
