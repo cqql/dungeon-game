@@ -21,7 +21,7 @@ public class EventHostTest {
 
   @Test(timeout = 100)
   public void itReturnsOnShutdownEvent () {
-    eventHost.send(LifeCycleEvents.SHUTDOWN);
+    eventHost.send(LifecycleEvents.SHUTDOWN);
 
     eventHost.run();
   }
@@ -41,7 +41,7 @@ public class EventHostTest {
     });
 
     eventHost.send(testEvent);
-    eventHost.send(LifeCycleEvents.SHUTDOWN);
+    eventHost.send(LifecycleEvents.SHUTDOWN);
     eventHost.run();
 
     Assert.assertTrue(eventPublished.get());
@@ -54,13 +54,13 @@ public class EventHostTest {
     eventHost.addListener(new AbstractEventListener() {
       @Override
       public void onEvent (Event event) {
-        if (event == LifeCycleEvents.INITIALIZE) {
+        if (event == LifecycleEvents.INITIALIZE) {
           eventPublished.set(true);
         }
       }
     });
 
-    eventHost.send(LifeCycleEvents.SHUTDOWN);
+    eventHost.send(LifecycleEvents.SHUTDOWN);
     eventHost.run();
 
     Assert.assertTrue(eventPublished.get());

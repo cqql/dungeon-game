@@ -33,7 +33,7 @@ public final class EventHost {
     clients = new ArrayList<EventClient>();
     eventQueue = new LinkedBlockingQueue<Event>();
 
-    send(LifeCycleEvents.INITIALIZE);
+    send(LifecycleEvents.INITIALIZE);
   }
 
   /**
@@ -48,7 +48,7 @@ public final class EventHost {
   }
 
   /**
-   * Runs the event host until a LifeCycleEvents.SHUTDOWN event is received or it's thread is interrupted.
+   * Runs the event host until a LifecycleEvents.SHUTDOWN event is received or it's thread is interrupted.
    */
   public void run () {
     for (EventClient client : clients) {
@@ -113,7 +113,7 @@ public final class EventHost {
   private void handleEvent (Event event) {
     publishEvent(event);
 
-    if (event == LifeCycleEvents.SHUTDOWN) {
+    if (event == LifecycleEvents.SHUTDOWN) {
       running = false;
     }
   }
