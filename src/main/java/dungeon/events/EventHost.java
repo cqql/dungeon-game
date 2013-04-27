@@ -9,6 +9,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Publishes events to all registered listeners.
+ *
+ * And every listener runs in it's own thread.
+ */
 public final class EventHost {
   private ExecutorService executor;
 
@@ -31,10 +36,20 @@ public final class EventHost {
     send(LifeCycleEvents.INITIALIZE);
   }
 
+  /**
+   * Register a listener.
+   *
+   * This may only be called before calling #run().
+   *
+   * @param listener
+   */
   public void addListener (EventListener listener) {
     clients.add(new EventClient(this, listener));
   }
 
+  /**
+   * Runs the event host until a LifeCycleEvents.SHUTDOWN event is received or it's thread is interrupted.
+   */
   public void run () {
     for (EventClient client : clients) {
       executor.execute(client);
@@ -55,6 +70,14 @@ public final class EventHost {
     }
   }
 
+  /**
+   * Send an event.
+   *
+   * This method should be called from the listeners, that want to publish their own events.
+   *
+   * @param event Event to be published
+   * @return true on success, otherwise false
+   */
   public boolean send (Event event) {
     if (event == null) {
       return false;

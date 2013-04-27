@@ -6,7 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class EventClient implements Runnable {
+final class EventClient implements Runnable {
   private EventHost eventHost;
 
   private EventListener listener;
