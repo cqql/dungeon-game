@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EventHostTest {
-  private class TestEvent implements Event {
+  private static class TestEvent implements Event {
 
   }
 
@@ -21,7 +21,7 @@ public class EventHostTest {
 
   @Test(timeout = 100)
   public void itReturnsOnShutdownEvent () {
-    eventHost.send(LifecycleEvents.SHUTDOWN);
+    eventHost.publish(LifecycleEvents.SHUTDOWN);
 
     eventHost.run();
   }
@@ -40,8 +40,8 @@ public class EventHostTest {
       }
     });
 
-    eventHost.send(testEvent);
-    eventHost.send(LifecycleEvents.SHUTDOWN);
+    eventHost.publish(testEvent);
+    eventHost.publish(LifecycleEvents.SHUTDOWN);
     eventHost.run();
 
     Assert.assertTrue(eventPublished.get());
@@ -60,7 +60,7 @@ public class EventHostTest {
       }
     });
 
-    eventHost.send(LifecycleEvents.SHUTDOWN);
+    eventHost.publish(LifecycleEvents.SHUTDOWN);
     eventHost.run();
 
     Assert.assertTrue(eventPublished.get());

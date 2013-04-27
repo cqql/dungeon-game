@@ -33,7 +33,7 @@ public final class EventHost {
     clients = new ArrayList<EventClient>();
     eventQueue = new LinkedBlockingQueue<Event>();
 
-    send(LifecycleEvents.INITIALIZE);
+    publish(LifecycleEvents.INITIALIZE);
   }
 
   /**
@@ -71,14 +71,14 @@ public final class EventHost {
   }
 
   /**
-   * Send an event.
+   * Publish an event.
    *
    * This method should be called from the listeners, that want to publish their own events.
    *
    * @param event Event to be published
    * @return true on success, otherwise false
    */
-  public boolean send (Event event) {
+  public boolean publish (Event event) {
     if (event == null) {
       return false;
     }
