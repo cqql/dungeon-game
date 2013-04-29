@@ -3,7 +3,7 @@ package dungeon.events;
 /**
  * Lifecycle events of the event host.
  */
-public enum LifecycleEvents implements Event {
+public enum LifecycleEvent implements Event {
   /**
    * This will always be the first event, that is published.
    *
