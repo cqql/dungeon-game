@@ -6,14 +6,18 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * A wrapper for an EventListener that manages the event queue and passes the events one after another to the listeners
+ * #onEvent() method.
+ */
 final class EventClient implements Runnable {
-  private EventHost eventHost;
+  private final EventHost eventHost;
 
-  private EventListener listener;
+  private final EventListener listener;
 
-  private BlockingQueue<Event> eventQueue;
+  private final BlockingQueue<Event> eventQueue;
 
-  private AtomicBoolean running;
+  private final AtomicBoolean running;
 
   public EventClient (EventHost eventHost, EventListener listener) {
     this.eventHost = eventHost;
@@ -42,11 +46,19 @@ final class EventClient implements Runnable {
     }
   }
 
+  /**
+   * Ends the client's event loop.
+   */
   public void shutdown () {
     running.set(false);
   }
 
-  public void receive (Event event) {
+  /**
+   * The event host calls this to pass an event to the client.
+   *
+   * Beware that this method is called from the host's thread.
+   */
+  public void onEvent (Event event) {
     try {
       eventQueue.put(event);
     } catch (InterruptedException e) {

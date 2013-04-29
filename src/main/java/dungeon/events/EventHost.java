@@ -15,21 +15,16 @@ import java.util.concurrent.LinkedBlockingQueue;
  * And every listener runs in it's own thread.
  */
 public final class EventHost {
-  private ExecutorService executor;
+  private final ExecutorService executor;
 
-  private Collection<EventClient> clients;
+  private final Collection<EventClient> clients;
 
-  private BlockingQueue<Event> eventQueue;
+  private final BlockingQueue<Event> eventQueue;
 
   private boolean running;
 
   public EventHost () {
-    this(Executors.newCachedThreadPool());
-  }
-
-  public EventHost (ExecutorService executor) {
-    this.executor = executor;
-
+    executor = Executors.newCachedThreadPool();
     clients = new ArrayList<EventClient>();
     eventQueue = new LinkedBlockingQueue<Event>();
 
@@ -118,7 +113,7 @@ public final class EventHost {
 
   private void publishEvent (Event event) {
     for (EventClient client : clients) {
-      client.receive(event);
+      client.onEvent(event);
     }
   }
 }
