@@ -87,14 +87,17 @@ public final class EventHost {
     }
   }
 
+  /**
+   * Shuts down the executor and all clients.
+   *
+   * This does not call executor.shutdownNow, because this will force clients to end and will have bad side effects.
+   */
   private void shutdown () {
     executor.shutdown();
 
     for (EventClient client : clients) {
       client.shutdown();
     }
-
-    executor.shutdownNow();
   }
 
   private void waitForNextEvent () throws InterruptedException {
