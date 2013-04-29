@@ -13,15 +13,11 @@ package dungeon.events;
 public interface EventListener {
   /**
    * Sets the event host, so that listeners can publish their own events.
-   *
-   * @param eventHost
    */
   public void setEventHost (EventHost eventHost);
 
   /**
    * This method will be called every time the event host publishes an event.
-   *
-   * @param event
    */
   public void onEvent (Event event);
 }

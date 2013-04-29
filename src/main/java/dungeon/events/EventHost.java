@@ -40,8 +40,6 @@ public final class EventHost {
    * Register a listener.
    *
    * This may only be called before calling #run().
-   *
-   * @param listener
    */
   public void addListener (EventListener listener) {
     clients.add(new EventClient(this, listener));
