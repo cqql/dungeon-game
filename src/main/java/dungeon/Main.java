@@ -1,8 +1,13 @@
 package dungeon;
 
+import dungeon.events.EventHost;
+
 public class Main {
   public static void main (String[] args) {
-    System.out.println("Welcome to the dungeon - von Louise");
-    System.out.println("It's gonna be awesome!");
+    Log.setLevel(Log.Level.NOTICE);
+
+    EventHost eventHost = new EventHost();
+
+    eventHost.run();
   }
 }
