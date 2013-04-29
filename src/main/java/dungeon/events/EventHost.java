@@ -97,11 +97,13 @@ public final class EventHost {
   }
 
   /**
-   * Shuts down the executor and all clients.
+   * Shuts down the host, the executor and all clients.
    *
    * This does not call executor.shutdownNow, because this will force clients to end and will have bad side effects.
    */
   private void shutdown () {
+    running = false;
+
     executor.shutdown();
 
     for (Client client : clients) {
@@ -119,7 +121,7 @@ public final class EventHost {
     publishEvent(event);
 
     if (event == LifecycleEvent.SHUTDOWN) {
-      running = false;
+      shutdown();
     }
   }
 
