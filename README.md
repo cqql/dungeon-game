@@ -18,8 +18,13 @@ Testing
 Running
 -------
 
-`./gradle run` führt zuerst die Tests aus, dann verschiedene Qualitäts- und Stilchecks und zuletzt die eigentliche
-Applikation.
+`./gradle run` führt die Applikation aus.
+
+
+Checks
+------
+
+`./gradle check` überprüft den Quellcode auf potenzielle Fehlerquellen etc.
 
 
 Autoren

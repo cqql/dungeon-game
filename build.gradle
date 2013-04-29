@@ -16,6 +16,3 @@ dependencies {
 }
 
 defaultTasks "test"
-
-// Execute tests and checks before running the application
-run.dependsOn check
