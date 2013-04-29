@@ -17,7 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public final class EventHost {
   private final ExecutorService executor;
 
-  private final Collection<EventClient> clients;
+  private final Collection<Client> clients;
 
   private final BlockingQueue<Event> eventQueue;
 
@@ -25,26 +25,35 @@ public final class EventHost {
 
   public EventHost () {
     executor = Executors.newCachedThreadPool();
-    clients = new ArrayList<EventClient>();
+    clients = new ArrayList<Client>();
     eventQueue = new LinkedBlockingQueue<Event>();
 
     publish(LifecycleEvent.INITIALIZE);
   }
 
   /**
-   * Register a listener.
+   * Add an event listener.
    *
    * This may only be called before calling #run().
    */
-  public void addListener (EventListener listener) {
-    clients.add(new EventClient(this, listener));
+  public void addListener (EventListener eventListener) {
+    clients.add(new EventBuffer(this, eventListener));
+  }
+
+  /**
+   * Add an event source.
+   *
+   * This may only be called before calling #run().
+   */
+  public void addSource (EventSource eventSource) {
+    clients.add(eventSource);
   }
 
   /**
    * Runs the event host until a LifecycleEvent.SHUTDOWN event is received or it's thread is interrupted.
    */
   public void run () {
-    for (EventClient client : clients) {
+    for (Client client : clients) {
       executor.execute(client);
     }
 
@@ -95,7 +104,7 @@ public final class EventHost {
   private void shutdown () {
     executor.shutdown();
 
-    for (EventClient client : clients) {
+    for (Client client : clients) {
       client.shutdown();
     }
   }
@@ -115,7 +124,7 @@ public final class EventHost {
   }
 
   private void publishEvent (Event event) {
-    for (EventClient client : clients) {
+    for (Client client : clients) {
       client.onEvent(event);
     }
   }
