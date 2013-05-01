@@ -88,7 +88,6 @@
 
     <!-- Naming Conventions -->
     <!-- Disallow numbers in every name except constants -->
-    <module name="AbstractClassName" />
     <module name="ClassTypeParameterName" />
     <module name="MethodTypeParameterName" />
     <module name="ConstantName" />
