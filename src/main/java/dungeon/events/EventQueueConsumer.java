@@ -9,22 +9,18 @@ import java.util.concurrent.LinkedBlockingQueue;
  * A wrapper for an EventListener that manages an event queue and passes the events one after another to the listeners
  * #onEvent() method.
  */
-public final class EventBuffer extends AbstractEventConsumer {
+public final class EventQueueConsumer extends AbstractEventConsumer {
   private final EventListener listener;
 
   private final BlockingQueue<Event> eventQueue;
 
-  public EventBuffer (EventHost eventHost, EventListener listener) {
-    super(eventHost);
-
+  public EventQueueConsumer (EventListener listener) {
     this.listener = listener;
     eventQueue = new LinkedBlockingQueue<Event>();
   }
 
   @Override
   public void run () {
-    listener.setEventHost(getEventHost());
-
     while (isRunning()) {
       try {
         Event event = eventQueue.take();

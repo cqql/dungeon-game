@@ -37,15 +37,19 @@ public final class EventHost {
    * This may only be called before calling #run().
    */
   public void addListener (EventListener eventListener) {
-    eventConsumers.add(new EventBuffer(this, eventListener));
+    eventConsumers.add(new EventQueueConsumer(eventListener));
+  }
+
+  public void addConsumer (EventConsumer eventConsumer) {
+    eventConsumers.add(eventConsumer);
   }
 
   /**
    * Runs the event host until a LifecycleEvent.SHUTDOWN event is received or it's thread is interrupted.
    */
   public void run () {
-    for (EventConsumer client : eventConsumers) {
-      executor.execute(client);
+    for (EventConsumer eventConsumer : eventConsumers) {
+      executor.execute(eventConsumer);
     }
 
     running = true;

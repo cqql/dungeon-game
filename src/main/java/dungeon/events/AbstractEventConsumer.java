@@ -2,17 +2,8 @@ package dungeon.events;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * A general implementation of something, that consumes and/or produces events.
- */
-abstract class AbstractEventConsumer implements EventConsumer {
-  private final EventHost eventHost;
-
+public abstract class AbstractEventConsumer implements EventConsumer {
   private final AtomicBoolean running = new AtomicBoolean(true);
-
-  public AbstractEventConsumer (EventHost eventHost) {
-    this.eventHost = eventHost;
-  }
 
   /**
    * You should stop.
@@ -30,16 +21,11 @@ abstract class AbstractEventConsumer implements EventConsumer {
   }
 
   /**
-   * The event host calls this to pass an event to the client.
-   *
-   * Beware that this method is called from the host's thread.
+   * This is intentionally a NOP in case you want to create a consumer that does not actually depend on the received
+   * events.
    */
   @Override
   public void onEvent (Event event) {
 
-  }
-
-  public EventHost getEventHost () {
-    return eventHost;
   }
 }
