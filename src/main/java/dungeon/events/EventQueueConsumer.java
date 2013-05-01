@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * A wrapper for an EventHandler that manages an event queue and passes the events one after another to the handlers
- * #onEvent() method.
+ * #handleEvent() method.
  *
  * This class is thread-safe.
  */
@@ -30,7 +30,7 @@ public final class EventQueueConsumer extends AbstractEventConsumer {
       try {
         Event event = eventQueue.take();
 
-        eventHandler.onEvent(event);
+        eventHandler.handleEvent(event);
       } catch (InterruptedException e) {
         Log.notice("EventQueueConsumer interrupted while running", e);
 

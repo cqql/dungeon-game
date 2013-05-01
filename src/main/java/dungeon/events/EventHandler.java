@@ -10,5 +10,5 @@ public interface EventHandler {
   /**
    * This method will be called every time the event host publishes an event.
    */
-  public void onEvent (Event event);
+  public void handleEvent (Event event);
 }
