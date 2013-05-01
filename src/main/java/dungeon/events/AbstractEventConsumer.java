@@ -5,18 +5,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * A general implementation of something, that consumes and/or produces events.
  */
-abstract class Client implements Runnable {
+abstract class AbstractEventConsumer implements EventConsumer {
   private final EventHost eventHost;
 
   private final AtomicBoolean running = new AtomicBoolean(true);
 
-  public Client (EventHost eventHost) {
+  public AbstractEventConsumer (EventHost eventHost) {
     this.eventHost = eventHost;
   }
 
   /**
    * You should stop.
    */
+  @Override
   public void shutdown () {
     running.set(false);
   }
@@ -33,6 +34,7 @@ abstract class Client implements Runnable {
    *
    * Beware that this method is called from the host's thread.
    */
+  @Override
   public void onEvent (Event event) {
 
   }

@@ -6,7 +6,7 @@ package dungeon.events;
  * The tasks left to you is implementing #run(). Be aware that you have to check #isRunning() regularly and stop if it's
  * false.
  */
-public abstract class EventSource extends Client {
+public abstract class EventSource extends AbstractEventConsumer {
   public EventSource (EventHost eventHost) {
     super(eventHost);
   }

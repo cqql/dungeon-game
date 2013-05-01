@@ -9,7 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * A wrapper for an EventListener that manages an event queue and passes the events one after another to the listeners
  * #onEvent() method.
  */
-public final class EventBuffer extends Client {
+public final class EventBuffer extends AbstractEventConsumer {
   private final EventListener listener;
 
   private final BlockingQueue<Event> eventQueue;

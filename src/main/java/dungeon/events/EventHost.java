@@ -17,7 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public final class EventHost {
   private final ExecutorService executor;
 
-  private final Collection<Client> clients;
+  private final Collection<EventConsumer> eventConsumers;
 
   private final BlockingQueue<Event> eventQueue;
 
@@ -25,7 +25,7 @@ public final class EventHost {
 
   public EventHost () {
     executor = Executors.newCachedThreadPool();
-    clients = new ArrayList<Client>();
+    eventConsumers = new ArrayList<EventConsumer>();
     eventQueue = new LinkedBlockingQueue<Event>();
 
     publish(LifecycleEvent.INITIALIZE);
@@ -37,7 +37,7 @@ public final class EventHost {
    * This may only be called before calling #run().
    */
   public void addListener (EventListener eventListener) {
-    clients.add(new EventBuffer(this, eventListener));
+    eventConsumers.add(new EventBuffer(this, eventListener));
   }
 
   /**
@@ -46,14 +46,14 @@ public final class EventHost {
    * This may only be called before calling #run().
    */
   public void addSource (EventSource eventSource) {
-    clients.add(eventSource);
+    eventConsumers.add(eventSource);
   }
 
   /**
    * Runs the event host until a LifecycleEvent.SHUTDOWN event is received or it's thread is interrupted.
    */
   public void run () {
-    for (Client client : clients) {
+    for (EventConsumer client : eventConsumers) {
       executor.execute(client);
     }
 
@@ -97,17 +97,17 @@ public final class EventHost {
   }
 
   /**
-   * Shuts down the host, the executor and all clients.
+   * Shuts down the host, the executor and all eventConsumers.
    *
-   * This does not call executor.shutdownNow, because this will force clients to end and will have bad side effects.
+   * This does not call executor.shutdownNow, because this will force eventConsumers to end and will have bad side effects.
    */
   private void shutdown () {
     running = false;
 
     executor.shutdown();
 
-    for (Client client : clients) {
-      client.shutdown();
+    for (EventConsumer eventConsumer : eventConsumers) {
+      eventConsumer.shutdown();
     }
   }
 
@@ -126,8 +126,8 @@ public final class EventHost {
   }
 
   private void publishEvent (Event event) {
-    for (Client client : clients) {
-      client.onEvent(event);
+    for (EventConsumer eventConsumer : eventConsumers) {
+      eventConsumer.onEvent(event);
     }
   }
 }
