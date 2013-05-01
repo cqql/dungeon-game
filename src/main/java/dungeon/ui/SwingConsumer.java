@@ -16,14 +16,12 @@ public class SwingConsumer implements EventConsumer {
     this.frame = frame;
   }
 
+  /**
+   * The frame is responsible for disposing itself upon the LifecycleEvent.SHUTDOWN event.
+   */
   @Override
   public void shutdown () {
-    SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run () {
-        frame.dispose();
-      }
-    });
+
   }
 
   /**

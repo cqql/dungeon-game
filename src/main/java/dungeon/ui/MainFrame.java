@@ -27,6 +27,8 @@ public class MainFrame extends EventedFrame {
   public void handleEvent (Event event) {
     if (event == LifecycleEvent.INITIALIZE) {
       initialize();
+    } else if (event == LifecycleEvent.SHUTDOWN) {
+      dispose();
     }
   }
 
