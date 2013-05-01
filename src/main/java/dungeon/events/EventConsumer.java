@@ -1,5 +1,11 @@
 package dungeon.events;
 
+/**
+ * Consume a stream of events.
+ *
+ * WARNING: #shutdown() and #onEvent() will be called from the event host's thread whereas #run() is running in it's own
+ * thread. Therefore you have to care about synchronization.
+ */
 public interface EventConsumer extends Runnable {
   /**
    * You should stop.

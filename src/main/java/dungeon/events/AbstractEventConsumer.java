@@ -2,12 +2,16 @@ package dungeon.events;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * An abstract event runner.
+ *
+ * Your job is to override #run() and continually check #isRunning() and stop working if it returns false.
+ *
+ * This class is thread-safe.
+ */
 public abstract class AbstractEventConsumer implements EventConsumer {
   private final AtomicBoolean running = new AtomicBoolean(true);
 
-  /**
-   * You should stop.
-   */
   @Override
   public void shutdown () {
     running.set(false);

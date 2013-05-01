@@ -10,9 +10,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Publishes events to all registered consumers.
+ * Publishes events to attached event consumers.
  *
- * And every consumer runs in it's own thread.
+ * Be aware of the fact that every event consumer will be running in it's own thread.
  */
 public final class EventHost {
   private final ExecutorService executor;
