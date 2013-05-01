@@ -2,22 +2,23 @@ package dungeon.ui;
 
 import dungeon.events.Event;
 import dungeon.events.EventConsumer;
+import dungeon.events.EventHandler;
 
 import javax.swing.*;
 
 /**
- * An event consumer that passes the events to the given frame in the swing event dispatching thread, so that the frame
- * can be manipulated in response to events, which is forbidden from other threads.
+ * An event consumer that passes the events to the given event handler in the swing event dispatching thread (EDT), so
+ * that the event handler can be manipulated in response to events, which is forbidden from other threads.
  */
 public class SwingConsumer implements EventConsumer {
-  private final EventedFrame frame;
+  private final EventHandler eventHandler;
 
-  public SwingConsumer (EventedFrame frame) {
-    this.frame = frame;
+  public SwingConsumer (EventHandler frame) {
+    this.eventHandler = frame;
   }
 
   /**
-   * The frame is responsible for disposing itself upon the LifecycleEvent.SHUTDOWN event.
+   * The event handler is responsible for disposing itself upon the LifecycleEvent.SHUTDOWN event.
    */
   @Override
   public void shutdown () {
@@ -25,20 +26,20 @@ public class SwingConsumer implements EventConsumer {
   }
 
   /**
-   * Sends events to the swing EDT.
+   * Sends events to the EDT.
    */
   @Override
   public void onEvent (final Event event) {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run () {
-        frame.handleEvent(event);
+        eventHandler.handleEvent(event);
       }
     });
   }
 
   /**
-   * This is a no-op, because all interaction with the frame has to be done in the swing event dispatching thread.
+   * This is a no-op, because all event handling will be done on the EDT.
    */
   @Override
   public void run () {

@@ -1,9 +1,11 @@
 package dungeon.ui;
 
 import dungeon.events.Event;
+import dungeon.events.EventHandler;
 import dungeon.events.EventHost;
 import dungeon.events.LifecycleEvent;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -14,7 +16,7 @@ import java.awt.event.WindowEvent;
  * handleEvent() will be called on the swing EDT. This means that any methods called by handleEvent() are generally
  * save to manipulate the frame.
  */
-public class MainFrame extends EventedFrame {
+public class MainFrame extends JFrame implements EventHandler {
   public static final String TITLE = "DUNGEON GAME";
 
   private final EventHost eventHost;
