@@ -41,15 +41,6 @@ public final class EventHost {
   }
 
   /**
-   * Add an event source.
-   *
-   * This may only be called before calling #run().
-   */
-  public void addSource (EventSource eventSource) {
-    eventConsumers.add(eventSource);
-  }
-
-  /**
    * Runs the event host until a LifecycleEvent.SHUTDOWN event is received or it's thread is interrupted.
    */
   public void run () {
