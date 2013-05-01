@@ -25,7 +25,7 @@ public abstract class AbstractEventConsumer implements EventConsumer {
   }
 
   /**
-   * This is intentionally a NOP in case you want to create a consumer that does not actually depend on the received
+   * This is intentionally a no-op in case you want to create a consumer that does not actually depend on the received
    * events.
    */
   @Override
