@@ -10,9 +10,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Publishes events to all registered listeners.
+ * Publishes events to all registered consumers.
  *
- * And every listener runs in it's own thread.
+ * And every consumer runs in it's own thread.
  */
 public final class EventHost {
   private final ExecutorService executor;
@@ -32,12 +32,12 @@ public final class EventHost {
   }
 
   /**
-   * Add an event listener.
+   * Add an event handler.
    *
    * This may only be called before calling #run().
    */
-  public void addListener (EventListener eventListener) {
-    eventConsumers.add(new EventQueueConsumer(eventListener));
+  public void addHandler (EventHandler eventHandler) {
+    eventConsumers.add(new EventQueueConsumer(eventHandler));
   }
 
   public void addConsumer (EventConsumer eventConsumer) {
@@ -70,7 +70,7 @@ public final class EventHost {
   /**
    * Publish an event.
    *
-   * This method should be called from the listeners, that want to publish their own events.
+   * This method should be called from the handlers, that want to publish their own events.
    *
    * @param event Event to be published
    * @return true on success, otherwise false

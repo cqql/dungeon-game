@@ -6,16 +6,16 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * A wrapper for an EventListener that manages an event queue and passes the events one after another to the listeners
+ * A wrapper for an EventHandler that manages an event queue and passes the events one after another to the handlers
  * #onEvent() method.
  */
 public final class EventQueueConsumer extends AbstractEventConsumer {
-  private final EventListener listener;
+  private final EventHandler eventHandler;
 
   private final BlockingQueue<Event> eventQueue;
 
-  public EventQueueConsumer (EventListener listener) {
-    this.listener = listener;
+  public EventQueueConsumer (EventHandler eventHandler) {
+    this.eventHandler = eventHandler;
     eventQueue = new LinkedBlockingQueue<Event>();
   }
 
@@ -25,7 +25,7 @@ public final class EventQueueConsumer extends AbstractEventConsumer {
       try {
         Event event = eventQueue.take();
 
-        listener.onEvent(event);
+        eventHandler.onEvent(event);
       } catch (InterruptedException e) {
         Log.notice("Event client interrupted while running", e);
 
