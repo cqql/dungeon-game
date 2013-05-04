@@ -28,28 +28,28 @@ public class MainFrame extends JFrame implements EventHandler {
   @Override
   public void handleEvent (Event event) {
     if (event == LifecycleEvent.INITIALIZE) {
-      initialize();
+      this.initialize();
     } else if (event == LifecycleEvent.SHUTDOWN) {
-      dispose();
+      this.dispose();
     }
   }
 
   private void initialize () {
-    setName(TITLE);
-    setTitle(TITLE);
+    this.setName(TITLE);
+    this.setTitle(TITLE);
 
-    setUndecorated(true);
-    setExtendedState(Frame.MAXIMIZED_BOTH);
-    setResizable(false);
+    this.setUndecorated(true);
+    this.setExtendedState(Frame.MAXIMIZED_BOTH);
+    this.setResizable(false);
 
-    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-    addWindowListener(new WindowAdapter() {
+    this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    this.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing (WindowEvent e) {
-        eventHost.publish(LifecycleEvent.SHUTDOWN);
+        MainFrame.this.eventHost.publish(LifecycleEvent.SHUTDOWN);
       }
     });
 
-    setVisible(true);
+    this.setVisible(true);
   }
 }

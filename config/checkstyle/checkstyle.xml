@@ -64,6 +64,9 @@
     <module name="MultipleStringLiterals" />
     <module name="MultipleVariableDeclarations" />
     <module name="OneStatementPerLine" />
+    <module name="RequireThis">
+      <property name="checkMethods" value="true" />
+    </module>
 
     <!-- Imports -->
     <module name="RedundantImport" />

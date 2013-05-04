@@ -24,11 +24,11 @@ public final class EventHost {
   private boolean running;
 
   public EventHost () {
-    executor = Executors.newCachedThreadPool();
-    eventConsumers = new ArrayList<EventConsumer>();
-    eventQueue = new LinkedBlockingQueue<Event>();
+    this.executor = Executors.newCachedThreadPool();
+    this.eventConsumers = new ArrayList<EventConsumer>();
+    this.eventQueue = new LinkedBlockingQueue<Event>();
 
-    publish(LifecycleEvent.INITIALIZE);
+    this.publish(LifecycleEvent.INITIALIZE);
   }
 
   /**
@@ -37,33 +37,33 @@ public final class EventHost {
    * This may only be called before calling #run().
    */
   public void addHandler (EventHandler eventHandler) {
-    eventConsumers.add(new EventQueueConsumer(eventHandler));
+    this.eventConsumers.add(new EventQueueConsumer(eventHandler));
   }
 
   public void addConsumer (EventConsumer eventConsumer) {
-    eventConsumers.add(eventConsumer);
+    this.eventConsumers.add(eventConsumer);
   }
 
   /**
    * Runs the event host until a LifecycleEvent.SHUTDOWN event is received or it's thread is interrupted.
    */
   public void run () {
-    for (EventConsumer eventConsumer : eventConsumers) {
-      executor.execute(eventConsumer);
+    for (EventConsumer eventConsumer : this.eventConsumers) {
+      this.executor.execute(eventConsumer);
     }
 
-    running = true;
+    this.running = true;
 
     try {
-      while (running) {
-        waitForNextEvent();
+      while (this.running) {
+        this.waitForNextEvent();
       }
     } catch (InterruptedException e) {
       Log.notice("The event host has been interrupted", e);
     } finally {
       Log.notice("The event host is shutting down");
 
-      shutdown();
+      this.shutdown();
     }
   }
 
@@ -81,7 +81,7 @@ public final class EventHost {
     }
 
     try {
-      eventQueue.put(event);
+      this.eventQueue.put(event);
 
       return true;
     } catch (InterruptedException e) {
@@ -97,31 +97,31 @@ public final class EventHost {
    * This does not call executor.shutdownNow, because this will force eventConsumers to end and will have bad side effects.
    */
   private void shutdown () {
-    running = false;
+    this.running = false;
 
-    executor.shutdown();
+    this.executor.shutdown();
 
-    for (EventConsumer eventConsumer : eventConsumers) {
+    for (EventConsumer eventConsumer : this.eventConsumers) {
       eventConsumer.shutdown();
     }
   }
 
   private void waitForNextEvent () throws InterruptedException {
-    Event event = eventQueue.take();
+    Event event = this.eventQueue.take();
 
-    handleEvent(event);
+    this.handleEvent(event);
   }
 
   private void handleEvent (Event event) {
-    publishEvent(event);
+    this.publishEvent(event);
 
     if (event == LifecycleEvent.SHUTDOWN) {
-      shutdown();
+      this.shutdown();
     }
   }
 
   private void publishEvent (Event event) {
-    for (EventConsumer eventConsumer : eventConsumers) {
+    for (EventConsumer eventConsumer : this.eventConsumers) {
       eventConsumer.onEvent(event);
     }
   }

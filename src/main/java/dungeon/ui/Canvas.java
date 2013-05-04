@@ -15,23 +15,23 @@ public class Canvas extends JPanel implements EventHandler {
   @Override
   public void handleEvent (Event event) {
     if (event instanceof MoveEvent) {
-      move((MoveEvent)event);
+      this.move((MoveEvent)event);
     }
   }
 
   private void move (MoveEvent event) {
     switch (event) {
       case UP:
-        point.y--;
+        this.point.y--;
         break;
       case DOWN:
-        point.y++;
+        this.point.y++;
         break;
       case LEFT:
-        point.x--;
+        this.point.x--;
         break;
       case RIGHT:
-        point.x++;
+        this.point.x++;
         break;
       default:
     }
@@ -43,6 +43,6 @@ public class Canvas extends JPanel implements EventHandler {
   protected void paintComponent (Graphics g) {
     super.paintComponent(g);
 
-    g.drawLine(0, 0, point.x, point.y);
+    g.drawLine(0, 0, this.point.x, this.point.y);
   }
 }

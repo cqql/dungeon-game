@@ -14,14 +14,14 @@ public abstract class AbstractEventConsumer implements EventConsumer {
 
   @Override
   public void shutdown () {
-    running.set(false);
+    this.running.set(false);
   }
 
   /**
    * Should this client still run?
    */
   public boolean isRunning () {
-    return running.get();
+    return this.running.get();
   }
 
   /**

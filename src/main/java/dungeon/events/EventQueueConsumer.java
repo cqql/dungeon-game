@@ -18,7 +18,7 @@ public final class EventQueueConsumer extends AbstractEventConsumer {
 
   public EventQueueConsumer (EventHandler eventHandler) {
     this.eventHandler = eventHandler;
-    eventQueue = new LinkedBlockingQueue<Event>();
+    this.eventQueue = new LinkedBlockingQueue<Event>();
   }
 
   /**
@@ -28,13 +28,13 @@ public final class EventQueueConsumer extends AbstractEventConsumer {
   public void run () {
     while (isRunning()) {
       try {
-        Event event = eventQueue.take();
+        Event event = this.eventQueue.take();
 
-        eventHandler.handleEvent(event);
+        this.eventHandler.handleEvent(event);
       } catch (InterruptedException e) {
         Log.notice("EventQueueConsumer interrupted while running", e);
 
-        shutdown();
+        this.shutdown();
       }
     }
   }
@@ -44,7 +44,7 @@ public final class EventQueueConsumer extends AbstractEventConsumer {
    */
   public void onEvent (Event event) {
     try {
-      eventQueue.put(event);
+      this.eventQueue.put(event);
     } catch (InterruptedException e) {
       Log.notice("EventQueueConsumer interrupted while receiving an event", e);
     }

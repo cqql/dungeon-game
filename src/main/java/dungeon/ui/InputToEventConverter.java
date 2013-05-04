@@ -22,16 +22,16 @@ public class InputToEventConverter implements KeyListener {
   public void keyPressed (KeyEvent keyEvent) {
     switch (keyEvent.getKeyChar()) {
       case 'w':
-        eventHost.publish(MoveEvent.UP);
+        this.eventHost.publish(MoveEvent.UP);
         break;
       case 'a':
-        eventHost.publish(MoveEvent.LEFT);
+        this.eventHost.publish(MoveEvent.LEFT);
         break;
       case 's':
-        eventHost.publish(MoveEvent.DOWN);
+        this.eventHost.publish(MoveEvent.DOWN);
         break;
       case 'd':
-        eventHost.publish(MoveEvent.RIGHT);
+        this.eventHost.publish(MoveEvent.RIGHT);
         break;
       default:
     }

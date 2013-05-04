@@ -33,7 +33,7 @@ public class SwingConsumer implements EventConsumer {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run () {
-        eventHandler.handleEvent(event);
+        SwingConsumer.this.eventHandler.handleEvent(event);
       }
     });
   }
