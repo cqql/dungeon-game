@@ -28,10 +28,10 @@ public class InputToEventConverter implements KeyListener {
         eventHost.publish(MoveEvent.LEFT);
         break;
       case 's':
-        eventHost.publish(MoveEvent.RIGHT);
+        eventHost.publish(MoveEvent.DOWN);
         break;
       case 'd':
-        eventHost.publish(MoveEvent.DOWN);
+        eventHost.publish(MoveEvent.RIGHT);
         break;
       default:
     }

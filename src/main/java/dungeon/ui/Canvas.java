@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class Canvas extends JPanel implements EventHandler {
   private static final int START_POSITION = 200;
-  private int x = START_POSITION;
-  private int y = START_POSITION;
+
+  private Point point = new Point(START_POSITION, START_POSITION);
 
   @Override
   public void handleEvent (Event event) {
@@ -22,16 +22,16 @@ public class Canvas extends JPanel implements EventHandler {
   private void move (MoveEvent event) {
     switch (event) {
       case UP:
-        x--;
+        point.y--;
         break;
       case DOWN:
-        x++;
+        point.y++;
         break;
       case LEFT:
-        y--;
+        point.x--;
         break;
       case RIGHT:
-        y++;
+        point.x++;
         break;
       default:
     }
@@ -43,6 +43,6 @@ public class Canvas extends JPanel implements EventHandler {
   protected void paintComponent (Graphics g) {
     super.paintComponent(g);
 
-    g.drawLine(0, 0, x, y);
+    g.drawLine(0, 0, point.x, point.y);
   }
 }
