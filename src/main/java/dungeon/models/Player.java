@@ -4,7 +4,7 @@ public class Player {
   public static class Position {
     public float x;
     public float y;
-    public String roomId;
+    public String roomID;
   }
 
   public Position position;
