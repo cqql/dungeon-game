@@ -1,5 +1,8 @@
 package dungeon.models;
 
-public class World {
+import java.util.List;
 
+public class World {
+  public List<Room> rooms;
+  public Player player;
 }
