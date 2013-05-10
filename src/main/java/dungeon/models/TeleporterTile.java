@@ -4,7 +4,7 @@ public class TeleporterTile extends Tile {
   public Target target;
 
   public static class Target {
-    public String roomID;
+    public String roomId;
 
     public int x;
 
