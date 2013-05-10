@@ -1,6 +1,6 @@
 package dungeon.ui;
 
-import dungeon.MoveEvent;
+import dungeon.ui.events.MoveCommand;
 import dungeon.events.Event;
 import dungeon.events.EventHandler;
 
@@ -14,12 +14,12 @@ public class Canvas extends JPanel implements EventHandler {
 
   @Override
   public void handleEvent (Event event) {
-    if (event instanceof MoveEvent) {
-      this.move((MoveEvent)event);
+    if (event instanceof MoveCommand) {
+      this.move((MoveCommand)event);
     }
   }
 
-  private void move (MoveEvent event) {
+  private void move (MoveCommand event) {
     switch (event) {
       case UP:
         this.point.y--;
