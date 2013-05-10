@@ -1,13 +1,22 @@
 package dungeon.models;
 
 public class Enemy {
-  public int strength = 1;
+  public final int strength = 1;
 
-  public static class Position {
-    public float x;
+  public final Position startPosition;
 
-    public float y;
+  public Enemy (Position startPosition) {
+    this.startPosition = startPosition;
   }
 
-  public Position position;
+  public static class Position {
+    public final float x;
+
+    public final float y;
+
+    public Position (float x, float y) {
+      this.x = x;
+      this.y = y;
+    }
+  }
 }
