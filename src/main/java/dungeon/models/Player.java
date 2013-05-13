@@ -1,5 +1,7 @@
 package dungeon.models;
 
+import dungeon.models.events.Transform;
+
 public class Player {
   private final String name;
 
@@ -30,5 +32,9 @@ public class Player {
 
   public Position getPosition () {
     return this.position;
+  }
+
+  public Player apply (Transform transform) {
+    return this;
   }
 }

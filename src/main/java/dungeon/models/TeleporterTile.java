@@ -1,5 +1,7 @@
 package dungeon.models;
 
+import dungeon.models.events.Transform;
+
 public class TeleporterTile extends Tile {
   private final Target target;
 
@@ -37,5 +39,9 @@ public class TeleporterTile extends Tile {
     public int getY () {
       return this.y;
     }
+  }
+
+  public TeleporterTile apply (Transform transform) {
+    return this;
   }
 }

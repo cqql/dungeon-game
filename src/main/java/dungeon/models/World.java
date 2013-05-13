@@ -1,5 +1,7 @@
 package dungeon.models;
 
+import dungeon.models.events.Transform;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,5 +32,9 @@ public class World {
     }
 
     return null;
+  }
+
+  public World apply (Transform transform) {
+    return this;
   }
 }
