@@ -18,22 +18,22 @@ public class Room {
   }
 
   public String getId () {
-    return id;
+    return this.id;
   }
 
   public List<Enemy> getEnemies () {
-    return enemies;
+    return this.enemies;
   }
 
   public List<List<Tile>> getTiles () {
-    return tiles;
+    return this.tiles;
   }
 
   public int getSize () {
-    if (tiles.size() == 0) {
+    if (this.tiles.size() == 0) {
       return 0;
     } else {
-      return tiles.get(0).size();
+      return this.tiles.get(0).size();
     }
   }
 }

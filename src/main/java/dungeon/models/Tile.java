@@ -11,6 +11,6 @@ public class Tile {
   }
 
   public boolean isBlocking () {
-    return blocking;
+    return this.blocking;
   }
 }

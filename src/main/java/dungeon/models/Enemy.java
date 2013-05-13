@@ -10,10 +10,10 @@ public class Enemy {
   }
 
   public int getStrength () {
-    return strength;
+    return this.strength;
   }
 
   public Position getStartPosition () {
-    return startPosition;
+    return this.startPosition;
   }
 }

@@ -17,18 +17,18 @@ public class Player {
   }
 
   public String getName () {
-    return name;
+    return this.name;
   }
 
   public int getHitPoints () {
-    return hitPoints;
+    return this.hitPoints;
   }
 
   public String getRoomId () {
-    return roomId;
+    return this.roomId;
   }
 
   public Position getPosition () {
-    return position;
+    return this.position;
   }
 }

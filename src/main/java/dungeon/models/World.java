@@ -15,16 +15,16 @@ public class World {
   }
 
   public List<Room> getRooms () {
-    return rooms;
+    return this.rooms;
   }
 
   public Player getPlayer () {
-    return player;
+    return this.player;
   }
 
   public Room getCurrentRoom () {
-    for (Room room : rooms) {
-      if (room.getId() == player.getRoomId()) {
+    for (Room room : this.rooms) {
+      if (room.getId() == this.player.getRoomId()) {
         return room;
       }
     }

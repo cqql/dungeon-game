@@ -10,20 +10,32 @@ public class TeleporterTile extends Tile {
   }
 
   public Target getTarget () {
-    return target;
+    return this.target;
   }
 
   public static class Target {
-    public final String roomId;
+    private final String roomId;
 
-    public final int x;
+    private final int x;
 
-    public final int y;
+    private final int y;
 
     public Target (String roomId, int x, int y) {
       this.roomId = roomId;
       this.x = x;
       this.y = y;
+    }
+
+    public String getRoomId () {
+      return this.roomId;
+    }
+
+    public int getX () {
+      return this.x;
+    }
+
+    public int getY () {
+      return this.y;
     }
   }
 }
