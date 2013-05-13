@@ -4,6 +4,7 @@ import dungeon.Log;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A wrapper for an EventHandler that manages an event queue and passes the events one after another to the handlers
@@ -18,7 +19,7 @@ public final class EventQueueConsumer extends AbstractEventConsumer {
 
   public EventQueueConsumer (EventHandler eventHandler) {
     this.eventHandler = eventHandler;
-    this.eventQueue = new LinkedBlockingQueue<Event>();
+    this.eventQueue = new LinkedBlockingQueue<>();
   }
 
   /**
@@ -28,9 +29,12 @@ public final class EventQueueConsumer extends AbstractEventConsumer {
   public void run () {
     while (isRunning()) {
       try {
-        Event event = this.eventQueue.take();
+        // Wait 10 milliseconds at most to prevent dead lock
+        Event event = this.eventQueue.poll(10, TimeUnit.MILLISECONDS);
 
-        this.eventHandler.handleEvent(event);
+        if (event != null) {
+          this.eventHandler.handleEvent(event);
+        }
       } catch (InterruptedException e) {
         Log.notice("EventQueueConsumer interrupted while running", e);
 
