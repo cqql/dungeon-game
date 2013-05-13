@@ -3,17 +3,17 @@ package dungeon.models;
 public class Enemy {
   private final int strength = 1;
 
-  private final Position startPosition;
+  private final Position position;
 
-  public Enemy (Position startPosition) {
-    this.startPosition = startPosition;
+  public Enemy (Position position) {
+    this.position = position;
   }
 
   public int getStrength () {
     return this.strength;
   }
 
-  public Position getStartPosition () {
-    return this.startPosition;
+  public Position getPosition () {
+    return this.position;
   }
 }
