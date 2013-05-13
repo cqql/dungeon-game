@@ -69,12 +69,12 @@ public class Canvas extends JPanel implements EventHandler {
       Position position = enemy.getPosition();
 
       g.setColor(this.enemyColor);
-      g.fillRect((int)position.getX() * tileWidth, (int)position.getY() * tileHeight, tileWidth, tileHeight);
+      g.fillRect((int)(position.getX() * tileWidth), (int)(position.getY() * tileHeight), tileWidth, tileHeight);
     }
 
     Position playerPosition = this.world.getPlayer().getPosition();
 
     g.setColor(this.playerColor);
-    g.fillRect((int)playerPosition.getX() * tileWidth, (int)playerPosition.getY() * tileHeight, tileWidth, tileHeight);
+    g.fillRect((int)(playerPosition.getX() * tileWidth), (int)(playerPosition.getY() * tileHeight), tileWidth, tileHeight);
   }
 }
