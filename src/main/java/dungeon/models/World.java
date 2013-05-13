@@ -10,7 +10,7 @@ public class World {
   public final Player player;
 
   public World (List<Room> rooms, Player player) {
-    this.rooms = Collections.unmodifiableList(new ArrayList<Room>(rooms));
+    this.rooms = Collections.unmodifiableList(new ArrayList<>(rooms));
     this.player = player;
   }
 }

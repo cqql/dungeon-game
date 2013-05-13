@@ -13,7 +13,7 @@ public class Room {
 
   public Room (String id, List<Enemy> enemies, List<List<Tile>> tiles) {
     this.id = id;
-    this.enemies = Collections.unmodifiableList(new ArrayList<Enemy>(enemies));
-    this.tiles = Collections.unmodifiableList(new ArrayList<List<Tile>>(tiles));
+    this.enemies = Collections.unmodifiableList(new ArrayList<>(enemies));
+    this.tiles = Collections.unmodifiableList(new ArrayList<>(tiles));
   }
 }
