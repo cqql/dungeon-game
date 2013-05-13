@@ -23,12 +23,12 @@ public class LevelLoadHandler implements EventHandler {
           new Room(
             "warm-up",
             Arrays.asList(
-              new Enemy(new Position(1, 1))
+              new Enemy(new Position(2, 1))
             ),
             Arrays.asList(
               Arrays.asList(new Tile(false), new Tile(false), new Tile(false)),
               Arrays.asList(new Tile(false), new Tile(false), new Tile(false)),
-              Arrays.asList(new Tile(false), new Tile(false), new Tile(false))
+              Arrays.asList(new Tile(false), new Tile(true), new Tile(false))
             )
           )
         ),
