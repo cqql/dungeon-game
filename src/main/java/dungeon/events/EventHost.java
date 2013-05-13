@@ -8,6 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Publishes events to attached event consumers.
@@ -15,19 +16,15 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Be aware of the fact that every event consumer will be running in it's own thread.
  */
 public final class EventHost {
-  private final ExecutorService executor;
+  private final ExecutorService executor = Executors.newCachedThreadPool();
 
-  private final Collection<EventConsumer> eventConsumers;
+  private final Collection<EventConsumer> eventConsumers = new ArrayList<>();
 
-  private final BlockingQueue<Event> eventQueue;
+  private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>();
 
-  private boolean running;
+  private final AtomicBoolean running = new AtomicBoolean(true);
 
   public EventHost () {
-    this.executor = Executors.newCachedThreadPool();
-    this.eventConsumers = new ArrayList<EventConsumer>();
-    this.eventQueue = new LinkedBlockingQueue<Event>();
-
     this.publish(LifecycleEvent.INITIALIZE);
   }
 
@@ -52,10 +49,8 @@ public final class EventHost {
       this.executor.execute(eventConsumer);
     }
 
-    this.running = true;
-
     try {
-      while (this.running) {
+      while (this.running.get()) {
         this.waitForNextEvent();
       }
     } catch (InterruptedException e) {
@@ -97,7 +92,7 @@ public final class EventHost {
    * This does not call executor.shutdownNow, because this will force eventConsumers to end and will have bad side effects.
    */
   private void shutdown () {
-    this.running = false;
+    this.running.set(false);
 
     this.executor.shutdown();
 
