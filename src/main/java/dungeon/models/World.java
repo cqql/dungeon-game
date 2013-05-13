@@ -35,6 +35,12 @@ public class World {
   }
 
   public World apply (Transform transform) {
-    return this;
+    List<Room> rooms = new ArrayList<>(this.rooms.size());
+
+    for (Room room : this.rooms) {
+      rooms.add(room.apply(transform));
+    }
+
+    return new World(rooms, this.player.apply(transform));
   }
 }

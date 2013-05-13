@@ -24,6 +24,7 @@ public class Main {
     eventHost.addConsumer(new SwingConsumer(canvas));
 
     eventHost.addHandler(new LevelLoadHandler(eventHost));
+    eventHost.addHandler(new GameHandler(eventHost));
 
     eventHost.run();
   }
