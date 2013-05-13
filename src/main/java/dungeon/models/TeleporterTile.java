@@ -3,8 +3,8 @@ package dungeon.models;
 public class TeleporterTile extends Tile {
   public final Target target;
 
-  public TeleporterTile (boolean blocking, Target target) {
-    super(blocking);
+  public TeleporterTile (Target target) {
+    super(false);
 
     this.target = target;
   }
