@@ -1,5 +1,6 @@
 package dungeon.models;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Room {
 
   public Room (String id, List<Enemy> enemies, List<List<Tile>> tiles) {
     this.id = id;
-    this.enemies = Collections.unmodifiableList(enemies);
-    this.tiles = Collections.unmodifiableList(tiles);
+    this.enemies = Collections.unmodifiableList(new ArrayList<Enemy>(enemies));
+    this.tiles = Collections.unmodifiableList(new ArrayList<List<Tile>>(tiles));
   }
 }
