@@ -5,7 +5,6 @@ import dungeon.events.EventHandler;
 import dungeon.events.EventHost;
 import dungeon.models.Player;
 import dungeon.models.World;
-import dungeon.models.events.TransformEvent;
 import dungeon.ui.events.MoveCommand;
 
 /**
@@ -51,6 +50,6 @@ public class GameHandler implements EventHandler {
 
     this.world = this.world.apply(transform);
 
-    eventHost.publish(new TransformEvent(transform));
+    eventHost.publish(transform);
   }
 }
