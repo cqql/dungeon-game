@@ -1,7 +1,12 @@
 package dungeon.models;
 
 public class Player {
-  public String name;
+  public final String name;
 
-  public int hitPoints = 1;
+  public final int hitPoints;
+
+  public Player (String name, int hitPoints) {
+    this.name = name;
+    this.hitPoints = hitPoints;
+  }
 }
