@@ -4,6 +4,7 @@ import dungeon.LevelLoadHandler;
 import dungeon.events.Event;
 import dungeon.events.EventHandler;
 import dungeon.models.*;
+import dungeon.models.events.TransformEvent;
 
 import javax.swing.*;
 import java.awt.Color;
@@ -23,7 +24,9 @@ public class Canvas extends JPanel implements EventHandler {
 
   @Override
   public void handleEvent (Event event) {
-    if (event instanceof LevelLoadHandler.LevelLoadedEvent) {
+    if (event instanceof TransformEvent) {
+      this.world = this.world.apply(((TransformEvent)event).getTransform());
+    } else if (event instanceof LevelLoadHandler.LevelLoadedEvent) {
       this.world = ((LevelLoadHandler.LevelLoadedEvent)event).getWorld();
     }
 
