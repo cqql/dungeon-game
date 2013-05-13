@@ -1,6 +1,6 @@
 package dungeon.ui;
 
-import dungeon.MoveEvent;
+import dungeon.ui.events.MoveCommand;
 import dungeon.events.EventHost;
 
 import java.awt.event.KeyEvent;
@@ -22,16 +22,16 @@ public class InputToEventConverter implements KeyListener {
   public void keyPressed (KeyEvent keyEvent) {
     switch (keyEvent.getKeyChar()) {
       case 'w':
-        this.eventHost.publish(MoveEvent.UP);
+        this.eventHost.publish(MoveCommand.UP);
         break;
       case 'a':
-        this.eventHost.publish(MoveEvent.LEFT);
+        this.eventHost.publish(MoveCommand.LEFT);
         break;
       case 's':
-        this.eventHost.publish(MoveEvent.DOWN);
+        this.eventHost.publish(MoveCommand.DOWN);
         break;
       case 'd':
-        this.eventHost.publish(MoveEvent.RIGHT);
+        this.eventHost.publish(MoveCommand.RIGHT);
         break;
       default:
     }

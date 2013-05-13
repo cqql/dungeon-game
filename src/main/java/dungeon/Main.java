@@ -23,6 +23,8 @@ public class Main {
     eventHost.addConsumer(new SwingConsumer(mainFrame));
     eventHost.addConsumer(new SwingConsumer(canvas));
 
+    eventHost.addHandler(new LevelLoadHandler(eventHost));
+
     eventHost.run();
   }
 }
