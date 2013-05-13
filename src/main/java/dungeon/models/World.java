@@ -21,4 +21,14 @@ public class World {
   public Player getPlayer () {
     return player;
   }
+
+  public Room getCurrentRoom () {
+    for (Room room : rooms) {
+      if (room.getId() == player.getRoomId()) {
+        return room;
+      }
+    }
+
+    return null;
+  }
 }

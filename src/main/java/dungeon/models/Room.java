@@ -28,4 +28,12 @@ public class Room {
   public List<List<Tile>> getTiles () {
     return tiles;
   }
+
+  public int getSize () {
+    if (tiles.size() == 0) {
+      return 0;
+    } else {
+      return tiles.get(0).size();
+    }
+  }
 }

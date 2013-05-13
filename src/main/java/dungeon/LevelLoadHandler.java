@@ -28,7 +28,7 @@ public class LevelLoadHandler implements EventHandler {
             Arrays.asList(
               Arrays.asList(new Tile(false), new Tile(false), new Tile(false)),
               Arrays.asList(new Tile(false), new Tile(false), new Tile(false)),
-              Arrays.asList(new Tile(false), new Tile(false), new Tile(false))
+              Arrays.asList(new Tile(false), new Tile(true), new Tile(false))
             )
           )
         ),
