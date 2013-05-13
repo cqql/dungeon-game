@@ -5,8 +5,14 @@ public class Player {
 
   public final int hitPoints;
 
-  public Player (String name, int hitPoints) {
+  public final String roomId;
+
+  public final Position position;
+
+  public Player (String name, int hitPoints, String roomId, Position position) {
     this.name = name;
     this.hitPoints = hitPoints;
+    this.roomId = roomId;
+    this.position = position;
   }
 }
