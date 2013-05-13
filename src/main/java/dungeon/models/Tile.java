@@ -1,5 +1,7 @@
 package dungeon.models;
 
+import dungeon.models.events.Transform;
+
 public class Tile {
   /**
    * true, wenn die Platte nicht begehbar ist; false, wenn die Platte begehbar ist
@@ -12,5 +14,9 @@ public class Tile {
 
   public boolean isBlocking () {
     return this.blocking;
+  }
+
+  public Tile apply (Transform transform) {
+    return this;
   }
 }

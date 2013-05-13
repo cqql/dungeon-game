@@ -1,5 +1,7 @@
 package dungeon.models;
 
+import dungeon.models.events.Transform;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,5 +32,15 @@ public class World {
     }
 
     return null;
+  }
+
+  public World apply (Transform transform) {
+    List<Room> rooms = new ArrayList<>(this.rooms.size());
+
+    for (Room room : this.rooms) {
+      rooms.add(room.apply(transform));
+    }
+
+    return new World(rooms, this.player.apply(transform));
   }
 }

@@ -1,5 +1,7 @@
 package dungeon.models;
 
+import dungeon.models.events.Transform;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,5 +37,9 @@ public class Room {
     } else {
       return this.tiles.get(0).size();
     }
+  }
+
+  public Room apply (Transform transform) {
+    return this;
   }
 }
