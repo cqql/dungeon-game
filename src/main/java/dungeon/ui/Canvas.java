@@ -3,10 +3,7 @@ package dungeon.ui;
 import dungeon.LevelLoadHandler;
 import dungeon.events.Event;
 import dungeon.events.EventHandler;
-import dungeon.models.Position;
-import dungeon.models.Room;
-import dungeon.models.Tile;
-import dungeon.models.World;
+import dungeon.models.*;
 
 import javax.swing.*;
 import java.awt.Color;
@@ -19,6 +16,8 @@ public class Canvas extends JPanel implements EventHandler {
   private final Color passableTile = new Color(139, 108, 217);
 
   private final Color playerColor = new Color(101, 202, 227);
+
+  private final Color enemyColor = new Color(33, 237, 60);
 
   private World world;
 
@@ -61,6 +60,13 @@ public class Canvas extends JPanel implements EventHandler {
       }
 
       row++;
+    }
+
+    for (Enemy enemy : room.getEnemies()) {
+      Position position = enemy.getPosition();
+
+      g.setColor(this.enemyColor);
+      g.fillRect((int)position.getX() * tileWidth, (int)position.getY() * tileHeight, tileWidth, tileHeight);
     }
 
     Position playerPosition = this.world.getPlayer().getPosition();
