@@ -1,12 +1,16 @@
 package dungeon.models;
 
 public class TeleporterTile extends Tile {
-  public final Target target;
+  private final Target target;
 
   public TeleporterTile (Target target) {
     super(false);
 
     this.target = target;
+  }
+
+  public Target getTarget () {
+    return target;
   }
 
   public static class Target {
