@@ -35,7 +35,7 @@ public class LevelLoadHandler implements EventHandler {
         new Player("Link", 1, "warm-up", new Position(0, 0))
       );
 
-      eventHost.publish(new LevelLoadedEvent(world));
+      this.eventHost.publish(new LevelLoadedEvent(world));
     }
   }
 
@@ -47,7 +47,7 @@ public class LevelLoadHandler implements EventHandler {
     }
 
     public World getWorld () {
-      return world;
+      return this.world;
     }
   }
 }
