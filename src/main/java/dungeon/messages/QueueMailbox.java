@@ -13,6 +13,8 @@ import java.util.concurrent.TimeUnit;
  * This class is thread-safe.
  */
 public final class QueueMailbox extends AbstractMailbox {
+  private static final int WAIT_TIME = 10;
+
   private final MessageHandler messageHandler;
 
   private final BlockingQueue<Message> messageQueue;
@@ -30,7 +32,7 @@ public final class QueueMailbox extends AbstractMailbox {
     while (isRunning()) {
       try {
         // Wait 10 milliseconds at most to prevent dead lock
-        Message message = this.messageQueue.poll(10, TimeUnit.MILLISECONDS);
+        Message message = this.messageQueue.poll(WAIT_TIME, TimeUnit.MILLISECONDS);
 
         if (message != null) {
           this.messageHandler.handleMessage(message);
