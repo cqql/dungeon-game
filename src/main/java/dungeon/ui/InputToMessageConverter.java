@@ -6,10 +6,10 @@ import dungeon.messages.Mailman;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class InputToEventConverter implements KeyListener {
+public class InputToMessageConverter implements KeyListener {
   private final Mailman mailman;
 
-  public InputToEventConverter (Mailman mailman) {
+  public InputToMessageConverter (Mailman mailman) {
     this.mailman = mailman;
   }
 

@@ -2,7 +2,7 @@ package dungeon;
 
 import dungeon.messages.Mailman;
 import dungeon.ui.Canvas;
-import dungeon.ui.InputToEventConverter;
+import dungeon.ui.InputToMessageConverter;
 import dungeon.ui.MainFrame;
 import dungeon.ui.SwingMailbox;
 
@@ -14,7 +14,7 @@ public class Main {
 
     MainFrame mainFrame = new MainFrame(mailman);
 
-    InputToEventConverter converter = new InputToEventConverter(mailman);
+    InputToMessageConverter converter = new InputToMessageConverter(mailman);
     mainFrame.addKeyListener(converter);
 
     Canvas canvas = new Canvas();
