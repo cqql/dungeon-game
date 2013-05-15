@@ -24,8 +24,8 @@ public final class Mailman {
 
   private final AtomicBoolean running = new AtomicBoolean(true);
 
-  public Mailman() {
-    this.publish(LifecycleEvent.INITIALIZE);
+  public Mailman () {
+    this.send(LifecycleEvent.INITIALIZE);
   }
 
   /**
@@ -37,7 +37,7 @@ public final class Mailman {
     this.mailboxes.add(new QueueMailbox(messageHandler));
   }
 
-  public void addConsumer (Mailbox mailbox) {
+  public void addMailbox (Mailbox mailbox) {
     this.mailboxes.add(mailbox);
   }
 
@@ -51,7 +51,7 @@ public final class Mailman {
 
     try {
       while (this.running.get()) {
-        this.waitForNextEvent();
+        this.waitForNextMessage();
       }
     } catch (InterruptedException e) {
       Log.notice("The event host has been interrupted", e);
@@ -65,12 +65,12 @@ public final class Mailman {
   /**
    * Publish an message.
    *
-   * This method should be called from the handlers, that want to publish their own messages.
+   * This method should be called from the handlers, that want to send their own messages.
    *
    * @param message Message to be published
    * @return true on success, otherwise false
    */
-  public boolean publish (Message message) {
+  public boolean send (Message message) {
     if (message == null) {
       return false;
     }
@@ -101,21 +101,21 @@ public final class Mailman {
     }
   }
 
-  private void waitForNextEvent () throws InterruptedException {
+  private void waitForNextMessage () throws InterruptedException {
     Message message = this.messageQueue.take();
 
-    this.handleEvent(message);
+    this.handleMessage(message);
   }
 
-  private void handleEvent (Message message) {
-    this.publishEvent(message);
+  private void handleMessage (Message message) {
+    this.distributeMessage(message);
 
     if (message == LifecycleEvent.SHUTDOWN) {
       this.shutdown();
     }
   }
 
-  private void publishEvent (Message message) {
+  private void distributeMessage (Message message) {
     for (Mailbox mailbox : this.mailboxes) {
       mailbox.onEvent(message);
     }

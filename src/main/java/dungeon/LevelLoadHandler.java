@@ -35,7 +35,7 @@ public class LevelLoadHandler implements MessageHandler {
         new Player("Link", 1, "warm-up", new Position(0, 0))
       );
 
-      this.mailman.publish(new LevelLoadedEvent(world));
+      this.mailman.send(new LevelLoadedEvent(world));
     }
   }
 

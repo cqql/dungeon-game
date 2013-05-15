@@ -20,8 +20,8 @@ public class Main {
     Canvas canvas = new Canvas();
     mainFrame.add(canvas);
 
-    mailman.addConsumer(new SwingConsumer(mainFrame));
-    mailman.addConsumer(new SwingConsumer(canvas));
+    mailman.addMailbox(new SwingConsumer(mainFrame));
+    mailman.addMailbox(new SwingConsumer(canvas));
 
     mailman.addHandler(new LevelLoadHandler(mailman));
     mailman.addHandler(new GameHandler(mailman));

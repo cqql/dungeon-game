@@ -50,6 +50,6 @@ public class GameHandler implements MessageHandler {
 
     this.world = this.world.apply(transform);
 
-    mailman.publish(transform);
+    mailman.send(transform);
   }
 }

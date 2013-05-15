@@ -46,7 +46,7 @@ public class MainFrame extends JFrame implements MessageHandler {
     this.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing (WindowEvent e) {
-        MainFrame.this.mailman.publish(LifecycleEvent.SHUTDOWN);
+        MainFrame.this.mailman.send(LifecycleEvent.SHUTDOWN);
       }
     });
 
