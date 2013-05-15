@@ -1,6 +1,6 @@
 package dungeon.models;
 
-import dungeon.models.events.Transform;
+import dungeon.models.messages.Transform;
 
 import java.util.ArrayList;
 import java.util.Collections;

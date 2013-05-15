@@ -1,4 +1,4 @@
-package dungeon.models.events;
+package dungeon.models.messages;
 
 import dungeon.messages.Message;
 

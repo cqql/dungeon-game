@@ -4,7 +4,7 @@ import dungeon.LevelLoadHandler;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.*;
-import dungeon.models.events.Transform;
+import dungeon.models.messages.Transform;
 
 import javax.swing.*;
 import java.awt.Color;
