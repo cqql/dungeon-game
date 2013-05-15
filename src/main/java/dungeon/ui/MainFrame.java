@@ -1,7 +1,7 @@
 package dungeon.ui;
 
 import dungeon.messages.Message;
-import dungeon.messages.EventHandler;
+import dungeon.messages.MessageHandler;
 import dungeon.messages.Mailman;
 import dungeon.messages.LifecycleEvent;
 
@@ -16,7 +16,7 @@ import java.awt.event.WindowEvent;
  * handleEvent() will be called on the swing EDT. This means that any methods called by handleEvent() are generally
  * save to manipulate the frame.
  */
-public class MainFrame extends JFrame implements EventHandler {
+public class MainFrame extends JFrame implements MessageHandler {
   public static final String TITLE = "DUNGEON GAME";
 
   private final Mailman mailman;

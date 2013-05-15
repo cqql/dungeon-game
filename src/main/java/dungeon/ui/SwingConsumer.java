@@ -2,7 +2,7 @@ package dungeon.ui;
 
 import dungeon.messages.Message;
 import dungeon.messages.Mailbox;
-import dungeon.messages.EventHandler;
+import dungeon.messages.MessageHandler;
 
 import javax.swing.*;
 
@@ -11,10 +11,10 @@ import javax.swing.*;
  * that the event handler can be manipulated in response to messages, which is forbidden from other threads.
  */
 public class SwingConsumer implements Mailbox {
-  private final EventHandler eventHandler;
+  private final MessageHandler messageHandler;
 
-  public SwingConsumer (EventHandler frame) {
-    this.eventHandler = frame;
+  public SwingConsumer (MessageHandler frame) {
+    this.messageHandler = frame;
   }
 
   /**
@@ -33,7 +33,7 @@ public class SwingConsumer implements Mailbox {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run () {
-        SwingConsumer.this.eventHandler.handleEvent(message);
+        SwingConsumer.this.messageHandler.handleEvent(message);
       }
     });
   }

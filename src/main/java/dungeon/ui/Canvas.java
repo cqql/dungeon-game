@@ -2,7 +2,7 @@ package dungeon.ui;
 
 import dungeon.LevelLoadHandler;
 import dungeon.messages.Message;
-import dungeon.messages.EventHandler;
+import dungeon.messages.MessageHandler;
 import dungeon.models.*;
 import dungeon.models.events.Transform;
 
@@ -11,7 +11,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-public class Canvas extends JPanel implements EventHandler {
+public class Canvas extends JPanel implements MessageHandler {
   private final Color blockingTile = new Color(181, 125, 147);
 
   private final Color passableTile = new Color(139, 108, 217);

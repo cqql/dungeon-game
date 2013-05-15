@@ -1,7 +1,7 @@
 package dungeon;
 
 import dungeon.messages.Message;
-import dungeon.messages.EventHandler;
+import dungeon.messages.MessageHandler;
 import dungeon.messages.Mailman;
 import dungeon.models.Player;
 import dungeon.models.World;
@@ -10,7 +10,7 @@ import dungeon.ui.events.MoveCommand;
 /**
  * Hier wird die eigentliche Logik des Spiels durchgeführt.
  */
-public class GameHandler implements EventHandler {
+public class GameHandler implements MessageHandler {
   private final Mailman mailman;
 
   private World world;

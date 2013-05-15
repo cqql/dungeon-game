@@ -7,18 +7,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A wrapper for an EventHandler that manages an event queue and passes the messages one after another to the handlers
+ * A wrapper for an MessageHandler that manages an event queue and passes the messages one after another to the handlers
  * #handleEvent() method.
  *
  * This class is thread-safe.
  */
 public final class EventQueueConsumer extends AbstractMailbox {
-  private final EventHandler eventHandler;
+  private final MessageHandler messageHandler;
 
   private final BlockingQueue<Message> messageQueue;
 
-  public EventQueueConsumer (EventHandler eventHandler) {
-    this.eventHandler = eventHandler;
+  public EventQueueConsumer (MessageHandler messageHandler) {
+    this.messageHandler = messageHandler;
     this.messageQueue = new LinkedBlockingQueue<>();
   }
 
@@ -33,7 +33,7 @@ public final class EventQueueConsumer extends AbstractMailbox {
         Message message = this.messageQueue.poll(10, TimeUnit.MILLISECONDS);
 
         if (message != null) {
-          this.eventHandler.handleEvent(message);
+          this.messageHandler.handleEvent(message);
         }
       } catch (InterruptedException e) {
         Log.notice("EventQueueConsumer interrupted while running", e);

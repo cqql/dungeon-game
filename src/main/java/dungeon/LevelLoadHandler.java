@@ -1,14 +1,14 @@
 package dungeon;
 
 import dungeon.messages.Message;
-import dungeon.messages.EventHandler;
+import dungeon.messages.MessageHandler;
 import dungeon.messages.Mailman;
 import dungeon.messages.LifecycleEvent;
 import dungeon.models.*;
 
 import java.util.Arrays;
 
-public class LevelLoadHandler implements EventHandler {
+public class LevelLoadHandler implements MessageHandler {
   private final Mailman mailman;
 
   public LevelLoadHandler (Mailman mailman) {
