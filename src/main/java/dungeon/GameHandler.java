@@ -11,6 +11,8 @@ import dungeon.ui.events.MoveCommand;
  * Hier wird die eigentliche Logik des Spiels durchgeführt.
  */
 public class GameHandler implements MessageHandler {
+  private static final float SPEED = 0.1f;
+
   private final Mailman mailman;
 
   private World world;
@@ -33,16 +35,16 @@ public class GameHandler implements MessageHandler {
 
     switch (command) {
       case UP:
-        transform = new Player.MoveTransform(0, -0.1f);
+        transform = new Player.MoveTransform(0, -SPEED);
         break;
       case DOWN:
-        transform = new Player.MoveTransform(0, 0.1f);
+        transform = new Player.MoveTransform(0, SPEED);
         break;
       case LEFT:
-        transform = new Player.MoveTransform(-0.1f, 0);
+        transform = new Player.MoveTransform(-SPEED, 0);
         break;
       case RIGHT:
-        transform = new Player.MoveTransform(0.1f, 0);
+        transform = new Player.MoveTransform(SPEED, 0);
         break;
       default:
         return;
@@ -50,6 +52,6 @@ public class GameHandler implements MessageHandler {
 
     this.world = this.world.apply(transform);
 
-    mailman.send(transform);
+    this.mailman.send(transform);
   }
 }

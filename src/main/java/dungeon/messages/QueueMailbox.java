@@ -18,7 +18,7 @@ public final class QueueMailbox extends AbstractMailbox {
 
   private final BlockingQueue<Message> messageQueue;
 
-  public QueueMailbox(MessageHandler messageHandler) {
+  public QueueMailbox (MessageHandler messageHandler) {
     this.messageHandler = messageHandler;
     this.messageQueue = new LinkedBlockingQueue<>();
   }
