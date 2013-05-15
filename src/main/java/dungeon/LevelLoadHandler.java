@@ -1,9 +1,9 @@
 package dungeon;
 
-import dungeon.events.Event;
-import dungeon.events.EventHandler;
-import dungeon.events.EventHost;
-import dungeon.events.LifecycleEvent;
+import dungeon.messages.Event;
+import dungeon.messages.EventHandler;
+import dungeon.messages.EventHost;
+import dungeon.messages.LifecycleEvent;
 import dungeon.models.*;
 
 import java.util.Arrays;

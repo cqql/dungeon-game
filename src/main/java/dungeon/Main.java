@@ -1,6 +1,6 @@
 package dungeon;
 
-import dungeon.events.EventHost;
+import dungeon.messages.EventHost;
 import dungeon.ui.Canvas;
 import dungeon.ui.InputToEventConverter;
 import dungeon.ui.MainFrame;

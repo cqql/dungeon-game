@@ -1,8 +1,8 @@
 package dungeon;
 
-import dungeon.events.Event;
-import dungeon.events.EventHandler;
-import dungeon.events.EventHost;
+import dungeon.messages.Event;
+import dungeon.messages.EventHandler;
+import dungeon.messages.EventHost;
 import dungeon.models.Player;
 import dungeon.models.World;
 import dungeon.ui.events.MoveCommand;

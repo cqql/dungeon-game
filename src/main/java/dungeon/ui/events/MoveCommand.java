@@ -1,6 +1,6 @@
 package dungeon.ui.events;
 
-import dungeon.events.Event;
+import dungeon.messages.Event;
 
 /**
  * Bewegungsbefehle, die der Spieler sendet.

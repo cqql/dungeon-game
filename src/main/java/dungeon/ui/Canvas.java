@@ -1,8 +1,8 @@
 package dungeon.ui;
 
 import dungeon.LevelLoadHandler;
-import dungeon.events.Event;
-import dungeon.events.EventHandler;
+import dungeon.messages.Event;
+import dungeon.messages.EventHandler;
 import dungeon.models.*;
 import dungeon.models.events.Transform;
 

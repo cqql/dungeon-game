@@ -1,4 +1,4 @@
-package dungeon.events;
+package dungeon.messages;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -26,7 +26,7 @@ public abstract class AbstractEventConsumer implements EventConsumer {
 
   /**
    * This is intentionally a no-op in case you want to create a consumer that does not actually depend on the received
-   * events.
+   * messages.
    */
   @Override
   public void onEvent (Event event) {

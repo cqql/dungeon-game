@@ -1,4 +1,4 @@
-package dungeon.events;
+package dungeon.messages;
 
 import dungeon.Log;
 
@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A wrapper for an EventHandler that manages an event queue and passes the events one after another to the handlers
+ * A wrapper for an EventHandler that manages an event queue and passes the messages one after another to the handlers
  * #handleEvent() method.
  *
  * This class is thread-safe.
@@ -23,7 +23,7 @@ public final class EventQueueConsumer extends AbstractEventConsumer {
   }
 
   /**
-   * Pass the events to the event handler info FIFO-order.
+   * Pass the messages to the event handler info FIFO-order.
    */
   @Override
   public void run () {

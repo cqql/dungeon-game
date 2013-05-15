@@ -1,7 +1,7 @@
-package dungeon.events;
+package dungeon.messages;
 
 /**
- * Consume a stream of events.
+ * Consume a stream of messages.
  *
  * WARNING: #shutdown() and #onEvent() will be called from the event host's thread whereas #run() is running in it's own
  * thread. Therefore you have to care about synchronization.

@@ -1,14 +1,14 @@
 package dungeon.ui;
 
-import dungeon.events.Event;
-import dungeon.events.EventConsumer;
-import dungeon.events.EventHandler;
+import dungeon.messages.Event;
+import dungeon.messages.EventConsumer;
+import dungeon.messages.EventHandler;
 
 import javax.swing.*;
 
 /**
- * An event consumer that passes the events to the given event handler in the swing event dispatching thread (EDT), so
- * that the event handler can be manipulated in response to events, which is forbidden from other threads.
+ * An event consumer that passes the messages to the given event handler in the swing event dispatching thread (EDT), so
+ * that the event handler can be manipulated in response to messages, which is forbidden from other threads.
  */
 public class SwingConsumer implements EventConsumer {
   private final EventHandler eventHandler;
@@ -26,7 +26,7 @@ public class SwingConsumer implements EventConsumer {
   }
 
   /**
-   * Sends events to the EDT.
+   * Sends messages to the EDT.
    */
   @Override
   public void onEvent (final Event event) {

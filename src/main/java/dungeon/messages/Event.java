@@ -1,4 +1,4 @@
-package dungeon.events;
+package dungeon.messages;
 
 /**
  * Implement this interface to create your own event objects.

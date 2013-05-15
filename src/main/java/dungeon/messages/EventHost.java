@@ -1,4 +1,4 @@
-package dungeon.events;
+package dungeon.messages;
 
 import dungeon.Log;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Publishes events to attached event consumers.
+ * Publishes messages to attached event consumers.
  *
  * Be aware of the fact that every event consumer will be running in it's own thread.
  */
@@ -65,7 +65,7 @@ public final class EventHost {
   /**
    * Publish an event.
    *
-   * This method should be called from the handlers, that want to publish their own events.
+   * This method should be called from the handlers, that want to publish their own messages.
    *
    * @param event Event to be published
    * @return true on success, otherwise false

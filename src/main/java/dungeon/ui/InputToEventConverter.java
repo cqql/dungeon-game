@@ -1,7 +1,7 @@
 package dungeon.ui;
 
 import dungeon.ui.events.MoveCommand;
-import dungeon.events.EventHost;
+import dungeon.messages.EventHost;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
