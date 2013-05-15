@@ -12,12 +12,12 @@ import java.util.concurrent.TimeUnit;
  *
  * This class is thread-safe.
  */
-public final class EventQueueConsumer extends AbstractMailbox {
+public final class QueueMailbox extends AbstractMailbox {
   private final MessageHandler messageHandler;
 
   private final BlockingQueue<Message> messageQueue;
 
-  public EventQueueConsumer (MessageHandler messageHandler) {
+  public QueueMailbox(MessageHandler messageHandler) {
     this.messageHandler = messageHandler;
     this.messageQueue = new LinkedBlockingQueue<>();
   }
@@ -36,7 +36,7 @@ public final class EventQueueConsumer extends AbstractMailbox {
           this.messageHandler.handleEvent(message);
         }
       } catch (InterruptedException e) {
-        Log.notice("EventQueueConsumer interrupted while running", e);
+        Log.notice("QueueMailbox interrupted while running", e);
 
         this.shutdown();
       }
@@ -50,7 +50,7 @@ public final class EventQueueConsumer extends AbstractMailbox {
     try {
       this.messageQueue.put(message);
     } catch (InterruptedException e) {
-      Log.notice("EventQueueConsumer interrupted while receiving an message", e);
+      Log.notice("QueueMailbox interrupted while receiving an message", e);
     }
   }
 }

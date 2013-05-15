@@ -34,7 +34,7 @@ public final class Mailman {
    * This may only be called before calling #run().
    */
   public void addHandler (MessageHandler messageHandler) {
-    this.mailboxes.add(new EventQueueConsumer(messageHandler));
+    this.mailboxes.add(new QueueMailbox(messageHandler));
   }
 
   public void addConsumer (Mailbox mailbox) {
