@@ -4,7 +4,7 @@ import dungeon.messages.Mailman;
 import dungeon.ui.Canvas;
 import dungeon.ui.InputToEventConverter;
 import dungeon.ui.MainFrame;
-import dungeon.ui.SwingConsumer;
+import dungeon.ui.SwingMailbox;
 
 public class Main {
   public static void main (String[] args) {
@@ -20,8 +20,8 @@ public class Main {
     Canvas canvas = new Canvas();
     mainFrame.add(canvas);
 
-    mailman.addMailbox(new SwingConsumer(mainFrame));
-    mailman.addMailbox(new SwingConsumer(canvas));
+    mailman.addMailbox(new SwingMailbox(mainFrame));
+    mailman.addMailbox(new SwingMailbox(canvas));
 
     mailman.addHandler(new LevelLoadHandler(mailman));
     mailman.addHandler(new GameHandler(mailman));
