@@ -1,8 +1,8 @@
 package dungeon;
 
-import dungeon.events.Event;
-import dungeon.events.EventHandler;
-import dungeon.events.EventHost;
+import dungeon.messages.Message;
+import dungeon.messages.MessageHandler;
+import dungeon.messages.Mailman;
 import dungeon.models.Player;
 import dungeon.models.World;
 import dungeon.ui.events.MoveCommand;
@@ -10,21 +10,23 @@ import dungeon.ui.events.MoveCommand;
 /**
  * Hier wird die eigentliche Logik des Spiels durchgeführt.
  */
-public class GameHandler implements EventHandler {
-  private final EventHost eventHost;
+public class GameHandler implements MessageHandler {
+  private static final float SPEED = 0.1f;
+
+  private final Mailman mailman;
 
   private World world;
 
-  public GameHandler (EventHost eventHost) {
-    this.eventHost = eventHost;
+  public GameHandler (Mailman mailman) {
+    this.mailman = mailman;
   }
 
   @Override
-  public void handleEvent (Event event) {
-    if (event instanceof LevelLoadHandler.LevelLoadedEvent) {
-      this.world = ((LevelLoadHandler.LevelLoadedEvent)event).getWorld();
-    } else if (event instanceof MoveCommand) {
-      move((MoveCommand)event);
+  public void handleMessage (Message message) {
+    if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
+      this.world = ((LevelLoadHandler.LevelLoadedEvent) message).getWorld();
+    } else if (message instanceof MoveCommand) {
+      move((MoveCommand) message);
     }
   }
 
@@ -33,16 +35,16 @@ public class GameHandler implements EventHandler {
 
     switch (command) {
       case UP:
-        transform = new Player.MoveTransform(0, -0.1f);
+        transform = new Player.MoveTransform(0, -SPEED);
         break;
       case DOWN:
-        transform = new Player.MoveTransform(0, 0.1f);
+        transform = new Player.MoveTransform(0, SPEED);
         break;
       case LEFT:
-        transform = new Player.MoveTransform(-0.1f, 0);
+        transform = new Player.MoveTransform(-SPEED, 0);
         break;
       case RIGHT:
-        transform = new Player.MoveTransform(0.1f, 0);
+        transform = new Player.MoveTransform(SPEED, 0);
         break;
       default:
         return;
@@ -50,6 +52,6 @@ public class GameHandler implements EventHandler {
 
     this.world = this.world.apply(transform);
 
-    eventHost.publish(transform);
+    this.mailman.send(transform);
   }
 }

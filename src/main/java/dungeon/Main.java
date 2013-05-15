@@ -1,31 +1,31 @@
 package dungeon;
 
-import dungeon.events.EventHost;
+import dungeon.messages.Mailman;
 import dungeon.ui.Canvas;
-import dungeon.ui.InputToEventConverter;
+import dungeon.ui.InputToMessageConverter;
 import dungeon.ui.MainFrame;
-import dungeon.ui.SwingConsumer;
+import dungeon.ui.SwingMailbox;
 
 public class Main {
   public static void main (String[] args) {
     Log.setLevel(Log.Level.NOTICE);
 
-    EventHost eventHost = new EventHost();
+    Mailman mailman = new Mailman();
 
-    MainFrame mainFrame = new MainFrame(eventHost);
+    MainFrame mainFrame = new MainFrame(mailman);
 
-    InputToEventConverter converter = new InputToEventConverter(eventHost);
+    InputToMessageConverter converter = new InputToMessageConverter(mailman);
     mainFrame.addKeyListener(converter);
 
     Canvas canvas = new Canvas();
     mainFrame.add(canvas);
 
-    eventHost.addConsumer(new SwingConsumer(mainFrame));
-    eventHost.addConsumer(new SwingConsumer(canvas));
+    mailman.addMailbox(new SwingMailbox(mainFrame));
+    mailman.addMailbox(new SwingMailbox(canvas));
 
-    eventHost.addHandler(new LevelLoadHandler(eventHost));
-    eventHost.addHandler(new GameHandler(eventHost));
+    mailman.addHandler(new LevelLoadHandler(mailman));
+    mailman.addHandler(new GameHandler(mailman));
 
-    eventHost.run();
+    mailman.run();
   }
 }

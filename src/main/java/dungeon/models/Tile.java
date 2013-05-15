@@ -1,6 +1,6 @@
 package dungeon.models;
 
-import dungeon.models.events.Transform;
+import dungeon.models.messages.Transform;
 
 public class Tile {
   /**

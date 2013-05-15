@@ -1,17 +1,17 @@
 package dungeon.ui;
 
 import dungeon.LevelLoadHandler;
-import dungeon.events.Event;
-import dungeon.events.EventHandler;
+import dungeon.messages.Message;
+import dungeon.messages.MessageHandler;
 import dungeon.models.*;
-import dungeon.models.events.Transform;
+import dungeon.models.messages.Transform;
 
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-public class Canvas extends JPanel implements EventHandler {
+public class Canvas extends JPanel implements MessageHandler {
   private final Color blockingTile = new Color(181, 125, 147);
 
   private final Color passableTile = new Color(139, 108, 217);
@@ -23,11 +23,11 @@ public class Canvas extends JPanel implements EventHandler {
   private World world;
 
   @Override
-  public void handleEvent (Event event) {
-    if (event instanceof Transform) {
-      this.world = this.world.apply((Transform)event);
-    } else if (event instanceof LevelLoadHandler.LevelLoadedEvent) {
-      this.world = ((LevelLoadHandler.LevelLoadedEvent)event).getWorld();
+  public void handleMessage (Message message) {
+    if (message instanceof Transform) {
+      this.world = this.world.apply((Transform) message);
+    } else if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
+      this.world = ((LevelLoadHandler.LevelLoadedEvent) message).getWorld();
     }
 
     repaint();

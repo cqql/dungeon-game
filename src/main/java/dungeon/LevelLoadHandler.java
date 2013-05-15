@@ -1,23 +1,23 @@
 package dungeon;
 
-import dungeon.events.Event;
-import dungeon.events.EventHandler;
-import dungeon.events.EventHost;
-import dungeon.events.LifecycleEvent;
+import dungeon.messages.Message;
+import dungeon.messages.MessageHandler;
+import dungeon.messages.Mailman;
+import dungeon.messages.LifecycleEvent;
 import dungeon.models.*;
 
 import java.util.Arrays;
 
-public class LevelLoadHandler implements EventHandler {
-  private final EventHost eventHost;
+public class LevelLoadHandler implements MessageHandler {
+  private final Mailman mailman;
 
-  public LevelLoadHandler (EventHost eventHost) {
-    this.eventHost = eventHost;
+  public LevelLoadHandler (Mailman mailman) {
+    this.mailman = mailman;
   }
 
   @Override
-  public void handleEvent (Event event) {
-    if (event == LifecycleEvent.INITIALIZE) {
+  public void handleMessage (Message message) {
+    if (message == LifecycleEvent.INITIALIZE) {
       World world = new World(
         Arrays.asList(
           new Room(
@@ -35,11 +35,11 @@ public class LevelLoadHandler implements EventHandler {
         new Player("Link", 1, "warm-up", new Position(0, 0))
       );
 
-      this.eventHost.publish(new LevelLoadedEvent(world));
+      this.mailman.send(new LevelLoadedEvent(world));
     }
   }
 
-  public static class LevelLoadedEvent implements Event {
+  public static class LevelLoadedEvent implements Message {
     private final World world;
 
     public LevelLoadedEvent (World world) {
