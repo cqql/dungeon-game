@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * A wrapper for an MessageHandler that manages an event queue and passes the messages one after another to the handlers
- * #handleEvent() method.
+ * #handleMessage() method.
  *
  * This class is thread-safe.
  */
@@ -33,7 +33,7 @@ public final class QueueMailbox extends AbstractMailbox {
         Message message = this.messageQueue.poll(10, TimeUnit.MILLISECONDS);
 
         if (message != null) {
-          this.messageHandler.handleEvent(message);
+          this.messageHandler.handleMessage(message);
         }
       } catch (InterruptedException e) {
         Log.notice("QueueMailbox interrupted while running", e);
@@ -46,7 +46,7 @@ public final class QueueMailbox extends AbstractMailbox {
   /**
    * Append the message to the message queue.
    */
-  public void onEvent (Message message) {
+  public void putMessage (Message message) {
     try {
       this.messageQueue.put(message);
     } catch (InterruptedException e) {

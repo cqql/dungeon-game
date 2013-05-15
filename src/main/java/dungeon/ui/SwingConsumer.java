@@ -29,11 +29,11 @@ public class SwingConsumer implements Mailbox {
    * Sends messages to the EDT.
    */
   @Override
-  public void onEvent (final Message message) {
+  public void putMessage (final Message message) {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run () {
-        SwingConsumer.this.messageHandler.handleEvent(message);
+        SwingConsumer.this.messageHandler.handleMessage(message);
       }
     });
   }

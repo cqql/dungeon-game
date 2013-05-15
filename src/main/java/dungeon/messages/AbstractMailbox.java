@@ -29,7 +29,7 @@ public abstract class AbstractMailbox implements Mailbox {
    * messages.
    */
   @Override
-  public void onEvent (Message message) {
+  public void putMessage (Message message) {
 
   }
 }

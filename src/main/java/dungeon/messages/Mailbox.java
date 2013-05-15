@@ -3,7 +3,7 @@ package dungeon.messages;
 /**
  * Consume a stream of messages.
  *
- * WARNING: #shutdown() and #onEvent() will be called from the event host's thread whereas #run() is running in it's own
+ * WARNING: #shutdown() and #putMessage() will be called from the event host's thread whereas #run() is running in it's own
  * thread. Therefore you have to care about synchronization.
  */
 public interface Mailbox extends Runnable {
@@ -17,5 +17,5 @@ public interface Mailbox extends Runnable {
    *
    * Beware that this method is called from the host's thread.
    */
-  public void onEvent (Message message);
+  public void putMessage (Message message);
 }

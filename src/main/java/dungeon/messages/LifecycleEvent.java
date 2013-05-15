@@ -1,7 +1,7 @@
 package dungeon.messages;
 
 /**
- * Lifecycle messages of the event host.
+ * Lifecycle events of the event host.
  */
 public enum LifecycleEvent implements Message {
   /**

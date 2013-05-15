@@ -117,7 +117,7 @@ public final class Mailman {
 
   private void distributeMessage (Message message) {
     for (Mailbox mailbox : this.mailboxes) {
-      mailbox.onEvent(message);
+      mailbox.putMessage(message);
     }
   }
 }

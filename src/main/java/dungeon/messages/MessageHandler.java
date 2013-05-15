@@ -10,5 +10,5 @@ public interface MessageHandler {
   /**
    * This method will be called every time the message host publishes an message.
    */
-  public void handleEvent (Message message);
+  public void handleMessage (Message message);
 }

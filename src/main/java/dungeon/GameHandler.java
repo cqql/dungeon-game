@@ -20,7 +20,7 @@ public class GameHandler implements MessageHandler {
   }
 
   @Override
-  public void handleEvent (Message message) {
+  public void handleMessage (Message message) {
     if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
       this.world = ((LevelLoadHandler.LevelLoadedEvent) message).getWorld();
     } else if (message instanceof MoveCommand) {

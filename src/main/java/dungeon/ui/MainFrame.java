@@ -13,7 +13,7 @@ import java.awt.event.WindowEvent;
 /**
  * The main frame for the application.
  *
- * handleEvent() will be called on the swing EDT. This means that any methods called by handleEvent() are generally
+ * handleMessage() will be called on the swing EDT. This means that any methods called by handleMessage() are generally
  * save to manipulate the frame.
  */
 public class MainFrame extends JFrame implements MessageHandler {
@@ -26,7 +26,7 @@ public class MainFrame extends JFrame implements MessageHandler {
   }
 
   @Override
-  public void handleEvent (Message message) {
+  public void handleMessage (Message message) {
     if (message == LifecycleEvent.INITIALIZE) {
       this.initialize();
     } else if (message == LifecycleEvent.SHUTDOWN) {

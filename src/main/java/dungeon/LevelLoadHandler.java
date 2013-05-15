@@ -16,7 +16,7 @@ public class LevelLoadHandler implements MessageHandler {
   }
 
   @Override
-  public void handleEvent (Message message) {
+  public void handleMessage (Message message) {
     if (message == LifecycleEvent.INITIALIZE) {
       World world = new World(
         Arrays.asList(

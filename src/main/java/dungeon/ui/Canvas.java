@@ -23,7 +23,7 @@ public class Canvas extends JPanel implements MessageHandler {
   private World world;
 
   @Override
-  public void handleEvent (Message message) {
+  public void handleMessage (Message message) {
     if (message instanceof Transform) {
       this.world = this.world.apply((Transform) message);
     } else if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
