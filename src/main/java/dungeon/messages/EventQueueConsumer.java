@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  *
  * This class is thread-safe.
  */
-public final class EventQueueConsumer extends AbstractEventConsumer {
+public final class EventQueueConsumer extends AbstractMailbox {
   private final EventHandler eventHandler;
 
   private final BlockingQueue<Event> eventQueue;

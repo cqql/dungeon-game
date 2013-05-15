@@ -1,7 +1,7 @@
 package dungeon.ui;
 
 import dungeon.messages.Event;
-import dungeon.messages.EventConsumer;
+import dungeon.messages.Mailbox;
 import dungeon.messages.EventHandler;
 
 import javax.swing.*;
@@ -10,7 +10,7 @@ import javax.swing.*;
  * An event consumer that passes the messages to the given event handler in the swing event dispatching thread (EDT), so
  * that the event handler can be manipulated in response to messages, which is forbidden from other threads.
  */
-public class SwingConsumer implements EventConsumer {
+public class SwingConsumer implements Mailbox {
   private final EventHandler eventHandler;
 
   public SwingConsumer (EventHandler frame) {

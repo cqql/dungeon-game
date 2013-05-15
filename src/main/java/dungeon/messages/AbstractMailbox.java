@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * This class is thread-safe.
  */
-public abstract class AbstractEventConsumer implements EventConsumer {
+public abstract class AbstractMailbox implements Mailbox {
   private final AtomicBoolean running = new AtomicBoolean(true);
 
   @Override

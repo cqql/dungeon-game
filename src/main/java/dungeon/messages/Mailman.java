@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class Mailman {
   private final ExecutorService executor = Executors.newCachedThreadPool();
 
-  private final Collection<EventConsumer> eventConsumers = new ArrayList<>();
+  private final Collection<Mailbox> mailboxes = new ArrayList<>();
 
   private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>();
 
@@ -34,19 +34,19 @@ public final class Mailman {
    * This may only be called before calling #run().
    */
   public void addHandler (EventHandler eventHandler) {
-    this.eventConsumers.add(new EventQueueConsumer(eventHandler));
+    this.mailboxes.add(new EventQueueConsumer(eventHandler));
   }
 
-  public void addConsumer (EventConsumer eventConsumer) {
-    this.eventConsumers.add(eventConsumer);
+  public void addConsumer (Mailbox mailbox) {
+    this.mailboxes.add(mailbox);
   }
 
   /**
    * Runs the event host until a LifecycleEvent.SHUTDOWN event is received or it's thread is interrupted.
    */
   public void run () {
-    for (EventConsumer eventConsumer : this.eventConsumers) {
-      this.executor.execute(eventConsumer);
+    for (Mailbox mailbox : this.mailboxes) {
+      this.executor.execute(mailbox);
     }
 
     try {
@@ -87,17 +87,17 @@ public final class Mailman {
   }
 
   /**
-   * Shuts down the host, the executor and all eventConsumers.
+   * Shuts down the host, the executor and all mailboxes.
    *
-   * This does not call executor.shutdownNow, because this will force eventConsumers to end and will have bad side effects.
+   * This does not call executor.shutdownNow, because this will force mailboxes to end and will have bad side effects.
    */
   private void shutdown () {
     this.running.set(false);
 
     this.executor.shutdown();
 
-    for (EventConsumer eventConsumer : this.eventConsumers) {
-      eventConsumer.shutdown();
+    for (Mailbox mailbox : this.mailboxes) {
+      mailbox.shutdown();
     }
   }
 
@@ -116,8 +116,8 @@ public final class Mailman {
   }
 
   private void publishEvent (Event event) {
-    for (EventConsumer eventConsumer : this.eventConsumers) {
-      eventConsumer.onEvent(event);
+    for (Mailbox mailbox : this.mailboxes) {
+      mailbox.onEvent(event);
     }
   }
 }
