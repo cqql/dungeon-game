@@ -1,6 +1,6 @@
 package dungeon.ui;
 
-import dungeon.messages.Event;
+import dungeon.messages.Message;
 import dungeon.messages.Mailbox;
 import dungeon.messages.EventHandler;
 
@@ -29,11 +29,11 @@ public class SwingConsumer implements Mailbox {
    * Sends messages to the EDT.
    */
   @Override
-  public void onEvent (final Event event) {
+  public void onEvent (final Message message) {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run () {
-        SwingConsumer.this.eventHandler.handleEvent(event);
+        SwingConsumer.this.eventHandler.handleEvent(message);
       }
     });
   }

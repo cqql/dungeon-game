@@ -1,6 +1,6 @@
 package dungeon;
 
-import dungeon.messages.Event;
+import dungeon.messages.Message;
 import dungeon.messages.EventHandler;
 import dungeon.messages.Mailman;
 import dungeon.models.Player;
@@ -20,11 +20,11 @@ public class GameHandler implements EventHandler {
   }
 
   @Override
-  public void handleEvent (Event event) {
-    if (event instanceof LevelLoadHandler.LevelLoadedEvent) {
-      this.world = ((LevelLoadHandler.LevelLoadedEvent)event).getWorld();
-    } else if (event instanceof MoveCommand) {
-      move((MoveCommand)event);
+  public void handleEvent (Message message) {
+    if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
+      this.world = ((LevelLoadHandler.LevelLoadedEvent) message).getWorld();
+    } else if (message instanceof MoveCommand) {
+      move((MoveCommand) message);
     }
   }
 

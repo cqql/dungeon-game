@@ -20,7 +20,7 @@ public final class Mailman {
 
   private final Collection<Mailbox> mailboxes = new ArrayList<>();
 
-  private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>();
+  private final BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
 
   private final AtomicBoolean running = new AtomicBoolean(true);
 
@@ -63,24 +63,24 @@ public final class Mailman {
   }
 
   /**
-   * Publish an event.
+   * Publish an message.
    *
    * This method should be called from the handlers, that want to publish their own messages.
    *
-   * @param event Event to be published
+   * @param message Message to be published
    * @return true on success, otherwise false
    */
-  public boolean publish (Event event) {
-    if (event == null) {
+  public boolean publish (Message message) {
+    if (message == null) {
       return false;
     }
 
     try {
-      this.eventQueue.put(event);
+      this.messageQueue.put(message);
 
       return true;
     } catch (InterruptedException e) {
-      Log.notice("A thread has been interrupted while sending an event", e);
+      Log.notice("A thread has been interrupted while sending an message", e);
 
       return false;
     }
@@ -102,22 +102,22 @@ public final class Mailman {
   }
 
   private void waitForNextEvent () throws InterruptedException {
-    Event event = this.eventQueue.take();
+    Message message = this.messageQueue.take();
 
-    this.handleEvent(event);
+    this.handleEvent(message);
   }
 
-  private void handleEvent (Event event) {
-    this.publishEvent(event);
+  private void handleEvent (Message message) {
+    this.publishEvent(message);
 
-    if (event == LifecycleEvent.SHUTDOWN) {
+    if (message == LifecycleEvent.SHUTDOWN) {
       this.shutdown();
     }
   }
 
-  private void publishEvent (Event event) {
+  private void publishEvent (Message message) {
     for (Mailbox mailbox : this.mailboxes) {
-      mailbox.onEvent(event);
+      mailbox.onEvent(message);
     }
   }
 }

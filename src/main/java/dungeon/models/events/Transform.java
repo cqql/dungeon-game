@@ -1,10 +1,10 @@
 package dungeon.models.events;
 
-import dungeon.messages.Event;
+import dungeon.messages.Message;
 
 /**
  * Ein Übergang, der auf einen Teil oder den ganzen Model-Graphen angewandt werden kann.
  */
-public interface Transform extends Event {
+public interface Transform extends Message {
 
 }

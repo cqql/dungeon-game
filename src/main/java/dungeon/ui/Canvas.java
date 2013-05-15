@@ -1,7 +1,7 @@
 package dungeon.ui;
 
 import dungeon.LevelLoadHandler;
-import dungeon.messages.Event;
+import dungeon.messages.Message;
 import dungeon.messages.EventHandler;
 import dungeon.models.*;
 import dungeon.models.events.Transform;
@@ -23,11 +23,11 @@ public class Canvas extends JPanel implements EventHandler {
   private World world;
 
   @Override
-  public void handleEvent (Event event) {
-    if (event instanceof Transform) {
-      this.world = this.world.apply((Transform)event);
-    } else if (event instanceof LevelLoadHandler.LevelLoadedEvent) {
-      this.world = ((LevelLoadHandler.LevelLoadedEvent)event).getWorld();
+  public void handleEvent (Message message) {
+    if (message instanceof Transform) {
+      this.world = this.world.apply((Transform) message);
+    } else if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
+      this.world = ((LevelLoadHandler.LevelLoadedEvent) message).getWorld();
     }
 
     repaint();

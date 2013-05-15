@@ -13,9 +13,9 @@ public interface Mailbox extends Runnable {
   public void shutdown ();
 
   /**
-   * The event host calls this to pass an event to the client.
+   * The message host calls this to pass an message to the client.
    *
    * Beware that this method is called from the host's thread.
    */
-  public void onEvent (Event event);
+  public void onEvent (Message message);
 }

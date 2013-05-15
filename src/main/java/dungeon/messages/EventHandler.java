@@ -8,7 +8,7 @@ package dungeon.messages;
  */
 public interface EventHandler {
   /**
-   * This method will be called every time the event host publishes an event.
+   * This method will be called every time the message host publishes an message.
    */
-  public void handleEvent (Event event);
+  public void handleEvent (Message message);
 }

@@ -15,11 +15,11 @@ import java.util.concurrent.TimeUnit;
 public final class EventQueueConsumer extends AbstractMailbox {
   private final EventHandler eventHandler;
 
-  private final BlockingQueue<Event> eventQueue;
+  private final BlockingQueue<Message> messageQueue;
 
   public EventQueueConsumer (EventHandler eventHandler) {
     this.eventHandler = eventHandler;
-    this.eventQueue = new LinkedBlockingQueue<>();
+    this.messageQueue = new LinkedBlockingQueue<>();
   }
 
   /**
@@ -30,10 +30,10 @@ public final class EventQueueConsumer extends AbstractMailbox {
     while (isRunning()) {
       try {
         // Wait 10 milliseconds at most to prevent dead lock
-        Event event = this.eventQueue.poll(10, TimeUnit.MILLISECONDS);
+        Message message = this.messageQueue.poll(10, TimeUnit.MILLISECONDS);
 
-        if (event != null) {
-          this.eventHandler.handleEvent(event);
+        if (message != null) {
+          this.eventHandler.handleEvent(message);
         }
       } catch (InterruptedException e) {
         Log.notice("EventQueueConsumer interrupted while running", e);
@@ -44,13 +44,13 @@ public final class EventQueueConsumer extends AbstractMailbox {
   }
 
   /**
-   * Append the event to the event queue.
+   * Append the message to the message queue.
    */
-  public void onEvent (Event event) {
+  public void onEvent (Message message) {
     try {
-      this.eventQueue.put(event);
+      this.messageQueue.put(message);
     } catch (InterruptedException e) {
-      Log.notice("EventQueueConsumer interrupted while receiving an event", e);
+      Log.notice("EventQueueConsumer interrupted while receiving an message", e);
     }
   }
 }

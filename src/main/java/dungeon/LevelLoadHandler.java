@@ -1,6 +1,6 @@
 package dungeon;
 
-import dungeon.messages.Event;
+import dungeon.messages.Message;
 import dungeon.messages.EventHandler;
 import dungeon.messages.Mailman;
 import dungeon.messages.LifecycleEvent;
@@ -16,8 +16,8 @@ public class LevelLoadHandler implements EventHandler {
   }
 
   @Override
-  public void handleEvent (Event event) {
-    if (event == LifecycleEvent.INITIALIZE) {
+  public void handleEvent (Message message) {
+    if (message == LifecycleEvent.INITIALIZE) {
       World world = new World(
         Arrays.asList(
           new Room(
@@ -39,7 +39,7 @@ public class LevelLoadHandler implements EventHandler {
     }
   }
 
-  public static class LevelLoadedEvent implements Event {
+  public static class LevelLoadedEvent implements Message {
     private final World world;
 
     public LevelLoadedEvent (World world) {

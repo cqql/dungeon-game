@@ -1,6 +1,6 @@
 package dungeon.ui;
 
-import dungeon.messages.Event;
+import dungeon.messages.Message;
 import dungeon.messages.EventHandler;
 import dungeon.messages.Mailman;
 import dungeon.messages.LifecycleEvent;
@@ -26,10 +26,10 @@ public class MainFrame extends JFrame implements EventHandler {
   }
 
   @Override
-  public void handleEvent (Event event) {
-    if (event == LifecycleEvent.INITIALIZE) {
+  public void handleEvent (Message message) {
+    if (message == LifecycleEvent.INITIALIZE) {
       this.initialize();
-    } else if (event == LifecycleEvent.SHUTDOWN) {
+    } else if (message == LifecycleEvent.SHUTDOWN) {
       this.dispose();
     }
   }

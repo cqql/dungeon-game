@@ -3,7 +3,7 @@ package dungeon.messages;
 /**
  * Lifecycle messages of the event host.
  */
-public enum LifecycleEvent implements Event {
+public enum LifecycleEvent implements Message {
   /**
    * This will always be the first event, that is published.
    *
