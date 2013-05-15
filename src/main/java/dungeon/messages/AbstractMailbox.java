@@ -3,7 +3,7 @@ package dungeon.messages;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * An abstract event runner.
+ * An abstract mailbox.
  *
  * Your job is to override #run() and continually check #isRunning() and stop working if it returns false.
  *
@@ -18,14 +18,14 @@ public abstract class AbstractMailbox implements Mailbox {
   }
 
   /**
-   * Should this client still run?
+   * Should this mailbox still run?
    */
   public boolean isRunning () {
     return this.running.get();
   }
 
   /**
-   * This is intentionally a no-op in case you want to create a consumer that does not actually depend on the received
+   * This is intentionally a no-op in case you want to create a mailbox that does not actually depend on the received
    * messages.
    */
   @Override

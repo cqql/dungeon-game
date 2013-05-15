@@ -11,9 +11,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Publishes messages to attached event consumers.
+ * Delivers messages to registered mailboxes.
  *
- * Be aware of the fact that every event consumer will be running in it's own thread.
+ * Be aware of the fact that each mailbox will be running in it's own thread.
  */
 public final class Mailman {
   private final ExecutorService executor = Executors.newCachedThreadPool();
@@ -29,7 +29,7 @@ public final class Mailman {
   }
 
   /**
-   * Add an event handler.
+   * Add a message handler.
    *
    * This may only be called before calling #run().
    */
@@ -42,7 +42,7 @@ public final class Mailman {
   }
 
   /**
-   * Runs the event host until a LifecycleEvent.SHUTDOWN event is received or it's thread is interrupted.
+   * Runs the mailman until a LifecycleEvent.SHUTDOWN event is received or it's thread is interrupted.
    */
   public void run () {
     for (Mailbox mailbox : this.mailboxes) {
@@ -63,11 +63,8 @@ public final class Mailman {
   }
 
   /**
-   * Publish an message.
+   * Enqueue a message to be sent to all mailboxes.
    *
-   * This method should be called from the handlers, that want to send their own messages.
-   *
-   * @param message Message to be published
    * @return true on success, otherwise false
    */
   public boolean send (Message message) {
@@ -87,7 +84,7 @@ public final class Mailman {
   }
 
   /**
-   * Shuts down the host, the executor and all mailboxes.
+   * Shuts down the mailman, the executor and all mailboxes.
    *
    * This does not call executor.shutdownNow, because this will force mailboxes to end and will have bad side effects.
    */

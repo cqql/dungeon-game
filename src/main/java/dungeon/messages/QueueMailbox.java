@@ -7,8 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A wrapper for an MessageHandler that manages an event queue and passes the messages one after another to the handlers
- * #handleMessage() method.
+ * A mailbox that puts messages in queue and passes them FIFO to a message handler.
  *
  * This class is thread-safe.
  */
@@ -25,7 +24,7 @@ public final class QueueMailbox extends AbstractMailbox {
   }
 
   /**
-   * Pass the messages to the event handler info FIFO-order.
+   * Pass the messages to the message handler in FIFO-order.
    */
   @Override
   public void run () {

@@ -1,9 +1,9 @@
 package dungeon.messages;
 
 /**
- * Consume a stream of messages.
+ * A mailbox should accept messages through #putMessage that will then be handled in it's #run method.
  *
- * WARNING: #shutdown() and #putMessage() will be called from the event host's thread whereas #run() is running in it's own
+ * WARNING: #shutdown() and #putMessage() will be called from the mailman's thread whereas #run() is running in it's own
  * thread. Therefore you have to care about synchronization.
  */
 public interface Mailbox extends Runnable {
@@ -13,9 +13,9 @@ public interface Mailbox extends Runnable {
   public void shutdown ();
 
   /**
-   * The message host calls this to pass an message to the client.
+   * The message host calls this to put a message in the mailbox.
    *
-   * Beware that this method is called from the host's thread.
+   * Beware that this method is called from the mailman's thread.
    */
   public void putMessage (Message message);
 }
