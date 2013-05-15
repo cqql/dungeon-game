@@ -1,16 +1,16 @@
 package dungeon.ui;
 
 import dungeon.ui.events.MoveCommand;
-import dungeon.messages.EventHost;
+import dungeon.messages.Mailman;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class InputToEventConverter implements KeyListener {
-  private final EventHost eventHost;
+  private final Mailman mailman;
 
-  public InputToEventConverter (EventHost eventHost) {
-    this.eventHost = eventHost;
+  public InputToEventConverter (Mailman mailman) {
+    this.mailman = mailman;
   }
 
   @Override
@@ -22,16 +22,16 @@ public class InputToEventConverter implements KeyListener {
   public void keyPressed (KeyEvent keyEvent) {
     switch (keyEvent.getKeyChar()) {
       case 'w':
-        this.eventHost.publish(MoveCommand.UP);
+        this.mailman.publish(MoveCommand.UP);
         break;
       case 'a':
-        this.eventHost.publish(MoveCommand.LEFT);
+        this.mailman.publish(MoveCommand.LEFT);
         break;
       case 's':
-        this.eventHost.publish(MoveCommand.DOWN);
+        this.mailman.publish(MoveCommand.DOWN);
         break;
       case 'd':
-        this.eventHost.publish(MoveCommand.RIGHT);
+        this.mailman.publish(MoveCommand.RIGHT);
         break;
       default:
     }

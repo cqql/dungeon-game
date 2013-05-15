@@ -2,7 +2,7 @@ package dungeon;
 
 import dungeon.messages.Event;
 import dungeon.messages.EventHandler;
-import dungeon.messages.EventHost;
+import dungeon.messages.Mailman;
 import dungeon.models.Player;
 import dungeon.models.World;
 import dungeon.ui.events.MoveCommand;
@@ -11,12 +11,12 @@ import dungeon.ui.events.MoveCommand;
  * Hier wird die eigentliche Logik des Spiels durchgeführt.
  */
 public class GameHandler implements EventHandler {
-  private final EventHost eventHost;
+  private final Mailman mailman;
 
   private World world;
 
-  public GameHandler (EventHost eventHost) {
-    this.eventHost = eventHost;
+  public GameHandler (Mailman mailman) {
+    this.mailman = mailman;
   }
 
   @Override
@@ -50,6 +50,6 @@ public class GameHandler implements EventHandler {
 
     this.world = this.world.apply(transform);
 
-    eventHost.publish(transform);
+    mailman.publish(transform);
   }
 }

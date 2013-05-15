@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * Be aware of the fact that every event consumer will be running in it's own thread.
  */
-public final class EventHost {
+public final class Mailman {
   private final ExecutorService executor = Executors.newCachedThreadPool();
 
   private final Collection<EventConsumer> eventConsumers = new ArrayList<>();
@@ -24,7 +24,7 @@ public final class EventHost {
 
   private final AtomicBoolean running = new AtomicBoolean(true);
 
-  public EventHost () {
+  public Mailman() {
     this.publish(LifecycleEvent.INITIALIZE);
   }
 

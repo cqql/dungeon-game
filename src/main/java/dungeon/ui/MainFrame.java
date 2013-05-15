@@ -2,7 +2,7 @@ package dungeon.ui;
 
 import dungeon.messages.Event;
 import dungeon.messages.EventHandler;
-import dungeon.messages.EventHost;
+import dungeon.messages.Mailman;
 import dungeon.messages.LifecycleEvent;
 
 import javax.swing.*;
@@ -19,10 +19,10 @@ import java.awt.event.WindowEvent;
 public class MainFrame extends JFrame implements EventHandler {
   public static final String TITLE = "DUNGEON GAME";
 
-  private final EventHost eventHost;
+  private final Mailman mailman;
 
-  public MainFrame (EventHost eventHost) {
-    this.eventHost = eventHost;
+  public MainFrame (Mailman mailman) {
+    this.mailman = mailman;
   }
 
   @Override
@@ -46,7 +46,7 @@ public class MainFrame extends JFrame implements EventHandler {
     this.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing (WindowEvent e) {
-        MainFrame.this.eventHost.publish(LifecycleEvent.SHUTDOWN);
+        MainFrame.this.mailman.publish(LifecycleEvent.SHUTDOWN);
       }
     });
 

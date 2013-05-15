@@ -2,17 +2,17 @@ package dungeon;
 
 import dungeon.messages.Event;
 import dungeon.messages.EventHandler;
-import dungeon.messages.EventHost;
+import dungeon.messages.Mailman;
 import dungeon.messages.LifecycleEvent;
 import dungeon.models.*;
 
 import java.util.Arrays;
 
 public class LevelLoadHandler implements EventHandler {
-  private final EventHost eventHost;
+  private final Mailman mailman;
 
-  public LevelLoadHandler (EventHost eventHost) {
-    this.eventHost = eventHost;
+  public LevelLoadHandler (Mailman mailman) {
+    this.mailman = mailman;
   }
 
   @Override
@@ -35,7 +35,7 @@ public class LevelLoadHandler implements EventHandler {
         new Player("Link", 1, "warm-up", new Position(0, 0))
       );
 
-      this.eventHost.publish(new LevelLoadedEvent(world));
+      this.mailman.publish(new LevelLoadedEvent(world));
     }
   }
 
