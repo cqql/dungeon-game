@@ -6,29 +6,26 @@ import dungeon.ui.InputToMessageConverter;
 import dungeon.ui.MainFrame;
 import dungeon.ui.SwingMailbox;
 
-/**
- * Main Klasse
- */
 public class Main {
-	public static void main(String[] args) {
-		Log.setLevel(Log.Level.NOTICE); // Hier wird geloggt
+  public static void main (String[] args) {
+    Log.setLevel(Log.Level.NOTICE);
 
-		Mailman mailman = new Mailman(); // Der Mailman ...
+    Mailman mailman = new Mailman();
 
-		MainFrame mainFrame = new MainFrame(mailman); // Erstellt das Hauptfenster welches den Mailman zugewiesen bekommt
+    MainFrame mainFrame = new MainFrame(mailman);
 
-		InputToMessageConverter converter = new InputToMessageConverter(mailman); // Dies ist ein KeyListener der die Keys in eine Message umwandelt und an den Mailman schickt
-		mainFrame.addKeyListener(converter); // MainFrame bekommt KeyListener (wartet auf Tastatureingaben und bearbeitet sie)
+    InputToMessageConverter converter = new InputToMessageConverter(mailman);
+    mainFrame.addKeyListener(converter);
 
-		Canvas canvas = new Canvas(); // Canvas wird erstellt
-		mainFrame.add(canvas); // Canvas wird dem MainFrame hinzugefügt
+    Canvas canvas = new Canvas();
+    mainFrame.add(canvas);
 
-		mailman.addMailbox(new SwingMailbox(mainFrame)); // MainFrame wird dem Mailman hinzugefügt
-		mailman.addMailbox(new SwingMailbox(canvas)); // Canvas wird dem Mailman hinzugefügt
+    mailman.addMailbox(new SwingMailbox(mainFrame));
+    mailman.addMailbox(new SwingMailbox(canvas));
 
-		mailman.addHandler(new LevelLoadHandler(mailman)); // ...
-		mailman.addHandler(new GameHandler(mailman)); // ...
+    mailman.addHandler(new LevelLoadHandler(mailman));
+    mailman.addHandler(new GameHandler(mailman));
 
-		mailman.run(); // Mailman wird gestartet
-	}
+    mailman.run();
+  }
 }

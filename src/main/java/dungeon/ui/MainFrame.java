@@ -12,50 +12,44 @@ import java.awt.event.WindowEvent;
 
 /**
  * The main frame for the application.
- * <p/>
+ *
  * handleMessage() will be called on the swing EDT. This means that any methods called by handleMessage() are generally
  * save to manipulate the frame.
- *
- * Diese Klasse ist die Fensterklasse vom Typ JFrame.
  */
 public class MainFrame extends JFrame implements MessageHandler {
-	public static final String TITLE = "DUNGEON GAME"; // Titel von des MainFrames
+  public static final String TITLE = "DUNGEON GAME";
 
-	private final Mailman mailman;
+  private final Mailman mailman;
 
-	public MainFrame(Mailman mailman) {
-		this.mailman = mailman; // Mailman für die Klasse verfügbar machen
-	}
+  public MainFrame (Mailman mailman) {
+    this.mailman = mailman;
+  }
 
-	/**
-	 * MessageHandler-Funktion
-	 * Wird vermutlich vom Mailman verwaltet ...
-	 */
-	@Override
-	public void handleMessage(Message message) {
-		if (message == LifecycleEvent.INITIALIZE) { // Wenn INITIALIZE, dann Fenster initialisieren und anzeigen
-			this.initialize();
-		} else if (message == LifecycleEvent.SHUTDOWN) { // Wenn SHUTDOWN, dann Fenster entfernen
-			this.dispose();
-		}
-	}
+  @Override
+  public void handleMessage (Message message) {
+    if (message == LifecycleEvent.INITIALIZE) {
+      this.initialize();
+    } else if (message == LifecycleEvent.SHUTDOWN) {
+      this.dispose();
+    }
+  }
 
-	private void initialize() {
-		this.setName(TITLE);  // Name wird gesetzt
-		this.setTitle(TITLE); // Titel wird gesetzt
+  private void initialize () {
+    this.setName(TITLE);
+    this.setTitle(TITLE);
 
-		this.setUndecorated(true);
-		this.setExtendedState(Frame.MAXIMIZED_BOTH);
-		this.setResizable(false);
+    this.setUndecorated(true);
+    this.setExtendedState(Frame.MAXIMIZED_BOTH);
+    this.setResizable(false);
 
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				MainFrame.this.mailman.send(LifecycleEvent.SHUTDOWN); // Wenn das Fenster geschlossen wird, Message an Mailman schicken
-			}
-		});
+    this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    this.addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing (WindowEvent e) {
+        MainFrame.this.mailman.send(LifecycleEvent.SHUTDOWN);
+      }
+    });
 
-		this.setVisible(true); // MainFrame sichtbar machen
-	}
+    this.setVisible(true);
+  }
 }
