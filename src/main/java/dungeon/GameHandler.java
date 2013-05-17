@@ -45,9 +45,6 @@ public class GameHandler implements MessageHandler {
         if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
           return;
         }
-
-
-
         transform = new Player.MoveTransform(0, SPEED);
         break;
       case LEFT:
