@@ -36,25 +36,28 @@ public class GameHandler implements MessageHandler {
 
     switch (command) {
       case UP:
-        if (this.world.getPlayer().getPosition().getY() - SPEED < 0.01) {
+        if (this.world.getPlayer().getPosition().getY() - SPEED < 0) {
           return;
         }
         transform = new Player.MoveTransform(0, -SPEED);
         break;
       case DOWN:
-        if (this.world.getPlayer().getPosition().getY() + 0.99 + SPEED > this.world.getCurrentRoom().getSize()) {
+        if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
           return;
         }
+
+
+
         transform = new Player.MoveTransform(0, SPEED);
         break;
       case LEFT:
-        if (this.world.getPlayer().getPosition().getX() - SPEED < 0.01) {
+        if (this.world.getPlayer().getPosition().getX() - SPEED < 0) {
           return;
         }
         transform = new Player.MoveTransform(-SPEED, 0);
         break;
       case RIGHT:
-        if (this.world.getPlayer().getPosition().getX() + 0.99 + SPEED > this.world.getCurrentRoom().getSize()) {
+        if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
           return;
         }
         transform = new Player.MoveTransform(SPEED, 0);
