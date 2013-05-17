@@ -20,17 +20,17 @@ public class InputToMessageConverter implements KeyListener {
 
   @Override
   public void keyPressed (KeyEvent keyEvent) {
-    switch (keyEvent.getKeyChar()) {
-      case 'w':
+    switch (keyEvent.getKeyCode()) {
+      case KeyEvent.VK_W: case KeyEvent.VK_UP:
         this.mailman.send(MoveCommand.UP);
         break;
-      case 'a':
+      case KeyEvent.VK_A: case KeyEvent.VK_LEFT:
         this.mailman.send(MoveCommand.LEFT);
         break;
-      case 's':
+      case KeyEvent.VK_S:case KeyEvent.VK_DOWN:
         this.mailman.send(MoveCommand.DOWN);
         break;
-      case 'd':
+      case KeyEvent.VK_D: case KeyEvent.VK_RIGHT:
         this.mailman.send(MoveCommand.RIGHT);
         break;
       default:
