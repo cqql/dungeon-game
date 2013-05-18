@@ -40,10 +40,25 @@ public class Player {
    * Checks if the player touches the enemy #enemy.
    */
   public boolean touches (Enemy enemy) {
-    Rectangle2D playerSpace = new Rectangle2D.Float(getPosition().getX(), getPosition().getY(), 1, 1);
     Rectangle2D enemySpace = new Rectangle2D.Float(enemy.getPosition().getX(), enemy.getPosition().getY(), 1, 1);
 
-    return playerSpace.intersects(enemySpace);
+    return this.playerSpace().intersects(enemySpace);
+  }
+
+  /**
+   * Checks if the player touches the 1x1 tile at Position (#x, #y).
+   */
+  public boolean touches (float x, float y) {
+    Rectangle2D tileSpace = new Rectangle2D.Float(x, y, 1, 1);
+
+    return this.playerSpace().intersects(tileSpace);
+  }
+
+  /**
+   * Returns a rectangle that represents the space occupied by the player.
+   */
+  private Rectangle2D playerSpace () {
+    return new Rectangle2D.Float(getPosition().getX(), getPosition().getY(), 1, 1);
   }
 
   public Player apply (Transform transform) {

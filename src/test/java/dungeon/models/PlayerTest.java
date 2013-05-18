@@ -40,4 +40,14 @@ public class PlayerTest {
 
     Assert.assertFalse(player.touches(enemy));
   }
+
+  @Test
+  public void touchesOverlappingTile () {
+    Assert.assertTrue(player.touches(1.5f, 1.5f));
+  }
+
+  @Test
+  public void doesNotTouchDistantTile () {
+    Assert.assertFalse(player.touches(1.5f, 3.5f));
+  }
 }
