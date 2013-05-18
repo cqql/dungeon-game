@@ -39,6 +39,10 @@ public class Player {
       MoveTransform move = (MoveTransform)transform;
 
       return new Player(this.name, this.hitPoints, this.roomId, new Position(this.position.getX() + move.xDelta, this.position.getY() + move.yDelta));
+    } else if (transform instanceof HitpointTransform) {
+      HitpointTransform hpTransform = (HitpointTransform)transform;
+
+      return new Player(this.name, this.hitPoints + hpTransform.delta, this.roomId, this.position);
     } else {
       return this;
     }
@@ -56,8 +60,10 @@ public class Player {
   }
 
   public static class HitpointTransform implements Transform {
-    public HitpointTransform (int delta) {
+    private final int delta;
 
+    public HitpointTransform (int delta) {
+      this.delta = delta;
     }
   }
 }
