@@ -26,4 +26,18 @@ public class PlayerTest {
 
     Assert.assertEquals(4, transformed.getHitPoints());
   }
+
+  @Test
+  public void touchesOverlappingEnemy () {
+    Enemy enemy = new Enemy(new Position(1.5f, 1.5f));
+
+    Assert.assertTrue(player.touches(enemy));
+  }
+
+  @Test
+  public void doesNotTouchDistantEnemy () {
+    Enemy enemy = new Enemy(new Position(0, 0));
+
+    Assert.assertFalse(player.touches(enemy));
+  }
 }

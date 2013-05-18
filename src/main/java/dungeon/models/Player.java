@@ -2,6 +2,8 @@ package dungeon.models;
 
 import dungeon.models.messages.Transform;
 
+import java.awt.geom.Rectangle2D;
+
 public class Player {
   private final String name;
 
@@ -32,6 +34,16 @@ public class Player {
 
   public Position getPosition () {
     return this.position;
+  }
+
+  /**
+   * Checks if the player touches the enemy #enemy.
+   */
+  public boolean touches (Enemy enemy) {
+    Rectangle2D playerSpace = new Rectangle2D.Float(getPosition().getX(), getPosition().getY(), 1, 1);
+    Rectangle2D enemySpace = new Rectangle2D.Float(enemy.getPosition().getX(), enemy.getPosition().getY(), 1, 1);
+
+    return playerSpace.intersects(enemySpace);
   }
 
   public Player apply (Transform transform) {
