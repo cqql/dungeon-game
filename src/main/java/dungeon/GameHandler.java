@@ -35,12 +35,11 @@ public class GameHandler implements MessageHandler {
 
   private void move (MoveCommand command) {
     Transform movementTransform = handleMovement(command);
-    Transform enemyTransform = handleEnemies(command);
-
     this.world = this.world.apply(movementTransform);
-    this.world = this.world.apply(enemyTransform);
-
     this.mailman.send(movementTransform);
+
+    Transform enemyTransform = handleEnemies();
+    this.world = this.world.apply(enemyTransform);
     this.mailman.send(enemyTransform);
   }
 
@@ -76,39 +75,14 @@ public class GameHandler implements MessageHandler {
     return new IdentityTransform();
   }
 
-  private Transform handleEnemies (MoveCommand command) {
-    switch (command) {
-      case UP:
-        for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
-          if (this.world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + 1 - SPEED) {
-            return new Player.HitpointTransform(-1);
-          }
-        }
-        break;
-      case DOWN:
-        for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
-          if (this.world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + SPEED) {
-            return new Player.HitpointTransform(-1);
-          }
-        }
-        break;
-      case LEFT:
-        for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
-          if (this.world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + 1 - SPEED) {
-            return new Player.HitpointTransform(-1);
-          }
-        }
-        break;
-      case RIGHT:
-        for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
-          if (this.world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + SPEED) {
-            return new Player.HitpointTransform(-1);
-          }
-        }
-        break;
-      default:
+  private Transform handleEnemies () {
+    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+      if (this.world.getPlayer().touches(enemy)) {
+        return new Player.HitpointTransform(-1);
+      } else {
+        return new IdentityTransform();
+      }
     }
-
     return new IdentityTransform();
   }
 }
