@@ -112,39 +112,8 @@ public class GameHandler implements MessageHandler {
     Transform movementTransform;
     Transform enemyTransform;
 
-
-    switch (command) {
-      case UP:
-        this.handleMovement(command);
-        this.handleEnemy(command);
-
-        movementTransform = handleMovement(command);
-        enemyTransform = handleEnemy(command);
-        break;
-      case DOWN:
-        this.handleMovement(command);
-        this.handleEnemy(command);
-
-        movementTransform = handleMovement(command);
-        enemyTransform = handleEnemy(command);
-        break;
-      case LEFT:
-        this.handleMovement(command);
-        this.handleEnemy(command);
-
-        movementTransform = handleMovement(command);
-        enemyTransform = handleEnemy(command);
-        break;
-      case RIGHT:
-        this.handleMovement(command);
-        this.handleEnemy(command);
-
-        movementTransform = handleMovement(command);
-        enemyTransform = handleEnemy(command);
-        break;
-      default:
-        return;
-    }
+    movementTransform = handleMovement(command);
+    enemyTransform = handleEnemy(command);
 
     this.world = this.world.apply(movementTransform);
     this.world = this.world.apply(enemyTransform);
