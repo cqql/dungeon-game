@@ -27,9 +27,9 @@ public class GameHandler implements MessageHandler {
   @Override
   public void handleMessage (Message message) {
     if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
-      this.world = ((LevelLoadHandler.LevelLoadedEvent) message).getWorld();
+      this.world = ((LevelLoadHandler.LevelLoadedEvent)message).getWorld();
     } else if (message instanceof MoveCommand) {
-      move((MoveCommand) message);
+      move((MoveCommand)message);
     }
   }
 
@@ -46,73 +46,69 @@ public class GameHandler implements MessageHandler {
 
   private Transform handleMovement (MoveCommand command) {
     switch (command) {
-
       case UP:
-        if (world.getPlayer().getPosition().getY() - SPEED < 0) {
+        if (this.world.getPlayer().getPosition().getY() - SPEED < 0) {
           return new IdentityTransform();
-        }
-        else {
+        } else {
           return new Player.MoveTransform(0, -SPEED);
         }
       case DOWN:
-        if (world.getPlayer().getPosition().getY() + 1 + SPEED > world.getCurrentRoom().getSize()) {
+        if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
           return new IdentityTransform();
-        }
-        else {
+        } else {
           return new Player.MoveTransform(0, SPEED);
         }
       case LEFT:
-        if (world.getPlayer().getPosition().getX() - SPEED < 0) {
+        if (this.world.getPlayer().getPosition().getX() - SPEED < 0) {
           return new IdentityTransform();
-        }
-        else {
+        } else {
           return new Player.MoveTransform(-SPEED, 0);
         }
       case RIGHT:
-        if (world.getPlayer().getPosition().getX() + 1 + SPEED > world.getCurrentRoom().getSize()) {
+        if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
           return new IdentityTransform();
-        }
-        else {
+        } else {
           return new Player.MoveTransform(SPEED, 0);
         }
       default:
     }
+
     return new IdentityTransform();
   }
 
   private Transform handleEnemies (MoveCommand command) {
     switch (command) {
-
       case UP:
-        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
-          if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + 1 - SPEED ) {
+        for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+          if (this.world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + 1 - SPEED) {
             return new Player.HitpointTransform(-1);
           }
         }
         break;
       case DOWN:
-        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
-          if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + SPEED ) {
+        for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+          if (this.world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + SPEED) {
             return new Player.HitpointTransform(-1);
           }
         }
         break;
       case LEFT:
-        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
-          if (world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + 1 - SPEED ) {
+        for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+          if (this.world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + 1 - SPEED) {
             return new Player.HitpointTransform(-1);
           }
         }
         break;
       case RIGHT:
-        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
-          if (world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + SPEED ) {
+        for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+          if (this.world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + SPEED) {
             return new Player.HitpointTransform(-1);
           }
         }
         break;
       default:
     }
+
     return new IdentityTransform();
   }
 }
