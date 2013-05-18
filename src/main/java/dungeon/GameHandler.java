@@ -6,6 +6,8 @@ import dungeon.messages.MessageHandler;
 import dungeon.models.Enemy;
 import dungeon.models.Player;
 import dungeon.models.World;
+import dungeon.models.messages.IdentityTransform;
+import dungeon.models.messages.Transform;
 import dungeon.ui.events.MoveCommand;
 
 /**
@@ -31,67 +33,123 @@ public class GameHandler implements MessageHandler {
     }
   }
 
-  private void move (MoveCommand command) {
-    Player.MoveTransform transform;
+  private Transform handleMovement (MoveCommand command) {
 
     switch (command) {
       case UP:
         if (world.getPlayer().getPosition().getY() - SPEED < 0) {
-          return;
+          return new IdentityTransform();
+        }
+        else {
+          return new Player.MoveTransform(0, -SPEED);
         }
 
-        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
-          if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + 1 - SPEED ) {
-//            transform = Player.HitpointTransform(-1);
-          }
-        }
-
-        transform = new Player.MoveTransform(0, -SPEED);
-        break;
       case DOWN:
         if (world.getPlayer().getPosition().getY() + 1 + SPEED > world.getCurrentRoom().getSize()) {
-          return;
+          return new IdentityTransform();
+        }
+        else {
+          return new Player.MoveTransform(0, SPEED);
         }
 
-        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
-          if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + SPEED ) {
-//            transform = Player.HitpointTransform(-1);
-          }
-        }
-        transform = new Player.MoveTransform(0, SPEED);
-        break;
       case LEFT:
         if (world.getPlayer().getPosition().getX() - SPEED < 0) {
-          return;
+          return new IdentityTransform();
+        }
+        else {
+          return new Player.MoveTransform(-SPEED, 0);
         }
 
-        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
-          if (world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + 1 - SPEED ) {
-//            transform = Player.HitpointTransform(-1);
-          }
-        }
-
-        transform = new Player.MoveTransform(-SPEED, 0);
-        break;
       case RIGHT:
         if (world.getPlayer().getPosition().getX() + 1 + SPEED > world.getCurrentRoom().getSize()) {
-          return;
+          return new IdentityTransform();
         }
+        else {
+          return new Player.MoveTransform(SPEED, 0);
+        }
+      default:
+    }
+    return new IdentityTransform();
+  }
 
+  private Transform handleEnemy (MoveCommand command) {
+
+    switch (command) {
+      case UP:
         for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
-          if (world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + SPEED ) {
-//            transform = Player.HitpointTransform(-1);
+          if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + 1 - SPEED ) {
+            return new Player.HitpointTransform(-1);
           }
         }
+        break;
+      case DOWN:
+        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
+          if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + SPEED ) {
+            return new Player.HitpointTransform(-1);
+          }
+        }
+        break;
+      case LEFT:
+        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
+          if (world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + 1 - SPEED ) {
+            return new Player.HitpointTransform(-1);
+          }
+        }
+        break;
+      case RIGHT:
+        for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
+          if (world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + SPEED ) {
+            return new Player.HitpointTransform(-1);
+          }
+        }
+        break;
+      default:
+    }
+    return new IdentityTransform();
+  }
 
-        transform = new Player.MoveTransform(SPEED, 0);
+  private void move (MoveCommand command) {
+    Transform movementTransform;
+    Transform enemyTransform;
+
+
+    switch (command) {
+      case UP:
+        this.handleMovement(command);
+        this.handleEnemy(command);
+
+        movementTransform = handleMovement(command);
+        enemyTransform = handleEnemy(command);
+        break;
+      case DOWN:
+        this.handleMovement(command);
+        this.handleEnemy(command);
+
+        movementTransform = handleMovement(command);
+        enemyTransform = handleEnemy(command);
+        break;
+      case LEFT:
+        this.handleMovement(command);
+        this.handleEnemy(command);
+
+        movementTransform = handleMovement(command);
+        enemyTransform = handleEnemy(command);
+        break;
+      case RIGHT:
+        this.handleMovement(command);
+        this.handleEnemy(command);
+
+        movementTransform = handleMovement(command);
+        enemyTransform = handleEnemy(command);
         break;
       default:
         return;
     }
 
-    this.world = this.world.apply(transform);
+    this.world = this.world.apply(movementTransform);
+    this.world = this.world.apply(enemyTransform);
 
-    this.mailman.send(transform);
+    this.mailman.send(movementTransform);
+    this.mailman.send(enemyTransform);
   }
 }
