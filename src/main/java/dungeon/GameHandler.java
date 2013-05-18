@@ -33,9 +33,20 @@ public class GameHandler implements MessageHandler {
     }
   }
 
-  private Transform handleMovement (MoveCommand command) {
+  private void move (MoveCommand command) {
+    Transform movementTransform = handleMovement(command);
+    Transform enemyTransform = handleEnemy(command);
 
+    this.world = this.world.apply(movementTransform);
+    this.world = this.world.apply(enemyTransform);
+
+    this.mailman.send(movementTransform);
+    this.mailman.send(enemyTransform);
+  }
+
+  private Transform handleMovement (MoveCommand command) {
     switch (command) {
+
       case UP:
         if (world.getPlayer().getPosition().getY() - SPEED < 0) {
           return new IdentityTransform();
@@ -43,7 +54,6 @@ public class GameHandler implements MessageHandler {
         else {
           return new Player.MoveTransform(0, -SPEED);
         }
-
       case DOWN:
         if (world.getPlayer().getPosition().getY() + 1 + SPEED > world.getCurrentRoom().getSize()) {
           return new IdentityTransform();
@@ -51,7 +61,6 @@ public class GameHandler implements MessageHandler {
         else {
           return new Player.MoveTransform(0, SPEED);
         }
-
       case LEFT:
         if (world.getPlayer().getPosition().getX() - SPEED < 0) {
           return new IdentityTransform();
@@ -59,7 +68,6 @@ public class GameHandler implements MessageHandler {
         else {
           return new Player.MoveTransform(-SPEED, 0);
         }
-
       case RIGHT:
         if (world.getPlayer().getPosition().getX() + 1 + SPEED > world.getCurrentRoom().getSize()) {
           return new IdentityTransform();
@@ -73,8 +81,8 @@ public class GameHandler implements MessageHandler {
   }
 
   private Transform handleEnemy (MoveCommand command) {
-
     switch (command) {
+
       case UP:
         for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
           if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + 1 - SPEED ) {
@@ -108,17 +116,5 @@ public class GameHandler implements MessageHandler {
     return new IdentityTransform();
   }
 
-  private void move (MoveCommand command) {
-    Transform movementTransform;
-    Transform enemyTransform;
 
-    movementTransform = handleMovement(command);
-    enemyTransform = handleEnemy(command);
-
-    this.world = this.world.apply(movementTransform);
-    this.world = this.world.apply(enemyTransform);
-
-    this.mailman.send(movementTransform);
-    this.mailman.send(enemyTransform);
-  }
 }
