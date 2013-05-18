@@ -54,4 +54,10 @@ public class Player {
       this.yDelta = yDelta;
     }
   }
+
+  public static class HitpointTransform implements Transform {
+    public HitpointTransform (int delta) {
+
+    }
+  }
 }

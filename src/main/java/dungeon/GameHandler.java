@@ -1,15 +1,12 @@
 package dungeon;
 
+import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.messages.Mailman;
 import dungeon.models.Enemy;
 import dungeon.models.Player;
-import dungeon.models.Tile;
 import dungeon.models.World;
 import dungeon.ui.events.MoveCommand;
-
-import java.util.List;
 
 /**
  * Hier wird die eigentliche Logik des Spiels durchgeführt.
@@ -45,7 +42,7 @@ public class GameHandler implements MessageHandler {
 
         for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
           if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + 1 - SPEED ) {
-            transform = Player.HitpointTransform(-1);
+//            transform = Player.HitpointTransform(-1);
           }
         }
 
@@ -58,7 +55,7 @@ public class GameHandler implements MessageHandler {
 
         for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
           if (world.getPlayer().getPosition().getY() == enemy.getPosition().getY() + SPEED ) {
-            transform = Player.HitpointTransform(-1);
+//            transform = Player.HitpointTransform(-1);
           }
         }
         transform = new Player.MoveTransform(0, SPEED);
@@ -70,7 +67,7 @@ public class GameHandler implements MessageHandler {
 
         for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
           if (world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + 1 - SPEED ) {
-            transform = Player.HitpointTransform(-1);
+//            transform = Player.HitpointTransform(-1);
           }
         }
 
@@ -83,7 +80,7 @@ public class GameHandler implements MessageHandler {
 
         for (Enemy enemy : world.getCurrentRoom().getEnemies()) {
           if (world.getPlayer().getPosition().getX() == enemy.getPosition().getX() + SPEED ) {
-            transform = Player.HitpointTransform(-1);
+//            transform = Player.HitpointTransform(-1);
           }
         }
 
