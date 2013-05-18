@@ -35,7 +35,7 @@ public class GameHandler implements MessageHandler {
 
   private void move (MoveCommand command) {
     Transform movementTransform = handleMovement(command);
-    Transform enemyTransform = handleEnemy(command);
+    Transform enemyTransform = handleEnemies(command);
 
     this.world = this.world.apply(movementTransform);
     this.world = this.world.apply(enemyTransform);
@@ -80,7 +80,7 @@ public class GameHandler implements MessageHandler {
     return new IdentityTransform();
   }
 
-  private Transform handleEnemy (MoveCommand command) {
+  private Transform handleEnemies (MoveCommand command) {
     switch (command) {
 
       case UP:
@@ -115,6 +115,4 @@ public class GameHandler implements MessageHandler {
     }
     return new IdentityTransform();
   }
-
-
 }
