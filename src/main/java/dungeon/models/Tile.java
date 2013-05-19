@@ -20,7 +20,7 @@ public class Tile {
   }
 
   public Position getPosition () {
-    return position;
+    return this.position;
   }
 
   public Tile apply (Transform transform) {

@@ -58,7 +58,7 @@ public class Player {
    * Returns a rectangle that represents the space occupied by the player.
    */
   private Rectangle2D playerSpace () {
-    return new Rectangle2D.Float(getPosition().getX(), getPosition().getY(), 1, 1);
+    return new Rectangle2D.Float(this.getPosition().getX(), this.getPosition().getY(), 1, 1);
   }
 
   public Player apply (Transform transform) {
