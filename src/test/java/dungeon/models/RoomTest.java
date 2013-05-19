@@ -1,11 +1,12 @@
 package dungeon.models;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
 
 public class RoomTest {
   private Room room;
@@ -24,11 +25,11 @@ public class RoomTest {
 
   @Test
   public void longestXSpanIsXSize () {
-    Assert.assertEquals(4, room.getXSize());
+    assertEquals(4, room.getXSize(), 0.000001);
   }
 
   @Test
   public void longestYSpanIsYSize () {
-    Assert.assertEquals(6, room.getYSize());
+    assertEquals(6, room.getYSize(), 0.000001);
   }
 }
