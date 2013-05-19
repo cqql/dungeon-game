@@ -55,7 +55,9 @@
     <module name="ModifiedControlVariable" />
     <module name="SimplifyBooleanExpression" />
     <module name="StringLiteralEquality" />
-    <module name="IllegalCatch" />
+    <module name="IllegalCatch">
+      <property name="illegalClassNames" value="java.lang.Throwable, java.lang.RuntimeException" />
+    </module>
     <module name="PackageDeclaration" />
     <module name="DeclarationOrder" />
     <module name="DeclarationOrder" />
