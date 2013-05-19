@@ -1,6 +1,7 @@
 package dungeon;
 
 import dungeon.game.LogicHandler;
+import dungeon.load.LevelLoadHandler;
 import dungeon.messages.Mailman;
 import dungeon.ui.Canvas;
 import dungeon.ui.InputToMessageConverter;
