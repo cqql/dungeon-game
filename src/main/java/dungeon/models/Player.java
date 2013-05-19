@@ -72,6 +72,10 @@ public class Player {
       HitpointTransform hpTransform = (HitpointTransform)transform;
 
       return new Player(this.name, this.hitPoints + hpTransform.delta, this.roomId, this.position);
+    } else if (transform instanceof TeleportTransform) {
+      TeleportTransform teleportTransform = (TeleportTransform)transform;
+
+      return new Player(this.name, this.hitPoints, teleportTransform.roomId, new Position(teleportTransform.x, teleportTransform.y));
     } else {
       return this;
     }
@@ -93,6 +97,20 @@ public class Player {
 
     public HitpointTransform (int delta) {
       this.delta = delta;
+    }
+  }
+
+  public static class TeleportTransform implements Transform {
+    private final String roomId;
+
+    private final int x;
+
+    private final int y;
+
+    public TeleportTransform (String roomId, int x, int y) {
+      this.roomId = roomId;
+      this.x = x;
+      this.y = y;
     }
   }
 }

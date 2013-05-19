@@ -5,10 +5,7 @@ import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.models.Enemy;
-import dungeon.models.Player;
-import dungeon.models.Tile;
-import dungeon.models.World;
+import dungeon.models.*;
 import dungeon.models.messages.IdentityTransform;
 import dungeon.models.messages.Transform;
 import dungeon.ui.events.MoveCommand;
@@ -47,6 +44,10 @@ public class LogicHandler implements MessageHandler {
     Transform enemyTransform = handleEnemies();
     this.world = this.world.apply(enemyTransform);
     this.mailman.send(enemyTransform);
+
+    Transform teleportTransform = handleTeleporters();
+    this.world = this.world.apply(teleportTransform);
+    this.mailman.send(teleportTransform);
 
     handleDefeat();
   }
@@ -102,6 +103,22 @@ public class LogicHandler implements MessageHandler {
       } else {
         return transform;
       }
+  }
+
+  private Transform handleTeleporters () {
+    for (Tile tile : this.world.getCurrentRoom().getTiles()) {
+      if (tile instanceof TeleporterTile) {
+        TeleporterTile teleporter = (TeleporterTile)tile;
+
+        if (this.world.getPlayer().touches(teleporter)) {
+          TeleporterTile.Target target = teleporter.getTarget();
+
+          return new Player.TeleportTransform(target.getRoomId(), target.getX(), target.getY());
+        }
+      }
+    }
+
+    return new IdentityTransform();
   }
 
   private void handleDefeat () {
