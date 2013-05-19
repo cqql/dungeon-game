@@ -10,9 +10,9 @@
     <tile blocking="false">
       <position x="1000" y="0" />
     </tile>
-    <tile blocking="false">
+    <victory-tile blocking="false">
       <position x="2000" y="0" />
-    </tile>
+    </victory-tile>
     <tile blocking="false">
       <position x="0" y="1000" />
     </tile>
@@ -23,13 +23,13 @@
       <position x="2000" y="1000" />
     </tile>
     <tile blocking="false">
-      <position x="0" y="2000" />
+      <position x="2000" y="2000" />
     </tile>
     <tile blocking="true">
       <position x="1000" y="2000" />
     </tile>
     <teleporter blocking="false">
-      <position x="2000" y="2000" />
+      <position x="0" y="2000" />
       <target roomId="warm-up" x="0" y="0" />
     </teleporter>
   </room>
