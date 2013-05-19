@@ -26,7 +26,7 @@ public class World {
 
   public Room getCurrentRoom () {
     for (Room room : this.rooms) {
-      if (room.getId() == this.player.getRoomId()) {
+      if (room.getId().equals(this.player.getRoomId())) {
         return room;
       }
     }
