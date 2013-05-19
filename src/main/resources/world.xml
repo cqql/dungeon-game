@@ -112,7 +112,7 @@
     <tile blocking="false">
       <position x="0" y="0"/>
     </tile>
-    <tile blocking="true">
+    <tile blocking="false">
       <position x="1000" y="0"/>
     </tile>
     <tile blocking="false">
