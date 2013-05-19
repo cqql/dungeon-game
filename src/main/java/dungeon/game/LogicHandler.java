@@ -1,6 +1,7 @@
 package dungeon.game;
 
 import dungeon.game.messages.DefeatEvent;
+import dungeon.game.messages.WinEvent;
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
@@ -50,6 +51,7 @@ public class LogicHandler implements MessageHandler {
     this.mailman.send(teleportTransform);
 
     handleDefeat();
+    handleWin();
   }
 
   private Transform handleMovement (MoveCommand command) {
@@ -124,6 +126,18 @@ public class LogicHandler implements MessageHandler {
   private void handleDefeat () {
     if (this.world.getPlayer().getHitPoints() == 0) {
       this.mailman.send(new DefeatEvent());
+    }
+  }
+
+  private void handleWin () {
+    for (Tile tile : this.world.getCurrentRoom().getTiles()) {
+      if (tile instanceof VictoryTile) {
+        VictoryTile victory = (VictoryTile)tile;
+
+        if (this.world.getPlayer().touches(victory)) {
+          this.mailman.send(new WinEvent());
+        }
+      }
     }
   }
 }
