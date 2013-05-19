@@ -12,7 +12,7 @@ import dungeon.models.messages.Transform;
 import dungeon.ui.events.MoveCommand;
 
 /**
- * Hier wird die eigentliche Logik des Spiels durchgeführt.
+ * Handles the game logic.
  */
 public class LogicHandler implements MessageHandler {
   private static final int SPEED = 100;
@@ -35,18 +35,12 @@ public class LogicHandler implements MessageHandler {
   }
 
   private void move (MoveCommand command) {
-    Transform movementTransform = handleMovement(command);
-    movementTransform = filterWalls(movementTransform);
-    movementTransform = filterBorders(movementTransform);
+    this.applyTransform(this.handleMovement(command));
+    this.applyTransform(this.handleEnemies());
+    this.applyTransform(this.handleTeleporters());
 
-    applyTransform(movementTransform);
-
-    applyTransform(handleEnemies());
-
-    applyTransform(handleTeleporters());
-
-    handleDefeat();
-    handleWin();
+    this.handleDefeat();
+    this.handleWin();
   }
 
   /**
@@ -58,6 +52,16 @@ public class LogicHandler implements MessageHandler {
   }
 
   private Transform handleMovement (MoveCommand command) {
+    Transform movementTransform = moveTransform(command);
+    movementTransform = filterWalls(movementTransform);
+
+    return filterBorders(movementTransform);
+  }
+
+  /**
+   * Create the appropriate MoveTransform for the command.
+   */
+  private Transform moveTransform (MoveCommand command) {
     switch (command) {
       case UP:
         return new Player.MoveTransform(0, -SPEED);
@@ -73,16 +77,9 @@ public class LogicHandler implements MessageHandler {
     return new IdentityTransform();
   }
 
-  private Transform handleEnemies () {
-    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
-      if (this.world.getPlayer().touches(enemy)) {
-        return new Player.HitpointTransform(-1);
-      }
-    }
-
-    return new IdentityTransform();
-  }
-
+  /**
+   * Prevent movement if the player would walk on a wall.
+   */
   private Transform filterWalls (Transform transform) {
     Player movedPlayer = this.world.getPlayer().apply(transform);
 
@@ -97,6 +94,9 @@ public class LogicHandler implements MessageHandler {
     return transform;
   }
 
+  /**
+   * Prevent movement if the player would leave the playing field.
+   */
   private Transform filterBorders (Transform transform) {
     Player movedPlayer = this.world.getPlayer().apply(transform);
 
@@ -110,6 +110,22 @@ public class LogicHandler implements MessageHandler {
     }
   }
 
+  /**
+   * Translate enemy contact into a transform.
+   */
+  private Transform handleEnemies () {
+    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+      if (this.world.getPlayer().touches(enemy)) {
+        return new Player.HitpointTransform(-1);
+      }
+    }
+
+    return new IdentityTransform();
+  }
+
+  /**
+   * Create a teleport transform it the player touches a teleporter.
+   */
   private Transform handleTeleporters () {
     for (Tile tile : this.world.getCurrentRoom().getTiles()) {
       if (tile instanceof TeleporterTile) {
