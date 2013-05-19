@@ -1,5 +1,6 @@
 package dungeon.game;
 
+import dungeon.game.messages.DefeatEvent;
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
@@ -46,6 +47,8 @@ public class LogicHandler implements MessageHandler {
     Transform enemyTransform = handleEnemies();
     this.world = this.world.apply(enemyTransform);
     this.mailman.send(enemyTransform);
+
+    handleDefeat();
   }
 
   private Transform handleMovement (MoveCommand command) {
@@ -99,5 +102,11 @@ public class LogicHandler implements MessageHandler {
       } else {
         return transform;
       }
+  }
+
+  private Message handleDefeat () {
+    if (this.world.getPlayer().getHitPoints() == 0) {
+      this.mailman.send(new DefeatEvent());
+    }
   }
 }
