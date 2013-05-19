@@ -1,5 +1,6 @@
-package dungeon;
+package dungeon.game;
 
+import dungeon.LevelLoadHandler;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
@@ -13,14 +14,14 @@ import dungeon.ui.events.MoveCommand;
 /**
  * Hier wird die eigentliche Logik des Spiels durchgeführt.
  */
-public class GameHandler implements MessageHandler {
+public class LogicHandler implements MessageHandler {
   private static final float SPEED = 0.1f;
 
   private final Mailman mailman;
 
   private World world;
 
-  public GameHandler (Mailman mailman) {
+  public LogicHandler (Mailman mailman) {
     this.mailman = mailman;
   }
 

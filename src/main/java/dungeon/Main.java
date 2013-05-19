@@ -1,5 +1,6 @@
 package dungeon;
 
+import dungeon.game.LogicHandler;
 import dungeon.messages.Mailman;
 import dungeon.ui.Canvas;
 import dungeon.ui.InputToMessageConverter;
@@ -24,7 +25,7 @@ public class Main {
     mailman.addMailbox(new SwingMailbox(canvas));
 
     mailman.addHandler(new LevelLoadHandler(mailman));
-    mailman.addHandler(new GameHandler(mailman));
+    mailman.addHandler(new LogicHandler(mailman));
 
     mailman.run();
   }
