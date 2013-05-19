@@ -11,9 +11,9 @@ public class Room {
 
   private final List<Enemy> enemies;
 
-  private final List<List<Tile>> tiles;
+  private final List<Tile> tiles;
 
-  public Room (String id, List<Enemy> enemies, List<List<Tile>> tiles) {
+  public Room (String id, List<Enemy> enemies, List<Tile> tiles) {
     this.id = id;
     this.enemies = Collections.unmodifiableList(new ArrayList<>(enemies));
     this.tiles = Collections.unmodifiableList(new ArrayList<>(tiles));
@@ -27,15 +27,16 @@ public class Room {
     return this.enemies;
   }
 
-  public List<List<Tile>> getTiles () {
-    return this.tiles;
+  public List<Tile> getTiles () {
+    return tiles;
   }
 
   public int getSize () {
     if (this.tiles.size() == 0) {
       return 0;
     } else {
-      return this.tiles.get(0).size();
+      return 3;
+      //return this.tiles.get(0).size();
     }
   }
 
