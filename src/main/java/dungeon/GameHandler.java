@@ -1,10 +1,9 @@
 package dungeon;
 
+import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.messages.Mailman;
 import dungeon.models.Player;
-import dungeon.models.Tile;
 import dungeon.models.World;
 import dungeon.ui.events.MoveCommand;
 
@@ -42,7 +41,7 @@ public class GameHandler implements MessageHandler {
         transform = new Player.MoveTransform(0, -SPEED);
         break;
       case DOWN:
-        if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
+        if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getYSize()) {
           return;
         }
         transform = new Player.MoveTransform(0, SPEED);
@@ -54,7 +53,7 @@ public class GameHandler implements MessageHandler {
         transform = new Player.MoveTransform(-SPEED, 0);
         break;
       case RIGHT:
-        if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
+        if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getXSize()) {
           return;
         }
         transform = new Player.MoveTransform(SPEED, 0);

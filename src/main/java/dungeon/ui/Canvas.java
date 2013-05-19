@@ -42,8 +42,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
     Room room = this.world.getCurrentRoom();
 
-    int tileWidth = g.getClipBounds().width / room.getSize();
-    int tileHeight = g.getClipBounds().height / room.getSize();
+    int tileWidth = g.getClipBounds().width / room.getXSize();
+    int tileHeight = g.getClipBounds().height / room.getYSize();
 
     for (Tile tile : room.getTiles()) {
       if (tile.isBlocking()) {

@@ -4,6 +4,7 @@ import dungeon.models.messages.Transform;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Room {
@@ -31,12 +32,39 @@ public class Room {
     return tiles;
   }
 
-  public int getSize () {
-    if (this.tiles.size() == 0) {
+  /**
+   * Returns the size along the X-axis whereas the size is the longest span occupied by tiles.
+   */
+  public int getXSize () {
+    if (this.tiles.isEmpty()) {
       return 0;
     } else {
-      return 3;
-      //return this.tiles.get(0).size();
+      Tile tile = Collections.max(this.tiles, new Comparator<Tile>() {
+        @Override
+        public int compare (Tile tile, Tile tile2) {
+          return (int)Math.ceil(tile.getPosition().getX() - tile2.getPosition().getX());
+        }
+      });
+
+      return (int)tile.getPosition().getX() + 1;
+    }
+  }
+
+  /**
+   * Returns the size along the Y-axis whereas the size is the longest span occupied by tiles.
+   */
+  public int getYSize () {
+    if (this.tiles.isEmpty()) {
+      return 0;
+    } else {
+      Tile tile = Collections.max(this.tiles, new Comparator<Tile>() {
+        @Override
+        public int compare (Tile tile, Tile tile2) {
+          return (int)Math.ceil(tile.getPosition().getY() - tile2.getPosition().getY());
+        }
+      });
+
+      return (int)tile.getPosition().getY() + 1;
     }
   }
 
