@@ -4,6 +4,7 @@ import dungeon.models.Enemy;
 import dungeon.models.Room;
 import dungeon.models.Tile;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -11,6 +12,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
+  @XmlAttribute
   public String id;
 
   @XmlElement(name = "enemy")
