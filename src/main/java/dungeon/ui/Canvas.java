@@ -15,6 +15,10 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color passableTile = new Color(139, 108, 217);
 
+  private final Color winTile = new Color(255, 244, 25);
+
+  private final Color teleporterTile = new Color(0, 0, 0);
+
   private final Color playerColor = new Color(101, 202, 227);
 
   private final Color enemyColor = new Color(33, 237, 60);
@@ -46,7 +50,11 @@ public class Canvas extends JPanel implements MessageHandler {
     int tileHeight = g.getClipBounds().height * Tile.SIZE / (int)room.getYSize();
 
     for (Tile tile : room.getTiles()) {
-      if (tile.isBlocking()) {
+      if (tile instanceof TeleporterTile) {
+        g.setColor(this.teleporterTile);
+      } else if (tile instanceof VictoryTile) {
+        g.setColor(this.winTile);
+      } else if (tile.isBlocking()) {
         g.setColor(this.blockingTile);
       } else {
         g.setColor(this.passableTile);
