@@ -1,6 +1,6 @@
 package dungeon.ui;
 
-import dungeon.LevelLoadHandler;
+import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.*;
@@ -25,8 +25,8 @@ public class Canvas extends JPanel implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
       this.world = this.world.apply((Transform) message);
-    } else if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
-      this.world = ((LevelLoadHandler.LevelLoadedEvent) message).getWorld();
+    } else if (message instanceof LevelLoadedEvent) {
+      this.world = ((LevelLoadedEvent) message).getWorld();
     }
 
     repaint();
