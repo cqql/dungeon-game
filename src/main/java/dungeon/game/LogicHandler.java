@@ -39,19 +39,22 @@ public class LogicHandler implements MessageHandler {
     movementTransform = filterWalls(movementTransform);
     movementTransform = filterBorders(movementTransform);
 
-    this.world = this.world.apply(movementTransform);
-    this.mailman.send(movementTransform);
+    applyTransform(movementTransform);
 
-    Transform enemyTransform = handleEnemies();
-    this.world = this.world.apply(enemyTransform);
-    this.mailman.send(enemyTransform);
+    applyTransform(handleEnemies());
 
-    Transform teleportTransform = handleTeleporters();
-    this.world = this.world.apply(teleportTransform);
-    this.mailman.send(teleportTransform);
+    applyTransform(handleTeleporters());
 
     handleDefeat();
     handleWin();
+  }
+
+  /**
+   * Applies a transform to the internal World object and send it to the mailman.
+   */
+  private void applyTransform (Transform transform) {
+    this.world = this.world.apply(transform);
+    this.mailman.send(transform);
   }
 
   private Transform handleMovement (MoveCommand command) {
@@ -102,9 +105,9 @@ public class LogicHandler implements MessageHandler {
       || movedPlayer.getPosition().getX() < 0
       || movedPlayer.getPosition().getX() + Player.SIZE > this.world.getCurrentRoom().getXSize()) {
       return new IdentityTransform();
-      } else {
-        return transform;
-      }
+    } else {
+      return transform;
+    }
   }
 
   private Transform handleTeleporters () {
