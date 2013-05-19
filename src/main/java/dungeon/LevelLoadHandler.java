@@ -26,9 +26,9 @@ public class LevelLoadHandler implements MessageHandler {
               new Enemy(new Position(2, 1))
             ),
             Arrays.asList(
-              Arrays.asList(new Tile(false), new Tile(false), new Tile(false)),
-              Arrays.asList(new Tile(false), new Tile(false), new Tile(false)),
-              Arrays.asList(new Tile(false), new Tile(true), new Tile(false))
+              new Tile(false, new Position(0, 0)), new Tile(false, new Position(1, 0)), new Tile(false, new Position(2, 0)),
+              new Tile(false, new Position(0, 1)), new Tile(false, new Position(1, 1)), new Tile(false, new Position(2, 1)),
+              new Tile(false, new Position(0, 2)), new Tile(true, new Position(1, 2)), new Tile(false, new Position(2, 2))
             )
           )
         ),

@@ -5,8 +5,8 @@ import dungeon.models.messages.Transform;
 public class TeleporterTile extends Tile {
   private final Target target;
 
-  public TeleporterTile (Target target) {
-    super(false);
+  public TeleporterTile (Position position, Target target) {
+    super(false, position);
 
     this.target = target;
   }
