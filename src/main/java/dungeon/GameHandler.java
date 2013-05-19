@@ -3,8 +3,11 @@ package dungeon;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
+import dungeon.models.Enemy;
 import dungeon.models.Player;
 import dungeon.models.World;
+import dungeon.models.messages.IdentityTransform;
+import dungeon.models.messages.Transform;
 import dungeon.ui.events.MoveCommand;
 
 /**
@@ -24,46 +27,62 @@ public class GameHandler implements MessageHandler {
   @Override
   public void handleMessage (Message message) {
     if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
-      this.world = ((LevelLoadHandler.LevelLoadedEvent) message).getWorld();
+      this.world = ((LevelLoadHandler.LevelLoadedEvent)message).getWorld();
     } else if (message instanceof MoveCommand) {
-      move((MoveCommand) message);
+      move((MoveCommand)message);
     }
   }
 
   private void move (MoveCommand command) {
-    Player.MoveTransform transform;
+    Transform movementTransform = handleMovement(command);
+    this.world = this.world.apply(movementTransform);
+    this.mailman.send(movementTransform);
 
+    Transform enemyTransform = handleEnemies();
+    this.world = this.world.apply(enemyTransform);
+    this.mailman.send(enemyTransform);
+  }
+
+  private Transform handleMovement (MoveCommand command) {
     switch (command) {
       case UP:
         if (this.world.getPlayer().getPosition().getY() - SPEED < 0) {
-          return;
+          return new IdentityTransform();
+        } else {
+          return new Player.MoveTransform(0, -SPEED);
         }
-        transform = new Player.MoveTransform(0, -SPEED);
-        break;
       case DOWN:
         if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getYSize()) {
-          return;
+          return new IdentityTransform();
+        } else {
+          return new Player.MoveTransform(0, SPEED);
         }
-        transform = new Player.MoveTransform(0, SPEED);
-        break;
       case LEFT:
         if (this.world.getPlayer().getPosition().getX() - SPEED < 0) {
-          return;
+          return new IdentityTransform();
+        } else {
+          return new Player.MoveTransform(-SPEED, 0);
         }
-        transform = new Player.MoveTransform(-SPEED, 0);
-        break;
       case RIGHT:
         if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getXSize()) {
-          return;
+          return new IdentityTransform();
+        } else {
+          return new Player.MoveTransform(SPEED, 0);
         }
-        transform = new Player.MoveTransform(SPEED, 0);
-        break;
       default:
-        return;
     }
 
-    this.world = this.world.apply(transform);
+    return new IdentityTransform();
+  }
 
-    this.mailman.send(transform);
+  private Transform handleEnemies () {
+    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+      if (this.world.getPlayer().touches(enemy)) {
+        return new Player.HitpointTransform(-1);
+      } else {
+        return new IdentityTransform();
+      }
+    }
+    return new IdentityTransform();
   }
 }

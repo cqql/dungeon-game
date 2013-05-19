@@ -29,7 +29,7 @@ public class Room {
   }
 
   public List<Tile> getTiles () {
-    return tiles;
+    return this.tiles;
   }
 
   /**
@@ -41,8 +41,8 @@ public class Room {
     } else {
       Tile tile = Collections.max(this.tiles, new Comparator<Tile>() {
         @Override
-        public int compare (Tile tile, Tile tile2) {
-          return (int)Math.ceil(tile.getPosition().getX() - tile2.getPosition().getX());
+        public int compare (Tile a, Tile b) {
+          return (int)Math.ceil(a.getPosition().getX() - b.getPosition().getX());
         }
       });
 
@@ -59,8 +59,8 @@ public class Room {
     } else {
       Tile tile = Collections.max(this.tiles, new Comparator<Tile>() {
         @Override
-        public int compare (Tile tile, Tile tile2) {
-          return (int)Math.ceil(tile.getPosition().getY() - tile2.getPosition().getY());
+        public int compare (Tile a, Tile b) {
+          return (int)Math.ceil(a.getPosition().getY() - b.getPosition().getY());
         }
       });
 
