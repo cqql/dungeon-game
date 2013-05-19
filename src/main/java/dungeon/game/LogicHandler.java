@@ -104,7 +104,7 @@ public class LogicHandler implements MessageHandler {
       }
   }
 
-  private Message handleDefeat () {
+  private void handleDefeat () {
     if (this.world.getPlayer().getHitPoints() == 0) {
       this.mailman.send(new DefeatEvent());
     }
