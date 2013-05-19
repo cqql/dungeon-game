@@ -15,7 +15,7 @@ import dungeon.ui.events.MoveCommand;
  * Hier wird die eigentliche Logik des Spiels durchgeführt.
  */
 public class LogicHandler implements MessageHandler {
-  private static final float SPEED = 0.1f;
+  private static final int SPEED = 100;
 
   private final Mailman mailman;
 
@@ -53,7 +53,7 @@ public class LogicHandler implements MessageHandler {
           return new Player.MoveTransform(0, -SPEED);
         }
       case DOWN:
-        if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getYSize()) {
+        if (this.world.getPlayer().getPosition().getY() + Player.SIZE + SPEED > this.world.getCurrentRoom().getYSize()) {
           return new IdentityTransform();
         } else {
           return new Player.MoveTransform(0, SPEED);
@@ -65,7 +65,7 @@ public class LogicHandler implements MessageHandler {
           return new Player.MoveTransform(-SPEED, 0);
         }
       case RIGHT:
-        if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getXSize()) {
+        if (this.world.getPlayer().getPosition().getX() + Player.SIZE + SPEED > this.world.getCurrentRoom().getXSize()) {
           return new IdentityTransform();
         } else {
           return new Player.MoveTransform(SPEED, 0);
@@ -82,7 +82,7 @@ public class LogicHandler implements MessageHandler {
         return new Player.HitpointTransform(-1);
       }
     }
-    
+
     return new IdentityTransform();
   }
 }

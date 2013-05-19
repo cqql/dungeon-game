@@ -3,6 +3,8 @@ package dungeon.models;
 import dungeon.models.messages.Transform;
 
 public class Tile {
+  public static final int SIZE = 1000;
+
   /**
    * true, wenn die Platte nicht begehbar ist; false, wenn die Platte begehbar ist
    */

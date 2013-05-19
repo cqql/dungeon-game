@@ -42,8 +42,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
     Room room = this.world.getCurrentRoom();
 
-    int tileWidth = g.getClipBounds().width / (int)room.getXSize();
-    int tileHeight = g.getClipBounds().height / (int)room.getYSize();
+    int tileWidth = g.getClipBounds().width * Tile.SIZE / (int)room.getXSize();
+    int tileHeight = g.getClipBounds().height * Tile.SIZE / (int)room.getYSize();
 
     for (Tile tile : room.getTiles()) {
       if (tile.isBlocking()) {
@@ -52,19 +52,19 @@ public class Canvas extends JPanel implements MessageHandler {
         g.setColor(this.passableTile);
       }
 
-      g.fillRect((int)(tile.getPosition().getX() * tileWidth), (int)(tile.getPosition().getY() * tileHeight), tileWidth, tileHeight);
+      g.fillRect(tile.getPosition().getX() * tileWidth / Tile.SIZE, tile.getPosition().getY() * tileHeight / Tile.SIZE, tileWidth, tileHeight);
     }
 
     for (Enemy enemy : room.getEnemies()) {
       Position position = enemy.getPosition();
 
       g.setColor(this.enemyColor);
-      g.fillRect((int)(position.getX() * tileWidth), (int)(position.getY() * tileHeight), tileWidth, tileHeight);
+      g.fillRect(position.getX() * tileWidth / Enemy.SIZE, position.getY() * tileHeight / Enemy.SIZE, tileWidth, tileHeight);
     }
 
     Position playerPosition = this.world.getPlayer().getPosition();
 
     g.setColor(this.playerColor);
-    g.fillRect((int)(playerPosition.getX() * tileWidth), (int)(playerPosition.getY() * tileHeight), tileWidth, tileHeight);
+    g.fillRect(playerPosition.getX() * tileWidth / Player.SIZE, playerPosition.getY() * tileHeight / Player.SIZE, tileWidth, tileHeight);
   }
 }
