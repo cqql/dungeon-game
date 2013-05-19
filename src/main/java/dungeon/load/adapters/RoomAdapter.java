@@ -21,7 +21,7 @@ public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
 
   @XmlElements({
     @XmlElement(name = "teleporter", type = TeleporterTileAdapter.class),
-    @XmlElement(name = "win-tile", type = VictoryTileAdapter.class),
+    @XmlElement(name = "victory-tile", type = VictoryTileAdapter.class),
     @XmlElement(name = "tile", type = TileAdapter.class)
   })
   @XmlJavaTypeAdapter(TileAdapter.class)

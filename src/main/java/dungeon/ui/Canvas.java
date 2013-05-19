@@ -15,7 +15,7 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color passableTile = new Color(139, 108, 217);
 
-  private final Color winTile = new Color(255, 244, 25);
+  private final Color victoryTile = new Color(255, 244, 25);
 
   private final Color teleporterTile = new Color(0, 0, 0);
 
@@ -53,7 +53,7 @@ public class Canvas extends JPanel implements MessageHandler {
       if (tile instanceof TeleporterTile) {
         g.setColor(this.teleporterTile);
       } else if (tile instanceof VictoryTile) {
-        g.setColor(this.winTile);
+        g.setColor(this.victoryTile);
       } else if (tile.isBlocking()) {
         g.setColor(this.blockingTile);
       } else {
