@@ -41,12 +41,6 @@ public class GameHandler implements MessageHandler {
     Transform enemyTransform = handleEnemies();
     this.world = this.world.apply(enemyTransform);
     this.mailman.send(enemyTransform);
-
-    /*
-    Transform lossTransform = handleLoss();
-    this.world = this.world.apply(lossTransform);
-    this.mailman.send(lossTransform);
-    */
   }
 
   private Transform handleMovement (MoveCommand command) {
@@ -91,15 +85,4 @@ public class GameHandler implements MessageHandler {
     }
     return new IdentityTransform();
   }
-
-  /*
-    Still work to do here.
-
-  private Transform handleLoss() {
-    if (this.world.getPlayer().getHitPoints() == 0) {
-      return <<<<<GAME OVER MESSAGE>>>>>>
-    }
-    return new IdentityTransform();
-  }
-  */
 }
