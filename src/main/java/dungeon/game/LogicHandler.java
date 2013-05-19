@@ -1,6 +1,6 @@
 package dungeon.game;
 
-import dungeon.LevelLoadHandler;
+import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
@@ -27,8 +27,8 @@ public class LogicHandler implements MessageHandler {
 
   @Override
   public void handleMessage (Message message) {
-    if (message instanceof LevelLoadHandler.LevelLoadedEvent) {
-      this.world = ((LevelLoadHandler.LevelLoadedEvent)message).getWorld();
+    if (message instanceof LevelLoadedEvent) {
+      this.world = ((LevelLoadedEvent)message).getWorld();
     } else if (message instanceof MoveCommand) {
       move((MoveCommand)message);
     }

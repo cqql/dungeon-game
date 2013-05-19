@@ -1,5 +1,6 @@
-package dungeon;
+package dungeon.load;
 
+import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.messages.Mailman;
@@ -36,18 +37,6 @@ public class LevelLoadHandler implements MessageHandler {
       );
 
       this.mailman.send(new LevelLoadedEvent(world));
-    }
-  }
-
-  public static class LevelLoadedEvent implements Message {
-    private final World world;
-
-    public LevelLoadedEvent (World world) {
-      this.world = world;
-    }
-
-    public World getWorld () {
-      return this.world;
     }
   }
 }
