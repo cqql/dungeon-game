@@ -1,13 +1,14 @@
 package dungeon.load;
 
+import dungeon.load.adapters.WorldAdapter;
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.models.*;
+import dungeon.models.World;
 
-import java.util.Arrays;
+import javax.xml.bind.JAXB;
 
 public class LevelLoadHandler implements MessageHandler {
   private final Mailman mailman;
@@ -19,24 +20,15 @@ public class LevelLoadHandler implements MessageHandler {
   @Override
   public void handleMessage (Message message) {
     if (message == LifecycleEvent.INITIALIZE) {
-      World world = new World(
-        Arrays.asList(
-          new Room(
-            "warm-up",
-            Arrays.asList(
-              new Enemy(new Position(2, 1))
-            ),
-            Arrays.asList(
-              new Tile(false, new Position(0, 0)), new Tile(false, new Position(1, 0)), new Tile(false, new Position(2, 0)),
-              new Tile(false, new Position(0, 1)), new Tile(false, new Position(1, 1)), new Tile(false, new Position(2, 1)),
-              new Tile(false, new Position(0, 2)), new Tile(true, new Position(1, 2)), new TeleporterTile(new Position(2, 2), new TeleporterTile.Target("warm-up", 0, 0))
-            )
-          )
-        ),
-        new Player("Link", 1, "warm-up", new Position(0, 0))
-      );
+      WorldAdapter worldAdapter = new WorldAdapter();
 
-      this.mailman.send(new LevelLoadedEvent(world));
+      try {
+        World world = worldAdapter.unmarshal(JAXB.unmarshal(getClass().getClassLoader().getResourceAsStream("world.xml"), WorldAdapter.class));
+
+        this.mailman.send(new LevelLoadedEvent(world));
+      } catch (Exception e) {
+        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      }
     }
   }
 }
