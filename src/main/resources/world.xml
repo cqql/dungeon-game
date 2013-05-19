@@ -46,7 +46,7 @@
     <tile blocking="false">
       <position x="1000" y="0"/>
     </tile>
-    <tile blocking="false">
+    <tile blocking="true">
       <position x="2000" y="0"/>
     </tile>
     <tile blocking="false">
@@ -58,7 +58,7 @@
     <tile blocking="false">
       <position x="2000" y="1000"/>
     </tile>
-    <tile blocking="false">
+    <tile blocking="true">
       <position x="0" y="2000"/>
     </tile>
     <tile blocking="false">
@@ -73,10 +73,10 @@
     <enemy>
       <position x="1000" y="1000"/>
     </enemy>
-    <tile blocking="false">
+    <tile blocking="true">
       <position x="0" y="0"/>
     </tile>
-    <tile blocking="true">
+    <tile blocking="false">
       <position x="1000" y="0"/>
     </tile>
     <tile blocking="false">
