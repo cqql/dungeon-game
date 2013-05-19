@@ -48,8 +48,8 @@ public class Player {
   /**
    * Checks if the player touches the 1x1 tile at Position (#x, #y).
    */
-  public boolean touches (float x, float y) {
-    Rectangle2D tileSpace = new Rectangle2D.Float(x, y, 1, 1);
+  public boolean touches (Tile tile) {
+    Rectangle2D tileSpace = new Rectangle2D.Float(tile.getPosition().getX(), tile.getPosition().getY(), 1, 1);
 
     return this.playerSpace().intersects(tileSpace);
   }

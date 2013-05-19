@@ -43,11 +43,11 @@ public class PlayerTest {
 
   @Test
   public void touchesOverlappingTile () {
-    Assert.assertTrue(player.touches(1.5f, 1.5f));
+    Assert.assertTrue(player.touches(new Tile(false, new Position(1.5f, 1.5f))));
   }
 
   @Test
   public void doesNotTouchDistantTile () {
-    Assert.assertFalse(player.touches(1.5f, 3.5f));
+    Assert.assertFalse(player.touches(new Tile(false, new Position(1.5f, 3.5f))));
   }
 }
