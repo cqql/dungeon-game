@@ -6,6 +6,7 @@ import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.Enemy;
 import dungeon.models.Player;
+import dungeon.models.Tile;
 import dungeon.models.World;
 import dungeon.models.messages.IdentityTransform;
 import dungeon.models.messages.Transform;
@@ -36,6 +37,9 @@ public class LogicHandler implements MessageHandler {
 
   private void move (MoveCommand command) {
     Transform movementTransform = handleMovement(command);
+    movementTransform = filterWalls(movementTransform);
+    movementTransform = filterBorders(movementTransform);
+
     this.world = this.world.apply(movementTransform);
     this.mailman.send(movementTransform);
 
@@ -47,29 +51,13 @@ public class LogicHandler implements MessageHandler {
   private Transform handleMovement (MoveCommand command) {
     switch (command) {
       case UP:
-        if (this.world.getPlayer().getPosition().getY() - SPEED < 0) {
-          return new IdentityTransform();
-        } else {
-          return new Player.MoveTransform(0, -SPEED);
-        }
+        return new Player.MoveTransform(0, -SPEED);
       case DOWN:
-        if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getYSize()) {
-          return new IdentityTransform();
-        } else {
-          return new Player.MoveTransform(0, SPEED);
-        }
+        return new Player.MoveTransform(0, SPEED);
       case LEFT:
-        if (this.world.getPlayer().getPosition().getX() - SPEED < 0) {
-          return new IdentityTransform();
-        } else {
-          return new Player.MoveTransform(-SPEED, 0);
-        }
+        return new Player.MoveTransform(-SPEED, 0);
       case RIGHT:
-        if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getXSize()) {
-          return new IdentityTransform();
-        } else {
-          return new Player.MoveTransform(SPEED, 0);
-        }
+        return new Player.MoveTransform(SPEED, 0);
       default:
     }
 
@@ -82,7 +70,34 @@ public class LogicHandler implements MessageHandler {
         return new Player.HitpointTransform(-1);
       }
     }
-    
+
     return new IdentityTransform();
+  }
+
+  private Transform filterWalls (Transform transform) {
+    Player movedPlayer = this.world.getPlayer().apply(transform);
+
+    for (Tile tile : this.world.getCurrentRoom().getTiles()) {
+      if (tile.isBlocking()) {
+        if (movedPlayer.touches(tile)) {
+          return new IdentityTransform();
+        }
+      }
+    }
+
+    return transform;
+  }
+
+  private Transform filterBorders (Transform transform) {
+    Player movedPlayer = this.world.getPlayer().apply(transform);
+
+    if (movedPlayer.getPosition().getY() < 0
+      || movedPlayer.getPosition().getY() + 1 > this.world.getCurrentRoom().getYSize()
+      || movedPlayer.getPosition().getX() < 0
+      || movedPlayer.getPosition().getX() + 1 > this.world.getCurrentRoom().getXSize()) {
+      return new IdentityTransform();
+      } else {
+        return transform;
+      }
   }
 }
