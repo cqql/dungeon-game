@@ -1,5 +1,6 @@
 package dungeon.load;
 
+import dungeon.Log;
 import dungeon.load.adapters.WorldAdapter;
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.LifecycleEvent;
@@ -27,7 +28,7 @@ public class LevelLoadHandler implements MessageHandler {
 
         this.mailman.send(new LevelLoadedEvent(world));
       } catch (Exception e) {
-        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        Log.error("Loading the world failed", e);
       }
     }
   }
