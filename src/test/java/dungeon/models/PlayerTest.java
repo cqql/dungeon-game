@@ -1,53 +1,54 @@
 package dungeon.models;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class PlayerTest {
   private Player player;
 
   @Before
   public void setUp () {
-    this.player = new Player("player", 5, "room", new Position(2, 2));
+    this.player = new Player("player", 5, "room", new Position(2000, 2000));
   }
 
   @Test
   public void moveTransformUpdatesPosition () {
-    Player transformed = this.player.apply(new Player.MoveTransform(1.2f, 2));
+    Player transformed = this.player.apply(new Player.MoveTransform(1200, 2000));
 
-    Assert.assertEquals(3.2f, transformed.getPosition().getX(), 0000000.1);
-    Assert.assertEquals(4, transformed.getPosition().getY(), 0000000.1);
+    assertEquals(3200, transformed.getPosition().getX());
+    assertEquals(4000, transformed.getPosition().getY());
   }
 
   @Test
   public void hitpointTransformUpdatesHitpoints () {
     Player transformed = this.player.apply(new Player.HitpointTransform(-1));
 
-    Assert.assertEquals(4, transformed.getHitPoints());
+    assertEquals(4, transformed.getHitPoints());
   }
 
   @Test
   public void touchesOverlappingEnemy () {
-    Enemy enemy = new Enemy(new Position(1.5f, 1.5f));
+    Enemy enemy = new Enemy(new Position(1500, 1500));
 
-    Assert.assertTrue(player.touches(enemy));
+    assertTrue(player.touches(enemy));
   }
 
   @Test
   public void doesNotTouchDistantEnemy () {
     Enemy enemy = new Enemy(new Position(0, 0));
 
-    Assert.assertFalse(player.touches(enemy));
+    assertFalse(player.touches(enemy));
   }
 
   @Test
   public void touchesOverlappingTile () {
-    Assert.assertTrue(player.touches(new Tile(false, new Position(1.5f, 1.5f))));
+    assertTrue(player.touches(new Tile(false, new Position(1500, 1500))));
   }
 
   @Test
   public void doesNotTouchDistantTile () {
-    Assert.assertFalse(player.touches(new Tile(false, new Position(1.5f, 3.5f))));
+    assertFalse(player.touches(new Tile(false, new Position(1500, 3500))));
   }
 }

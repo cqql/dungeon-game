@@ -17,19 +17,19 @@ public class RoomTest {
       "test-room",
       new ArrayList<Enemy>(),
       Arrays.asList(
-        new Tile(false, new Position(0, 1)),
-        new Tile(false, new Position(3, 5))
+        new Tile(false, new Position(0, 1000)),
+        new Tile(false, new Position(3000, 5000))
       )
     );
   }
 
   @Test
   public void longestXSpanIsXSize () {
-    assertEquals(4, room.getXSize(), 0.000001);
+    assertEquals(3000 + Tile.SIZE, room.getXSize());
   }
 
   @Test
   public void longestYSpanIsYSize () {
-    assertEquals(6, room.getYSize(), 0.000001);
+    assertEquals(5000 + Tile.SIZE, room.getYSize());
   }
 }

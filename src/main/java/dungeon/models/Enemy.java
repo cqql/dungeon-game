@@ -3,6 +3,8 @@ package dungeon.models;
 import dungeon.models.messages.Transform;
 
 public class Enemy {
+  public static final int SIZE = 1000;
+
   private final int strength = 1;
 
   private final Position position;

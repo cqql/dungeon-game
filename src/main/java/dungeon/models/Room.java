@@ -35,7 +35,7 @@ public class Room {
   /**
    * Returns the size along the X-axis whereas the size is the longest span occupied by tiles.
    */
-  public float getXSize () {
+  public int getXSize () {
     if (this.tiles.isEmpty()) {
       return 0;
     } else {
@@ -46,14 +46,14 @@ public class Room {
         }
       });
 
-      return (int)tile.getPosition().getX() + 1;
+      return tile.getPosition().getX() + Tile.SIZE;
     }
   }
 
   /**
    * Returns the size along the Y-axis whereas the size is the longest span occupied by tiles.
    */
-  public float getYSize () {
+  public int getYSize () {
     if (this.tiles.isEmpty()) {
       return 0;
     } else {
@@ -64,7 +64,7 @@ public class Room {
         }
       });
 
-      return (int)tile.getPosition().getY() + 1;
+      return tile.getPosition().getY() + Tile.SIZE;
     }
   }
 

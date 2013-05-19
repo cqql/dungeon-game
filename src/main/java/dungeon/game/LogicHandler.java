@@ -16,7 +16,7 @@ import dungeon.ui.events.MoveCommand;
  * Hier wird die eigentliche Logik des Spiels durchgeführt.
  */
 public class LogicHandler implements MessageHandler {
-  private static final float SPEED = 0.1f;
+  private static final int SPEED = 100;
 
   private final Mailman mailman;
 
@@ -92,9 +92,9 @@ public class LogicHandler implements MessageHandler {
     Player movedPlayer = this.world.getPlayer().apply(transform);
 
     if (movedPlayer.getPosition().getY() < 0
-      || movedPlayer.getPosition().getY() + 1 > this.world.getCurrentRoom().getYSize()
+      || movedPlayer.getPosition().getY() + Player.SIZE > this.world.getCurrentRoom().getYSize()
       || movedPlayer.getPosition().getX() < 0
-      || movedPlayer.getPosition().getX() + 1 > this.world.getCurrentRoom().getXSize()) {
+      || movedPlayer.getPosition().getX() + Player.SIZE > this.world.getCurrentRoom().getXSize()) {
       return new IdentityTransform();
       } else {
         return transform;

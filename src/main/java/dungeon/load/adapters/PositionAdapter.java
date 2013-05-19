@@ -7,10 +7,10 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class PositionAdapter extends XmlAdapter<PositionAdapter, Position> {
   @XmlAttribute
-  public float x;
+  public int x;
 
   @XmlAttribute
-  public float y;
+  public int y;
 
   @Override
   public Position unmarshal (PositionAdapter positionAdapter) throws Exception {

@@ -5,6 +5,8 @@ import dungeon.models.messages.Transform;
 import java.awt.geom.Rectangle2D;
 
 public class Player {
+  public static final int SIZE = 1000;
+
   private final String name;
 
   private final int hitPoints;
@@ -40,7 +42,7 @@ public class Player {
    * Checks if the player touches the enemy #enemy.
    */
   public boolean touches (Enemy enemy) {
-    Rectangle2D enemySpace = new Rectangle2D.Float(enemy.getPosition().getX(), enemy.getPosition().getY(), 1, 1);
+    Rectangle2D enemySpace = new Rectangle2D.Float(enemy.getPosition().getX(), enemy.getPosition().getY(), Enemy.SIZE, Enemy.SIZE);
 
     return this.playerSpace().intersects(enemySpace);
   }
@@ -49,7 +51,7 @@ public class Player {
    * Checks if the player touches the 1x1 tile at Position (#x, #y).
    */
   public boolean touches (Tile tile) {
-    Rectangle2D tileSpace = new Rectangle2D.Float(tile.getPosition().getX(), tile.getPosition().getY(), 1, 1);
+    Rectangle2D tileSpace = new Rectangle2D.Float(tile.getPosition().getX(), tile.getPosition().getY(), Tile.SIZE, Tile.SIZE);
 
     return this.playerSpace().intersects(tileSpace);
   }
@@ -58,7 +60,7 @@ public class Player {
    * Returns a rectangle that represents the space occupied by the player.
    */
   private Rectangle2D playerSpace () {
-    return new Rectangle2D.Float(this.getPosition().getX(), this.getPosition().getY(), 1, 1);
+    return new Rectangle2D.Float(this.getPosition().getX(), this.getPosition().getY(), Player.SIZE, Player.SIZE);
   }
 
   public Player apply (Transform transform) {
@@ -76,11 +78,11 @@ public class Player {
   }
 
   public static class MoveTransform implements Transform {
-    private final float xDelta;
+    private final int xDelta;
 
-    private final float yDelta;
+    private final int yDelta;
 
-    public MoveTransform (float xDelta, float yDelta) {
+    public MoveTransform (int xDelta, int yDelta) {
       this.xDelta = xDelta;
       this.yDelta = yDelta;
     }
