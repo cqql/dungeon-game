@@ -25,8 +25,8 @@ public class TeleporterTileAdapter extends TileAdapter {
     public int y;
 
     @Override
-    public TeleporterTile.Target unmarshal (TargetAdapter targetAdapter) throws Exception {
-      return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public TeleporterTile.Target unmarshal (TargetAdapter adapter) throws Exception {
+      return new TeleporterTile.Target(adapter.roomId, adapter.x, adapter.y);
     }
 
     @Override
