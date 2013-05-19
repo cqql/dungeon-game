@@ -1,12 +1,11 @@
 package dungeon.game;
 
+import dungeon.game.messages.DefeatEvent;
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.models.Enemy;
-import dungeon.models.Player;
-import dungeon.models.World;
+import dungeon.models.*;
 import dungeon.models.messages.IdentityTransform;
 import dungeon.models.messages.Transform;
 import dungeon.ui.events.MoveCommand;
@@ -36,40 +35,33 @@ public class LogicHandler implements MessageHandler {
 
   private void move (MoveCommand command) {
     Transform movementTransform = handleMovement(command);
+    movementTransform = filterWalls(movementTransform);
+    movementTransform = filterBorders(movementTransform);
+
     this.world = this.world.apply(movementTransform);
     this.mailman.send(movementTransform);
 
     Transform enemyTransform = handleEnemies();
     this.world = this.world.apply(enemyTransform);
     this.mailman.send(enemyTransform);
+
+    Transform teleportTransform = handleTeleporters();
+    this.world = this.world.apply(teleportTransform);
+    this.mailman.send(teleportTransform);
+
+    handleDefeat();
   }
 
   private Transform handleMovement (MoveCommand command) {
     switch (command) {
       case UP:
-        if (this.world.getPlayer().getPosition().getY() - SPEED < 0) {
-          return new IdentityTransform();
-        } else {
-          return new Player.MoveTransform(0, -SPEED);
-        }
+        return new Player.MoveTransform(0, -SPEED);
       case DOWN:
-        if (this.world.getPlayer().getPosition().getY() + Player.SIZE + SPEED > this.world.getCurrentRoom().getYSize()) {
-          return new IdentityTransform();
-        } else {
-          return new Player.MoveTransform(0, SPEED);
-        }
+        return new Player.MoveTransform(0, SPEED);
       case LEFT:
-        if (this.world.getPlayer().getPosition().getX() - SPEED < 0) {
-          return new IdentityTransform();
-        } else {
-          return new Player.MoveTransform(-SPEED, 0);
-        }
+        return new Player.MoveTransform(-SPEED, 0);
       case RIGHT:
-        if (this.world.getPlayer().getPosition().getX() + Player.SIZE + SPEED > this.world.getCurrentRoom().getXSize()) {
-          return new IdentityTransform();
-        } else {
-          return new Player.MoveTransform(SPEED, 0);
-        }
+        return new Player.MoveTransform(SPEED, 0);
       default:
     }
 
@@ -84,5 +76,54 @@ public class LogicHandler implements MessageHandler {
     }
 
     return new IdentityTransform();
+  }
+
+  private Transform filterWalls (Transform transform) {
+    Player movedPlayer = this.world.getPlayer().apply(transform);
+
+    for (Tile tile : this.world.getCurrentRoom().getTiles()) {
+      if (tile.isBlocking()) {
+        if (movedPlayer.touches(tile)) {
+          return new IdentityTransform();
+        }
+      }
+    }
+
+    return transform;
+  }
+
+  private Transform filterBorders (Transform transform) {
+    Player movedPlayer = this.world.getPlayer().apply(transform);
+
+    if (movedPlayer.getPosition().getY() < 0
+      || movedPlayer.getPosition().getY() + Player.SIZE > this.world.getCurrentRoom().getYSize()
+      || movedPlayer.getPosition().getX() < 0
+      || movedPlayer.getPosition().getX() + Player.SIZE > this.world.getCurrentRoom().getXSize()) {
+      return new IdentityTransform();
+      } else {
+        return transform;
+      }
+  }
+
+  private Transform handleTeleporters () {
+    for (Tile tile : this.world.getCurrentRoom().getTiles()) {
+      if (tile instanceof TeleporterTile) {
+        TeleporterTile teleporter = (TeleporterTile)tile;
+
+        if (this.world.getPlayer().touches(teleporter)) {
+          TeleporterTile.Target target = teleporter.getTarget();
+
+          return new Player.TeleportTransform(target.getRoomId(), target.getX(), target.getY());
+        }
+      }
+    }
+
+    return new IdentityTransform();
+  }
+
+  private void handleDefeat () {
+    if (this.world.getPlayer().getHitPoints() == 0) {
+      this.mailman.send(new DefeatEvent());
+    }
   }
 }

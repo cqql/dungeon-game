@@ -51,4 +51,13 @@ public class PlayerTest {
   public void doesNotTouchDistantTile () {
     assertFalse(player.touches(new Tile(false, new Position(1500, 3500))));
   }
+
+  @Test
+  public void teleportTransformUpdatesPosition () {
+    Player teleported = this.player.apply(new Player.TeleportTransform("another-room", 5, 1));
+
+    assertEquals("another-room", teleported.getRoomId());
+    assertEquals(5, teleported.getPosition().getX());
+    assertEquals(1, teleported.getPosition().getY());
+  }
 }
