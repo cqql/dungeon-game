@@ -58,7 +58,7 @@ public class GameHandler implements MessageHandler {
           return new Player.MoveTransform(0, -SPEED);
         }
       case DOWN:
-        if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
+        if (this.world.getPlayer().getPosition().getY() + 1 + SPEED > this.world.getCurrentRoom().getYSize()) {
           return new IdentityTransform();
         } else {
           return new Player.MoveTransform(0, SPEED);
@@ -70,7 +70,7 @@ public class GameHandler implements MessageHandler {
           return new Player.MoveTransform(-SPEED, 0);
         }
       case RIGHT:
-        if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getSize()) {
+        if (this.world.getPlayer().getPosition().getX() + 1 + SPEED > this.world.getCurrentRoom().getXSize()) {
           return new IdentityTransform();
         } else {
           return new Player.MoveTransform(SPEED, 0);

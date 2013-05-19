@@ -4,6 +4,7 @@ import dungeon.models.messages.Transform;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Room {
@@ -11,9 +12,9 @@ public class Room {
 
   private final List<Enemy> enemies;
 
-  private final List<List<Tile>> tiles;
+  private final List<Tile> tiles;
 
-  public Room (String id, List<Enemy> enemies, List<List<Tile>> tiles) {
+  public Room (String id, List<Enemy> enemies, List<Tile> tiles) {
     this.id = id;
     this.enemies = Collections.unmodifiableList(new ArrayList<>(enemies));
     this.tiles = Collections.unmodifiableList(new ArrayList<>(tiles));
@@ -27,15 +28,43 @@ public class Room {
     return this.enemies;
   }
 
-  public List<List<Tile>> getTiles () {
-    return this.tiles;
+  public List<Tile> getTiles () {
+    return tiles;
   }
 
-  public int getSize () {
-    if (this.tiles.size() == 0) {
+  /**
+   * Returns the size along the X-axis whereas the size is the longest span occupied by tiles.
+   */
+  public float getXSize () {
+    if (this.tiles.isEmpty()) {
       return 0;
     } else {
-      return this.tiles.get(0).size();
+      Tile tile = Collections.max(this.tiles, new Comparator<Tile>() {
+        @Override
+        public int compare (Tile tile, Tile tile2) {
+          return (int)Math.ceil(tile.getPosition().getX() - tile2.getPosition().getX());
+        }
+      });
+
+      return (int)tile.getPosition().getX() + 1;
+    }
+  }
+
+  /**
+   * Returns the size along the Y-axis whereas the size is the longest span occupied by tiles.
+   */
+  public float getYSize () {
+    if (this.tiles.isEmpty()) {
+      return 0;
+    } else {
+      Tile tile = Collections.max(this.tiles, new Comparator<Tile>() {
+        @Override
+        public int compare (Tile tile, Tile tile2) {
+          return (int)Math.ceil(tile.getPosition().getY() - tile2.getPosition().getY());
+        }
+      });
+
+      return (int)tile.getPosition().getY() + 1;
     }
   }
 

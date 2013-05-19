@@ -9,7 +9,6 @@ import dungeon.models.messages.Transform;
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.List;
 
 public class Canvas extends JPanel implements MessageHandler {
   private final Color blockingTile = new Color(181, 125, 147);
@@ -43,26 +42,17 @@ public class Canvas extends JPanel implements MessageHandler {
 
     Room room = this.world.getCurrentRoom();
 
-    int tileWidth = g.getClipBounds().width / room.getSize();
-    int tileHeight = g.getClipBounds().height / room.getSize();
-    int row = 0;
+    int tileWidth = g.getClipBounds().width / (int)room.getXSize();
+    int tileHeight = g.getClipBounds().height / (int)room.getYSize();
 
-    for (List<Tile> tiles : room.getTiles()) {
-      int column = 0;
-
-      for (Tile tile : tiles) {
-        if (tile.isBlocking()) {
-          g.setColor(this.blockingTile);
-        } else {
-          g.setColor(this.passableTile);
-        }
-
-        g.fillRect(column * tileWidth, row * tileHeight, tileWidth, tileHeight);
-
-        column++;
+    for (Tile tile : room.getTiles()) {
+      if (tile.isBlocking()) {
+        g.setColor(this.blockingTile);
+      } else {
+        g.setColor(this.passableTile);
       }
 
-      row++;
+      g.fillRect((int)(tile.getPosition().getX() * tileWidth), (int)(tile.getPosition().getY() * tileHeight), tileWidth, tileHeight);
     }
 
     for (Enemy enemy : room.getEnemies()) {

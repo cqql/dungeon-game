@@ -8,12 +8,19 @@ public class Tile {
    */
   private final boolean blocking;
 
-  public Tile (boolean blocking) {
+  private final Position position;
+
+  public Tile (boolean blocking, Position position) {
     this.blocking = blocking;
+    this.position = position;
   }
 
   public boolean isBlocking () {
     return this.blocking;
+  }
+
+  public Position getPosition () {
+    return position;
   }
 
   public Tile apply (Transform transform) {
