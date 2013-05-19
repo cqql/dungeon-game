@@ -80,10 +80,9 @@ public class LogicHandler implements MessageHandler {
     for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
       if (this.world.getPlayer().touches(enemy)) {
         return new Player.HitpointTransform(-1);
-      } else {
-        return new IdentityTransform();
       }
     }
+    
     return new IdentityTransform();
   }
 }
