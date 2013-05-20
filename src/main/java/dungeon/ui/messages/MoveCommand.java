@@ -1,4 +1,4 @@
-package dungeon.ui.events;
+package dungeon.ui.messages;
 
 import dungeon.messages.Message;
 

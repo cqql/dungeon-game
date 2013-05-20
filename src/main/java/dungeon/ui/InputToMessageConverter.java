@@ -1,6 +1,6 @@
 package dungeon.ui;
 
-import dungeon.ui.events.MoveCommand;
+import dungeon.ui.messages.MoveCommand;
 import dungeon.messages.Mailman;
 
 import java.awt.event.KeyEvent;
