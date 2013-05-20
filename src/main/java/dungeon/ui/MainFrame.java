@@ -1,28 +1,49 @@
 package dungeon.ui;
 
+import dungeon.messages.LifecycleEvent;
+import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.messages.Mailman;
-import dungeon.messages.LifecycleEvent;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
  * The main frame for the application.
  *
- * handleMessage() will be called on the swing EDT. This means that any methods called by handleMessage() are generally
- * save to manipulate the frame.
+ * It handles showing the different screens of the game.
  */
 public class MainFrame extends JFrame implements MessageHandler {
   public static final String TITLE = "DUNGEON GAME";
 
   private final Mailman mailman;
 
-  public MainFrame (Mailman mailman) {
+  private final Canvas canvas;
+
+  private final StartMenu startMenu;
+
+  public MainFrame (Mailman mailman, Canvas canvas) {
     this.mailman = mailman;
+    this.canvas = canvas;
+
+    this.startMenu = new StartMenu(new StartMenu.Listener() {
+      @Override
+      public void onStart () {
+        MainFrame.this.remove(MainFrame.this.startMenu);
+        MainFrame.this.add(MainFrame.this.canvas);
+
+        MainFrame.this.revalidate();
+
+        MainFrame.this.canvas.requestFocus();
+      }
+
+      @Override
+      public void onQuit () {
+        MainFrame.this.mailman.send(LifecycleEvent.SHUTDOWN);
+      }
+    });
   }
 
   @Override
@@ -49,6 +70,8 @@ public class MainFrame extends JFrame implements MessageHandler {
         MainFrame.this.mailman.send(LifecycleEvent.SHUTDOWN);
       }
     });
+
+    this.add(this.startMenu);
 
     this.setVisible(true);
   }

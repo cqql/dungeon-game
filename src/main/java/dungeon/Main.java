@@ -14,13 +14,12 @@ public class Main {
 
     Mailman mailman = new Mailman();
 
-    MainFrame mainFrame = new MainFrame(mailman);
-
     InputToMessageConverter converter = new InputToMessageConverter(mailman);
-    mainFrame.addKeyListener(converter);
 
     Canvas canvas = new Canvas();
-    mainFrame.add(canvas);
+    canvas.addKeyListener(converter);
+
+    MainFrame mainFrame = new MainFrame(mailman, canvas);
 
     mailman.addMailbox(new SwingMailbox(mainFrame));
     mailman.addMailbox(new SwingMailbox(canvas));

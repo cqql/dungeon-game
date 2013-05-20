@@ -25,6 +25,10 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private World world;
 
+  public Canvas () {
+    this.setFocusable(true);
+  }
+
   @Override
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
