@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <world>
-  <room id="LvL-1">
+  <room id="level-1">
     <enemy>
       <position x="1000" y="2000"/>
     </enemy>
@@ -30,10 +30,10 @@
     </tile>
     <teleporter blocking="false">
       <position x="2000" y="2000"/>
-      <target roomId="LvL-2" x="0" y="1000"/>
+      <target roomId="level-2" x="0" y="1000"/>
     </teleporter>
   </room>
-  <room id="LvL-2">
+  <room id="level-2">
     <enemy>
       <position x="1000" y="1000"/>
     </enemy>
@@ -63,10 +63,10 @@
     </tile>
     <teleporter blocking="false">
       <position x="2000" y="2000"/>
-      <target roomId="LvL-3" x="0" y="2000"/>
+      <target roomId="level-3" x="0" y="2000"/>
     </teleporter>
   </room>
-  <room id="LvL-3">
+  <room id="level-3">
     <enemy>
       <position x="1000" y="0"/>
     </enemy>
@@ -101,7 +101,7 @@
       <position x="2000" y="2000"/>
     </victory-tile>
   </room>
-  <player name="Link" hitPoints="1" roomId="LvL-1">
+  <player name="Link" hitPoints="1" roomId="level-1">
     <position x="0" y="0" />
   </player>
 </world>
