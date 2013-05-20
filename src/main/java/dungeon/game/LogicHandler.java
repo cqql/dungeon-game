@@ -9,7 +9,7 @@ import dungeon.messages.MessageHandler;
 import dungeon.models.*;
 import dungeon.models.messages.IdentityTransform;
 import dungeon.models.messages.Transform;
-import dungeon.ui.events.MoveCommand;
+import dungeon.ui.messages.MoveCommand;
 
 /**
  * Handles the game logic.
