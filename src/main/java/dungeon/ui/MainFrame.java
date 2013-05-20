@@ -1,5 +1,7 @@
 package dungeon.ui;
 
+import dungeon.game.messages.DefeatEvent;
+import dungeon.game.messages.WinEvent;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
@@ -24,6 +26,10 @@ public class MainFrame extends JFrame implements MessageHandler {
 
   private final StartMenu startMenu;
 
+  private final WinScreen winScreen;
+
+  private final DefeatScreen defeatScreen;
+
   public MainFrame (Mailman mailman, Canvas canvas) {
     this.mailman = mailman;
     this.canvas = canvas;
@@ -31,17 +37,42 @@ public class MainFrame extends JFrame implements MessageHandler {
     this.startMenu = new StartMenu(new StartMenu.Listener() {
       @Override
       public void onStart () {
-        MainFrame.this.remove(MainFrame.this.startMenu);
-        MainFrame.this.add(MainFrame.this.canvas);
+        SwingUtilities.invokeLater(new Runnable() {
+          @Override
+          public void run () {
+            MainFrame.this.remove(MainFrame.this.startMenu);
+            MainFrame.this.add(MainFrame.this.canvas);
 
-        MainFrame.this.revalidate();
+            MainFrame.this.revalidate();
 
-        MainFrame.this.canvas.requestFocus();
+            MainFrame.this.canvas.requestFocus();
+          }
+        });
       }
 
       @Override
       public void onQuit () {
         MainFrame.this.mailman.send(LifecycleEvent.SHUTDOWN);
+      }
+    });
+
+    this.winScreen = new WinScreen(new WinScreen.Listener() {
+      @Override
+      public void onBackButton () {
+        MainFrame.this.remove(MainFrame.this.winScreen);
+        MainFrame.this.add(MainFrame.this.startMenu);
+
+        MainFrame.this.revalidate();
+      }
+    });
+
+    this.defeatScreen = new DefeatScreen(new DefeatScreen.Listener() {
+      @Override
+      public void onBackButton () {
+        MainFrame.this.remove(MainFrame.this.defeatScreen);
+        MainFrame.this.add(MainFrame.this.startMenu);
+
+        MainFrame.this.revalidate();
       }
     });
   }
@@ -52,6 +83,16 @@ public class MainFrame extends JFrame implements MessageHandler {
       this.initialize();
     } else if (message == LifecycleEvent.SHUTDOWN) {
       this.dispose();
+    } else if (message instanceof WinEvent) {
+      this.remove(this.canvas);
+      this.add(this.winScreen);
+
+      this.revalidate();
+    } else if (message instanceof DefeatEvent) {
+      this.remove(this.canvas);
+      this.add(this.defeatScreen);
+
+      this.revalidate();
     }
   }
 
