@@ -23,6 +23,7 @@ public class Main {
 
     mailman.addMailbox(new SwingMailbox(mainFrame));
     mailman.addMailbox(new SwingMailbox(canvas));
+    mailman.addMailbox(new SwingMailbox(converter));
 
     mailman.addHandler(new LevelLoadHandler(mailman));
     mailman.addHandler(new LogicHandler(mailman));
