@@ -35,6 +35,10 @@ public class LogicHandler implements MessageHandler {
   }
 
   private void move (MoveCommand command) {
+    if (this.world == null) {
+      return;
+    }
+
     this.applyTransform(this.handleMovement(command));
     this.applyTransform(this.handleEnemies());
     this.applyTransform(this.handleTeleporters());
