@@ -100,8 +100,11 @@
     <tile blocking="false">
       <position x="1000" y="2000"/>
     </tile>
+    <tile blocking="false">
+        <position x="2000" y="2000" />
+    </tile>
     <victory-tile blocking="false">
-      <position x="2000" y="2000"/>
+      <position x="2000" y="0"/>
     </victory-tile>
   </room>
   <player name="Link" hitPoints="1" roomId="LvL-1">
