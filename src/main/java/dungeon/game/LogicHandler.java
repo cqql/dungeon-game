@@ -88,10 +88,8 @@ public class LogicHandler implements MessageHandler {
     Player movedPlayer = this.world.getPlayer().apply(transform);
 
     for (Tile tile : this.world.getCurrentRoom().getTiles()) {
-      if (tile.isBlocking()) {
-        if (movedPlayer.touches(tile)) {
-          return new IdentityTransform();
-        }
+      if (tile.isBlocking() && movedPlayer.touches(tile)) {
+        return new IdentityTransform();
       }
     }
 
