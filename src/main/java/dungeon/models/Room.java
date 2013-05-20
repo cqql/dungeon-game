@@ -33,6 +33,51 @@ public class Room {
   }
 
   /**
+   * Returns all blocking tiles in this room.
+   */
+  public List<Tile> getWalls () {
+    List<Tile> walls = new ArrayList<>();
+
+    for (Tile tile : this.tiles) {
+      if (tile.isBlocking()) {
+        walls.add(tile);
+      }
+    }
+
+    return walls;
+  }
+
+  /**
+   * Returns all victory tiles in this room.
+   */
+  public List<VictoryTile> getVictoryTiles () {
+    List<VictoryTile> tiles = new ArrayList<>();
+
+    for (Tile tile : this.tiles) {
+      if (tile instanceof VictoryTile) {
+        tiles.add((VictoryTile)tile);
+      }
+    }
+
+    return tiles;
+  }
+
+  /**
+   * Returns all teleporters in this room.
+   */
+  public List<TeleporterTile> getTeleporters () {
+    List<TeleporterTile> teleporters = new ArrayList<>();
+
+    for (Tile tile : this.tiles) {
+      if (tile instanceof TeleporterTile) {
+        teleporters.add((TeleporterTile)tile);
+      }
+    }
+
+    return teleporters;
+  }
+
+  /**
    * Returns the size along the X-axis whereas the size is the longest span occupied by tiles.
    */
   public int getXSize () {

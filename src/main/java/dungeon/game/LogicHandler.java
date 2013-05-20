@@ -87,8 +87,8 @@ public class LogicHandler implements MessageHandler {
   private Transform filterWalls (Transform transform) {
     Player movedPlayer = this.world.getPlayer().apply(transform);
 
-    for (Tile tile : this.world.getCurrentRoom().getTiles()) {
-      if (tile.isBlocking() && movedPlayer.touches(tile)) {
+    for (Tile wall : this.world.getCurrentRoom().getWalls()) {
+      if (movedPlayer.touches(wall)) {
         return new IdentityTransform();
       }
     }
@@ -129,15 +129,11 @@ public class LogicHandler implements MessageHandler {
    * Create a teleport transform it the player touches a teleporter.
    */
   private Transform handleTeleporters () {
-    for (Tile tile : this.world.getCurrentRoom().getTiles()) {
-      if (tile instanceof TeleporterTile) {
-        TeleporterTile teleporter = (TeleporterTile)tile;
+    for (TeleporterTile teleporter : this.world.getCurrentRoom().getTeleporters()) {
+      if (this.world.getPlayer().touches(teleporter)) {
+        TeleporterTile.Target target = teleporter.getTarget();
 
-        if (this.world.getPlayer().touches(teleporter)) {
-          TeleporterTile.Target target = teleporter.getTarget();
-
-          return new Player.TeleportTransform(target.getRoomId(), target.getX(), target.getY());
-        }
+        return new Player.TeleportTransform(target.getRoomId(), target.getX(), target.getY());
       }
     }
 
@@ -151,13 +147,9 @@ public class LogicHandler implements MessageHandler {
   }
 
   private void handleWin () {
-    for (Tile tile : this.world.getCurrentRoom().getTiles()) {
-      if (tile instanceof VictoryTile) {
-        VictoryTile victory = (VictoryTile)tile;
-
-        if (this.world.getPlayer().touches(victory)) {
-          this.mailman.send(new WinEvent());
-        }
+    for (VictoryTile tile : this.world.getCurrentRoom().getVictoryTiles()) {
+      if (this.world.getPlayer().touches(tile)) {
+        this.mailman.send(new WinEvent());
       }
     }
   }
