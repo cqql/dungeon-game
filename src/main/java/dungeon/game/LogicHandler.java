@@ -48,7 +48,7 @@ public class LogicHandler implements MessageHandler {
   }
 
   /**
-   * Applies a transform to the internal World object and send it to the mailman.
+   * Applies a transform to the internal World object and sends it to the mailman.
    */
   private void applyTransform (Transform transform) {
     this.world = this.world.apply(transform);
