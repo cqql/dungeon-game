@@ -4,9 +4,6 @@
     <enemy>
       <position x="1000" y="2000"/>
     </enemy>
-    <enemy>
-      <position x="1000" y="0"/>
-    </enemy>
     <tile blocking="false">
       <position x="0" y="0"/>
     </tile>
