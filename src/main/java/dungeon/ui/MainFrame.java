@@ -6,6 +6,7 @@ import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
+import dungeon.ui.messages.MenuCommand;
 
 import javax.swing.*;
 import java.awt.CardLayout;
@@ -53,6 +54,8 @@ public class MainFrame extends JFrame implements MessageHandler {
             MainFrame.this.goToScreen(CANVAS);
 
             MainFrame.this.canvas.requestFocus();
+
+            MainFrame.this.mailman.send(MenuCommand.START_GAME);
           }
         });
       }
