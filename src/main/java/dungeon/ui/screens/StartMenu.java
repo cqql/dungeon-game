@@ -1,4 +1,8 @@
-package dungeon.ui;
+package dungeon.ui.screens;
+
+import dungeon.messages.LifecycleEvent;
+import dungeon.messages.Mailman;
+import dungeon.ui.messages.MenuCommand;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -13,12 +17,12 @@ public class StartMenu extends JPanel {
 
   private final JButton quitButton;
 
-  private final Listener listener;
+  private final Mailman mailman;
 
-  public StartMenu (Listener listener) {
+  public StartMenu (Mailman mailman) {
     super(new BorderLayout());
 
-    this.listener = listener;
+    this.mailman = mailman;
 
     this.startButton = new JButton("Start");
     this.quitButton = new JButton("Beenden");
@@ -29,8 +33,8 @@ public class StartMenu extends JPanel {
     this.startButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        if (StartMenu.this.listener != null) {
-          StartMenu.this.listener.onStart();
+        if (StartMenu.this.mailman != null) {
+          StartMenu.this.mailman.send(MenuCommand.START_GAME);
         }
       }
     });
@@ -38,16 +42,10 @@ public class StartMenu extends JPanel {
     this.quitButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        if (StartMenu.this.listener != null) {
-          StartMenu.this.listener.onQuit();
+        if (StartMenu.this.mailman != null) {
+          StartMenu.this.mailman.send(LifecycleEvent.SHUTDOWN);
         }
       }
     });
-  }
-
-  public static interface Listener {
-    public void onStart ();
-
-    public void onQuit ();
   }
 }
