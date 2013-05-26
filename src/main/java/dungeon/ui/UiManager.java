@@ -17,10 +17,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Follows the flow of the game and activates the appropriate UI and EventHandler.
+ * Follows the flow of the game and activates the appropriate screen.
  *
- * For example a StartGame message is received. Then the UiManager will activate the Canvas and the
- * InputToMessageConverter. If later in the game a WinEvent is received, the UiManager will switch to the WinScreen.
+ * For example a StartGame message is received. Then the UiManager will activate the Canvas. If later in the game a
+ * WinEvent is received, the UiManager will switch to the WinScreen.
  */
 public class UiManager extends JPanel implements MessageHandler {
   private static final String START_MENU = "START_MENU";

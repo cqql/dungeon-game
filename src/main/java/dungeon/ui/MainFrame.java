@@ -13,7 +13,7 @@ import java.awt.event.WindowEvent;
 /**
  * The main frame for the application.
  *
- * It handles showing the different screens of the game.
+ * Everything related to UI and user interaction is handled by an UiManager and different screens.
  */
 public class MainFrame extends JFrame implements MessageHandler {
   public static final String TITLE = "DUNGEON GAME";

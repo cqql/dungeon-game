@@ -8,11 +8,14 @@ import javax.swing.*;
 
 /**
  * An event consumer that passes the messages to the given event handler in the swing event dispatching thread (EDT), so
- * that the event handler can be manipulated in response to messages, which is forbidden from other threads.
+ * that the event handler can respond to messages without having to worry about synchronization.
  */
 public class SwingMailbox implements Mailbox {
   private final MessageHandler messageHandler;
 
+  /**
+   * @param frame A swing component that wants to receive messages
+   */
   public SwingMailbox (MessageHandler frame) {
     this.messageHandler = frame;
   }
