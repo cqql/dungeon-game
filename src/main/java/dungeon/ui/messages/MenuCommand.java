@@ -6,5 +6,6 @@ import dungeon.messages.Message;
  * Commands that can be triggered through the start menu.
  */
 public enum MenuCommand implements Message {
-  START_GAME
+  START_GAME,
+  SHOW_MENU
 }

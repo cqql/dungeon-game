@@ -1,4 +1,4 @@
-package dungeon.ui;
+package dungeon.ui.screens;
 
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
