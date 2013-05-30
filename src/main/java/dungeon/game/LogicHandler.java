@@ -81,11 +81,26 @@ public class LogicHandler implements MessageHandler {
     switch (this.logic.getGameState()) {
       case VICTORY:
         this.mailman.send(new WinEvent());
+
+        this.reset();
         break;
       case DEFEAT:
         this.mailman.send(new DefeatEvent());
+
+        this.reset();
         break;
     }
+  }
+
+  /**
+   * Reset this handler.
+   *
+   * This is necessary, because otherwise the handler would continually send win or defeat events.
+   */
+  private void reset () {
+    this.logic = null;
+    this.lastPulse = 0;
+    this.pulseDelta = 0;
   }
 
   /**
