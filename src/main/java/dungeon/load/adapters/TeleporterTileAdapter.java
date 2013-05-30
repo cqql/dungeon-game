@@ -3,14 +3,10 @@ package dungeon.load.adapters;
 import dungeon.models.TeleporterTile;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 public class TeleporterTileAdapter extends TileAdapter {
-  @XmlTransient
-  public boolean blocking;
-
   @XmlJavaTypeAdapter(TargetAdapter.class)
   public TeleporterTile.Target target;
 

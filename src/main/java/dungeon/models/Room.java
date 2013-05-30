@@ -87,7 +87,7 @@ public class Room {
       Tile tile = Collections.max(this.tiles, new Comparator<Tile>() {
         @Override
         public int compare (Tile a, Tile b) {
-          return (int)Math.ceil(a.getPosition().getX() - b.getPosition().getX());
+          return a.getPosition().getX() - b.getPosition().getX();
         }
       });
 
@@ -105,7 +105,7 @@ public class Room {
       Tile tile = Collections.max(this.tiles, new Comparator<Tile>() {
         @Override
         public int compare (Tile a, Tile b) {
-          return (int)Math.ceil(a.getPosition().getY() - b.getPosition().getY());
+          return a.getPosition().getY() - b.getPosition().getY();
         }
       });
 
