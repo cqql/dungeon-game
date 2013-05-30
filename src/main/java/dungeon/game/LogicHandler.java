@@ -29,7 +29,14 @@ public class LogicHandler implements MessageHandler {
 
   private final Set<MoveCommand> activeMoveDirections = EnumSet.noneOf(MoveCommand.class);
 
+  /**
+   * Time when the last pulse came in in milliseconds.
+   */
   private long lastPulse = 0;
+
+  /**
+   * Time delta since the last pulse came in in milliseconds.
+   */
   private int pulseDelta = 0;
 
   private World world;
@@ -61,6 +68,9 @@ public class LogicHandler implements MessageHandler {
     }
   }
 
+  /**
+   * Apply all the changes to the world, that have happened since the last pulse.
+   */
   private void pulse () {
     if (this.world == null) {
       return;
@@ -76,6 +86,7 @@ public class LogicHandler implements MessageHandler {
     this.handleWin();
   }
 
+
   private void updatePulseDelta () {
     long now = System.currentTimeMillis();
 
@@ -84,6 +95,9 @@ public class LogicHandler implements MessageHandler {
     this.lastPulse = now;
   }
 
+  /**
+   * @return the time since the last pulse came in in milliseconds
+   */
   private double getPulseDelta () {
     return this.pulseDelta / 1000.0;
   }
