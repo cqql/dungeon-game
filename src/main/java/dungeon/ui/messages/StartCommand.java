@@ -17,6 +17,6 @@ public class StartCommand implements Message {
   }
 
   public Command getCommand () {
-    return command;
+    return this.command;
   }
 }

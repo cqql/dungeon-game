@@ -19,17 +19,19 @@ import java.util.List;
  * Handles the game logic.
  */
 public class LogicHandler implements MessageHandler {
+  private static final double MS_PER_SECOND = 1000;
+
   private final Mailman mailman;
 
   /**
    * Time when the last pulse came in in milliseconds.
    */
-  private long lastPulse = 0;
+  private long lastPulse;
 
   /**
    * Time delta since the last pulse came in in milliseconds.
    */
-  private int pulseDelta = 0;
+  private int pulseDelta;
 
   private GameLogic logic;
 
@@ -42,23 +44,35 @@ public class LogicHandler implements MessageHandler {
     if (message instanceof LevelLoadedEvent) {
       this.logic = new GameLogic(((LevelLoadedEvent)message).getWorld());
     } else if (message instanceof StartCommand) {
-      if (this.logic != null) {
-        Command command = ((StartCommand)message).getCommand();
-
-        if (command instanceof MoveCommand) {
-          this.logic.activateMoveDirection((MoveCommand)command);
-        }
-      }
+      this.startCommand((StartCommand)message);
     } else if (message instanceof EndCommand) {
-      if (this.logic != null) {
-        Command command = ((EndCommand)message).getCommand();
-
-        if (command instanceof MoveCommand) {
-          this.logic.deactivateMoveDirection((MoveCommand)command);
-        }
-      }
+      this.endCommand((EndCommand)message);
     } else if (message instanceof Pulse) {
       this.pulse();
+    }
+  }
+
+  private void startCommand (StartCommand message) {
+    if (this.logic == null) {
+      return;
+    }
+
+    Command command = message.getCommand();
+
+    if (command instanceof MoveCommand) {
+      this.logic.activateMoveDirection((MoveCommand)command);
+    }
+  }
+
+  private void endCommand (EndCommand message) {
+    if (this.logic == null) {
+      return;
+    }
+
+    Command command = message.getCommand();
+
+    if (command instanceof MoveCommand) {
+      this.logic.deactivateMoveDirection((MoveCommand)command);
     }
   }
 
@@ -89,6 +103,7 @@ public class LogicHandler implements MessageHandler {
 
         this.reset();
         break;
+      default:
     }
   }
 
@@ -118,6 +133,6 @@ public class LogicHandler implements MessageHandler {
    * @return the time since the last pulse came in in milliseconds
    */
   private double getPulseDelta () {
-    return this.pulseDelta / 1000.0;
+    return this.pulseDelta / MS_PER_SECOND;
   }
 }

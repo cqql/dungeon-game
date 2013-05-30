@@ -15,6 +15,6 @@ public class EndCommand implements Message {
   }
 
   public Command getCommand () {
-    return command;
+    return this.command;
   }
 }

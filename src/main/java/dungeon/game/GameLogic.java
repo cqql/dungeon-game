@@ -55,7 +55,7 @@ public class GameLogic {
    * You can use this to check, if the player has died, won, etc.
    */
   public GameState getGameState () {
-    return gameState;
+    return this.gameState;
   }
 
   /**

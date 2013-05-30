@@ -18,6 +18,6 @@ public enum MoveCommand implements Command {
   }
 
   public Vector getDirection () {
-    return direction;
+    return this.direction;
   }
 }
