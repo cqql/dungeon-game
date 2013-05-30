@@ -5,7 +5,7 @@ import dungeon.models.messages.Transform;
 import java.awt.geom.Rectangle2D;
 
 public class Player {
-  public static final int SIZE = 1000;
+  public static final int SIZE = 900;
 
   private final String name;
 

@@ -50,8 +50,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
     Room room = this.world.getCurrentRoom();
 
-    int tileWidth = g.getClipBounds().width * Tile.SIZE / (int)room.getXSize();
-    int tileHeight = g.getClipBounds().height * Tile.SIZE / (int)room.getYSize();
+    double xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();
+    double yPixelPerUnit = (double)g.getClipBounds().height / room.getYSize();
 
     for (Tile tile : room.getTiles()) {
       if (tile instanceof TeleporterTile) {
@@ -64,19 +64,19 @@ public class Canvas extends JPanel implements MessageHandler {
         g.setColor(this.passableTile);
       }
 
-      g.fillRect(tile.getPosition().getX() * tileWidth / Tile.SIZE, tile.getPosition().getY() * tileHeight / Tile.SIZE, tileWidth, tileHeight);
+      g.fillRect((int)(tile.getPosition().getX() * xPixelPerUnit), (int)(tile.getPosition().getY() * yPixelPerUnit), (int)(Tile.SIZE * xPixelPerUnit), (int)(Tile.SIZE * yPixelPerUnit));
     }
 
     for (Enemy enemy : room.getEnemies()) {
       Position position = enemy.getPosition();
 
       g.setColor(this.enemyColor);
-      g.fillRect(position.getX() * tileWidth / Enemy.SIZE, position.getY() * tileHeight / Enemy.SIZE, tileWidth, tileHeight);
+      g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(Enemy.SIZE * xPixelPerUnit), (int)(Enemy.SIZE * yPixelPerUnit));
     }
 
     Position playerPosition = this.world.getPlayer().getPosition();
 
     g.setColor(this.playerColor);
-    g.fillRect(playerPosition.getX() * tileWidth / Player.SIZE, playerPosition.getY() * tileHeight / Player.SIZE, tileWidth, tileHeight);
+    g.fillRect((int)(playerPosition.getX() * xPixelPerUnit), (int)(playerPosition.getY() * yPixelPerUnit), (int)(Player.SIZE * xPixelPerUnit), (int)(Player.SIZE * yPixelPerUnit));
   }
 }

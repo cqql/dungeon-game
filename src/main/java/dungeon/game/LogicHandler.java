@@ -6,20 +6,34 @@ import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.models.*;
-import dungeon.models.messages.IdentityTransform;
 import dungeon.models.messages.Transform;
+import dungeon.pulse.Pulse;
+import dungeon.ui.messages.Command;
+import dungeon.ui.messages.EndCommand;
 import dungeon.ui.messages.MoveCommand;
+import dungeon.ui.messages.StartCommand;
+
+import java.util.List;
 
 /**
  * Handles the game logic.
  */
 public class LogicHandler implements MessageHandler {
-  private static final int SPEED = 100;
+  private static final double MS_PER_SECOND = 1000;
 
   private final Mailman mailman;
 
-  private World world;
+  /**
+   * Time when the last pulse came in in milliseconds.
+   */
+  private long lastPulse;
+
+  /**
+   * Time delta since the last pulse came in in milliseconds.
+   */
+  private int pulseDelta;
+
+  private GameLogic logic;
 
   public LogicHandler (Mailman mailman) {
     this.mailman = mailman;
@@ -28,129 +42,97 @@ public class LogicHandler implements MessageHandler {
   @Override
   public void handleMessage (Message message) {
     if (message instanceof LevelLoadedEvent) {
-      this.world = ((LevelLoadedEvent)message).getWorld();
-    } else if (message instanceof MoveCommand) {
-      move((MoveCommand)message);
+      this.logic = new GameLogic(((LevelLoadedEvent)message).getWorld());
+    } else if (message instanceof StartCommand) {
+      this.startCommand((StartCommand)message);
+    } else if (message instanceof EndCommand) {
+      this.endCommand((EndCommand)message);
+    } else if (message instanceof Pulse) {
+      this.pulse();
     }
   }
 
-  private void move (MoveCommand command) {
-    if (this.world == null) {
+  private void startCommand (StartCommand message) {
+    if (this.logic == null) {
       return;
     }
 
-    this.applyTransform(this.handleMovement(command));
-    this.applyTransform(this.handleEnemies());
-    this.applyTransform(this.handleTeleporters());
+    Command command = message.getCommand();
 
-    this.handleDefeat();
-    this.handleWin();
+    if (command instanceof MoveCommand) {
+      this.logic.activateMoveDirection((MoveCommand)command);
+    }
+  }
+
+  private void endCommand (EndCommand message) {
+    if (this.logic == null) {
+      return;
+    }
+
+    Command command = message.getCommand();
+
+    if (command instanceof MoveCommand) {
+      this.logic.deactivateMoveDirection((MoveCommand)command);
+    }
   }
 
   /**
-   * Applies a transform to the internal World object and sends it to the mailman.
+   * Apply all the changes to the world, that have happened since the last pulse.
    */
-  private void applyTransform (Transform transform) {
-    this.world = this.world.apply(transform);
-    this.mailman.send(transform);
-  }
+  private void pulse () {
+    if (this.logic == null) {
+      return;
+    }
 
-  private Transform handleMovement (MoveCommand command) {
-    Transform movementTransform = moveTransform(command);
-    movementTransform = filterWalls(movementTransform);
+    this.updatePulseDelta();
 
-    return filterBorders(movementTransform);
-  }
+    List<Transform> transforms = this.logic.pulse(this.getPulseDelta());
 
-  /**
-   * Create the appropriate MoveTransform for the command.
-   */
-  private Transform moveTransform (MoveCommand command) {
-    switch (command) {
-      case UP:
-        return new Player.MoveTransform(0, -SPEED);
-      case DOWN:
-        return new Player.MoveTransform(0, SPEED);
-      case LEFT:
-        return new Player.MoveTransform(-SPEED, 0);
-      case RIGHT:
-        return new Player.MoveTransform(SPEED, 0);
+    for (Transform transform : transforms) {
+      this.mailman.send(transform);
+    }
+
+    switch (this.logic.getGameState()) {
+      case VICTORY:
+        this.mailman.send(new WinEvent());
+
+        this.reset();
+        break;
+      case DEFEAT:
+        this.mailman.send(new DefeatEvent());
+
+        this.reset();
+        break;
       default:
     }
-
-    return new IdentityTransform();
   }
 
   /**
-   * Prevent movement if the player would walk on a wall.
+   * Reset this handler.
+   *
+   * This is necessary, because otherwise the handler would continually send win or defeat events.
    */
-  private Transform filterWalls (Transform transform) {
-    Player movedPlayer = this.world.getPlayer().apply(transform);
-
-    for (Tile wall : this.world.getCurrentRoom().getWalls()) {
-      if (movedPlayer.touches(wall)) {
-        return new IdentityTransform();
-      }
-    }
-
-    return transform;
+  private void reset () {
+    this.logic = null;
+    this.lastPulse = 0;
+    this.pulseDelta = 0;
   }
 
   /**
-   * Prevent movement if the player would leave the playing field.
+   * Recalculate the time since the last pulse.
    */
-  private Transform filterBorders (Transform transform) {
-    Player movedPlayer = this.world.getPlayer().apply(transform);
+  private void updatePulseDelta () {
+    long now = System.currentTimeMillis();
 
-    if (movedPlayer.getPosition().getY() < 0
-      || movedPlayer.getPosition().getY() + Player.SIZE > this.world.getCurrentRoom().getYSize()
-      || movedPlayer.getPosition().getX() < 0
-      || movedPlayer.getPosition().getX() + Player.SIZE > this.world.getCurrentRoom().getXSize()) {
-      return new IdentityTransform();
-    } else {
-      return transform;
-    }
+    // If there are more than 2^32 seconds between two pulses, we are already extinct.
+    this.pulseDelta = (int)(now - this.lastPulse);
+    this.lastPulse = now;
   }
 
   /**
-   * Translate enemy contact into a transform.
+   * @return the time since the last pulse came in in milliseconds
    */
-  private Transform handleEnemies () {
-    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
-      if (this.world.getPlayer().touches(enemy)) {
-        return new Player.HitpointTransform(-1);
-      }
-    }
-
-    return new IdentityTransform();
-  }
-
-  /**
-   * Create a teleport transform it the player touches a teleporter.
-   */
-  private Transform handleTeleporters () {
-    for (TeleporterTile teleporter : this.world.getCurrentRoom().getTeleporters()) {
-      if (this.world.getPlayer().touches(teleporter)) {
-        TeleporterTile.Target target = teleporter.getTarget();
-
-        return new Player.TeleportTransform(target.getRoomId(), target.getX(), target.getY());
-      }
-    }
-
-    return new IdentityTransform();
-  }
-
-  private void handleDefeat () {
-    if (this.world.getPlayer().getHitPoints() == 0) {
-      this.mailman.send(new DefeatEvent());
-    }
-  }
-
-  private void handleWin () {
-    for (VictoryTile tile : this.world.getCurrentRoom().getVictoryTiles()) {
-      if (this.world.getPlayer().touches(tile)) {
-        this.mailman.send(new WinEvent());
-      }
-    }
+  private double getPulseDelta () {
+    return this.pulseDelta / MS_PER_SECOND;
   }
 }
