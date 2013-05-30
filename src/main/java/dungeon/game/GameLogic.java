@@ -64,40 +64,34 @@ public class GameLogic {
    * @return A list of all changes that have happened
    */
   public List<Transform> pulse (double delta) {
-    List<Transform> transforms = new ArrayList<>();
+    List<Transform> transformLog = new ArrayList<>();
 
-    Transform moveTransform = this.handleMovement(delta);
-    this.applyTransform(moveTransform);
-    transforms.add(moveTransform);
-
-    Transform hpTransform = this.handleEnemies();
-    this.applyTransform(hpTransform);
-    transforms.add(hpTransform);
-
-    Transform teleporterTransform = this.handleTeleporters();
-    this.applyTransform(teleporterTransform);
-    transforms.add(teleporterTransform);
+    this.applyTransform(this.handleMovement(delta), transformLog);
+    this.applyTransform(this.handleEnemies(), transformLog);
+    this.applyTransform(this.handleTeleporters(), transformLog);
 
     this.handleDefeat();
     this.handleWin();
 
-    return transforms;
+    return transformLog;
   }
 
   /**
-   * Apply all transforms to the internal world object.
+   * Apply all transforms to the internal world object and log them.
    */
-  private void applyTransforms (List<Transform> transforms) {
+  private void applyTransforms (List<Transform> transforms, List<Transform> log) {
     for (Transform transform : transforms) {
-      this.applyTransform(transform);
+      this.applyTransform(transform, log);
     }
   }
 
   /**
-   * Apply a transform to the internal world object.
+   * Apply a transform to the internal world object and log it.
    */
-  private void applyTransform (Transform transform) {
+  private void applyTransform (Transform transform, List<Transform> log) {
     this.world = this.world.apply(transform);
+
+    log.add(transform);
   }
 
   private Transform handleMovement (double delta) {
