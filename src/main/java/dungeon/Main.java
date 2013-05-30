@@ -3,6 +3,7 @@ package dungeon;
 import dungeon.game.LogicHandler;
 import dungeon.load.LevelLoadHandler;
 import dungeon.messages.Mailman;
+import dungeon.pulse.PulseGenerator;
 import dungeon.ui.*;
 import dungeon.ui.screens.*;
 
@@ -31,6 +32,8 @@ public class Main {
     mailman.addMailbox(new SwingMailbox(canvas));
     mailman.addMailbox(new SwingMailbox(converter));
     mailman.addMailbox(new SwingMailbox(uiManager));
+
+    mailman.addMailbox(new PulseGenerator(mailman));
 
     mailman.addHandler(new LevelLoadHandler(mailman));
     mailman.addHandler(new LogicHandler(mailman));
