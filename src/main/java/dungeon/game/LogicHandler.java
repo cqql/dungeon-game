@@ -9,15 +9,28 @@ import dungeon.messages.MessageHandler;
 import dungeon.models.*;
 import dungeon.models.messages.IdentityTransform;
 import dungeon.models.messages.Transform;
+import dungeon.pulse.Pulse;
+import dungeon.ui.messages.Command;
+import dungeon.ui.messages.EndCommand;
 import dungeon.ui.messages.MoveCommand;
+import dungeon.ui.messages.StartCommand;
+import dungeon.util.Vector;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * Handles the game logic.
  */
 public class LogicHandler implements MessageHandler {
-  private static final int SPEED = 100;
+  private static final int SPEED = 1000;
 
   private final Mailman mailman;
+
+  private final Set<MoveCommand> activeMoveDirections = EnumSet.noneOf(MoveCommand.class);
+
+  private long lastPulse = 0;
+  private int pulseDelta = 0;
 
   private World world;
 
@@ -29,22 +42,50 @@ public class LogicHandler implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof LevelLoadedEvent) {
       this.world = ((LevelLoadedEvent)message).getWorld();
-    } else if (message instanceof MoveCommand) {
-      move((MoveCommand)message);
+
+      this.activeMoveDirections.clear();
+    } else if (message instanceof StartCommand) {
+      Command command = ((StartCommand)message).getCommand();
+
+      if (command instanceof MoveCommand) {
+        this.activeMoveDirections.add((MoveCommand)command);
+      }
+    } else if (message instanceof EndCommand) {
+      Command command = ((EndCommand)message).getCommand();
+
+      if (command instanceof MoveCommand) {
+        this.activeMoveDirections.remove(command);
+      }
+    } else if (message instanceof Pulse) {
+      this.pulse();
     }
   }
 
-  private void move (MoveCommand command) {
+  private void pulse () {
     if (this.world == null) {
       return;
     }
 
-    this.applyTransform(this.handleMovement(command));
+    this.updatePulseDelta();
+
+    this.applyTransform(this.handleMovement());
     this.applyTransform(this.handleEnemies());
     this.applyTransform(this.handleTeleporters());
 
     this.handleDefeat();
     this.handleWin();
+  }
+
+  private void updatePulseDelta () {
+    long now = System.currentTimeMillis();
+
+    // If there are more than 2^32 seconds between two pulses, we are already extinct.
+    this.pulseDelta = (int)(now - this.lastPulse);
+    this.lastPulse = now;
+  }
+
+  private double getPulseDelta () {
+    return this.pulseDelta / 1000.0;
   }
 
   /**
@@ -55,30 +96,31 @@ public class LogicHandler implements MessageHandler {
     this.mailman.send(transform);
   }
 
-  private Transform handleMovement (MoveCommand command) {
-    Transform movementTransform = moveTransform(command);
+  private Transform handleMovement () {
+    Transform movementTransform = moveTransform();
     movementTransform = filterWalls(movementTransform);
 
     return filterBorders(movementTransform);
   }
 
   /**
-   * Create the appropriate MoveTransform for the command.
+   * Create the appropriate MoveTransform with respect to the currently active directions.
    */
-  private Transform moveTransform (MoveCommand command) {
-    switch (command) {
-      case UP:
-        return new Player.MoveTransform(0, -SPEED);
-      case DOWN:
-        return new Player.MoveTransform(0, SPEED);
-      case LEFT:
-        return new Player.MoveTransform(-SPEED, 0);
-      case RIGHT:
-        return new Player.MoveTransform(SPEED, 0);
-      default:
+  private Transform moveTransform () {
+    Vector direction = new Vector(0, 0);
+
+    for (MoveCommand moveCommand : this.activeMoveDirections) {
+      direction = direction.plus(moveCommand.getDirection());
     }
 
-    return new IdentityTransform();
+    if (direction.isZero()) {
+      return new IdentityTransform();
+    } else {
+      direction = direction.normalize();
+      direction = direction.times(SPEED * this.getPulseDelta());
+
+      return new Player.MoveTransform((int)direction.getX(), (int)direction.getY());
+    }
   }
 
   /**

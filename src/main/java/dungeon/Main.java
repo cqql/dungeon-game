@@ -30,7 +30,6 @@ public class Main {
 
     mailman.addMailbox(new SwingMailbox(mainFrame));
     mailman.addMailbox(new SwingMailbox(canvas));
-    mailman.addMailbox(new SwingMailbox(converter));
     mailman.addMailbox(new SwingMailbox(uiManager));
 
     mailman.addMailbox(new PulseGenerator(mailman));
