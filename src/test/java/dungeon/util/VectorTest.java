@@ -3,6 +3,8 @@ package dungeon.util;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class VectorTest {
   @Test
@@ -34,6 +36,25 @@ public class VectorTest {
 
     assertEquals(0.6, result.getX(), 0.00001);
     assertEquals(0.8, result.getY(), 0.00001);
+  }
+
+  @Test(expected = ArithmeticException.class)
+  public void normalizingNullVectorShouldThrow () {
+    (new Vector(0, 0)).normalize();
+  }
+
+  @Test
+  public void isZeroShouldReturnTrueIfVectorIsZeroVector () {
+    Vector a = new Vector(0, 0);
+
+    assertTrue(a.isZero());
+  }
+
+  @Test
+  public void isZeroShouldReturnFalseOtherwise () {
+    Vector a = new Vector(1, -0.1);
+
+    assertFalse(a.isZero());
   }
 
   @Test
