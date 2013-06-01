@@ -11,13 +11,16 @@ public class Player {
 
   private final int hitPoints;
 
+  private final String levelId;
+
   private final String roomId;
 
   private final Position position;
 
-  public Player (String name, int hitPoints, String roomId, Position position) {
+  public Player (String name, int hitPoints, String levelId, String roomId, Position position) {
     this.name = name;
     this.hitPoints = hitPoints;
+    this.levelId = levelId;
     this.roomId = roomId;
     this.position = position;
   }
@@ -28,6 +31,10 @@ public class Player {
 
   public int getHitPoints () {
     return this.hitPoints;
+  }
+
+  public String getLevelId () {
+    return this.levelId;
   }
 
   public String getRoomId () {
@@ -67,15 +74,15 @@ public class Player {
     if (transform instanceof MoveTransform) {
       MoveTransform move = (MoveTransform)transform;
 
-      return new Player(this.name, this.hitPoints, this.roomId, new Position(this.position.getX() + move.xDelta, this.position.getY() + move.yDelta));
+      return new Player(this.name, this.hitPoints, this.levelId, this.roomId, new Position(this.position.getX() + move.xDelta, this.position.getY() + move.yDelta));
     } else if (transform instanceof HitpointTransform) {
       HitpointTransform hpTransform = (HitpointTransform)transform;
 
-      return new Player(this.name, this.hitPoints + hpTransform.delta, this.roomId, this.position);
+      return new Player(this.name, this.hitPoints + hpTransform.delta, this.levelId, this.roomId, this.position);
     } else if (transform instanceof TeleportTransform) {
       TeleportTransform teleportTransform = (TeleportTransform)transform;
 
-      return new Player(this.name, this.hitPoints, teleportTransform.roomId, new Position(teleportTransform.x, teleportTransform.y));
+      return new Player(this.name, this.hitPoints, this.levelId, teleportTransform.roomId, new Position(teleportTransform.x, teleportTransform.y));
     } else {
       return this;
     }

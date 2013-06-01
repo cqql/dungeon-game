@@ -7,17 +7,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class World {
-  private final List<Room> rooms;
+  private final List<Level> levels;
 
   private final Player player;
 
-  public World (List<Room> rooms, Player player) {
-    this.rooms = Collections.unmodifiableList(new ArrayList<>(rooms));
+  public World (List<Level> levels, Player player) {
+    this.levels = Collections.unmodifiableList(new ArrayList<>(levels));
     this.player = player;
   }
 
-  public List<Room> getRooms () {
-    return this.rooms;
+  public List<Level> getLevels () {
+    return this.levels;
   }
 
   public Player getPlayer () {
@@ -25,9 +25,15 @@ public class World {
   }
 
   public Room getCurrentRoom () {
-    for (Room room : this.rooms) {
-      if (room.getId().equals(this.player.getRoomId())) {
-        return room;
+    for (Level level : this.levels) {
+      if (!level.getId().equals(this.player.getLevelId())) {
+        continue;
+      }
+
+      for (Room room : level.getRooms()) {
+        if (room.getId().equals(this.player.getRoomId())) {
+          return room;
+        }
       }
     }
 
@@ -35,12 +41,12 @@ public class World {
   }
 
   public World apply (Transform transform) {
-    List<Room> rooms = new ArrayList<>(this.rooms.size());
+    List<Level> levels = new ArrayList<>(this.levels.size());
 
-    for (Room room : this.rooms) {
-      rooms.add(room.apply(transform));
+    for (Level level : this.levels) {
+      levels.add(level.apply(transform));
     }
 
-    return new World(rooms, this.player.apply(transform));
+    return new World(levels, this.player.apply(transform));
   }
 }

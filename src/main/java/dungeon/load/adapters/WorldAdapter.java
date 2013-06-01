@@ -1,7 +1,7 @@
 package dungeon.load.adapters;
 
+import dungeon.models.Level;
 import dungeon.models.Player;
-import dungeon.models.Room;
 import dungeon.models.World;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -12,22 +12,22 @@ import java.util.List;
 
 @XmlRootElement(name = "world")
 public class WorldAdapter extends XmlAdapter<WorldAdapter, World> {
-  @XmlElement(name = "room")
-  @XmlJavaTypeAdapter(RoomAdapter.class)
-  public List<Room> rooms;
+  @XmlElement(name = "level")
+  @XmlJavaTypeAdapter(LevelAdapter.class)
+  public List<Level> levels;
 
   @XmlJavaTypeAdapter(PlayerAdapter.class)
   public Player player;
 
   @Override
   public World unmarshal (WorldAdapter worldAdapter) throws Exception {
-    return new World(worldAdapter.rooms, worldAdapter.player);
+    return new World(worldAdapter.levels, worldAdapter.player);
   }
 
   @Override
   public WorldAdapter marshal (World world) {
     WorldAdapter adapter = new WorldAdapter();
-    adapter.rooms = world.getRooms();
+    adapter.levels = world.getLevels();
     adapter.player = world.getPlayer();
 
     return adapter;
