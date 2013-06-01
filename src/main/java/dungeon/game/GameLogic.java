@@ -166,7 +166,7 @@ public class GameLogic {
   }
 
   /**
-   * Create a teleport transform it the player touches a teleporter.
+   * Create a teleport transform if the player touches a teleporter.
    */
   private Transform handleTeleporters () {
     for (TeleporterTile teleporter : this.world.getCurrentRoom().getTeleporters()) {
