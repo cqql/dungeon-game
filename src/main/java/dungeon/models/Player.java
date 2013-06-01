@@ -15,10 +15,19 @@ public class Player {
 
   private final int maxHitPoints;
 
+  /**
+   * Which level is the player currently in?
+   */
   private final String levelId;
 
+  /**
+   * Which room is the player currently in?
+   */
   private final String roomId;
 
+  /**
+   * His position in the room.
+   */
   private final Position position;
 
   public Player (String name, int lives, int hitPoints, int maxHitPoints, String levelId, String roomId, Position position) {
