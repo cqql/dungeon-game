@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LevelAdapter extends XmlAdapter<LevelAdapter, Level> {
@@ -15,7 +16,7 @@ public class LevelAdapter extends XmlAdapter<LevelAdapter, Level> {
 
   @XmlElement(name = "room")
   @XmlJavaTypeAdapter(RoomAdapter.class)
-  public List<Room> rooms;
+  public List<Room> rooms = new ArrayList<>();
 
   @Override
   public Level unmarshal (LevelAdapter adapter) throws Exception {

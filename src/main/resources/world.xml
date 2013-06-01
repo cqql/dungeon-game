@@ -62,6 +62,9 @@
       <tile blocking="false">
         <position x="1000" y="2000" />
       </tile>
+      <save-point>
+        <position x="2200" y="500" />
+      </save-point>
     </room>
   </level>
   <level id="level-2">

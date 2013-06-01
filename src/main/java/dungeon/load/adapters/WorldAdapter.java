@@ -8,13 +8,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement(name = "world")
 public class WorldAdapter extends XmlAdapter<WorldAdapter, World> {
   @XmlElement(name = "level")
   @XmlJavaTypeAdapter(LevelAdapter.class)
-  public List<Level> levels;
+  public List<Level> levels = new ArrayList<>();
 
   @XmlJavaTypeAdapter(PlayerAdapter.class)
   public Player player;

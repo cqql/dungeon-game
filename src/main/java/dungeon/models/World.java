@@ -25,16 +25,28 @@ public class World {
   }
 
   public Room getCurrentRoom () {
+    Level currentLevel = this.getCurrentLevel();
+
+    if (currentLevel == null) {
+      return null;
+    }
+
+    for (Room room : currentLevel.getRooms()) {
+      if (room.getId().equals(this.player.getRoomId())) {
+        return room;
+      }
+    }
+
+    return null;
+  }
+
+  private Level getCurrentLevel () {
     for (Level level : this.levels) {
       if (!level.getId().equals(this.player.getLevelId())) {
         continue;
       }
 
-      for (Room room : level.getRooms()) {
-        if (room.getId().equals(this.player.getRoomId())) {
-          return room;
-        }
-      }
+      return level;
     }
 
     return null;

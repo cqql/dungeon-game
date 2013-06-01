@@ -10,7 +10,7 @@ public class PlayerTest {
 
   @Before
   public void setUp () {
-    this.player = new Player("player", 5, "level", "room", new Position(2000, 2000));
+    this.player = new Player("player", 1, 5, 5, "level", "room", new Position(2000, 2000));
   }
 
   @Test

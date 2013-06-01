@@ -2,6 +2,7 @@ package dungeon.load.adapters;
 
 import dungeon.models.Enemy;
 import dungeon.models.Room;
+import dungeon.models.SavePoint;
 import dungeon.models.Tile;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -9,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
@@ -17,7 +19,11 @@ public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
 
   @XmlElement(name = "enemy")
   @XmlJavaTypeAdapter(EnemyAdapter.class)
-  public List<Enemy> enemies;
+  public List<Enemy> enemies = new ArrayList<>();
+
+  @XmlElement(name = "save-point")
+  @XmlJavaTypeAdapter(SavePointAdapter.class)
+  public List<SavePoint> savePoints = new ArrayList<>();
 
   @XmlElements({
     @XmlElement(name = "teleporter", type = TeleporterTileAdapter.class),
@@ -25,11 +31,11 @@ public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
     @XmlElement(name = "tile", type = TileAdapter.class)
   })
   @XmlJavaTypeAdapter(TileAdapter.class)
-  public List<Tile> tiles;
+  public List<Tile> tiles = new ArrayList<>();
 
   @Override
   public Room unmarshal (RoomAdapter adapter) throws Exception {
-    return new Room(adapter.id, adapter.enemies, adapter.tiles);
+    return new Room(adapter.id, adapter.enemies, adapter.savePoints, adapter.tiles);
   }
 
   @Override
@@ -37,6 +43,7 @@ public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
     RoomAdapter adapter = new RoomAdapter();
     adapter.id = room.getId();
     adapter.enemies = room.getEnemies();
+    adapter.savePoints = room.getSavePoints();
     adapter.tiles = room.getTiles();
 
     return adapter;

@@ -12,11 +12,14 @@ public class Room {
 
   private final List<Enemy> enemies;
 
+  private final List<SavePoint> savePoints;
+
   private final List<Tile> tiles;
 
-  public Room (String id, List<Enemy> enemies, List<Tile> tiles) {
+  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles) {
     this.id = id;
     this.enemies = Collections.unmodifiableList(new ArrayList<>(enemies));
+    this.savePoints = Collections.unmodifiableList(new ArrayList<>(savePoints));
     this.tiles = Collections.unmodifiableList(new ArrayList<>(tiles));
   }
 
@@ -26,6 +29,10 @@ public class Room {
 
   public List<Enemy> getEnemies () {
     return this.enemies;
+  }
+
+  public List<SavePoint> getSavePoints () {
+    return this.savePoints;
   }
 
   public List<Tile> getTiles () {
