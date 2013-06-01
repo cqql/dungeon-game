@@ -30,7 +30,21 @@ public class Player {
    */
   private final Position position;
 
-  public Player (String name, int lives, int hitPoints, int maxHitPoints, String levelId, String roomId, Position position) {
+  /**
+   * In which room was the player, when he activated the current save point?
+   *
+   * Whenever the player enters a new level, this should be reset to the starting room's id.
+   */
+  private final String savePointRoomId;
+
+  /**
+   * At which position was the player, when he activated the current save point?
+   *
+   * Whenever the player enters a new level, this should be reset to the player's position in the starting room.
+   */
+  private final Position savePointPosition;
+
+  public Player (String name, int lives, int hitPoints, int maxHitPoints, String levelId, String roomId, Position position, String savePointRoomId, Position savePointPosition) {
     this.name = name;
     this.lives = lives;
     this.hitPoints = hitPoints;
@@ -38,6 +52,8 @@ public class Player {
     this.levelId = levelId;
     this.roomId = roomId;
     this.position = position;
+    this.savePointRoomId = savePointRoomId;
+    this.savePointPosition = savePointPosition;
   }
 
   public String getName () {
@@ -66,6 +82,14 @@ public class Player {
 
   public Position getPosition () {
     return this.position;
+  }
+
+  public String getSavePointRoomId () {
+    return this.savePointRoomId;
+  }
+
+  public Position getSavePointPosition () {
+    return this.savePointPosition;
   }
 
   /**
@@ -101,6 +125,8 @@ public class Player {
     String levelId = this.levelId;
     String roomId = this.roomId;
     Position position = this.position;
+    String savePointRoomId = this.savePointRoomId;
+    Position savePointPosition = this.savePointPosition;
 
     if (transform instanceof MoveTransform) {
       MoveTransform move = (MoveTransform)transform;
@@ -117,7 +143,7 @@ public class Player {
       position = new Position(teleportTransform.x, teleportTransform.y);
     }
 
-    return new Player(name, lives, hitPoints, maxHitPoints, levelId, roomId, position);
+    return new Player(name, lives, hitPoints, maxHitPoints, levelId, roomId, position, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {
