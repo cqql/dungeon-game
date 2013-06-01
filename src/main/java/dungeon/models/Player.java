@@ -9,25 +9,71 @@ public class Player {
 
   private final String name;
 
+  private final int lives;
+
   private final int hitPoints;
 
+  private final int maxHitPoints;
+
+  /**
+   * Which level is the player currently in?
+   */
+  private final String levelId;
+
+  /**
+   * Which room is the player currently in?
+   */
   private final String roomId;
 
+  /**
+   * His position in the room.
+   */
   private final Position position;
 
-  public Player (String name, int hitPoints, String roomId, Position position) {
+  /**
+   * In which room was the player, when he activated the current save point?
+   *
+   * Whenever the player enters a new level, this should be reset to the starting room's id.
+   */
+  private final String savePointRoomId;
+
+  /**
+   * At which position was the player, when he activated the current save point?
+   *
+   * Whenever the player enters a new level, this should be reset to the player's position in the starting room.
+   */
+  private final Position savePointPosition;
+
+  public Player (String name, int lives, int hitPoints, int maxHitPoints, String levelId, String roomId, Position position, String savePointRoomId, Position savePointPosition) {
     this.name = name;
+    this.lives = lives;
     this.hitPoints = hitPoints;
+    this.maxHitPoints = maxHitPoints;
+    this.levelId = levelId;
     this.roomId = roomId;
     this.position = position;
+    this.savePointRoomId = savePointRoomId;
+    this.savePointPosition = savePointPosition;
   }
 
   public String getName () {
     return this.name;
   }
 
+  public int getLives () {
+    return this.lives;
+  }
+
   public int getHitPoints () {
     return this.hitPoints;
+  }
+
+  public int getMaxHitPoints () {
+    return this.maxHitPoints;
+  }
+
+  public String getLevelId () {
+    return this.levelId;
   }
 
   public String getRoomId () {
@@ -36,6 +82,14 @@ public class Player {
 
   public Position getPosition () {
     return this.position;
+  }
+
+  public String getSavePointRoomId () {
+    return this.savePointRoomId;
+  }
+
+  public Position getSavePointPosition () {
+    return this.savePointPosition;
   }
 
   /**
@@ -64,21 +118,32 @@ public class Player {
   }
 
   public Player apply (Transform transform) {
+    String name = this.name;
+    int lives = this.lives;
+    int hitPoints = this.hitPoints;
+    int maxHitPoints = this.maxHitPoints;
+    String levelId = this.levelId;
+    String roomId = this.roomId;
+    Position position = this.position;
+    String savePointRoomId = this.savePointRoomId;
+    Position savePointPosition = this.savePointPosition;
+
     if (transform instanceof MoveTransform) {
       MoveTransform move = (MoveTransform)transform;
 
-      return new Player(this.name, this.hitPoints, this.roomId, new Position(this.position.getX() + move.xDelta, this.position.getY() + move.yDelta));
+      position = new Position(this.position.getX() + move.xDelta, this.position.getY() + move.yDelta);
     } else if (transform instanceof HitpointTransform) {
       HitpointTransform hpTransform = (HitpointTransform)transform;
 
-      return new Player(this.name, this.hitPoints + hpTransform.delta, this.roomId, this.position);
+      hitPoints += hpTransform.delta;
     } else if (transform instanceof TeleportTransform) {
       TeleportTransform teleportTransform = (TeleportTransform)transform;
 
-      return new Player(this.name, this.hitPoints, teleportTransform.roomId, new Position(teleportTransform.x, teleportTransform.y));
-    } else {
-      return this;
+      roomId = teleportTransform.roomId;
+      position = new Position(teleportTransform.x, teleportTransform.y);
     }
+
+    return new Player(name, lives, hitPoints, maxHitPoints, levelId, roomId, position, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {

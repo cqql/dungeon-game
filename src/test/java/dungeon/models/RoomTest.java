@@ -17,6 +17,7 @@ public class RoomTest {
     this.room = new Room(
       "test-room",
       new ArrayList<Enemy>(),
+      new ArrayList<SavePoint>(),
       Arrays.asList(
         new Tile(false, new Position(0, 1000)),
         new Tile(false, new Position(3000, 5000)),
