@@ -12,6 +12,9 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
   public String name;
 
   @XmlAttribute
+  public int lives;
+
+  @XmlAttribute
   public int hitPoints;
 
   @XmlAttribute
@@ -28,13 +31,14 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
 
   @Override
   public Player unmarshal (PlayerAdapter adapter) throws Exception {
-    return new Player(adapter.name, adapter.hitPoints, adapter.maxHitPoints, adapter.levelId, adapter.roomId, adapter.position);
+    return new Player(adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.levelId, adapter.roomId, adapter.position);
   }
 
   @Override
   public PlayerAdapter marshal (Player player) throws Exception {
     PlayerAdapter adapter = new PlayerAdapter();
     adapter.name = player.getName();
+    adapter.lives = player.getLives();
     adapter.hitPoints = player.getHitPoints();
     adapter.maxHitPoints = player.getMaxHitPoints();
     adapter.levelId = player.getLevelId();

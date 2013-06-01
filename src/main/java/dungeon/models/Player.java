@@ -9,6 +9,8 @@ public class Player {
 
   private final String name;
 
+  private final int lives;
+
   private final int hitPoints;
 
   private final int maxHitPoints;
@@ -19,8 +21,9 @@ public class Player {
 
   private final Position position;
 
-  public Player (String name, int hitPoints, int maxHitPoints, String levelId, String roomId, Position position) {
+  public Player (String name, int lives, int hitPoints, int maxHitPoints, String levelId, String roomId, Position position) {
     this.name = name;
+    this.lives = lives;
     this.hitPoints = hitPoints;
     this.maxHitPoints = maxHitPoints;
     this.levelId = levelId;
@@ -30,6 +33,10 @@ public class Player {
 
   public String getName () {
     return this.name;
+  }
+
+  public int getLives () {
+    return this.lives;
   }
 
   public int getHitPoints () {
@@ -79,6 +86,7 @@ public class Player {
 
   public Player apply (Transform transform) {
     String name = this.name;
+    int lives = this.lives;
     int hitPoints = this.hitPoints;
     int maxHitPoints = this.maxHitPoints;
     String levelId = this.levelId;
@@ -100,7 +108,7 @@ public class Player {
       position = new Position(teleportTransform.x, teleportTransform.y);
     }
 
-    return new Player(name, hitPoints, maxHitPoints, levelId, roomId, position);
+    return new Player(name, lives, hitPoints, maxHitPoints, levelId, roomId, position);
   }
 
   public static class MoveTransform implements Transform {

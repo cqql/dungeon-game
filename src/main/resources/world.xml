@@ -104,7 +104,7 @@
       </victory-tile>
     </room>
   </level>
-  <player name="Link" hitPoints="1" maxHitPoints="3" levelId="level-1" roomId="room-1">
+  <player name="Link" lives="3" hitPoints="1" maxHitPoints="3" levelId="level-1" roomId="room-1">
     <position x="0" y="0" />
   </player>
 </world>
