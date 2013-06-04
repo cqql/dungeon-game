@@ -23,6 +23,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color enemyColor = new Color(33, 237, 60);
 
+  private final Color savePointColor = new Color(50, 122, 88);
+
   private World world;
 
   public Canvas () {
@@ -72,6 +74,13 @@ public class Canvas extends JPanel implements MessageHandler {
 
       g.setColor(this.enemyColor);
       g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(Enemy.SIZE * xPixelPerUnit), (int)(Enemy.SIZE * yPixelPerUnit));
+    }
+
+    for (SavePoint savePoint : room.getSavePoints()) {
+      Position position = savePoint.getPosition();
+
+      g.setColor(this.savePointColor);
+      g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(savePoint.SIZE * xPixelPerUnit), (int)(savePoint.SIZE * yPixelPerUnit));
     }
 
     Position playerPosition = this.world.getPlayer().getPosition();
