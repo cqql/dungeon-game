@@ -35,9 +35,6 @@
       </teleporter>
     </room>
     <room id="room-2">
-      <enemy>
-        <position x="1000" y="1000" />
-      </enemy>
       <tile blocking="true">
         <position x="0" y="0" />
       </tile>
@@ -65,7 +62,1419 @@
       <save-point>
         <position x="2200" y="500" />
       </save-point>
+      <teleporter blocking="false">
+        <position x="2000" y="2000" />
+        <target roomId="room-3" x="0" y="0" />
+      </teleporter>
     </room>
+    <room id='room-3'>
+      <tile blocking='false'>
+        <position x='0' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='2000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='0' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='7000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='0' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='10000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='0' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='14000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='0' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='16000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='0' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='0' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='7000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='1000' y='8000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='1000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='1000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='10000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='2000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='16000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='2000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='2000' y='18000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='2000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='8000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='3000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='13000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='3000' y='14000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='3000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='3000' y='18000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='3000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='3000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='4000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='7000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='4000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='10000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='4000' y='11000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='4000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='4000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='0'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='5000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='9000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='5000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='13000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='5000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='16000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='5000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='5000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='0'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='6000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='8000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='6000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='6000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='0'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='7000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='14000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='7000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='7000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='1000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='8000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='4000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='8000' y='5000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='8000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='8000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='8000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='13000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='8000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='8000' y='18000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='8000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='1000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='9000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='8000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='9000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='10000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='9000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='9000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='0'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='10000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='13000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='10000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='10000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='1000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='11000' y='2000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='11000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='9000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='11000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='12000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='11000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='11000' y='19000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='12000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='4000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='12000' y='5000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='12000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='11000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='12000' y='12000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='12000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='12000' y='18000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='12000' y='19000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='13000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='5000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='13000' y='6000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='13000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='12000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='13000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='13000' y='17000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='13000' y='18000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='13000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='17000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='14000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='14000' y='19000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='15000' y='0'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='15000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='2000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='15000' y='3000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='15000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='17000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='15000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='15000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='4000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='16000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='6000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='16000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='8000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='16000' y='9000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='16000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='11000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='16000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='14000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='16000' y='15000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='16000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='16000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='3000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='17000' y='4000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='17000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='16000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='17000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='17000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='1000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='18000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='3000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='9000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='18000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='11000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='18000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='13000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='18000' y='14000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='17000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='18000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='18000' y='19000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='0'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='1000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='2000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='3000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='19000' y='4000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='5000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='6000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='7000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='8000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='9000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='10000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='11000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='12000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='13000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='14000'></position>
+      </tile>
+      <tile blocking='true'>
+        <position x='19000' y='15000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='16000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='17000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='18000'></position>
+      </tile>
+      <tile blocking='false'>
+        <position x='19000' y='19000'></position>
+      </tile>
+      <enemy>
+        <position x='0' y='19000'></position>
+      </enemy>
+      <enemy>
+        <position x='1000' y='10000'></position>
+      </enemy>
+      <enemy>
+        <position x='1000' y='12000'></position>
+      </enemy>
+      <enemy>
+        <position x='1000' y='17000'></position>
+      </enemy>
+      <enemy>
+        <position x='2000' y='1000'></position>
+      </enemy>
+      <enemy>
+        <position x='2000' y='4000'></position>
+      </enemy>
+      <enemy>
+        <position x='3000' y='5000'></position>
+      </enemy>
+      <enemy>
+        <position x='3000' y='10000'></position>
+      </enemy>
+      <enemy>
+        <position x='4000' y='7000'></position>
+      </enemy>
+      <enemy>
+        <position x='4000' y='9000'></position>
+      </enemy>
+      <enemy>
+        <position x='5000' y='11000'></position>
+      </enemy>
+      <enemy>
+        <position x='6000' y='7000'></position>
+      </enemy>
+      <enemy>
+        <position x='7000' y='0'></position>
+      </enemy>
+      <enemy>
+        <position x='7000' y='11000'></position>
+      </enemy>
+      <enemy>
+        <position x='8000' y='16000'></position>
+      </enemy>
+      <enemy>
+        <position x='8000' y='17000'></position>
+      </enemy>
+      <enemy>
+        <position x='9000' y='3000'></position>
+      </enemy>
+      <enemy>
+        <position x='9000' y='19000'></position>
+      </enemy>
+      <enemy>
+        <position x='10000' y='8000'></position>
+      </enemy>
+      <enemy>
+        <position x='10000' y='15000'></position>
+      </enemy>
+      <enemy>
+        <position x='10000' y='17000'></position>
+      </enemy>
+      <enemy>
+        <position x='10000' y='18000'></position>
+      </enemy>
+      <enemy>
+        <position x='11000' y='15000'></position>
+      </enemy>
+      <enemy>
+        <position x='12000' y='17000'></position>
+      </enemy>
+      <enemy>
+        <position x='13000' y='1000'></position>
+      </enemy>
+      <enemy>
+        <position x='14000' y='4000'></position>
+      </enemy>
+      <enemy>
+        <position x='14000' y='6000'></position>
+      </enemy>
+      <enemy>
+        <position x='14000' y='10000'></position>
+      </enemy>
+      <enemy>
+        <position x='16000' y='6000'></position>
+      </enemy>
+      <enemy>
+        <position x='16000' y='11000'></position>
+      </enemy>
+      <enemy>
+        <position x='16000' y='13000'></position>
+      </enemy>
+      <enemy>
+        <position x='17000' y='0'></position>
+      </enemy>
+      <enemy>
+        <position x='17000' y='3000'></position>
+      </enemy>
+      <enemy>
+        <position x='17000' y='12000'></position>
+      </enemy>
+      <enemy>
+        <position x='18000' y='6000'></position>
+      </enemy>
+      <enemy>
+        <position x='18000' y='8000'></position>
+      </enemy>
+      <enemy>
+        <position x='18000' y='13000'></position>
+      </enemy>
+      <enemy>
+        <position x='18000' y='16000'></position>
+      </enemy>
+      <enemy>
+        <position x='19000' y='12000'></position>
+      </enemy>
+      <teleporter blocking='false'>
+        <position x='1000' y='19000'></position>
+        <target roomId='room-3' x='14032' y='9930'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='2000' y='5000'></position>
+        <target roomId='room-3' x='13848' y='10191'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='2000' y='6000'></position>
+        <target roomId='room-3' x='13789' y='18718'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='3000' y='4000'></position>
+        <target roomId='room-3' x='16754' y='5896'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='3000' y='13000'></position>
+        <target roomId='room-3' x='15710' y='7052'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='4000' y='0'></position>
+        <target roomId='room-3' x='2037' y='13209'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='5000' y='16000'></position>
+        <target roomId='room-3' x='17294' y='2164'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='5000' y='19000'></position>
+        <target roomId='room-3' x='7032' y='5022'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='9000' y='17000'></position>
+        <target roomId='room-3' x='6320' y='7473'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='10000' y='13000'></position>
+        <target roomId='room-3' x='13446' y='14158'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='13000' y='1000'></position>
+        <target roomId='room-3' x='14705' y='4909'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='13000' y='12000'></position>
+        <target roomId='room-3' x='702' y='1187'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='14000' y='3000'></position>
+        <target roomId='room-3' x='12565' y='12187'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='15000' y='5000'></position>
+        <target roomId='room-3' x='16665' y='16774'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='15000' y='15000'></position>
+        <target roomId='room-3' x='8972' y='12584'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='15000' y='16000'></position>
+        <target roomId='room-3' x='17055' y='5042'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='17000' y='1000'></position>
+        <target roomId='room-3' x='16275' y='18472'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='17000' y='18000'></position>
+        <target roomId='room-3' x='10166' y='2562'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='18000' y='0'></position>
+        <target roomId='room-3' x='7416' y='1187'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='18000' y='15000'></position>
+        <target roomId='room-3' x='11669' y='3394'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='19000' y='0'></position>
+        <target roomId='room-3' x='3231' y='13015'></target>
+      </teleporter>
+      <teleporter blocking='false'>
+        <position x='19000' y='1000'></position>
+        <target roomId='room-3' x='7358' y='14552'></target>
+      </teleporter>
+    </room>
+
   </level>
   <level id="level-2">
     <room id="room-1">
