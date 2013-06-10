@@ -145,13 +145,13 @@ public class Player {
     } else if (transform instanceof LivesTransform) {
       LivesTransform livesTransform = (LivesTransform)transform;
 
-      lives +=livesTransform.delta;
+      lives += livesTransform.delta;
     } else if (transform instanceof TeleportTransform) {
       TeleportTransform teleportTransform = (TeleportTransform)transform;
 
       roomId = teleportTransform.roomId;
       position = new Position(teleportTransform.x, teleportTransform.y);
-    } else if (transform instanceof  SavePointTransform) {
+    } else if (transform instanceof SavePointTransform) {
       SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
 
       roomId = savePointTransform.roomId;
