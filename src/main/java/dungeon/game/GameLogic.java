@@ -188,7 +188,7 @@ public class GameLogic {
   private Transform handleCheckpoint () {
     for (SavePoint savePoint : this.world.getCurrentRoom().getSavePoints()) {
       if (this.world.getPlayer().touches(savePoint)) {
-        return new Player.savePointTransform(this.world.getPlayer().getRoomId(), savePoint.getPosition().getX(), savePoint.getPosition().getY());
+        return new Player.SavePointTransform(this.world.getPlayer().getRoomId(), this.world.getPlayer().getPosition().getX(), this.world.getPlayer().getPosition().getY());
       }
     }
 
