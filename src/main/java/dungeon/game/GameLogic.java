@@ -69,6 +69,8 @@ public class GameLogic {
     this.applyTransform(this.handleMovement(delta), transformLog);
     this.applyTransform(this.handleEnemies(), transformLog);
     this.applyTransform(this.handleTeleporters(), transformLog);
+    this.applyTransform(this.handleCheckpoint(), transformLog);
+    this.applyTransform(this.handleHealth(), transformLog);
 
     this.handleDefeat();
     this.handleWin();
@@ -181,10 +183,34 @@ public class GameLogic {
   }
 
   /**
+   * Create a savepoint transform if the player touches a savepoint
+   */
+  private Transform handleCheckpoint () {
+    for (SavePoint savePoint : this.world.getCurrentRoom().getSavePoints()) {
+      if (this.world.getPlayer().touches(savePoint)) {
+        return new Player.savePointTransform(this.world.getPlayer().getRoomId(), savePoint.getPosition().getX(), savePoint.getPosition().getY());
+      }
+    }
+
+    return new IdentityTransform();
+  }
+
+  /**
+   * Respawn player on checkpoint position if he dies
+   */
+  private Transform handleHealth () {
+    if (this.world.getPlayer().getHitPoints() == 0) {
+      return new Player.LivesTransform(-1);
+    }
+
+    return new IdentityTransform();
+  }
+
+  /**
    * Set the game state to DEFEAT when the player's hit points drop to 0.
    */
   private void handleDefeat () {
-    if (this.world.getPlayer().getHitPoints() == 0) {
+    if (this.world.getPlayer().getLives() == 0) {
       this.gameState = GameState.DEFEAT;
     }
   }
