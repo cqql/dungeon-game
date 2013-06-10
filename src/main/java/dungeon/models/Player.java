@@ -110,6 +110,12 @@ public class Player {
     return this.playerSpace().intersects(tileSpace);
   }
 
+  public boolean touches (SavePoint savePoint) {
+    Rectangle2D savePointSpace = new Rectangle2D.Float(savePoint.getPosition().getX(), savePoint.getPosition().getY(), SavePoint.SIZE, SavePoint.SIZE);
+
+    return this.playerSpace().intersects(savePointSpace);
+  }
+
   /**
    * Returns a rectangle that represents the space occupied by the player.
    */
@@ -136,11 +142,20 @@ public class Player {
       HitpointTransform hpTransform = (HitpointTransform)transform;
 
       hitPoints += hpTransform.delta;
+    } else if (transform instanceof LivesTransform) {
+      LivesTransform livesTransform = (LivesTransform)transform;
+
+      lives +=livesTransform.delta;
     } else if (transform instanceof TeleportTransform) {
       TeleportTransform teleportTransform = (TeleportTransform)transform;
 
       roomId = teleportTransform.roomId;
       position = new Position(teleportTransform.x, teleportTransform.y);
+    } else if (transform instanceof  savePointTransform) {
+      savePointTransform savePointTransform = (Player.savePointTransform)transform;
+
+      roomId = savePointTransform.roomId;
+      position = new Position(savePointTransform.x, savePointTransform.y);
     }
 
     return new Player(name, lives, hitPoints, maxHitPoints, levelId, roomId, position, savePointRoomId, savePointPosition);
@@ -165,6 +180,14 @@ public class Player {
     }
   }
 
+  public static class LivesTransform implements Transform {
+    private final int delta;
+
+    public LivesTransform (int delta) {
+      this.delta = delta;
+    }
+  }
+
   public static class TeleportTransform implements Transform {
     private final String roomId;
 
@@ -178,4 +201,19 @@ public class Player {
       this.y = y;
     }
   }
+
+  public static class savePointTransform implements Transform {
+    private final String roomId;
+
+    private final int x;
+
+    private final int y;
+
+    public savePointTransform (String roomId, int x, int y) {
+      this.roomId = roomId;
+      this.x = x;
+      this.y = y;
+    }
+  }
+
 }
