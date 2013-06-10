@@ -75,7 +75,7 @@ public class Canvas extends JPanel implements MessageHandler {
       g.setColor(this.enemyColor);
       g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(Enemy.SIZE * xPixelPerUnit), (int)(Enemy.SIZE * yPixelPerUnit));
     }
-    
+
     for (SavePoint savePoint : room.getSavePoints()) {
       Position position = savePoint.getPosition();
 
