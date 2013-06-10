@@ -1,0 +1,34 @@
+:ruby
+  SIZE_X = 20
+  SIZE_Y = 20
+
+  id = "room-3"
+  tiles = []
+  enemies = []
+  teleporters = []
+
+  (0...SIZE_X).each do |x|
+    (0...SIZE_Y).each do |y|
+      tiles << { x: x * 1000, y: y * 1000, blocking: Random.rand(5) == 0 }
+
+      if Random.rand(10) == 0 and !tiles.last[:blocking]
+        enemies << { x: x * 1000, y: y * 1000 }
+      end
+
+      if Random.rand(20) == 0 and !tiles.last[:blocking]
+        teleporters << { x: x * 1000, y: y * 1000, target_id: id, target_x: Random.rand((SIZE_X - 1) * 1000), target_y: Random.rand((SIZE_Y - 1) * 1000) }
+      end
+    end
+  end
+
+%room{id: id}
+  - tiles.each do |tile|
+    %tile{blocking: tile[:blocking] ? "true" : "false"}
+      %position{x: tile[:x], y: tile[:y]}
+  - enemies.each do |enemy|
+    %enemy
+      %position{x: enemy[:x], y: enemy[:y]}
+  - teleporters.each do |teleporter|
+    %teleporter{blocking: "false"}
+      %position{x: teleporter[:x], y: teleporter[:y]}
+      %target{roomId: teleporter[:target_id], x: teleporter[:target_x], y: teleporter[:target_y]}
