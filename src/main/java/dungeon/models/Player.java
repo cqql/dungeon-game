@@ -151,8 +151,8 @@ public class Player {
 
       roomId = teleportTransform.roomId;
       position = new Position(teleportTransform.x, teleportTransform.y);
-    } else if (transform instanceof  savePointTransform) {
-      savePointTransform savePointTransform = (Player.savePointTransform)transform;
+    } else if (transform instanceof  SavePointTransform) {
+      SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
 
       roomId = savePointTransform.roomId;
       position = new Position(savePointTransform.x, savePointTransform.y);
@@ -202,14 +202,14 @@ public class Player {
     }
   }
 
-  public static class savePointTransform implements Transform {
+  public static class SavePointTransform implements Transform {
     private final String roomId;
 
     private final int x;
 
     private final int y;
 
-    public savePointTransform (String roomId, int x, int y) {
+    public SavePointTransform (String roomId, int x, int y) {
       this.roomId = roomId;
       this.x = x;
       this.y = y;
