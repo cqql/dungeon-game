@@ -13,8 +13,6 @@ import dungeon.ui.messages.EndCommand;
 import dungeon.ui.messages.MoveCommand;
 import dungeon.ui.messages.StartCommand;
 
-import java.util.List;
-
 /**
  * Handles the game logic.
  */
@@ -86,9 +84,9 @@ public class LogicHandler implements MessageHandler {
 
     this.updatePulseDelta();
 
-    List<Transform> transforms = this.logic.pulse(this.getPulseDelta());
+    Transaction transaction = this.logic.pulse(this.getPulseDelta());
 
-    for (Transform transform : transforms) {
+    for (Transform transform : transaction.getTransforms()) {
       this.mailman.send(transform);
     }
 
