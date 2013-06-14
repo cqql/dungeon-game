@@ -154,8 +154,8 @@ public class Player {
     } else if (transform instanceof SavePointTransform) {
       SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
 
-      roomId = savePointTransform.roomId;
-      position = new Position(savePointTransform.x, savePointTransform.y);
+      savePointRoomId = savePointTransform.roomId;
+      savePointPosition = new Position(savePointTransform.x, savePointTransform.y);
     }
 
     return new Player(name, lives, hitPoints, maxHitPoints, levelId, roomId, position, savePointRoomId, savePointPosition);
