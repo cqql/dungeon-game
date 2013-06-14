@@ -6,9 +6,7 @@ import dungeon.models.messages.Transform;
 import dungeon.ui.messages.MoveCommand;
 import dungeon.util.Vector;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -61,44 +59,28 @@ public class GameLogic {
   /**
    * Compute all changes, that have happened in the last #delta seconds.
    *
-   * @return A list of all changes that have happened
+   * @return A transaction of all changes that have happened
    */
-  public List<Transform> pulse (double delta) {
-    List<Transform> transformLog = new ArrayList<>();
+  public Transaction pulse (double delta) {
+    Transaction transaction = new Transaction(this.world);
 
-    this.applyTransform(this.handleMovement(delta), transformLog);
-    this.applyTransform(this.handleEnemies(), transformLog);
-    this.applyTransform(this.handleTeleporters(), transformLog);
+    this.handleMovement(transaction, delta);
+    this.handleEnemies(transaction);
+    this.handleTeleporters(transaction);
+
+    this.world = transaction.getWorld();
 
     this.handleDefeat();
     this.handleWin();
 
-    return transformLog;
+    return transaction;
   }
 
-  /**
-   * Apply all transforms to the internal world object and log them.
-   */
-  private void applyTransforms (List<Transform> transforms, List<Transform> log) {
-    for (Transform transform : transforms) {
-      this.applyTransform(transform, log);
-    }
-  }
-
-  /**
-   * Apply a transform to the internal world object and log it.
-   */
-  private void applyTransform (Transform transform, List<Transform> log) {
-    this.world = this.world.apply(transform);
-
-    log.add(transform);
-  }
-
-  private Transform handleMovement (double delta) {
+  private void handleMovement (Transaction transaction, double delta) {
     Transform movementTransform = moveTransform(delta);
     movementTransform = filterWalls(movementTransform);
 
-    return filterBorders(movementTransform);
+    transaction.pushAndCommit(filterBorders(movementTransform));
   }
 
   /**
@@ -155,29 +137,27 @@ public class GameLogic {
   /**
    * Translate enemy contact into a transform.
    */
-  private Transform handleEnemies () {
+  private void handleEnemies (Transaction transaction) {
     for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
       if (this.world.getPlayer().touches(enemy)) {
-        return new Player.HitpointTransform(-1);
+        transaction.pushAndCommit(new Player.HitpointTransform(-1));
       }
     }
-
-    return new IdentityTransform();
   }
 
   /**
    * Create a teleport transform if the player touches a teleporter.
    */
-  private Transform handleTeleporters () {
+  private void handleTeleporters (Transaction transaction) {
     for (TeleporterTile teleporter : this.world.getCurrentRoom().getTeleporters()) {
       if (this.world.getPlayer().touches(teleporter)) {
         TeleporterTile.Target target = teleporter.getTarget();
 
-        return new Player.TeleportTransform(target.getRoomId(), target.getX(), target.getY());
+        transaction.pushAndCommit(new Player.TeleportTransform(target.getRoomId(), target.getX(), target.getY()));
+
+        return;
       }
     }
-
-    return new IdentityTransform();
   }
 
   /**
