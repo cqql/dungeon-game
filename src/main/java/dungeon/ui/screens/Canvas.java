@@ -76,10 +76,11 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawTiles(g, room);
     this.drawDrops(g, room);
     this.drawEnemies(g, room);
+    this.drawSavepoints(g, room);
     this.drawPlayer(g, this.world.getPlayer());
     this.drawHpIndicator(g);
     this.drawMoneyIndicator(g);
-    this.drawSavepoints(g, room);
+
   }
 
   private void drawTiles (Graphics g, Room room) {
