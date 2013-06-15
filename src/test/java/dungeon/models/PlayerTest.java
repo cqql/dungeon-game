@@ -58,7 +58,7 @@ public class PlayerTest {
 
   @Test
   public void teleportTransformUpdatesPosition () {
-    Player teleported = this.player.apply(new Player.TeleportTransform("another-room", 5, 1));
+    Player teleported = this.player.apply(new Player.TeleportTransform("another-room", new Position(5, 1)));
 
     assertEquals("another-room", teleported.getRoomId());
     assertEquals(5, teleported.getPosition().getX());

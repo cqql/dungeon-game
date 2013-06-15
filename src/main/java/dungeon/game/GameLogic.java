@@ -9,7 +9,6 @@ import dungeon.util.Vector;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.lang.System;
 
 /**
  * The game logic.
