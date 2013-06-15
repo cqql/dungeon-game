@@ -140,7 +140,7 @@ public class GameLogic {
   private void handleEnemies (Transaction transaction) {
     for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
       if (this.world.getPlayer().touches(enemy)) {
-        transaction.pushAndCommit(new Player.HitpointTransform(-1));
+        transaction.pushAndCommit(new Player.HitpointTransform(-enemy.getStrength()));
       }
     }
   }
