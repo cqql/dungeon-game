@@ -26,7 +26,7 @@ public class Drop implements Spatial {
   }
 
   public int getId () {
-    return id;
+    return this.id;
   }
 
   public Position getPosition () {
@@ -48,7 +48,7 @@ public class Drop implements Spatial {
    * @return true if the drop is a money drop.
    */
   public boolean isMoney () {
-    return money != 0;
+    return this.money != 0;
   }
 
   public int getMoney () {

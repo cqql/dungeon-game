@@ -98,7 +98,7 @@ public class Player implements Spatial {
   }
 
   public List<Item> getItems () {
-    return items;
+    return this.items;
   }
 
   public String getLevelId () {
