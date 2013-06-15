@@ -146,7 +146,13 @@ public class GameLogic {
       if (this.world.getPlayer().touches(drop)) {
         LOGGER.info("Pick up drop #" + drop.getId());
 
-        transaction.pushAndCommit(new Room.RemoveDropTransform(drop.getId()));
+        transaction.push(new Room.RemoveDropTransform(drop.getId()));
+
+        if (drop.isMoney()) {
+          transaction.push(new Player.MoneyTransform(drop.getMoney()));
+        }
+
+        transaction.commit();
       }
     }
   }
