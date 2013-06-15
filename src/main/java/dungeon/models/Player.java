@@ -102,12 +102,21 @@ public class Player {
   }
 
   /**
-   * Checks if the player touches the 1x1 tile at Position (#x, #y).
+   * Checks if the player touches the tile at Position (#x, #y).
    */
   public boolean touches (Tile tile) {
     Rectangle2D tileSpace = new Rectangle2D.Float(tile.getPosition().getX(), tile.getPosition().getY(), Tile.SIZE, Tile.SIZE);
 
     return this.playerSpace().intersects(tileSpace);
+  }
+
+  /**
+   * Checks if the player touches the drop at Position (#x, #y).
+   */
+  public boolean touches (Drop drop) {
+    Rectangle2D dropSpace = new Rectangle2D.Float(drop.getPosition().getX(), drop.getPosition().getY(), Drop.SIZE, Drop.SIZE);
+
+    return this.playerSpace().intersects(dropSpace);
   }
 
   /**

@@ -8,6 +8,7 @@ import dungeon.util.Vector;
 
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * The game logic.
@@ -21,6 +22,8 @@ import java.util.Set;
  * for 150ms.
  */
 public class GameLogic {
+  private static final Logger LOGGER = Logger.getLogger(GameLogic.class.getName());
+
   private static final int SPEED = 1000;
 
   private final Set<MoveCommand> activeMoveDirections = EnumSet.noneOf(MoveCommand.class);
@@ -65,6 +68,7 @@ public class GameLogic {
     Transaction transaction = new Transaction(this.world);
 
     this.handleMovement(transaction, delta);
+    this.handleDrops(transaction);
     this.handleEnemies(transaction);
     this.handleTeleporters(transaction);
 
@@ -131,6 +135,19 @@ public class GameLogic {
       return new IdentityTransform();
     } else {
       return transform;
+    }
+  }
+
+  /**
+   * Pickup drops that the player is touching.
+   */
+  private void handleDrops (Transaction transaction) {
+    for (Drop drop : this.world.getCurrentRoom().getDrops()) {
+      if (this.world.getPlayer().touches(drop)) {
+        LOGGER.info("Pick up drop #" + drop.getId());
+
+        transaction.pushAndCommit(new Room.RemoveDropTransform(drop.getId()));
+      }
     }
   }
 

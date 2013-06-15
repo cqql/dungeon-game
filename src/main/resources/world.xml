@@ -33,11 +33,11 @@
         <position x="2000" y="2000" />
         <target roomId="room-2" x="0" y="1000" />
       </teleporter>
-      <drop money="0">
+      <drop id="1" money="0">
         <position x="1500" y="500"></position>
         <item id="1"></item>
       </drop>
-      <drop money="20">
+      <drop id="2" money="20">
         <position x="1500" y="1500"></position>
       </drop>
     </room>

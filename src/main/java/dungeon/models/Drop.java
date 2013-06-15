@@ -8,20 +8,34 @@ package dungeon.models;
 public class Drop {
   public static final int SIZE = 500;
 
+  private final int id;
+
   private final Position position;
 
   private final Item item;
 
   private final int money;
 
-  public Drop (Position position, Item item, int money) {
+  public Drop (int id, Position position, Item item, int money) {
+    this.id = id;
     this.position = position;
     this.item = item;
     this.money = money;
   }
 
+  public int getId () {
+    return id;
+  }
+
   public Position getPosition () {
     return this.position;
+  }
+
+  /**
+   * @return true if the drop is an item drop.
+   */
+  public boolean isItem () {
+    return !this.isMoney();
   }
 
   public Item getItem () {
