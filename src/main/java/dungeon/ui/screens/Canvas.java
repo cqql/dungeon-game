@@ -28,6 +28,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color hpColor = new Color(235, 58, 58);
 
+  private final Color LifeColor = new Color(60, 179, 113);
+
   private final Color white = new Color(255, 255, 255);
 
   private final Color moneyColor = new Color(253, 225, 54);
@@ -80,6 +82,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawPlayer(g, this.world.getPlayer());
     this.drawHpIndicator(g);
     this.drawMoneyIndicator(g);
+    this.drawLifeIndicator(g);
 
   }
 
@@ -141,6 +144,15 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.white);
     g.setFont(this.font);
     g.drawString(String.format("%d / %d", this.world.getPlayer().getHitPoints(), this.world.getPlayer().getMaxHitPoints()), 60, 38);
+  }
+
+  private void drawLifeIndicator (Graphics g) {
+    g.setColor(this.LifeColor);
+    g.fillRect(20, 100, 20, 20);
+
+    g.setColor(this.white);
+    g.setFont(this.font);
+    g.drawString(String.format("%d", this.world.getPlayer().getLives()), 60, 118);
   }
 
   private void drawMoneyIndicator (Graphics g) {
