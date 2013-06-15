@@ -36,6 +36,12 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private World world;
 
+  /**
+   * The unit to pixel conversion factors for the current room.
+   */
+  private double xPixelPerUnit = 0;
+  private double yPixelPerUnit = 0;
+
   public Canvas () {
     this.setFocusable(true);
   }
@@ -61,8 +67,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
     Room room = this.world.getCurrentRoom();
 
-    double xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();
-    double yPixelPerUnit = (double)g.getClipBounds().height / room.getYSize();
+    this.xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();
+    this.yPixelPerUnit = (double)g.getClipBounds().height / room.getYSize();
 
     for (Tile tile : room.getTiles()) {
       if (tile instanceof TeleporterTile) {
@@ -75,32 +81,28 @@ public class Canvas extends JPanel implements MessageHandler {
         g.setColor(this.passableTile);
       }
 
-      g.fillRect((int)(tile.getPosition().getX() * xPixelPerUnit), (int)(tile.getPosition().getY() * yPixelPerUnit), (int)(Tile.SIZE * xPixelPerUnit), (int)(Tile.SIZE * yPixelPerUnit));
+      this.drawSquare(g, tile.getPosition(), Tile.SIZE);
     }
 
     for (Drop drop : room.getDrops()) {
-      Position position = drop.getPosition();
-
       if (drop.isMoney()) {
         g.setColor(this.moneyColor);
       } else {
         g.setColor(this.itemColor);
       }
 
-      g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(Drop.SIZE * xPixelPerUnit), (int)(Drop.SIZE * yPixelPerUnit));
+      this.drawSquare(g, drop.getPosition(), Drop.SIZE);
     }
 
     for (Enemy enemy : room.getEnemies()) {
-      Position position = enemy.getPosition();
-
       g.setColor(this.enemyColor);
-      g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(Enemy.SIZE * xPixelPerUnit), (int)(Enemy.SIZE * yPixelPerUnit));
+
+      this.drawSquare(g, enemy.getPosition(), Enemy.SIZE);
     }
 
-    Position playerPosition = this.world.getPlayer().getPosition();
-
     g.setColor(this.playerColor);
-    g.fillRect((int)(playerPosition.getX() * xPixelPerUnit), (int)(playerPosition.getY() * yPixelPerUnit), (int)(Player.SIZE * xPixelPerUnit), (int)(Player.SIZE * yPixelPerUnit));
+
+    this.drawSquare(g, this.world.getPlayer().getPosition(), Player.SIZE);
 
     this.drawHpIndicator(g);
   }
@@ -115,5 +117,9 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.white);
     g.setFont(this.font);
     g.drawString(String.format("%d / %d", this.world.getPlayer().getHitPoints(), this.world.getPlayer().getMaxHitPoints()), 60, 38);
+  }
+
+  private void drawSquare (Graphics g, Position position, int widthUnits) {
+    g.fillRect((int)(position.getX() * this.xPixelPerUnit), (int)(position.getY() * this.yPixelPerUnit), (int)(widthUnits * this.xPixelPerUnit), (int)(widthUnits * this.yPixelPerUnit));
   }
 }
