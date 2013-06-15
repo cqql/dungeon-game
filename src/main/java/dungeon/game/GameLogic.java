@@ -222,7 +222,9 @@ public class GameLogic {
         new Player.TeleportTransform(
           this.world.getPlayer().getSavePointRoomId(),
           this.world.getPlayer().getSavePointPosition().getX(),
-          this.world.getPlayer().getSavePointPosition().getY()));
+          this.world.getPlayer().getSavePointPosition().getY()
+        )
+      );
     }
   }
 
