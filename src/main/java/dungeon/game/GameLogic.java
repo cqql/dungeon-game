@@ -212,7 +212,7 @@ public class GameLogic {
   }
 
   /**
-   * Reset HP when players loses a life and respawn player if checkpoint is activated and he dies
+   * Reset HP when players loses a life and respawn the player if he dies
    */
   private void handleRespawn (Transaction transaction) {
     if (this.world.getPlayer().getHitPoints() == 0) {
