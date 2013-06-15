@@ -79,6 +79,13 @@ public class Transaction {
   }
 
   /**
+   * Rollback to the last commit, e.g. dismiss all pending transforms.
+   */
+  public void rollback () {
+    this.pendingTransforms.clear();
+  }
+
+  /**
    * Returns all committed transforms.
    */
   public List<Transform> getTransforms () {
