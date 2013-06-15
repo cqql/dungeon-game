@@ -16,6 +16,11 @@ public class Player implements Spatial {
   private final int maxHitPoints;
 
   /**
+   * The amount of money the player has.
+   */
+  private final int money;
+
+  /**
    * Which level is the player currently in?
    */
   private final String levelId;
@@ -44,11 +49,12 @@ public class Player implements Spatial {
    */
   private final Position savePointPosition;
 
-  public Player (String name, int lives, int hitPoints, int maxHitPoints, String levelId, String roomId, Position position, String savePointRoomId, Position savePointPosition) {
+  public Player (String name, int lives, int hitPoints, int maxHitPoints, int money, String levelId, String roomId, Position position, String savePointRoomId, Position savePointPosition) {
     this.name = name;
     this.lives = lives;
     this.hitPoints = hitPoints;
     this.maxHitPoints = maxHitPoints;
+    this.money = money;
     this.levelId = levelId;
     this.roomId = roomId;
     this.position = position;
@@ -70,6 +76,10 @@ public class Player implements Spatial {
 
   public int getMaxHitPoints () {
     return this.maxHitPoints;
+  }
+
+  public int getMoney () {
+    return this.money;
   }
 
   public String getLevelId () {
@@ -108,6 +118,7 @@ public class Player implements Spatial {
     int lives = this.lives;
     int hitPoints = this.hitPoints;
     int maxHitPoints = this.maxHitPoints;
+    int money = this.money;
     String levelId = this.levelId;
     String roomId = this.roomId;
     Position position = this.position;
@@ -129,7 +140,7 @@ public class Player implements Spatial {
       position = new Position(teleportTransform.x, teleportTransform.y);
     }
 
-    return new Player(name, lives, hitPoints, maxHitPoints, levelId, roomId, position, savePointRoomId, savePointPosition);
+    return new Player(name, lives, hitPoints, maxHitPoints, money, levelId, roomId, position, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {
