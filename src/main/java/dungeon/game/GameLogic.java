@@ -29,7 +29,9 @@ public class GameLogic {
 
   private long lastDamageTime;
 
-  private final Set<MoveCommand> activeMoveDirections = EnumSet.noneOf(MoveCommand.class);
+  private final Set<Direction> activeMoveDirections = EnumSet.noneOf(Direction.class);
+
+  private Direction viewingDirection = Direction.RIGHT;
 
   private GameState gameState = GameState.PLAYING;
 
@@ -43,14 +45,16 @@ public class GameLogic {
    * Set a move flag.
    */
   public void activateMoveDirection (MoveCommand command) {
-    this.activeMoveDirections.add(command);
+    this.activeMoveDirections.add(command.getDirection());
+
+    this.viewingDirection = command.getDirection();
   }
 
   /**
    * Reset a move flag.
    */
   public void deactivateMoveDirection (MoveCommand command) {
-    this.activeMoveDirections.remove(command);
+    this.activeMoveDirections.remove(command.getDirection());
   }
 
   /**
@@ -71,6 +75,7 @@ public class GameLogic {
     Transaction transaction = new Transaction(this.world);
 
     this.handleMovement(transaction, delta);
+    this.updateViewingDirection(transaction);
     this.handleDrops(transaction);
     this.handleEnemies(transaction);
     this.handleTeleporters(transaction);
@@ -96,19 +101,19 @@ public class GameLogic {
    * Create the appropriate MoveTransform with respect to the currently active directions.
    */
   private Transform moveTransform (double delta) {
-    Vector direction = new Vector(0, 0);
+    Vector finalDirection = new Vector(0, 0);
 
-    for (MoveCommand moveCommand : this.activeMoveDirections) {
-      direction = direction.plus(moveCommand.getDirection());
+    for (Direction direction : this.activeMoveDirections) {
+      finalDirection = finalDirection.plus(direction.getVector());
     }
 
-    if (direction.isZero()) {
+    if (finalDirection.isZero()) {
       return new IdentityTransform();
     } else {
-      direction = direction.normalize();
-      direction = direction.times(SPEED * delta);
+      finalDirection = finalDirection.normalize();
+      finalDirection = finalDirection.times(SPEED * delta);
 
-      return new Player.MoveTransform((int)direction.getX(), (int)direction.getY());
+      return new Player.MoveTransform((int)finalDirection.getX(), (int)finalDirection.getY());
     }
   }
 
@@ -140,6 +145,15 @@ public class GameLogic {
       return new IdentityTransform();
     } else {
       return transform;
+    }
+  }
+
+  /**
+   * Update the direction the player is currently facing.
+   */
+  private void updateViewingDirection (Transaction transaction) {
+    if (transaction.getWorld().getPlayer().getViewingDirection() != this.viewingDirection) {
+      transaction.pushAndCommit(new Player.ViewingDirectionTransform(this.viewingDirection));
     }
   }
 
