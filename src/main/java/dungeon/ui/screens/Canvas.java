@@ -28,7 +28,7 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color hpColor = new Color(235, 58, 58);
 
-  private final Color LifeColor = new Color(60, 179, 113);
+  private final Color lifeColor = new Color(60, 179, 113);
 
   private final Color white = new Color(255, 255, 255);
 
@@ -147,7 +147,7 @@ public class Canvas extends JPanel implements MessageHandler {
   }
 
   private void drawLifeIndicator (Graphics g) {
-    g.setColor(this.LifeColor);
+    g.setColor(this.lifeColor);
     g.fillRect(20, 100, 20, 20);
 
     g.setColor(this.white);
