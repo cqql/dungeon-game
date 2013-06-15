@@ -1,23 +1,23 @@
 package dungeon.ui.messages;
 
-import dungeon.util.Vector;
+import dungeon.models.Direction;
 
 /**
  * Bewegungsbefehle, die der Spieler geben kann.
  */
 public enum MoveCommand implements Command {
-  LEFT(new Vector(-1, 0)),
-  RIGHT(new Vector(1, 0)),
-  UP(new Vector(0, -1)),
-  DOWN(new Vector(0, 1));
+  LEFT(Direction.LEFT),
+  RIGHT(Direction.RIGHT),
+  UP(Direction.UP),
+  DOWN(Direction.DOWN);
 
-  private final Vector direction;
+  private final Direction direction;
 
-  private MoveCommand (Vector direction) {
+  private MoveCommand (Direction direction) {
     this.direction = direction;
   }
 
-  public Vector getDirection () {
+  public Direction getDirection () {
     return this.direction;
   }
 }

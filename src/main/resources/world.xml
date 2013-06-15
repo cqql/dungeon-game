@@ -1523,7 +1523,7 @@
       </victory-tile>
     </room>
   </level>
-  <player name="Link" lives="3" hitPoints="1" maxHitPoints="3" money="0" levelId="level-1" roomId="room-1" savePointRoomId="room-1">
+  <player name="Link" lives="3" hitPoints="1" maxHitPoints="3" money="0" levelId="level-1" roomId="room-1" viewingDirection="LEFT" savePointRoomId="room-1">
     <position x="0" y="0" />
     <savePointPosition x="0" y="0" />
   </player>

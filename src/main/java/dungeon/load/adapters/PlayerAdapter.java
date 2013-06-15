@@ -1,5 +1,6 @@
 package dungeon.load.adapters;
 
+import dungeon.models.Direction;
 import dungeon.models.Item;
 import dungeon.models.Player;
 import dungeon.models.Position;
@@ -41,6 +42,9 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
   public Position position;
 
   @XmlAttribute
+  public String viewingDirection;
+
+  @XmlAttribute
   public String savePointRoomId;
 
   @XmlJavaTypeAdapter(PositionAdapter.class)
@@ -48,7 +52,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
 
   @Override
   public Player unmarshal (PlayerAdapter adapter) throws Exception {
-    return new Player(adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.items, adapter.levelId, adapter.roomId, adapter.position, adapter.savePointRoomId, adapter.savePointPosition);
+    return new Player(adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.items, adapter.levelId, adapter.roomId, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
   }
 
   @Override
@@ -63,6 +67,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
     adapter.levelId = player.getLevelId();
     adapter.roomId = player.getRoomId();
     adapter.position = player.getPosition();
+    adapter.viewingDirection = player.getViewingDirection().toString();
     adapter.savePointRoomId = player.getSavePointRoomId();
     adapter.savePointPosition = player.getSavePointPosition();
 
