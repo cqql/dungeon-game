@@ -35,7 +35,7 @@
       </teleporter>
       <drop money="0">
         <position x="1500" y="500"></position>
-        <item></item>
+        <item id="1"></item>
       </drop>
       <drop money="20">
         <position x="1500" y="1500"></position>
