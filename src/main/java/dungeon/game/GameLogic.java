@@ -150,6 +150,8 @@ public class GameLogic {
 
         if (drop.isMoney()) {
           transaction.push(new Player.MoneyTransform(drop.getMoney()));
+        } else {
+          transaction.push(new Player.AddItemTransform(drop.getItem()));
         }
 
         transaction.commit();

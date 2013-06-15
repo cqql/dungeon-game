@@ -154,6 +154,9 @@ public class Player implements Spatial {
       position = new Position(teleportTransform.x, teleportTransform.y);
     } else if (transform instanceof MoneyTransform) {
       money += ((MoneyTransform)transform).delta;
+    } else if (transform instanceof AddItemTransform) {
+      items = new ArrayList<>(items);
+      items.add(((AddItemTransform)transform).item);
     }
 
     return new Player(name, lives, hitPoints, maxHitPoints, money, items, levelId, roomId, position, savePointRoomId, savePointPosition);
@@ -197,6 +200,14 @@ public class Player implements Spatial {
 
     public MoneyTransform (int delta) {
       this.delta = delta;
+    }
+  }
+
+  public static class AddItemTransform implements Transform {
+    private final Item item;
+
+    public AddItemTransform (Item item) {
+      this.item = item;
     }
   }
 }
