@@ -4,7 +4,7 @@ import dungeon.models.messages.Transform;
 
 import java.awt.geom.Rectangle2D;
 
-public class Player {
+public class Player implements Spatial {
   public static final int SIZE = 900;
 
   private final String name;
@@ -93,37 +93,14 @@ public class Player {
   }
 
   /**
-   * Checks if the player touches the enemy #enemy.
+   * @return true if the player touches the object.
    */
-  public boolean touches (Enemy enemy) {
-    Rectangle2D enemySpace = new Rectangle2D.Float(enemy.getPosition().getX(), enemy.getPosition().getY(), Enemy.SIZE, Enemy.SIZE);
-
-    return this.playerSpace().intersects(enemySpace);
+  public boolean touches (Spatial object) {
+    return this.space().intersects(object.space());
   }
 
-  /**
-   * Checks if the player touches the tile at Position (#x, #y).
-   */
-  public boolean touches (Tile tile) {
-    Rectangle2D tileSpace = new Rectangle2D.Float(tile.getPosition().getX(), tile.getPosition().getY(), Tile.SIZE, Tile.SIZE);
-
-    return this.playerSpace().intersects(tileSpace);
-  }
-
-  /**
-   * Checks if the player touches the drop at Position (#x, #y).
-   */
-  public boolean touches (Drop drop) {
-    Rectangle2D dropSpace = new Rectangle2D.Float(drop.getPosition().getX(), drop.getPosition().getY(), Drop.SIZE, Drop.SIZE);
-
-    return this.playerSpace().intersects(dropSpace);
-  }
-
-  /**
-   * Returns a rectangle that represents the space occupied by the player.
-   */
-  private Rectangle2D playerSpace () {
-    return new Rectangle2D.Float(this.getPosition().getX(), this.getPosition().getY(), Player.SIZE, Player.SIZE);
+  public Rectangle2D space () {
+    return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
 
   public Player apply (Transform transform) {

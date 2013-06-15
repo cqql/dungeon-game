@@ -1,11 +1,13 @@
 package dungeon.models;
 
+import java.awt.geom.Rectangle2D;
+
 /**
  * A dropped item that is lying around somewhere in a room.
  *
  * It can be either an amount of money (item == null) or an item (money == 0).
  */
-public class Drop {
+public class Drop implements Spatial {
   public static final int SIZE = 500;
 
   private final int id;
@@ -51,5 +53,10 @@ public class Drop {
 
   public int getMoney () {
     return this.money;
+  }
+
+  @Override
+  public Rectangle2D space () {
+    return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
 }

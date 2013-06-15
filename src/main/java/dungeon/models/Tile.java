@@ -2,7 +2,9 @@ package dungeon.models;
 
 import dungeon.models.messages.Transform;
 
-public class Tile {
+import java.awt.geom.Rectangle2D;
+
+public class Tile implements Spatial {
   public static final int SIZE = 1000;
 
   /**
@@ -27,5 +29,10 @@ public class Tile {
 
   public Tile apply (Transform transform) {
     return this;
+  }
+
+  @Override
+  public Rectangle2D space () {
+    return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
 }
