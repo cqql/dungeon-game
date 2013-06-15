@@ -10,12 +10,14 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class RoomTest {
+  private static final String ROOM_ID = "test-room";
+
   private Room room;
 
   @Before
   public void setUp () {
     this.room = new Room(
-      "test-room",
+      ROOM_ID,
       new ArrayList<Enemy>(),
       new ArrayList<SavePoint>(),
       Arrays.asList(
@@ -24,19 +26,19 @@ public class RoomTest {
         new VictoryTile(new Position(1000, 2000)),
         new Tile(true, new Position(0, 0)),
         new Tile(true, new Position(3000, 0)),
-        new TeleporterTile(new Position(0, 4000), new TeleporterTile.Target("test-room", 0, 0))
+        new TeleporterTile(new Position(0, 4000), new TeleporterTile.Target(ROOM_ID, 0, 0))
       )
     );
   }
 
   @Test
   public void longestXSpanIsXSize () {
-    assertEquals(3000 + Tile.SIZE, room.getXSize());
+    assertEquals(3000 + Tile.SIZE, this.room.getXSize());
   }
 
   @Test
   public void longestYSpanIsYSize () {
-    assertEquals(5000 + Tile.SIZE, room.getYSize());
+    assertEquals(5000 + Tile.SIZE, this.room.getYSize());
   }
 
   @Test

@@ -82,13 +82,13 @@ public class Transaction {
    * Returns all committed transforms.
    */
   public List<Transform> getTransforms () {
-    return Collections.unmodifiableList(transforms);
+    return Collections.unmodifiableList(this.transforms);
   }
 
   /**
    * Returns the state of the world after applying all committed transforms.
    */
   public World getWorld () {
-    return world;
+    return this.world;
   }
 }

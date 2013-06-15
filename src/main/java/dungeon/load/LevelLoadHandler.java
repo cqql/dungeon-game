@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LevelLoadHandler implements MessageHandler {
-  private static final Logger logger = Logger.getLogger(LevelLoadHandler.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(LevelLoadHandler.class.getName());
 
   private final Mailman mailman;
 
@@ -31,7 +31,7 @@ public class LevelLoadHandler implements MessageHandler {
 
         this.mailman.send(new LevelLoadedEvent(world));
       } catch (Exception e) {
-        logger.log(Level.SEVERE, "Loading the world failed", e);
+        LOGGER.log(Level.SEVERE, "Loading the world failed", e);
       }
     }
   }

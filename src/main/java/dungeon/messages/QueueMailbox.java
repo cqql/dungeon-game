@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * This class is thread-safe.
  */
 public final class QueueMailbox extends AbstractMailbox {
-  private static final Logger logger = Logger.getLogger(QueueMailbox.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(QueueMailbox.class.getName());
 
   private static final int WAIT_TIME = 10;
 
@@ -39,7 +39,7 @@ public final class QueueMailbox extends AbstractMailbox {
           this.messageHandler.handleMessage(message);
         }
       } catch (InterruptedException e) {
-        logger.log(Level.WARNING, "QueueMailbox interrupted while running", e);
+        LOGGER.log(Level.WARNING, "QueueMailbox interrupted while running", e);
 
         this.shutdown();
       }
@@ -53,7 +53,7 @@ public final class QueueMailbox extends AbstractMailbox {
     try {
       this.messageQueue.put(message);
     } catch (InterruptedException e) {
-      logger.log(Level.WARNING, "QueueMailbox interrupted while receiving an message", e);
+      LOGGER.log(Level.WARNING, "QueueMailbox interrupted while receiving an message", e);
     }
   }
 }

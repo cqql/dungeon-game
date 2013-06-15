@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * Be aware of the fact that each mailbox will be running in it's own thread.
  */
 public final class Mailman {
-  private static final Logger logger = Logger.getLogger(Mailman.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(Mailman.class.getName());
 
   private final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -56,9 +56,9 @@ public final class Mailman {
         this.waitForNextMessage();
       }
     } catch (InterruptedException e) {
-      logger.log(Level.SEVERE, "The event host has been interrupted", e);
+      LOGGER.log(Level.SEVERE, "The event host has been interrupted", e);
     } finally {
-      logger.info("The event host is shutting down");
+      LOGGER.info("The event host is shutting down");
 
       this.shutdown();
     }
@@ -79,7 +79,7 @@ public final class Mailman {
 
       return true;
     } catch (InterruptedException e) {
-      logger.log(Level.WARNING, "A thread has been interrupted while sending an message", e);
+      LOGGER.log(Level.WARNING, "A thread has been interrupted while sending an message", e);
 
       return false;
     }
