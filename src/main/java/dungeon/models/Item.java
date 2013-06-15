@@ -13,4 +13,9 @@ public class Item {
   public int getId () {
     return this.id;
   }
+
+  @Override
+  public String toString () {
+    return "Item#" + this.id;
+  }
 }

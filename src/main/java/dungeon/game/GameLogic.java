@@ -144,7 +144,7 @@ public class GameLogic {
   private void handleDrops (Transaction transaction) {
     for (Drop drop : this.world.getCurrentRoom().getDrops()) {
       if (this.world.getPlayer().touches(drop)) {
-        LOGGER.info("Pick up drop #" + drop.getId());
+        LOGGER.info("Pick up " + drop);
 
         transaction.push(new Room.RemoveDropTransform(drop.getId()));
 

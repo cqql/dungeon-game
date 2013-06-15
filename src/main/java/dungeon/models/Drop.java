@@ -59,4 +59,13 @@ public class Drop implements Spatial {
   public Rectangle2D space () {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
+
+  @Override
+  public String toString () {
+    if (this.isMoney()) {
+      return "Drop#" + this.id + " with " + this.money + " coins";
+    } else {
+      return "Drop#" + this.id + " with " + this.item;
+    }
+  }
 }
