@@ -2,6 +2,7 @@ package dungeon.models;
 
 import dungeon.models.messages.Transform;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +27,12 @@ public class Level {
   }
 
   public Level apply (Transform transform) {
-    return this;
+    List<Room> rooms = new ArrayList<>();
+
+    for (Room room : this.rooms) {
+      rooms.add(room.apply(transform));
+    }
+
+    return new Level(this.id, rooms);
   }
 }

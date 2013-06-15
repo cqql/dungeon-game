@@ -30,9 +30,20 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color white = new Color(255, 255, 255);
 
+  private final Color moneyColor = new Color(253, 225, 54);
+
+  private final Color itemColor = new Color(151, 151, 151);
+
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
   private World world;
+
+  /**
+   * The unit to pixel conversion factors for the current room.
+   */
+  private double xPixelPerUnit = 0;
+
+  private double yPixelPerUnit = 0;
 
   public Canvas () {
     this.setFocusable(true);
@@ -41,9 +52,9 @@ public class Canvas extends JPanel implements MessageHandler {
   @Override
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
-      this.world = this.world.apply((Transform) message);
+      this.world = this.world.apply((Transform)message);
     } else if (message instanceof LevelLoadedEvent) {
-      this.world = ((LevelLoadedEvent) message).getWorld();
+      this.world = ((LevelLoadedEvent)message).getWorld();
     }
 
     repaint();
@@ -59,9 +70,19 @@ public class Canvas extends JPanel implements MessageHandler {
 
     Room room = this.world.getCurrentRoom();
 
-    double xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();
-    double yPixelPerUnit = (double)g.getClipBounds().height / room.getYSize();
+    this.xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();
+    this.yPixelPerUnit = (double)g.getClipBounds().height / room.getYSize();
 
+    this.drawTiles(g, room);
+    this.drawDrops(g, room);
+    this.drawEnemies(g, room);
+    this.drawPlayer(g, this.world.getPlayer());
+    this.drawHpIndicator(g);
+    this.drawMoneyIndicator(g);
+    this.drawSavepoints(g, room);
+  }
+
+  private void drawTiles (Graphics g, Room room) {
     for (Tile tile : room.getTiles()) {
       if (tile instanceof TeleporterTile) {
         g.setColor(this.teleporterTile);
@@ -73,34 +94,45 @@ public class Canvas extends JPanel implements MessageHandler {
         g.setColor(this.passableTile);
       }
 
-      g.fillRect((int)(tile.getPosition().getX() * xPixelPerUnit), (int)(tile.getPosition().getY() * yPixelPerUnit), (int)(Tile.SIZE * xPixelPerUnit), (int)(Tile.SIZE * yPixelPerUnit));
+      this.drawSquare(g, tile.getPosition(), Tile.SIZE);
     }
+  }
 
+  private void drawDrops (Graphics g, Room room) {
+    for (Drop drop : room.getDrops()) {
+      if (drop.isMoney()) {
+        g.setColor(this.moneyColor);
+      } else {
+        g.setColor(this.itemColor);
+      }
+
+      this.drawSquare(g, drop.getPosition(), Drop.SIZE);
+    }
+  }
+
+  private void drawEnemies (Graphics g, Room room) {
     for (Enemy enemy : room.getEnemies()) {
-      Position position = enemy.getPosition();
-
       g.setColor(this.enemyColor);
-      g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(Enemy.SIZE * xPixelPerUnit), (int)(Enemy.SIZE * yPixelPerUnit));
-    }
 
+      this.drawSquare(g, enemy.getPosition(), Enemy.SIZE);
+    }
+  }
+
+  private void drawSavepoints (Graphics g, Room room) {
     for (SavePoint savePoint : room.getSavePoints()) {
       Position position = savePoint.getPosition();
 
       g.setColor(this.savePointColor);
       g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(savePoint.SIZE * xPixelPerUnit), (int)(savePoint.SIZE * yPixelPerUnit));
     }
-
-    Position playerPosition = this.world.getPlayer().getPosition();
-
-    g.setColor(this.playerColor);
-    g.fillRect((int)(playerPosition.getX() * xPixelPerUnit), (int)(playerPosition.getY() * yPixelPerUnit), (int)(Player.SIZE * xPixelPerUnit), (int)(Player.SIZE * yPixelPerUnit));
-
-    this.drawHpIndicator(g);
   }
 
-  /**
-   * Draw an hitpoint indicator.
-   */
+  private void drawPlayer (Graphics g, Player player) {
+    g.setColor(this.playerColor);
+
+    this.drawSquare(g, player.getPosition(), Player.SIZE);
+  }
+
   private void drawHpIndicator (Graphics g) {
     g.setColor(this.hpColor);
     g.fillRect(20, 20, 20, 20);
@@ -108,5 +140,21 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.white);
     g.setFont(this.font);
     g.drawString(String.format("%d / %d", this.world.getPlayer().getHitPoints(), this.world.getPlayer().getMaxHitPoints()), 60, 38);
+  }
+
+  private void drawMoneyIndicator (Graphics g) {
+    g.setColor(this.moneyColor);
+    g.fillRect(20, 60, 20, 20);
+
+    g.setColor(this.white);
+    g.setFont(this.font);
+    g.drawString(String.format("%d", this.world.getPlayer().getMoney()), 60, 78);
+  }
+
+  /**
+   * Draw a square with the positions converted from our abstract unit to pixels.
+   */
+  private void drawSquare (Graphics g, Position position, int widthUnits) {
+    g.fillRect((int)(position.getX() * this.xPixelPerUnit), (int)(position.getY() * this.yPixelPerUnit), (int)(widthUnits * this.xPixelPerUnit), (int)(widthUnits * this.yPixelPerUnit));
   }
 }

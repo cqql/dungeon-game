@@ -33,6 +33,13 @@
         <position x="2000" y="2000" />
         <target roomId="room-2" x="0" y="1000" />
       </teleporter>
+      <drop id="1" money="0">
+        <position x="1500" y="500"></position>
+        <item id="1"></item>
+      </drop>
+      <drop id="2" money="20">
+        <position x="1500" y="1500"></position>
+      </drop>
     </room>
     <room id="room-2">
       <tile blocking="true">
@@ -1516,7 +1523,7 @@
       </victory-tile>
     </room>
   </level>
-  <player name="Link" lives="3" hitPoints="1" maxHitPoints="3" levelId="level-1" roomId="room-1" savePointRoomId="room-1">
+  <player name="Link" lives="3" hitPoints="1" maxHitPoints="3" money="0" levelId="level-1" roomId="room-1" savePointRoomId="room-1">
     <position x="0" y="0" />
     <savePointPosition x="0" y="0" />
   </player>
