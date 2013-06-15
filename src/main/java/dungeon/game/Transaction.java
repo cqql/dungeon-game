@@ -58,7 +58,7 @@ public class Transaction {
 
     try {
       for (Transform transform : this.pendingTransforms) {
-        world = this.world.apply(transform);
+        world = world.apply(transform);
       }
 
       this.transforms.addAll(this.pendingTransforms);
