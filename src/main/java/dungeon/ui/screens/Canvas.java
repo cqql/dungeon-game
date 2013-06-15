@@ -76,6 +76,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawEnemies(g, room);
     this.drawPlayer(g, this.world.getPlayer());
     this.drawHpIndicator(g);
+    this.drawMoneyIndicator(g);
   }
 
   private void drawTiles (Graphics g, Room room) {
@@ -120,9 +121,6 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawSquare(g, player.getPosition(), Player.SIZE);
   }
 
-  /**
-   * Draw an hitpoint indicator.
-   */
   private void drawHpIndicator (Graphics g) {
     g.setColor(this.hpColor);
     g.fillRect(20, 20, 20, 20);
@@ -130,6 +128,15 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.white);
     g.setFont(this.font);
     g.drawString(String.format("%d / %d", this.world.getPlayer().getHitPoints(), this.world.getPlayer().getMaxHitPoints()), 60, 38);
+  }
+
+  private void drawMoneyIndicator (Graphics g) {
+    g.setColor(this.moneyColor);
+    g.fillRect(20, 60, 20, 20);
+
+    g.setColor(this.white);
+    g.setFont(this.font);
+    g.drawString(String.format("%d", this.world.getPlayer().getMoney()), 60, 78);
   }
 
   /**
