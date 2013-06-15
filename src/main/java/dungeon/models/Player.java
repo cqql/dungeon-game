@@ -3,6 +3,9 @@ package dungeon.models;
 import dungeon.models.messages.Transform;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Player implements Spatial {
   public static final int SIZE = 900;
@@ -19,6 +22,11 @@ public class Player implements Spatial {
    * The amount of money the player has.
    */
   private final int money;
+
+  /**
+   * The items in the player's bag.
+   */
+  private final List<Item> items;
 
   /**
    * Which level is the player currently in?
@@ -49,12 +57,13 @@ public class Player implements Spatial {
    */
   private final Position savePointPosition;
 
-  public Player (String name, int lives, int hitPoints, int maxHitPoints, int money, String levelId, String roomId, Position position, String savePointRoomId, Position savePointPosition) {
+  public Player (String name, int lives, int hitPoints, int maxHitPoints, int money, List<Item> items, String levelId, String roomId, Position position, String savePointRoomId, Position savePointPosition) {
     this.name = name;
     this.lives = lives;
     this.hitPoints = hitPoints;
     this.maxHitPoints = maxHitPoints;
     this.money = money;
+    this.items = Collections.unmodifiableList(new ArrayList<>(items));
     this.levelId = levelId;
     this.roomId = roomId;
     this.position = position;
@@ -80,6 +89,10 @@ public class Player implements Spatial {
 
   public int getMoney () {
     return this.money;
+  }
+
+  public List<Item> getItems () {
+    return items;
   }
 
   public String getLevelId () {
@@ -119,6 +132,7 @@ public class Player implements Spatial {
     int hitPoints = this.hitPoints;
     int maxHitPoints = this.maxHitPoints;
     int money = this.money;
+    List<Item> items = this.items;
     String levelId = this.levelId;
     String roomId = this.roomId;
     Position position = this.position;
@@ -142,7 +156,7 @@ public class Player implements Spatial {
       money += ((MoneyTransform)transform).delta;
     }
 
-    return new Player(name, lives, hitPoints, maxHitPoints, money, levelId, roomId, position, savePointRoomId, savePointPosition);
+    return new Player(name, lives, hitPoints, maxHitPoints, money, items, levelId, roomId, position, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {

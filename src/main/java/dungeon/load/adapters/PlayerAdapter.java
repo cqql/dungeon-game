@@ -1,11 +1,15 @@
 package dungeon.load.adapters;
 
+import dungeon.models.Item;
 import dungeon.models.Player;
 import dungeon.models.Position;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
   @XmlAttribute
@@ -22,6 +26,10 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
 
   @XmlAttribute
   public int money;
+
+  @XmlElement(name = "item")
+  @XmlJavaTypeAdapter(ItemAdapter.class)
+  public List<Item> items = new ArrayList<>();
 
   @XmlAttribute
   public String levelId;
@@ -40,7 +48,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
 
   @Override
   public Player unmarshal (PlayerAdapter adapter) throws Exception {
-    return new Player(adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.levelId, adapter.roomId, adapter.position, adapter.savePointRoomId, adapter.savePointPosition);
+    return new Player(adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.items, adapter.levelId, adapter.roomId, adapter.position, adapter.savePointRoomId, adapter.savePointPosition);
   }
 
   @Override
@@ -51,6 +59,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
     adapter.hitPoints = player.getHitPoints();
     adapter.maxHitPoints = player.getMaxHitPoints();
     adapter.money = player.getMoney();
+    adapter.items = player.getItems();
     adapter.levelId = player.getLevelId();
     adapter.roomId = player.getRoomId();
     adapter.position = player.getPosition();
