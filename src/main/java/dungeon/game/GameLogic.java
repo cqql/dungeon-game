@@ -75,7 +75,7 @@ public class GameLogic {
     this.handleEnemies(transaction);
     this.handleTeleporters(transaction);
     this.handleCheckpoint(transaction);
-    this.handleLives(transaction);
+    this.handleRespawn(transaction);
 
     this.world = transaction.getWorld();
 
@@ -212,12 +212,13 @@ public class GameLogic {
   }
 
   /**
-   * Reset HP when players loses a life
+   * Reset HP when players loses a life and respawn player if checkpoint is activated and he dies
    */
-  private void handleLives (Transaction transaction) {
+  private void handleRespawn (Transaction transaction) {
     if (this.world.getPlayer().getHitPoints() == 0) {
       transaction.pushAndCommit(new Player.LivesTransform(-1));
       transaction.pushAndCommit(new Player.HitpointTransform(this.world.getPlayer().getMaxHitPoints()));
+      transaction.pushAndCommit(new Player.TeleportTransform(this.world.getPlayer().getSavePointRoomId(), this.world.getPlayer().getSavePointPosition().getX(), this.world.getPlayer().getSavePointPosition().getY()));
     }
   }
 
