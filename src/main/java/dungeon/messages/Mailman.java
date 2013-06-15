@@ -1,7 +1,5 @@
 package dungeon.messages;
 
-import dungeon.Log;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
@@ -9,6 +7,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Delivers messages to registered mailboxes.
@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Be aware of the fact that each mailbox will be running in it's own thread.
  */
 public final class Mailman {
+  private static final Logger LOGGER = Logger.getLogger(Mailman.class.getName());
+
   private final ExecutorService executor = Executors.newCachedThreadPool();
 
   private final Collection<Mailbox> mailboxes = new ArrayList<>();
@@ -54,9 +56,9 @@ public final class Mailman {
         this.waitForNextMessage();
       }
     } catch (InterruptedException e) {
-      Log.notice("The event host has been interrupted", e);
+      LOGGER.log(Level.SEVERE, "The event host has been interrupted", e);
     } finally {
-      Log.notice("The event host is shutting down");
+      LOGGER.info("The event host is shutting down");
 
       this.shutdown();
     }
@@ -77,7 +79,7 @@ public final class Mailman {
 
       return true;
     } catch (InterruptedException e) {
-      Log.notice("A thread has been interrupted while sending an message", e);
+      LOGGER.log(Level.WARNING, "A thread has been interrupted while sending an message", e);
 
       return false;
     }

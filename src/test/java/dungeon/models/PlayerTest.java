@@ -6,11 +6,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class PlayerTest {
+  private static final String ROOM_ID = "room";
+
   private Player player;
 
   @Before
   public void setUp () {
-    this.player = new Player("player", 1, 5, 5, "level", "room", new Position(2000, 2000), "room", new Position(0, 0));
+    this.player = new Player("player", 1, 5, 5, "level", ROOM_ID, new Position(2000, 2000), ROOM_ID, new Position(0, 0));
   }
 
   @Test
@@ -32,24 +34,24 @@ public class PlayerTest {
   public void touchesOverlappingEnemy () {
     Enemy enemy = new Enemy(new Position(1500, 1500));
 
-    assertTrue(player.touches(enemy));
+    assertTrue(this.player.touches(enemy));
   }
 
   @Test
   public void doesNotTouchDistantEnemy () {
     Enemy enemy = new Enemy(new Position(0, 0));
 
-    assertFalse(player.touches(enemy));
+    assertFalse(this.player.touches(enemy));
   }
 
   @Test
   public void touchesOverlappingTile () {
-    assertTrue(player.touches(new Tile(false, new Position(1500, 1500))));
+    assertTrue(this.player.touches(new Tile(false, new Position(1500, 1500))));
   }
 
   @Test
   public void doesNotTouchDistantTile () {
-    assertFalse(player.touches(new Tile(false, new Position(1500, 3500))));
+    assertFalse(this.player.touches(new Tile(false, new Position(1500, 3500))));
   }
 
   @Test

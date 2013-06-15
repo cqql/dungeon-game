@@ -47,10 +47,6 @@
     <module name="EqualsAvoidNull" />
     <module name="EqualsHashCode" />
     <module name="InnerAssignment" />
-    <module name="MagicNumber">
-      <property name="ignoreHashCodeMethod" value="true" />
-      <property name="ignoreAnnotation" value="true" />
-    </module>
     <module name="MissingSwitchDefault" />
     <module name="ModifiedControlVariable" />
     <module name="SimplifyBooleanExpression" />
@@ -63,7 +59,6 @@
     <module name="DeclarationOrder" />
     <module name="ExplicitInitialization" />
     <module name="DefaultComesLast" />
-    <module name="MultipleStringLiterals" />
     <module name="MultipleVariableDeclarations" />
     <module name="OneStatementPerLine" />
     <module name="RequireThis">

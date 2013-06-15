@@ -8,6 +8,7 @@ import dungeon.models.messages.Transform;
 
 import javax.swing.*;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 public class Canvas extends JPanel implements MessageHandler {
@@ -24,6 +25,12 @@ public class Canvas extends JPanel implements MessageHandler {
   private final Color enemyColor = new Color(33, 237, 60);
 
   private final Color savePointColor = new Color(50, 122, 88);
+
+  private final Color hpColor = new Color(235, 58, 58);
+
+  private final Color white = new Color(255, 255, 255);
+
+  private final Font font = new Font("Arial", Font.PLAIN, 20);
 
   private World world;
 
@@ -87,5 +94,19 @@ public class Canvas extends JPanel implements MessageHandler {
 
     g.setColor(this.playerColor);
     g.fillRect((int)(playerPosition.getX() * xPixelPerUnit), (int)(playerPosition.getY() * yPixelPerUnit), (int)(Player.SIZE * xPixelPerUnit), (int)(Player.SIZE * yPixelPerUnit));
+
+    this.drawHpIndicator(g);
+  }
+
+  /**
+   * Draw an hitpoint indicator.
+   */
+  private void drawHpIndicator (Graphics g) {
+    g.setColor(this.hpColor);
+    g.fillRect(20, 20, 20, 20);
+
+    g.setColor(this.white);
+    g.setFont(this.font);
+    g.drawString(String.format("%d / %d", this.world.getPlayer().getHitPoints(), this.world.getPlayer().getMaxHitPoints()), 60, 38);
   }
 }
