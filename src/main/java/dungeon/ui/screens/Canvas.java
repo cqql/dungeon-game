@@ -40,6 +40,7 @@ public class Canvas extends JPanel implements MessageHandler {
    * The unit to pixel conversion factors for the current room.
    */
   private double xPixelPerUnit = 0;
+
   private double yPixelPerUnit = 0;
 
   public Canvas () {
@@ -49,9 +50,9 @@ public class Canvas extends JPanel implements MessageHandler {
   @Override
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
-      this.world = this.world.apply((Transform) message);
+      this.world = this.world.apply((Transform)message);
     } else if (message instanceof LevelLoadedEvent) {
-      this.world = ((LevelLoadedEvent) message).getWorld();
+      this.world = ((LevelLoadedEvent)message).getWorld();
     }
 
     repaint();
@@ -70,6 +71,14 @@ public class Canvas extends JPanel implements MessageHandler {
     this.xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();
     this.yPixelPerUnit = (double)g.getClipBounds().height / room.getYSize();
 
+    this.drawTiles(g, room);
+    this.drawDrops(g, room);
+    this.drawEnemies(g, room);
+    this.drawPlayer(g, this.world.getPlayer());
+    this.drawHpIndicator(g);
+  }
+
+  private void drawTiles (Graphics g, Room room) {
     for (Tile tile : room.getTiles()) {
       if (tile instanceof TeleporterTile) {
         g.setColor(this.teleporterTile);
@@ -83,7 +92,9 @@ public class Canvas extends JPanel implements MessageHandler {
 
       this.drawSquare(g, tile.getPosition(), Tile.SIZE);
     }
+  }
 
+  private void drawDrops (Graphics g, Room room) {
     for (Drop drop : room.getDrops()) {
       if (drop.isMoney()) {
         g.setColor(this.moneyColor);
@@ -93,18 +104,20 @@ public class Canvas extends JPanel implements MessageHandler {
 
       this.drawSquare(g, drop.getPosition(), Drop.SIZE);
     }
+  }
 
+  private void drawEnemies (Graphics g, Room room) {
     for (Enemy enemy : room.getEnemies()) {
       g.setColor(this.enemyColor);
 
       this.drawSquare(g, enemy.getPosition(), Enemy.SIZE);
     }
+  }
 
+  private void drawPlayer (Graphics g, Player player) {
     g.setColor(this.playerColor);
 
-    this.drawSquare(g, this.world.getPlayer().getPosition(), Player.SIZE);
-
-    this.drawHpIndicator(g);
+    this.drawSquare(g, player.getPosition(), Player.SIZE);
   }
 
   /**
@@ -119,6 +132,9 @@ public class Canvas extends JPanel implements MessageHandler {
     g.drawString(String.format("%d / %d", this.world.getPlayer().getHitPoints(), this.world.getPlayer().getMaxHitPoints()), 60, 38);
   }
 
+  /**
+   * Draw a square with the positions converted from our abstract unit to pixels.
+   */
   private void drawSquare (Graphics g, Position position, int widthUnits) {
     g.fillRect((int)(position.getX() * this.xPixelPerUnit), (int)(position.getY() * this.yPixelPerUnit), (int)(widthUnits * this.xPixelPerUnit), (int)(widthUnits * this.yPixelPerUnit));
   }
