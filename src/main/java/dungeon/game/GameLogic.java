@@ -8,6 +8,9 @@ import dungeon.util.Vector;
 
 import java.util.EnumSet;
 import java.util.Set;
+import java.lang.System;
+
+
 
 /**
  * The game logic.
@@ -22,6 +25,8 @@ import java.util.Set;
  */
 public class GameLogic {
   private static final int SPEED = 1000;
+
+  private long lastDamageTime;
 
   private final Set<MoveCommand> activeMoveDirections = EnumSet.noneOf(MoveCommand.class);
 
@@ -68,7 +73,7 @@ public class GameLogic {
     this.handleEnemies(transaction);
     this.handleTeleporters(transaction);
     this.handleCheckpoint(transaction);
-    this.handleHealth(transaction);
+    this.handleLives(transaction);
 
     this.world = transaction.getWorld();
 
@@ -141,7 +146,9 @@ public class GameLogic {
    */
   private void handleEnemies (Transaction transaction) {
     for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
-      if (this.world.getPlayer().touches(enemy)) {
+      if (System.currentTimeMillis() - this.lastDamageTime > 1000 && this.world.getPlayer().touches(enemy)) {
+        this.lastDamageTime = System.currentTimeMillis();
+
         transaction.pushAndCommit(new Player.HitpointTransform(-enemy.getStrength()));
       }
     }
@@ -182,11 +189,12 @@ public class GameLogic {
   }
 
   /**
-   * Respawn player on checkpoint position if he dies
+   * Reset HP when players loses a life
    */
-  private void handleHealth (Transaction transaction) {
+  private void handleLives (Transaction transaction) {
     if (this.world.getPlayer().getHitPoints() == 0) {
       transaction.pushAndCommit(new Player.LivesTransform(-1));
+      transaction.pushAndCommit(new Player.HitpointTransform(this.world.getPlayer().getMaxHitPoints()));
     }
   }
 
