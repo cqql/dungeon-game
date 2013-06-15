@@ -1,9 +1,6 @@
 package dungeon.load.adapters;
 
-import dungeon.models.Enemy;
-import dungeon.models.Room;
-import dungeon.models.SavePoint;
-import dungeon.models.Tile;
+import dungeon.models.*;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -33,9 +30,13 @@ public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
   @XmlJavaTypeAdapter(TileAdapter.class)
   public List<Tile> tiles = new ArrayList<>();
 
+  @XmlElement(name = "drop")
+  @XmlJavaTypeAdapter(DropAdapter.class)
+  public List<Drop> drops = new ArrayList<>();
+
   @Override
   public Room unmarshal (RoomAdapter adapter) throws Exception {
-    return new Room(adapter.id, adapter.enemies, adapter.savePoints, adapter.tiles);
+    return new Room(adapter.id, adapter.enemies, adapter.savePoints, adapter.tiles, adapter.drops);
   }
 
   @Override
@@ -45,6 +46,7 @@ public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
     adapter.enemies = room.getEnemies();
     adapter.savePoints = room.getSavePoints();
     adapter.tiles = room.getTiles();
+    adapter.drops = room.getDrops();
 
     return adapter;
   }

@@ -8,6 +8,7 @@ import dungeon.util.Vector;
 
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * The game logic.
@@ -21,6 +22,8 @@ import java.util.Set;
  * for 150ms.
  */
 public class GameLogic {
+  private static final Logger LOGGER = Logger.getLogger(GameLogic.class.getName());
+
   private static final int SPEED = 1000;
 
   private final Set<MoveCommand> activeMoveDirections = EnumSet.noneOf(MoveCommand.class);
@@ -65,6 +68,7 @@ public class GameLogic {
     Transaction transaction = new Transaction(this.world);
 
     this.handleMovement(transaction, delta);
+    this.handleDrops(transaction);
     this.handleEnemies(transaction);
     this.handleTeleporters(transaction);
 
@@ -135,10 +139,31 @@ public class GameLogic {
   }
 
   /**
+   * Pickup drops that the player is touching.
+   */
+  private void handleDrops (Transaction transaction) {
+    for (Drop drop : transaction.getWorld().getCurrentRoom().getDrops()) {
+      if (this.world.getPlayer().touches(drop)) {
+        LOGGER.info("Pick up " + drop);
+
+        transaction.push(new Room.RemoveDropTransform(drop.getId()));
+
+        if (drop.isMoney()) {
+          transaction.push(new Player.MoneyTransform(drop.getMoney()));
+        } else {
+          transaction.push(new Player.AddItemTransform(drop.getItem()));
+        }
+
+        transaction.commit();
+      }
+    }
+  }
+
+  /**
    * Translate enemy contact into a transform.
    */
   private void handleEnemies (Transaction transaction) {
-    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
       if (this.world.getPlayer().touches(enemy)) {
         transaction.pushAndCommit(new Player.HitpointTransform(-enemy.getStrength()));
       }
@@ -149,7 +174,7 @@ public class GameLogic {
    * Create a teleport transform if the player touches a teleporter.
    */
   private void handleTeleporters (Transaction transaction) {
-    for (TeleporterTile teleporter : this.world.getCurrentRoom().getTeleporters()) {
+    for (TeleporterTile teleporter : transaction.getWorld().getCurrentRoom().getTeleporters()) {
       if (this.world.getPlayer().touches(teleporter)) {
         TeleporterTile.Target target = teleporter.getTarget();
 

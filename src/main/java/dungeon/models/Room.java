@@ -16,8 +16,14 @@ public class Room {
 
   private final List<Tile> tiles;
 
-  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles) {
+  /**
+   * Items lying around in the room.
+   */
+  private final List<Drop> drops;
+
+  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles, List<Drop> drops) {
     this.id = id;
+    this.drops = Collections.unmodifiableList(new ArrayList<>(drops));
     this.enemies = Collections.unmodifiableList(new ArrayList<>(enemies));
     this.savePoints = Collections.unmodifiableList(new ArrayList<>(savePoints));
     this.tiles = Collections.unmodifiableList(new ArrayList<>(tiles));
@@ -37,6 +43,10 @@ public class Room {
 
   public List<Tile> getTiles () {
     return this.tiles;
+  }
+
+  public List<Drop> getDrops () {
+    return this.drops;
   }
 
   /**
@@ -121,6 +131,30 @@ public class Room {
   }
 
   public Room apply (Transform transform) {
-    return this;
+    String id = this.id;
+    List<Enemy> enemies = this.enemies;
+    List<Tile> tiles = this.tiles;
+    List<SavePoint> savePoints = this.savePoints;
+    List<Drop> drops = this.drops;
+
+    if (transform instanceof RemoveDropTransform) {
+      drops = new ArrayList<>();
+
+      for (Drop drop : this.drops) {
+        if (drop.getId() != ((RemoveDropTransform)transform).dropId) {
+          drops.add(drop);
+        }
+      }
+    }
+
+    return new Room(id, enemies, savePoints, tiles, drops);
+  }
+
+  public static class RemoveDropTransform implements Transform {
+    private final int dropId;
+
+    public RemoveDropTransform (int dropId) {
+      this.dropId = dropId;
+    }
   }
 }
