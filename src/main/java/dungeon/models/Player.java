@@ -182,12 +182,12 @@ public class Player implements Spatial {
       TeleportTransform teleportTransform = (TeleportTransform)transform;
 
       roomId = teleportTransform.roomId;
-      position = new Position(teleportTransform.x, teleportTransform.y);
+      position = new Position(teleportTransform.position.getX(), teleportTransform.position.getY());
     } else if (transform instanceof SavePointTransform) {
       SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
 
       savePointRoomId = savePointTransform.roomId;
-      savePointPosition = new Position(savePointTransform.x, savePointTransform.y);
+      savePointPosition = new Position(savePointTransform.position.getX(), savePointTransform.position.getY());
     } else if (transform instanceof MoneyTransform) {
       money += ((MoneyTransform)transform).delta;
     } else if (transform instanceof AddItemTransform) {
@@ -228,28 +228,22 @@ public class Player implements Spatial {
   public static class TeleportTransform implements Transform {
     private final String roomId;
 
-    private final int x;
+    private final Position position;
 
-    private final int y;
-
-    public TeleportTransform (String roomId, int x, int y) {
+    public TeleportTransform (String roomId, Position position) {
       this.roomId = roomId;
-      this.x = x;
-      this.y = y;
+      this.position = position;
     }
   }
 
   public static class SavePointTransform implements Transform {
     private final String roomId;
 
-    private final int x;
+    private final Position position;
 
-    private final int y;
-
-    public SavePointTransform (String roomId, int x, int y) {
+    public SavePointTransform (String roomId, Position position) {
       this.roomId = roomId;
-      this.x = x;
-      this.y = y;
+      this.position = position;
     }
   }
 
