@@ -24,6 +24,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color enemyColor = new Color(33, 237, 60);
 
+  private final Color savePointColor = new Color(50, 122, 88);
+
   private final Color hpColor = new Color(235, 58, 58);
 
   private final Color white = new Color(255, 255, 255);
@@ -74,9 +76,11 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawTiles(g, room);
     this.drawDrops(g, room);
     this.drawEnemies(g, room);
+    this.drawSavepoints(g, room);
     this.drawPlayer(g, this.world.getPlayer());
     this.drawHpIndicator(g);
     this.drawMoneyIndicator(g);
+
   }
 
   private void drawTiles (Graphics g, Room room) {
@@ -112,6 +116,15 @@ public class Canvas extends JPanel implements MessageHandler {
       g.setColor(this.enemyColor);
 
       this.drawSquare(g, enemy.getPosition(), Enemy.SIZE);
+    }
+  }
+
+  private void drawSavepoints (Graphics g, Room room) {
+    for (SavePoint savePoint : room.getSavePoints()) {
+      Position position = savePoint.getPosition();
+
+      g.setColor(this.savePointColor);
+      this.drawSquare(g, savePoint.getPosition(), savePoint.SIZE);
     }
   }
 

@@ -26,6 +26,8 @@ public class GameLogic {
 
   private static final int SPEED = 1000;
 
+  private long lastDamageTime;
+
   private final Set<Direction> activeMoveDirections = EnumSet.noneOf(Direction.class);
 
   private Direction viewingDirection = Direction.RIGHT;
@@ -76,6 +78,8 @@ public class GameLogic {
     this.handleDrops(transaction);
     this.handleEnemies(transaction);
     this.handleTeleporters(transaction);
+    this.handleCheckpoint(transaction);
+    this.handleRespawn(transaction);
 
     this.world = transaction.getWorld();
 
@@ -177,8 +181,10 @@ public class GameLogic {
    * Translate enemy contact into a transform.
    */
   private void handleEnemies (Transaction transaction) {
-    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
-      if (this.world.getPlayer().touches(enemy)) {
+    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+      if (System.currentTimeMillis() - this.lastDamageTime > 1000 && this.world.getPlayer().touches(enemy)) {
+        this.lastDamageTime = System.currentTimeMillis();
+
         transaction.pushAndCommit(new Player.HitpointTransform(-enemy.getStrength()));
       }
     }
@@ -192,7 +198,7 @@ public class GameLogic {
       if (this.world.getPlayer().touches(teleporter)) {
         TeleporterTile.Target target = teleporter.getTarget();
 
-        transaction.pushAndCommit(new Player.TeleportTransform(target.getRoomId(), target.getX(), target.getY()));
+        transaction.pushAndCommit(new Player.TeleportTransform(target.getRoomId(), target.getPosition()));
 
         return;
       }
@@ -200,10 +206,35 @@ public class GameLogic {
   }
 
   /**
+   * Create a savepoint transform if the player touches a savepoint
+   */
+  private void handleCheckpoint (Transaction transaction) {
+    for (SavePoint savePoint : this.world.getCurrentRoom().getSavePoints()) {
+      if (this.world.getPlayer().touches(savePoint)) {
+        transaction.pushAndCommit(
+          new Player.SavePointTransform(this.world.getPlayer().getRoomId(), this.world.getPlayer().getPosition()));
+
+        return;
+      }
+    }
+  }
+
+  /**
+   * Reset HP when players loses a life and respawn the player if he dies
+   */
+  private void handleRespawn (Transaction transaction) {
+    if (this.world.getPlayer().getHitPoints() == 0) {
+      transaction.pushAndCommit(new Player.LivesTransform(-1));
+      transaction.pushAndCommit(new Player.HitpointTransform(this.world.getPlayer().getMaxHitPoints()));
+      transaction.pushAndCommit(new Player.TeleportTransform(this.world.getPlayer().getSavePointRoomId(), this.world.getPlayer().getSavePointPosition()));
+    }
+  }
+
+  /**
    * Set the game state to DEFEAT when the player's hit points drop to 0.
    */
   private void handleDefeat () {
-    if (this.world.getPlayer().getHitPoints() == 0) {
+    if (this.world.getPlayer().getLives() == 0) {
       this.gameState = GameState.DEFEAT;
     }
   }

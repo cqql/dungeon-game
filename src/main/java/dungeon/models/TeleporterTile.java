@@ -39,6 +39,10 @@ public class TeleporterTile extends Tile {
     public int getY () {
       return this.y;
     }
+
+    public Position getPosition () {
+      return new Position(this.x, this.y);
+    }
   }
 
   public TeleporterTile apply (Transform transform) {
