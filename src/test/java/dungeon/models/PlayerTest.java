@@ -14,7 +14,7 @@ public class PlayerTest {
 
   @Before
   public void setUp () {
-    this.player = new Player("player", 1, 5, 5, 0, new ArrayList<Item>(), "level", ROOM_ID, new Position(2000, 2000), ROOM_ID, new Position(0, 0));
+    this.player = new Player("player", 1, 5, 5, 0, new ArrayList<Item>(), "level", ROOM_ID, new Position(2000, 2000), Direction.RIGHT, ROOM_ID, new Position(0, 0));
   }
 
   @Test

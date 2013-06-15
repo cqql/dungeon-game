@@ -44,6 +44,11 @@ public class Player implements Spatial {
   private final Position position;
 
   /**
+   * In which direction is the player looking?
+   */
+  private final Direction viewingDirection;
+
+  /**
    * In which room was the player, when he activated the current save point?
    *
    * Whenever the player enters a new level, this should be reset to the starting room's id.
@@ -57,7 +62,7 @@ public class Player implements Spatial {
    */
   private final Position savePointPosition;
 
-  public Player (String name, int lives, int hitPoints, int maxHitPoints, int money, List<Item> items, String levelId, String roomId, Position position, String savePointRoomId, Position savePointPosition) {
+  public Player (String name, int lives, int hitPoints, int maxHitPoints, int money, List<Item> items, String levelId, String roomId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
     this.name = name;
     this.lives = lives;
     this.hitPoints = hitPoints;
@@ -67,6 +72,7 @@ public class Player implements Spatial {
     this.levelId = levelId;
     this.roomId = roomId;
     this.position = position;
+    this.viewingDirection = viewingDirection;
     this.savePointRoomId = savePointRoomId;
     this.savePointPosition = savePointPosition;
   }
@@ -107,6 +113,10 @@ public class Player implements Spatial {
     return this.position;
   }
 
+  public Direction getViewingDirection () {
+    return this.viewingDirection;
+  }
+
   public String getSavePointRoomId () {
     return this.savePointRoomId;
   }
@@ -136,6 +146,7 @@ public class Player implements Spatial {
     String levelId = this.levelId;
     String roomId = this.roomId;
     Position position = this.position;
+    Direction viewingDirection = this.viewingDirection;
     String savePointRoomId = this.savePointRoomId;
     Position savePointPosition = this.savePointPosition;
 
@@ -143,6 +154,8 @@ public class Player implements Spatial {
       MoveTransform move = (MoveTransform)transform;
 
       position = new Position(this.position.getX() + move.xDelta, this.position.getY() + move.yDelta);
+    } else if (transform instanceof ViewingDirectionTransform) {
+      viewingDirection = ((ViewingDirectionTransform)transform).direction;
     } else if (transform instanceof HitpointTransform) {
       HitpointTransform hpTransform = (HitpointTransform)transform;
 
@@ -159,7 +172,7 @@ public class Player implements Spatial {
       items.add(((AddItemTransform)transform).item);
     }
 
-    return new Player(name, lives, hitPoints, maxHitPoints, money, items, levelId, roomId, position, savePointRoomId, savePointPosition);
+    return new Player(name, lives, hitPoints, maxHitPoints, money, items, levelId, roomId, position, viewingDirection, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {
@@ -208,6 +221,14 @@ public class Player implements Spatial {
 
     public AddItemTransform (Item item) {
       this.item = item;
+    }
+  }
+
+  public static class ViewingDirectionTransform implements Transform {
+    private final Direction direction;
+
+    public ViewingDirectionTransform (Direction direction) {
+      this.direction = direction;
     }
   }
 }
