@@ -16,8 +16,14 @@ public class Room {
 
   private final List<Tile> tiles;
 
-  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles) {
+  /**
+   * Items lying around in the room.
+   */
+  private final List<Drop> drops;
+
+  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles, List<Drop> drops) {
     this.id = id;
+    this.drops = Collections.unmodifiableList(new ArrayList<>(drops));
     this.enemies = Collections.unmodifiableList(new ArrayList<>(enemies));
     this.savePoints = Collections.unmodifiableList(new ArrayList<>(savePoints));
     this.tiles = Collections.unmodifiableList(new ArrayList<>(tiles));
@@ -37,6 +43,10 @@ public class Room {
 
   public List<Tile> getTiles () {
     return this.tiles;
+  }
+
+  public List<Drop> getDrops () {
+    return this.drops;
   }
 
   /**
