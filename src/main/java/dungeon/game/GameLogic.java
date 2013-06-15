@@ -142,7 +142,7 @@ public class GameLogic {
    * Pickup drops that the player is touching.
    */
   private void handleDrops (Transaction transaction) {
-    for (Drop drop : this.world.getCurrentRoom().getDrops()) {
+    for (Drop drop : transaction.getWorld().getCurrentRoom().getDrops()) {
       if (this.world.getPlayer().touches(drop)) {
         LOGGER.info("Pick up " + drop);
 
@@ -161,7 +161,7 @@ public class GameLogic {
    * Translate enemy contact into a transform.
    */
   private void handleEnemies (Transaction transaction) {
-    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
+    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
       if (this.world.getPlayer().touches(enemy)) {
         transaction.pushAndCommit(new Player.HitpointTransform(-enemy.getStrength()));
       }
@@ -172,7 +172,7 @@ public class GameLogic {
    * Create a teleport transform if the player touches a teleporter.
    */
   private void handleTeleporters (Transaction transaction) {
-    for (TeleporterTile teleporter : this.world.getCurrentRoom().getTeleporters()) {
+    for (TeleporterTile teleporter : transaction.getWorld().getCurrentRoom().getTeleporters()) {
       if (this.world.getPlayer().touches(teleporter)) {
         TeleporterTile.Target target = teleporter.getTarget();
 
