@@ -182,12 +182,12 @@ public class Player implements Spatial {
       TeleportTransform teleportTransform = (TeleportTransform)transform;
 
       roomId = teleportTransform.roomId;
-      position = new Position(teleportTransform.position.getX(), teleportTransform.position.getY());
+      position = teleportTransform.position;
     } else if (transform instanceof SavePointTransform) {
       SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
 
       savePointRoomId = savePointTransform.roomId;
-      savePointPosition = new Position(savePointTransform.position.getX(), savePointTransform.position.getY());
+      savePointPosition = savePointTransform.position;
     } else if (transform instanceof MoneyTransform) {
       money += ((MoneyTransform)transform).delta;
     } else if (transform instanceof AddItemTransform) {
