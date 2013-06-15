@@ -124,7 +124,7 @@ public class Canvas extends JPanel implements MessageHandler {
       Position position = savePoint.getPosition();
 
       g.setColor(this.savePointColor);
-      g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(savePoint.SIZE * xPixelPerUnit), (int)(savePoint.SIZE * yPixelPerUnit));
+      this.drawSquare(g, savePoint.getPosition(), savePoint.SIZE);
     }
   }
 
