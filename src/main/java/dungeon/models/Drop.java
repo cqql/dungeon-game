@@ -6,6 +6,8 @@ package dungeon.models;
  * It can be either an amount of money (item == null) or an item (money == 0).
  */
 public class Drop {
+  public static final int SIZE = 500;
+
   private final Position position;
 
   private final Item item;
@@ -24,6 +26,13 @@ public class Drop {
 
   public Item getItem () {
     return this.item;
+  }
+
+  /**
+   * @return true if the drop is a money drop.
+   */
+  public boolean isMoney () {
+    return money != 0;
   }
 
   public int getMoney () {

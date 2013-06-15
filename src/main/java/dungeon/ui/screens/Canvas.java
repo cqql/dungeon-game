@@ -28,6 +28,10 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color white = new Color(255, 255, 255);
 
+  private final Color moneyColor = new Color(253, 225, 54);
+
+  private final Color itemColor = new Color(151, 151, 151);
+
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
   private World world;
@@ -72,6 +76,18 @@ public class Canvas extends JPanel implements MessageHandler {
       }
 
       g.fillRect((int)(tile.getPosition().getX() * xPixelPerUnit), (int)(tile.getPosition().getY() * yPixelPerUnit), (int)(Tile.SIZE * xPixelPerUnit), (int)(Tile.SIZE * yPixelPerUnit));
+    }
+
+    for (Drop drop : room.getDrops()) {
+      Position position = drop.getPosition();
+
+      if (drop.isMoney()) {
+        g.setColor(this.moneyColor);
+      } else {
+        g.setColor(this.itemColor);
+      }
+
+      g.fillRect((int)(position.getX() * xPixelPerUnit), (int)(position.getY() * yPixelPerUnit), (int)(Drop.SIZE * xPixelPerUnit), (int)(Drop.SIZE * yPixelPerUnit));
     }
 
     for (Enemy enemy : room.getEnemies()) {

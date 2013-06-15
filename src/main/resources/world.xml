@@ -34,7 +34,7 @@
         <target roomId="room-2" x="0" y="1000" />
       </teleporter>
       <drop money="0">
-        <position x="1500" y="1500"></position>
+        <position x="1500" y="500"></position>
         <item></item>
       </drop>
       <drop money="20">
