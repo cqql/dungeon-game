@@ -1,10 +1,10 @@
 package dungeon.messages;
 
-import dungeon.Log;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A mailbox that puts messages in queue and passes them FIFO to a message handler.
@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
  * This class is thread-safe.
  */
 public final class QueueMailbox extends AbstractMailbox {
+  private static final Logger logger = Logger.getLogger(QueueMailbox.class.getName());
+
   private static final int WAIT_TIME = 10;
 
   private final MessageHandler messageHandler;
@@ -37,7 +39,7 @@ public final class QueueMailbox extends AbstractMailbox {
           this.messageHandler.handleMessage(message);
         }
       } catch (InterruptedException e) {
-        Log.notice("QueueMailbox interrupted while running", e);
+        logger.log(Level.WARNING, "QueueMailbox interrupted while running", e);
 
         this.shutdown();
       }
@@ -51,7 +53,7 @@ public final class QueueMailbox extends AbstractMailbox {
     try {
       this.messageQueue.put(message);
     } catch (InterruptedException e) {
-      Log.notice("QueueMailbox interrupted while receiving an message", e);
+      logger.log(Level.WARNING, "QueueMailbox interrupted while receiving an message", e);
     }
   }
 }

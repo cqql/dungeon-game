@@ -9,8 +9,6 @@ import dungeon.ui.screens.*;
 
 public class Main {
   public static void main (String[] args) {
-    Log.setLevel(Log.Level.NOTICE);
-
     Mailman mailman = new Mailman();
 
     InputToMessageConverter converter = new InputToMessageConverter(mailman);

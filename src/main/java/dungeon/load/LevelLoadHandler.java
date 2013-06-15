@@ -1,6 +1,5 @@
 package dungeon.load;
 
-import dungeon.Log;
 import dungeon.load.adapters.WorldAdapter;
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
@@ -10,8 +9,12 @@ import dungeon.models.World;
 import dungeon.ui.messages.MenuCommand;
 
 import javax.xml.bind.JAXB;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LevelLoadHandler implements MessageHandler {
+  private static final Logger logger = Logger.getLogger(LevelLoadHandler.class.getName());
+
   private final Mailman mailman;
 
   public LevelLoadHandler (Mailman mailman) {
@@ -28,7 +31,7 @@ public class LevelLoadHandler implements MessageHandler {
 
         this.mailman.send(new LevelLoadedEvent(world));
       } catch (Exception e) {
-        Log.error("Loading the world failed", e);
+        logger.log(Level.SEVERE, "Loading the world failed", e);
       }
     }
   }
