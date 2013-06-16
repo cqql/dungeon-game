@@ -29,6 +29,8 @@ public class InputToMessageConverter implements KeyListener {
 
     if (command != null) {
       this.mailman.send(new StartCommand(command));
+    }  else if (keyEvent.getKeyChar() == 'i') {
+      this.mailman.send(new ShowInventory());
     }
   }
 

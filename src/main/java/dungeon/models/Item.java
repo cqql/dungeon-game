@@ -1,5 +1,7 @@
 package dungeon.models;
 
+import dungeon.game.Transaction;
+
 /**
  * This can be any item, that could exist - A sword, a shield, a potion, etc.
  */
@@ -21,6 +23,10 @@ public class Item {
     return this.type;
   }
 
+  public void use (Transaction transaction) {
+    this.type.use(transaction);
+  }
+
   @Override
   public String toString () {
     return "Item#" + this.id + " " + this.type;
@@ -38,7 +44,7 @@ public class Item {
 
     Item item = (Item)o;
 
-    if (id != item.id) {
+    if (this.id != item.id) {
       return false;
     }
 
@@ -47,6 +53,6 @@ public class Item {
 
   @Override
   public int hashCode () {
-    return id;
+    return this.id;
   }
 }

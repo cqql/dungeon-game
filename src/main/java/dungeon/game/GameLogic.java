@@ -7,6 +7,7 @@ import dungeon.ui.messages.MoveCommand;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +49,8 @@ public class GameLogic {
   private boolean useIceBolt;
 
   private boolean useHealthPotion;
+
+  private final List<Item> useItems = new ArrayList<>();
 
   private long lastAttackTime;
 
@@ -101,6 +104,13 @@ public class GameLogic {
   }
 
   /**
+   * Use {@code item} during the next pulse.
+   */
+  public void useItem (Item item) {
+    this.useItems.add(item);
+  }
+
+  /**
    * Set the ice bolt attacking flag.
    */
   public void activateIceBolt () {
@@ -132,6 +142,7 @@ public class GameLogic {
     Transaction transaction = new Transaction(this.world);
 
     this.handleHealthPotion(transaction);
+    this.useItems(transaction);
     this.handleMovement(transaction, delta);
     this.handleProjectiles(transaction, delta);
     this.updateViewingDirection(transaction);
@@ -166,12 +177,25 @@ public class GameLogic {
       if (healthPotions.size() > 0) {
         Item healthPotion = healthPotions.get(0);
 
-        transaction.push(new Player.HitpointTransform(healthPotion.getType().getHitPointDelta()));
-        transaction.push(new Player.RemoveItemTransform(healthPotion));
-
-        transaction.commit();
+        healthPotion.use(transaction);
+        transaction.pushAndCommit(new Player.RemoveItemTransform(healthPotion));
       }
     }
+  }
+
+  /**
+   * Use the items, that have been requested.
+   */
+  private void useItems (Transaction transaction) {
+    for (Item item : this.useItems) {
+      LOGGER.info("Use item " + item);
+
+      item.use(transaction);
+
+      transaction.pushAndCommit(new Player.RemoveItemTransform(item));
+    }
+
+    this.useItems.clear();
   }
 
   private void handleMovement (Transaction transaction, double delta) {

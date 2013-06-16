@@ -1,7 +1,21 @@
 package dungeon.models;
 
+import dungeon.game.Transaction;
+
 public enum ItemType {
-  HEALTH_POTION(true, false, 5);
+  HEALTH_POTION("Heiltrank", true, false, 5) {
+    @Override
+    public String getDescription () {
+      return "Heilt " + this.getHitPointDelta() + " HP";
+    }
+
+    @Override
+    public void use (Transaction transaction) {
+      transaction.pushAndCommit(new Player.HitpointTransform(this.getHitPointDelta()));
+    }
+  };
+
+  private final String name;
 
   private final boolean useable;
 
@@ -9,22 +23,36 @@ public enum ItemType {
 
   private final int hitPointDelta;
 
-  private ItemType (boolean useable, boolean equipable, int hitPointDelta) {
+  private ItemType (String name, boolean useable, boolean equipable, int hitPointDelta) {
+    this.name = name;
     this.useable = useable;
     this.equipable = equipable;
     this.hitPointDelta = hitPointDelta;
   }
 
+  public String getName () {
+    return this.name;
+  }
+
+  public abstract String getDescription ();
+
   public boolean isUseable () {
-    return useable;
+    return this.useable;
   }
 
   public boolean isEquipable () {
-    return equipable;
+    return this.equipable;
   }
 
   public int getHitPointDelta () {
-    return hitPointDelta;
+    return this.hitPointDelta;
+  }
+
+  /**
+   * Use the item, e.g. apply the appropriate transforms.
+   */
+  public void use (Transaction transaction) {
+
   }
 
   @Override
