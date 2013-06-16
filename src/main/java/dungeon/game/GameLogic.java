@@ -50,6 +50,8 @@ public class GameLogic {
 
   private boolean useHealthPotion;
 
+  private boolean useManaPotion;
+
   private final List<Item> useItems = new ArrayList<>();
 
   private long lastAttackTime;
@@ -104,6 +106,13 @@ public class GameLogic {
   }
 
   /**
+   * Use a mana potion during the next pulse.
+   */
+  public void useManaPotion () {
+    this.useManaPotion = true;
+  }
+
+  /**
    * Use {@code item} during the next pulse.
    */
   public void useItem (Item item) {
@@ -142,6 +151,7 @@ public class GameLogic {
     Transaction transaction = new Transaction(this.world);
 
     this.handleHealthPotion(transaction);
+    this.handleManaPotion(transaction);
     this.useItems(transaction);
     this.handleMovement(transaction, delta);
     this.handleProjectiles(transaction, delta);
@@ -179,6 +189,25 @@ public class GameLogic {
 
         healthPotion.use(transaction);
         transaction.pushAndCommit(new Player.RemoveItemTransform(healthPotion));
+      }
+    }
+  }
+
+  /**
+   * Use a mana potion if the player has one.
+   */
+  private void handleManaPotion (Transaction transaction) {
+    if (this.useManaPotion) {
+      this.useManaPotion = false;
+
+
+    List<Item> manaPotions = transaction.getWorld().getPlayer().getManaPotions();
+
+      if (manaPotions.size() > 0) {
+        Item manaPotion = manaPotions.get(0);
+
+        manaPotion.use(transaction);
+        transaction.pushAndCommit(new Player.RemoveItemTransform(manaPotion));
       }
     }
   }
