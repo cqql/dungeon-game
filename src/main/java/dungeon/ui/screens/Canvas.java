@@ -38,9 +38,9 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color itemColor = new Color(151, 151, 151);
 
-  private final Color healthPotionColor = new Color (200, 0, 0);
+  private final Color healthPotionColor = new Color(200, 0, 0);
 
-  private final Color manaPotionColor = new Color (0, 170, 255);
+  private final Color manaPotionColor = new Color(0, 170, 255);
 
   private final Color projectileColor = new Color(118, 77, 0);
 
@@ -95,6 +95,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawMoneyIndicator(g);
     this.drawLifeIndicator(g);
     this.drawManaIndicator(g);
+    this.drawWeaponIndicator(g);
   }
 
   private void drawTiles (Graphics g, Room room) {
@@ -196,6 +197,12 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.white);
     g.setFont(this.font);
     g.drawString(String.format("%d / %d", this.world.getPlayer().getMana(), this.world.getPlayer().getMaxMana()), 60, 158);
+  }
+
+  private void drawWeaponIndicator (Graphics g) {
+    g.setColor(this.white);
+    g.setFont(this.font);
+    g.drawString(String.format("%s", this.world.getPlayer().getWeaponId()), 120, 38);
   }
 
   /**
