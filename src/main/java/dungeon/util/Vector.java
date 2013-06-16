@@ -4,11 +4,6 @@ package dungeon.util;
  * An immutable 2D-vector.
  */
 public class Vector {
-  /**
-   * How close a vector has to be to zero, to be considered the null vector.
-   */
-  private static final double ZERO_PRECISION = 0.00000000001;
-
   private final double x;
 
   private final double y;
@@ -46,7 +41,7 @@ public class Vector {
    * @return true if the vector is the null vector
    */
   public boolean isZero () {
-    return Math.abs(this.x) < ZERO_PRECISION && Math.abs(this.y) < ZERO_PRECISION;
+    return Double.compare(this.x, 0) == 0 && Double.compare(this.y, 0) == 0;
   }
 
   public double getX () {
