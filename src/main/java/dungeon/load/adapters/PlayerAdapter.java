@@ -14,6 +14,9 @@ import java.util.List;
 
 public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
   @XmlAttribute
+  public int id;
+
+  @XmlAttribute
   public String name;
 
   @XmlAttribute
@@ -52,12 +55,13 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
 
   @Override
   public Player unmarshal (PlayerAdapter adapter) throws Exception {
-    return new Player(adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.items, adapter.levelId, adapter.roomId, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
+    return new Player(adapter.id, adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.items, adapter.levelId, adapter.roomId, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
   }
 
   @Override
   public PlayerAdapter marshal (Player player) throws Exception {
     PlayerAdapter adapter = new PlayerAdapter();
+    adapter.id = player.getId();
     adapter.name = player.getName();
     adapter.lives = player.getLives();
     adapter.hitPoints = player.getHitPoints();

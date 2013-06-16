@@ -28,7 +28,8 @@ public class RoomTest {
         new Tile(true, new Position(3000, 0)),
         new TeleporterTile(new Position(0, 4000), new TeleporterTile.Target(ROOM_ID, 0, 0))
       ),
-      new ArrayList<Drop>());
+      new ArrayList<Drop>(),
+      new ArrayList<Projectile>());
   }
 
   @Test

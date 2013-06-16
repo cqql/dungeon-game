@@ -14,7 +14,7 @@ public class PlayerTest {
 
   @Before
   public void setUp () {
-    this.player = new Player("player", 1, 5, 5, 0, new ArrayList<Item>(), "level", ROOM_ID, new Position(2000, 2000), Direction.RIGHT, ROOM_ID, new Position(0, 0));
+    this.player = new Player(0, "player", 1, 5, 5, 0, new ArrayList<Item>(), "level", ROOM_ID, new Position(2000, 2000), Direction.RIGHT, ROOM_ID, new Position(0, 0));
   }
 
   @Test
@@ -33,35 +33,26 @@ public class PlayerTest {
   }
 
   @Test
-  public void touchesOverlappingEnemy () {
-    Enemy enemy = new Enemy(new Position(1500, 1500));
-
-    assertTrue(this.player.touches(enemy));
-  }
-
-  @Test
-  public void doesNotTouchDistantEnemy () {
-    Enemy enemy = new Enemy(new Position(0, 0));
-
-    assertFalse(this.player.touches(enemy));
-  }
-
-  @Test
-  public void touchesOverlappingTile () {
-    assertTrue(this.player.touches(new Tile(false, new Position(1500, 1500))));
-  }
-
-  @Test
-  public void doesNotTouchDistantTile () {
-    assertFalse(this.player.touches(new Tile(false, new Position(1500, 3500))));
-  }
-
-  @Test
   public void teleportTransformUpdatesPosition () {
     Player teleported = this.player.apply(new Player.TeleportTransform("another-room", new Position(5, 1)));
 
     assertEquals("another-room", teleported.getRoomId());
     assertEquals(5, teleported.getPosition().getX());
     assertEquals(1, teleported.getPosition().getY());
+  }
+
+  @Test
+  public void playerShootsInViewingDirection () {
+    Projectile projectile = player.shootProjectile(1);
+
+    assertEquals(Direction.RIGHT.getVector(), projectile.getVelocity().normalize());
+  }
+
+  @Test
+  public void playerShootsFromHip () {
+    Projectile projectile = player.shootProjectile(1);
+
+    assertTrue(projectile.getPosition().getX() >= player.getPosition().getX() + Player.SIZE - Projectile.SIZE);
+    assertTrue(projectile.getPosition().getY() <= player.getPosition().getY() + (Player.SIZE / 2));
   }
 }

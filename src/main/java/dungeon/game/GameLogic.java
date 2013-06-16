@@ -6,6 +6,7 @@ import dungeon.models.messages.Transform;
 import dungeon.ui.messages.MoveCommand;
 import dungeon.util.Vector;
 
+import java.awt.geom.Rectangle2D;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -26,11 +27,24 @@ public class GameLogic {
 
   private static final int SPEED = 1000;
 
+  /**
+   * The next available ID.
+   *
+   * IDs in maps may only be between 0 and 999999.
+   *
+   * @see #nextId()
+   */
+  private int nextId = 1000000;
+
   private long lastDamageTime;
 
   private final Set<Direction> activeMoveDirections = EnumSet.noneOf(Direction.class);
 
   private Direction viewingDirection = Direction.RIGHT;
+
+  private boolean attacking;
+
+  private long lastAttackTime;
 
   private GameState gameState = GameState.PLAYING;
 
@@ -57,6 +71,20 @@ public class GameLogic {
   }
 
   /**
+   * Set the attacking flag.
+   */
+  public void activateAttack () {
+    this.attacking = true;
+  }
+
+  /**
+   * Reset the attacking flag.
+   */
+  public void deactivateAttack () {
+    this.attacking = false;
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -74,12 +102,15 @@ public class GameLogic {
     Transaction transaction = new Transaction(this.world);
 
     this.handleMovement(transaction, delta);
+    this.handleProjectiles(transaction, delta);
     this.updateViewingDirection(transaction);
     this.handleDrops(transaction);
     this.handleEnemies(transaction);
+    this.handleEnemyLives(transaction);
     this.handleTeleporters(transaction);
     this.handleCheckpoint(transaction);
     this.handleRespawn(transaction);
+    this.handleAttacking(transaction);
 
     this.world = transaction.getWorld();
 
@@ -92,8 +123,11 @@ public class GameLogic {
   private void handleMovement (Transaction transaction, double delta) {
     Transform movementTransform = moveTransform(delta);
     movementTransform = filterWalls(movementTransform);
+    Player movedPlayer = transaction.getWorld().getPlayer().apply(movementTransform);
 
-    transaction.pushAndCommit(filterBorders(movementTransform));
+    if (!this.outOfBorders(movedPlayer, transaction.getWorld().getCurrentRoom())) {
+      transaction.pushAndCommit(movementTransform);
+    }
   }
 
   /**
@@ -123,7 +157,7 @@ public class GameLogic {
     Player movedPlayer = this.world.getPlayer().apply(transform);
 
     for (Tile wall : this.world.getCurrentRoom().getWalls()) {
-      if (movedPlayer.touches(wall)) {
+      if (this.touch(movedPlayer, wall)) {
         return new IdentityTransform();
       }
     }
@@ -132,18 +166,41 @@ public class GameLogic {
   }
 
   /**
-   * Prevent movement if the player would leave the playing field.
+   * Move the projectiles and collide it with walls and borders.
    */
-  private Transform filterBorders (Transform transform) {
-    Player movedPlayer = this.world.getPlayer().apply(transform);
+  private void handleProjectiles (Transaction transaction, double delta) {
+    Room room = transaction.getWorld().getCurrentRoom();
 
-    if (movedPlayer.getPosition().getY() < 0
-      || movedPlayer.getPosition().getY() + Player.SIZE > this.world.getCurrentRoom().getYSize()
-      || movedPlayer.getPosition().getX() < 0
-      || movedPlayer.getPosition().getX() + Player.SIZE > this.world.getCurrentRoom().getXSize()) {
-      return new IdentityTransform();
-    } else {
-      return transform;
+    for (Projectile projectile : room.getProjectiles()) {
+      transaction.pushAndCommit(new Projectile.MoveTransform(projectile.getId(), new Position(projectile.getPosition().getVector().plus(projectile.getVelocity().times(delta)))));
+
+      for (Tile wall : room.getWalls()) {
+        if (this.touch(wall, projectile)) {
+          transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+          break;
+        }
+      }
+
+      if (this.outOfBorders(projectile, room)) {
+        transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+        break;
+      }
+
+      Player player = transaction.getWorld().getPlayer();
+
+      if (this.touch(player, projectile) && !player.equals(projectile.getSource())) {
+        this.damagePlayer(transaction, projectile.getDamage());
+        transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+        break;
+      }
+
+      for (Enemy enemy : room.getEnemies()) {
+        if (this.touch(enemy, projectile) && !enemy.equals(projectile.getSource())) {
+          this.damageEnemy(transaction, enemy, projectile.getDamage());
+          transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+          break;
+        }
+      }
     }
   }
 
@@ -161,7 +218,7 @@ public class GameLogic {
    */
   private void handleDrops (Transaction transaction) {
     for (Drop drop : transaction.getWorld().getCurrentRoom().getDrops()) {
-      if (this.world.getPlayer().touches(drop)) {
+      if (this.touch(transaction.getWorld().getPlayer(), drop)) {
         LOGGER.info("Pick up " + drop);
 
         transaction.push(new Room.RemoveDropTransform(drop.getId()));
@@ -178,14 +235,23 @@ public class GameLogic {
   }
 
   /**
-   * Translate enemy contact into a transform.
+   * Damage player on enemy contact.
    */
   private void handleEnemies (Transaction transaction) {
-    for (Enemy enemy : this.world.getCurrentRoom().getEnemies()) {
-      if (System.currentTimeMillis() - this.lastDamageTime > 1000 && this.world.getPlayer().touches(enemy)) {
-        this.lastDamageTime = System.currentTimeMillis();
+    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
+      if (this.touch(transaction.getWorld().getPlayer(), enemy)) {
+        this.damagePlayer(transaction, enemy.getStrength());
+      }
+    }
+  }
 
-        transaction.pushAndCommit(new Player.HitpointTransform(-enemy.getStrength()));
+  /**
+   * Destroy enemies when their hit points drop below 0.
+   */
+  private void handleEnemyLives (Transaction transaction) {
+    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
+      if (enemy.getHitPoints() <= 0) {
+        transaction.pushAndCommit(new Room.RemoveEnemyTransform(enemy));
       }
     }
   }
@@ -195,7 +261,7 @@ public class GameLogic {
    */
   private void handleTeleporters (Transaction transaction) {
     for (TeleporterTile teleporter : transaction.getWorld().getCurrentRoom().getTeleporters()) {
-      if (this.world.getPlayer().touches(teleporter)) {
+      if (this.touch(transaction.getWorld().getPlayer(), teleporter)) {
         TeleporterTile.Target target = teleporter.getTarget();
 
         transaction.pushAndCommit(new Player.TeleportTransform(target.getRoomId(), target.getPosition()));
@@ -209,10 +275,13 @@ public class GameLogic {
    * Create a savepoint transform if the player touches a savepoint
    */
   private void handleCheckpoint (Transaction transaction) {
-    for (SavePoint savePoint : this.world.getCurrentRoom().getSavePoints()) {
-      if (this.world.getPlayer().touches(savePoint)) {
+    Player player = transaction.getWorld().getPlayer();
+
+    for (SavePoint savePoint : transaction.getWorld().getCurrentRoom().getSavePoints()) {
+      if (this.touch(player, savePoint)) {
         transaction.pushAndCommit(
-          new Player.SavePointTransform(this.world.getPlayer().getRoomId(), this.world.getPlayer().getPosition()));
+          new Player.SavePointTransform(player.getRoomId(), player.getPosition())
+        );
 
         return;
       }
@@ -223,10 +292,12 @@ public class GameLogic {
    * Reset HP when players loses a life and respawn the player if he dies
    */
   private void handleRespawn (Transaction transaction) {
-    if (this.world.getPlayer().getHitPoints() == 0) {
+    Player player = transaction.getWorld().getPlayer();
+
+    if (player.getHitPoints() == 0) {
       transaction.pushAndCommit(new Player.LivesTransform(-1));
-      transaction.pushAndCommit(new Player.HitpointTransform(this.world.getPlayer().getMaxHitPoints()));
-      transaction.pushAndCommit(new Player.TeleportTransform(this.world.getPlayer().getSavePointRoomId(), this.world.getPlayer().getSavePointPosition()));
+      transaction.pushAndCommit(new Player.HitpointTransform(player.getMaxHitPoints()));
+      transaction.pushAndCommit(new Player.TeleportTransform(player.getSavePointRoomId(), player.getSavePointPosition()));
     }
   }
 
@@ -244,9 +315,65 @@ public class GameLogic {
    */
   private void handleWin () {
     for (VictoryTile tile : this.world.getCurrentRoom().getVictoryTiles()) {
-      if (this.world.getPlayer().touches(tile)) {
+      if (this.touch(this.world.getPlayer(), tile)) {
         this.gameState = GameState.VICTORY;
       }
     }
+  }
+
+  /**
+   * Create a new projectile if the player is attacking.
+   */
+  private void handleAttacking (Transaction transaction) {
+    if (this.attacking && System.currentTimeMillis() - this.lastAttackTime > 200) {
+      this.lastAttackTime = System.currentTimeMillis();
+
+      Player player = transaction.getWorld().getPlayer();
+
+      Projectile projectile = player.shootProjectile(this.nextId());
+
+      transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
+    }
+  }
+
+  /**
+   * Returns a free ID.
+   */
+  private int nextId () {
+    return this.nextId++;
+  }
+
+  /**
+   * Inflict {@code amount} damage on player if he has not suffered any damage lately.
+   */
+  private void damagePlayer (Transaction transaction, int amount) {
+    if (System.currentTimeMillis() - this.lastDamageTime > 1000) {
+      this.lastDamageTime = System.currentTimeMillis();
+
+      transaction.pushAndCommit(new Player.HitpointTransform(-amount));
+    }
+  }
+
+  /**
+   * Inflict {@code amount} damage on {@code enemy}.
+   */
+  private void damageEnemy (Transaction transaction, Enemy enemy, int amount) {
+    transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -amount));
+  }
+
+  /**
+   * Helper to check if two spatial objects touch.
+   */
+  private boolean touch (Spatial a, Spatial b) {
+    return a.space().intersects(b.space());
+  }
+
+  /**
+   * Helper to check if a spatial object is out of the playing field.
+   */
+  private boolean outOfBorders (Spatial object, Room room) {
+    Rectangle2D space = object.space();
+
+    return space.getMinX() < 0 || space.getMinY() < 0 || space.getMaxX() > room.getXSize() || space.getMinY() > room.getYSize();
   }
 }
