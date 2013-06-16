@@ -64,6 +64,8 @@ public class LogicHandler implements MessageHandler {
       this.logic.activateIceBolt();
     } else if (command instanceof HealthPotionCommand) {
       this.logic.useHealthPotion();
+    } else if (command instanceof ManaPotionCommand) {
+      this.logic.useManaPotion();
     }
   }
 
