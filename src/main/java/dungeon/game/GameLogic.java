@@ -184,6 +184,10 @@ public class GameLogic {
 
         break;
       }
+
+      if (this.touch(transaction.getWorld().getPlayer(), projectile)) {
+        this.damagePlayer(transaction, projectile.getDamage());
+      }
     }
   }
 
@@ -218,14 +222,12 @@ public class GameLogic {
   }
 
   /**
-   * Translate enemy contact into a transform.
+   * Damage player on enemy contact.
    */
   private void handleEnemies (Transaction transaction) {
     for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
-      if (System.currentTimeMillis() - this.lastDamageTime > 1000 && this.touch(transaction.getWorld().getPlayer(), enemy)) {
-        this.lastDamageTime = System.currentTimeMillis();
-
-        transaction.pushAndCommit(new Player.HitpointTransform(-enemy.getStrength()));
+      if (this.touch(transaction.getWorld().getPlayer(), enemy)) {
+        this.damagePlayer(transaction, enemy.getStrength());
       }
     }
   }
@@ -313,6 +315,17 @@ public class GameLogic {
    */
   private int nextId () {
     return this.nextId++;
+  }
+
+  /**
+   * Inflict {@code amount} damage on player if he has not suffered any damage lately.
+   */
+  private void damagePlayer (Transaction transaction, int amount) {
+    if (System.currentTimeMillis() - this.lastDamageTime > 1000) {
+      this.lastDamageTime = System.currentTimeMillis();
+
+      transaction.pushAndCommit(new Player.HitpointTransform(-amount));
+    }
   }
 
   /**
