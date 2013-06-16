@@ -30,7 +30,7 @@ public class ProjectileAdapter extends XmlAdapter<ProjectileAdapter, Projectile>
     ProjectileAdapter adapter = new ProjectileAdapter();
     adapter.id = projectile.getId();
     adapter.position = projectile.getPosition();
-    adapter.direction = projectile.getDirection();
+    adapter.direction = projectile.getVelocity();
     adapter.damage = projectile.getDamage();
 
     return adapter;

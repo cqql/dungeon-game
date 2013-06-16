@@ -99,6 +99,7 @@ public class GameLogic {
     Transaction transaction = new Transaction(this.world);
 
     this.handleMovement(transaction, delta);
+    this.handleProjectiles(transaction, delta);
     this.updateViewingDirection(transaction);
     this.handleDrops(transaction);
     this.handleEnemies(transaction);
@@ -170,6 +171,15 @@ public class GameLogic {
       return new IdentityTransform();
     } else {
       return transform;
+    }
+  }
+
+  /**
+   * Move the projectiles.
+   */
+  private void handleProjectiles (Transaction transaction, double delta) {
+    for (Projectile projectile : transaction.getWorld().getCurrentRoom().getProjectiles()) {
+      transaction.pushAndCommit(new Projectile.MoveTransform(projectile.getId(), new Position(projectile.getPosition().getVector().plus(projectile.getVelocity().times(delta)))));
     }
   }
 
@@ -283,7 +293,7 @@ public class GameLogic {
     if (this.attacking && System.currentTimeMillis() - this.lastAttackTime > 200) {
       this.lastAttackTime = System.currentTimeMillis();
 
-      Projectile projectile = new Projectile(this.nextId, transaction.getWorld().getPlayer().getPosition(), Direction.DOWN.getVector(), 1);
+      Projectile projectile = new Projectile(this.nextId(), transaction.getWorld().getPlayer().getPosition(), Direction.DOWN.getVector().times(5000), 1);
 
       transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
     }

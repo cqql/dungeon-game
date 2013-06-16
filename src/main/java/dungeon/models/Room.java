@@ -146,7 +146,7 @@ public class Room {
     List<Tile> tiles = this.tiles;
     List<SavePoint> savePoints = this.savePoints;
     List<Drop> drops = this.drops;
-    List<Projectile> projectiles = this.projectiles;
+    List<Projectile> projectiles = new ArrayList<>();
 
     if (transform instanceof RemoveDropTransform) {
       drops = new ArrayList<>();
@@ -159,6 +159,10 @@ public class Room {
     } else if (transform instanceof AddProjectileTransform && this.id.equals(((AddProjectileTransform)transform).roomId)) {
       projectiles = new ArrayList<>(projectiles);
       projectiles.add(((AddProjectileTransform)transform).projectile);
+    }
+
+    for (Projectile projectile : this.projectiles) {
+      projectiles.add(projectile.apply(transform));
     }
 
     return new Room(id, enemies, savePoints, tiles, drops, projectiles);
