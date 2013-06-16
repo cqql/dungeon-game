@@ -38,7 +38,7 @@ public class Item {
 
     Item item = (Item)o;
 
-    if (id != item.id) {
+    if (this.id != item.id) {
       return false;
     }
 
@@ -47,6 +47,6 @@ public class Item {
 
   @Override
   public int hashCode () {
-    return id;
+    return this.id;
   }
 }

@@ -142,7 +142,7 @@ public class Canvas extends JPanel implements MessageHandler {
   private void drawProjectiles (Graphics g, Room room) {
     for (Projectile projectile : room.getProjectiles()) {
       if (projectile.getType() == DamageType.NORMAL) {
-        g.setColor(normalProjectileColor);
+        g.setColor(this.normalProjectileColor);
       }
 
       this.drawSquare(g, projectile.getPosition(), Projectile.SIZE);

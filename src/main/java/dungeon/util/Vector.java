@@ -64,11 +64,11 @@ public class Vector {
 
     Vector vector = (Vector)o;
 
-    if (Double.compare(vector.x, x) != 0) {
+    if (Double.compare(vector.x, this.x) != 0) {
       return false;
     }
 
-    if (Double.compare(vector.y, y) != 0) {
+    if (Double.compare(vector.y, this.y) != 0) {
       return false;
     }
 
@@ -79,9 +79,9 @@ public class Vector {
   public int hashCode () {
     int result;
     long temp;
-    temp = Double.doubleToLongBits(x);
+    temp = Double.doubleToLongBits(this.x);
     result = (int)(temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(y);
+    temp = Double.doubleToLongBits(this.y);
     result = 31 * result + (int)(temp ^ (temp >>> 32));
     return result;
   }

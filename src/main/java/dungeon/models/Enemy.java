@@ -83,7 +83,7 @@ public class Enemy implements Spatial, Identifiable {
   public static class HitPointTransform implements Transform {
     private final Enemy enemy;
 
-    public final int delta;
+    private final int delta;
 
     public HitPointTransform (Enemy enemy, int delta) {
       this.enemy = enemy;

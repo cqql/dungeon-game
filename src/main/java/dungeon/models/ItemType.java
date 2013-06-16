@@ -24,21 +24,21 @@ public enum ItemType {
   }
 
   public String getName () {
-    return name;
+    return this.name;
   }
 
   public abstract String getDescription ();
 
   public boolean isUseable () {
-    return useable;
+    return this.useable;
   }
 
   public boolean isEquipable () {
-    return equipable;
+    return this.equipable;
   }
 
   public int getHitPointDelta () {
-    return hitPointDelta;
+    return this.hitPointDelta;
   }
 
   @Override

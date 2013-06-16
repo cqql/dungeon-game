@@ -77,9 +77,9 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
     this.itemList.setCellRenderer(new ListCellRenderer<Item>() {
       @Override
-      public Component getListCellRendererComponent (JList<? extends Item> jList, Item item, int i, boolean b, boolean b2) {
+      public Component getListCellRendererComponent (JList<? extends Item> jList, Item item, int index, boolean isSelected, boolean cellHasFocus) {
         DefaultListCellRenderer renderer = new DefaultListCellRenderer();
-        Component cell = renderer.getListCellRendererComponent(jList, item, i, b, b2);
+        Component cell = renderer.getListCellRendererComponent(jList, item, index, isSelected, cellHasFocus);
 
         ((JLabel)cell).setText(item.getType().getName());
 

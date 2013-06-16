@@ -16,8 +16,8 @@ public class ItemPanel extends JPanel {
   public ItemPanel () {
     this.setLayout(new GridLayout(25, 1));
 
-    this.add(nameInfo);
-    this.add(description);
+    this.add(this.nameInfo);
+    this.add(this.description);
   }
 
   public void setItem (Item item) {
