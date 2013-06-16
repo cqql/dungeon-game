@@ -2,6 +2,8 @@
   SIZE_X = 20
   SIZE_Y = 20
 
+  next_id = 100
+
   id = "room-3"
   tiles = []
   enemies = []
@@ -12,7 +14,8 @@
       tiles << { x: x * 1000, y: y * 1000, blocking: Random.rand(5) == 0 }
 
       if Random.rand(10) == 0 and !tiles.last[:blocking]
-        enemies << { x: x * 1000, y: y * 1000 }
+        enemies << { id: next_id, x: x * 1000, y: y * 1000, hp: Random.rand(10) }
+        next_id = next_id + 1
       end
 
       if Random.rand(20) == 0 and !tiles.last[:blocking]
@@ -26,7 +29,7 @@
     %tile{blocking: tile[:blocking] ? "true" : "false"}
       %position{x: tile[:x], y: tile[:y]}
   - enemies.each do |enemy|
-    %enemy
+    %enemy{id: enemy[:id], hitPoints: enemy[:hp]}
       %position{x: enemy[:x], y: enemy[:y]}
   - teleporters.each do |teleporter|
     %teleporter{blocking: "false"}
