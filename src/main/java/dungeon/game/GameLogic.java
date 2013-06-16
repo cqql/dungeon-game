@@ -293,7 +293,7 @@ public class GameLogic {
     if (this.attacking && System.currentTimeMillis() - this.lastAttackTime > 200) {
       this.lastAttackTime = System.currentTimeMillis();
 
-      Projectile projectile = new Projectile(this.nextId(), transaction.getWorld().getPlayer().getPosition(), Direction.DOWN.getVector().times(5000), 1);
+      Projectile projectile = new Projectile(this.nextId(), transaction.getWorld().getPlayer().getPosition(), transaction.getWorld().getPlayer().getViewingDirection().getVector().times(5000), 1);
 
       transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
     }
