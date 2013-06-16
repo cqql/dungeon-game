@@ -8,10 +8,7 @@ import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.messages.Transform;
 import dungeon.pulse.Pulse;
-import dungeon.ui.messages.Command;
-import dungeon.ui.messages.EndCommand;
-import dungeon.ui.messages.MoveCommand;
-import dungeon.ui.messages.StartCommand;
+import dungeon.ui.messages.*;
 
 /**
  * Handles the game logic.
@@ -59,6 +56,8 @@ public class LogicHandler implements MessageHandler {
 
     if (command instanceof MoveCommand) {
       this.logic.activateMoveDirection((MoveCommand)command);
+    } else if (command instanceof AttackCommand) {
+      this.logic.activateAttack();
     }
   }
 
@@ -71,6 +70,8 @@ public class LogicHandler implements MessageHandler {
 
     if (command instanceof MoveCommand) {
       this.logic.deactivateMoveDirection((MoveCommand)command);
+    } else if (command instanceof AttackCommand) {
+      this.logic.deactivateAttack();
     }
   }
 

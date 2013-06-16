@@ -3,6 +3,8 @@ package dungeon.models;
 import dungeon.util.Vector;
 
 public class Projectile {
+  public static final int SIZE = 100;
+
   private final int id;
 
   private final Position position;

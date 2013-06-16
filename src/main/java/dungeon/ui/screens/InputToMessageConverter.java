@@ -1,10 +1,7 @@
 package dungeon.ui.screens;
 
 import dungeon.messages.Mailman;
-import dungeon.ui.messages.Command;
-import dungeon.ui.messages.EndCommand;
-import dungeon.ui.messages.MoveCommand;
-import dungeon.ui.messages.StartCommand;
+import dungeon.ui.messages.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -57,6 +54,8 @@ public class InputToMessageConverter implements KeyListener {
         return MoveCommand.DOWN;
       case 'd':
         return MoveCommand.RIGHT;
+      case 'j':
+        return new AttackCommand();
       default:
         return null;
     }

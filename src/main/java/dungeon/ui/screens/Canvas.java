@@ -80,10 +80,10 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawEnemies(g, room);
     this.drawSavepoints(g, room);
     this.drawPlayer(g, this.world.getPlayer());
+    this.drawProjectiles(g, room);
     this.drawHpIndicator(g);
     this.drawMoneyIndicator(g);
     this.drawLifeIndicator(g);
-
   }
 
   private void drawTiles (Graphics g, Room room) {
@@ -135,6 +135,12 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.playerColor);
 
     this.drawSquare(g, player.getPosition(), Player.SIZE);
+  }
+
+  private void drawProjectiles (Graphics g, Room room) {
+    for (Projectile projectile : room.getProjectiles()) {
+      this.drawSquare(g, projectile.getPosition(), Projectile.SIZE);
+    }
   }
 
   private void drawHpIndicator (Graphics g) {

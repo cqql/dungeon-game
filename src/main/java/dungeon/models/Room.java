@@ -156,6 +156,9 @@ public class Room {
           drops.add(drop);
         }
       }
+    } else if (transform instanceof AddProjectileTransform && this.id.equals(((AddProjectileTransform)transform).roomId)) {
+      projectiles = new ArrayList<>(projectiles);
+      projectiles.add(((AddProjectileTransform)transform).projectile);
     }
 
     return new Room(id, enemies, savePoints, tiles, drops, projectiles);
@@ -166,6 +169,17 @@ public class Room {
 
     public RemoveDropTransform (int dropId) {
       this.dropId = dropId;
+    }
+  }
+
+  public static class AddProjectileTransform implements Transform {
+    private final String roomId;
+
+    private final Projectile projectile;
+
+    public AddProjectileTransform (String roomId, Projectile projectile) {
+      this.roomId = roomId;
+      this.projectile = projectile;
     }
   }
 }

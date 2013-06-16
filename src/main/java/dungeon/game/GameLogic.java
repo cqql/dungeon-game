@@ -26,11 +26,22 @@ public class GameLogic {
 
   private static final int SPEED = 1000;
 
+  /**
+   * The next available ID.
+   *
+   * @see #nextId()
+   */
+  private int nextId;
+
   private long lastDamageTime;
 
   private final Set<Direction> activeMoveDirections = EnumSet.noneOf(Direction.class);
 
   private Direction viewingDirection = Direction.RIGHT;
+
+  private boolean attacking;
+
+  private long lastAttackTime;
 
   private GameState gameState = GameState.PLAYING;
 
@@ -57,6 +68,20 @@ public class GameLogic {
   }
 
   /**
+   * Set the attacking flag.
+   */
+  public void activateAttack () {
+    this.attacking = true;
+  }
+
+  /**
+   * Reset the attacking flag.
+   */
+  public void deactivateAttack () {
+    this.attacking = false;
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -80,6 +105,7 @@ public class GameLogic {
     this.handleTeleporters(transaction);
     this.handleCheckpoint(transaction);
     this.handleRespawn(transaction);
+    this.handleAttacking(transaction);
 
     this.world = transaction.getWorld();
 
@@ -248,5 +274,25 @@ public class GameLogic {
         this.gameState = GameState.VICTORY;
       }
     }
+  }
+
+  /**
+   * Create a new projectile if the player is attacking.
+   */
+  private void handleAttacking (Transaction transaction) {
+    if (this.attacking && System.currentTimeMillis() - this.lastAttackTime > 200) {
+      this.lastAttackTime = System.currentTimeMillis();
+
+      Projectile projectile = new Projectile(this.nextId, transaction.getWorld().getPlayer().getPosition(), Direction.DOWN.getVector(), 1);
+
+      transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
+    }
+  }
+
+  /**
+   * Returns a free ID.
+   */
+  private int nextId () {
+    return this.nextId++;
   }
 }
