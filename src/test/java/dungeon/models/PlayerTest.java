@@ -24,12 +24,15 @@ public class PlayerTest {
       0,
       0,
       1,
+      1,
       Arrays.asList(
         new Item(1, ItemType.HEALTH_POTION),
         new Item(2, ItemType.HEALTH_POTION)
       ),
       "level",
       ROOM_ID,
+      WEAPON_ID,
+      WEAK_BOW,
       new Position(2000, 2000),
       Direction.RIGHT,
       ROOM_ID,
