@@ -25,6 +25,8 @@ public class Player implements Spatial, Identifiable {
 
   private final int maxMana;
 
+  private final int damage;
+
   /**
    * The amount of money the player has.
    */
@@ -44,6 +46,16 @@ public class Player implements Spatial, Identifiable {
    * Which room is the player currently in?
    */
   private final String roomId;
+
+  /**
+   * Which weapon has the player equipped?
+   */
+  private final String weaponId;
+
+  /**
+   * Which weapon type has the player equipped
+   */
+  private final ItemType weapon;
 
   /**
    * His position in the room.
@@ -69,7 +81,7 @@ public class Player implements Spatial, Identifiable {
    */
   private final Position savePointPosition;
 
-  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, int mana, int maxMana, List<Item> items, String levelId, String roomId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
+  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, int mana, int maxMana, int damage, List<Item> items, String levelId, String roomId, String weaponId, ItemType weapon ,Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
     this.id = id;
     this.name = name;
     this.lives = lives;
@@ -78,9 +90,12 @@ public class Player implements Spatial, Identifiable {
     this.money = money;
     this.mana = mana;
     this.maxMana = maxMana;
+    this.damage = damage;
     this.items = Collections.unmodifiableList(new ArrayList<>(items));
     this.levelId = levelId;
     this.roomId = roomId;
+    this.weaponId = weaponId;
+    this.weapon = weapon;
     this.position = position;
     this.viewingDirection = viewingDirection;
     this.savePointRoomId = savePointRoomId;
@@ -119,6 +134,10 @@ public class Player implements Spatial, Identifiable {
     return this.maxMana;
   }
 
+  public int getDamage () {
+    return this.damage;
+  }
+
   public List<Item> getItems () {
     return this.items;
   }
@@ -129,6 +148,14 @@ public class Player implements Spatial, Identifiable {
 
   public String getRoomId () {
     return this.roomId;
+  }
+
+  public String getWeaponId () {
+    return this.weaponId;
+  }
+
+  public ItemType getWeapon () {
+    return this.weapon;
   }
 
   public Position getPosition () {
@@ -200,12 +227,17 @@ public class Player implements Spatial, Identifiable {
   }
 
   public Projectile attack (int id) {
-    return createProjectile(id, 5000, 1, DamageType.NORMAL);
+    if (this.getWeapon() == ItemType.WEAK_BOW) {
+      return createProjectile(id, 5000 + 1500, 1 + 3, DamageType.WEAK_BOW);
+    } else if (this.getWeapon() == ItemType.STRONG_BOW) {
+      return createProjectile(id, 5000 + 2000, 1 + 5, DamageType.STRONG_BOW);
+    } else return createProjectile(id, 5000, 1, DamageType.NORMAL);
   }
 
   public Projectile iceBoltAttack (int id) {
     return createProjectile(id, 7000, 2, DamageType.ICE);
   }
+
 
   public Player apply (Transform transform) {
     int id = this.id;
@@ -216,9 +248,12 @@ public class Player implements Spatial, Identifiable {
     int money = this.money;
     int mana = this.mana;
     int maxMana = this.maxMana;
+    int damage = this.damage;
     List<Item> items = this.items;
     String levelId = this.levelId;
     String roomId = this.roomId;
+    String weaponId = this.weaponId;
+    ItemType weapon = this.weapon;
     Position position = this.position;
     Direction viewingDirection = this.viewingDirection;
     String savePointRoomId = this.savePointRoomId;
@@ -265,9 +300,15 @@ public class Player implements Spatial, Identifiable {
           items.add(item);
         }
       }
+    } else if (transform instanceof EquipWeaponTransform) {
+      EquipWeaponTransform equipWeaponTransform = (Player.EquipWeaponTransform)transform;
+
+      weaponId = equipWeaponTransform.weaponId;
+      weapon = equipWeaponTransform.weapon;
+      damage = equipWeaponTransform.damageDelta;
     }
 
-    return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, position, viewingDirection, savePointRoomId, savePointPosition);
+    return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, damage, items, levelId, roomId, weaponId, weapon, position, viewingDirection, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {
@@ -348,6 +389,20 @@ public class Player implements Spatial, Identifiable {
 
     public RemoveItemTransform (Item item) {
       this.item = item;
+    }
+  }
+
+  public static class EquipWeaponTransform implements Transform {
+    private final String weaponId;
+
+    private final ItemType weapon;
+
+    private final int damageDelta;
+
+    public EquipWeaponTransform (String weaponId, ItemType weapon, int damageDelta) {
+      this.weaponId = weaponId;
+      this.weapon = weapon;
+      this.damageDelta = damageDelta;
     }
   }
 
