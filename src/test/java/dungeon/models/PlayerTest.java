@@ -40,4 +40,19 @@ public class PlayerTest {
     assertEquals(5, teleported.getPosition().getX());
     assertEquals(1, teleported.getPosition().getY());
   }
+
+  @Test
+  public void playerShootsInViewingDirection () {
+    Projectile projectile = player.shootProjectile(1);
+
+    assertEquals(Direction.RIGHT.getVector(), projectile.getVelocity().normalize());
+  }
+
+  @Test
+  public void playerShootsFromHip () {
+    Projectile projectile = player.shootProjectile(1);
+
+    assertTrue(projectile.getPosition().getX() >= player.getPosition().getX() + Player.SIZE - Projectile.SIZE);
+    assertTrue(projectile.getPosition().getY() <= player.getPosition().getY() + (Player.SIZE / 2));
+  }
 }

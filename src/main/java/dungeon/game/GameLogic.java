@@ -330,7 +330,7 @@ public class GameLogic {
 
       Player player = transaction.getWorld().getPlayer();
 
-      Projectile projectile = new Projectile(this.nextId(), player, player.getPosition(), player.getViewingDirection().getVector().times(5000), 1);
+      Projectile projectile = player.shootProjectile(this.nextId());
 
       transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
     }

@@ -1,6 +1,7 @@
 package dungeon.models;
 
 import dungeon.models.messages.Transform;
+import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -134,6 +135,24 @@ public class Player implements Spatial, Identifiable {
 
   public Rectangle2D space () {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
+  }
+
+  /**
+   * Returns a projectile that the player shoots.
+   *
+   * This means that the projectile is moving in the viewing direction and shot from the "hip".
+   */
+  public Projectile shootProjectile (int id) {
+    Position position = new Position(
+      this.position.getVector()
+        .plus(new Vector(SIZE / 2, SIZE / 2))
+        .plus(new Vector(-Projectile.SIZE / 2, -Projectile.SIZE / 2))
+        .plus(
+          this.viewingDirection.getVector().times(SIZE / 2)
+        )
+    );
+
+    return new Projectile(id, this, position, this.viewingDirection.getVector().times(5000), 1);
   }
 
   public Player apply (Transform transform) {
