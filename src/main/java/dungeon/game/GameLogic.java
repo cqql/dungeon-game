@@ -164,7 +164,6 @@ public class GameLogic {
     this.handleAttack(transaction);
     this.handleIceBolt(transaction);
 
-
     this.world = transaction.getWorld();
 
     this.handleDefeat();
@@ -198,8 +197,7 @@ public class GameLogic {
     if (this.useManaPotion) {
       this.useManaPotion = false;
 
-
-    List<Item> manaPotions = transaction.getWorld().getPlayer().getManaPotions();
+      List<Item> manaPotions = transaction.getWorld().getPlayer().getManaPotions();
 
       if (manaPotions.size() > 0) {
         Item manaPotion = manaPotions.get(0);

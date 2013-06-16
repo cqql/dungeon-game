@@ -50,13 +50,14 @@ public class Enemy implements Spatial, Identifiable {
   }
 
   public MoveStrategy getMoveStrategy () {
-    return moveStrategy;
+    return this.moveStrategy;
   }
 
   public Enemy apply (Transform transform) {
     int id = this.id;
     int hitPoints = this.hitPoints;
     Position position = this.position;
+    MoveStrategy moveStrategy = this.moveStrategy;
 
     if (transform instanceof HitPointTransform && this.equals(((HitPointTransform)transform).enemy)) {
       hitPoints += ((HitPointTransform)transform).delta;
@@ -150,8 +151,8 @@ public class Enemy implements Spatial, Identifiable {
         if (enemyToPlayer.length() < 500) {
           Room room = transaction.getWorld().getCurrentRoom();
 
-          transaction.pushAndCommit(new TeleportTransform(enemy, new Position((int)(random.nextFloat() * room.getXSize()), (int)(random.nextFloat() * room.getYSize()))));
-        } else if (random.nextInt(200) == 0) {
+          transaction.pushAndCommit(new TeleportTransform(enemy, new Position((int)(RANDOM.nextFloat() * room.getXSize()), (int)(RANDOM.nextFloat() * room.getYSize()))));
+        } else if (RANDOM.nextInt(200) == 0) {
           Position position = new Position(
             transaction.getWorld().getPlayer().getPosition().getVector().plus(enemyToPlayer)
           );
@@ -163,7 +164,7 @@ public class Enemy implements Spatial, Identifiable {
       }
     };
 
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
 
     public abstract void move (Transaction transaction, Enemy enemy, double delta);
   }
