@@ -44,6 +44,8 @@ public class LogicHandler implements MessageHandler {
       this.endCommand((EndCommand)message);
     } else if (message instanceof Pulse) {
       this.pulse();
+    } else if (message instanceof UseItemCommand) {
+      this.logic.useItem(((UseItemCommand)message).getItem());
     }
   }
 

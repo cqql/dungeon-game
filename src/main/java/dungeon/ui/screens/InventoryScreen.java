@@ -10,6 +10,7 @@ import dungeon.models.World;
 import dungeon.models.messages.Transform;
 import dungeon.ui.messages.ShowGame;
 import dungeon.ui.messages.ShowInventory;
+import dungeon.ui.messages.UseItemCommand;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -26,39 +27,90 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
   private World world;
 
-  private final JList<Item> itemList;
+  private final DefaultListModel<Item> listModel = new DefaultListModel<>();
 
-  private final ItemPanel itemPanel;
+  private final JList<Item> itemList = new JList<>(this.listModel);
 
-  private final JPanel actionBar;
+  private final ItemPanel itemPanel = new ItemPanel();
 
-  private final JButton backButton;
+  private final JPanel actionBar = new JPanel();
+
+  private final JButton equipButton = new JButton("Ausrüsten");
+
+  private final JButton useButton = new JButton("Benutzen");
+
+  private final JButton backButton = new JButton("Zurück");
 
   public InventoryScreen (Mailman mailman) {
     this.mailman = mailman;
-
-    this.itemList = new JList<>();
-    this.itemPanel = new ItemPanel();
-    this.actionBar = new JPanel();
-    this.backButton = new JButton("Zurück");
   }
 
   @Override
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
       this.world = this.world.apply((Transform)message);
+
+      this.reset();
     } else if (message instanceof LevelLoadedEvent) {
       this.world = ((LevelLoadedEvent)message).getWorld();
     } else if (message == LifecycleEvent.INITIALIZE) {
       this.initialize();
     } else if (message instanceof ShowInventory) {
-      List<Item> items = this.world.getPlayer().getItems();
+      this.reset();
+    }
+  }
 
-      this.itemList.setListData(items.toArray(new Item[items.size()]));
+  /**
+   * Synchronize the items in the list with the items in the player's bag and enable/disable the buttons.
+   */
+  private void reset () {
+    List<Item> items = this.world.getPlayer().getItems();
+
+    for (Item item : items) {
+      if (!this.listModel.contains(item)) {
+        this.listModel.addElement(item);
+      }
+    }
+
+    for (Object object : this.listModel.toArray()) {
+      Item item = (Item)object;
+
+      if (!items.contains(item)) {
+        this.listModel.removeElement(item);
+      }
+    }
+
+    if (this.itemList.getSelectedValue() == null) {
+      this.equipButton.setEnabled(false);
+      this.useButton.setEnabled(false);
     }
   }
 
   private void initialize () {
+    this.equipButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
+        if (!InventoryScreen.this.equipButton.isEnabled()) {
+          return;
+        }
+
+        Item item = InventoryScreen.this.itemList.getSelectedValue();
+      }
+    });
+
+    this.useButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
+        if (!InventoryScreen.this.useButton.isEnabled()) {
+          return;
+        }
+
+        Item item = InventoryScreen.this.itemList.getSelectedValue();
+
+        InventoryScreen.this.mailman.send(new UseItemCommand(item));
+      }
+    });
+
     this.backButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
@@ -72,6 +124,13 @@ public class InventoryScreen extends JPanel implements MessageHandler {
         Item item = InventoryScreen.this.itemList.getSelectedValue();
 
         InventoryScreen.this.itemPanel.setItem(item);
+
+        if (item == null) {
+          InventoryScreen.this.reset();
+        } else {
+          InventoryScreen.this.equipButton.setEnabled(item.getType().isEquipable());
+          InventoryScreen.this.useButton.setEnabled(item.getType().isUseable());
+        }
       }
     });
 
@@ -87,6 +146,8 @@ public class InventoryScreen extends JPanel implements MessageHandler {
       }
     });
 
+    this.actionBar.add(this.equipButton);
+    this.actionBar.add(this.useButton);
     this.actionBar.add(this.backButton);
 
     this.setLayout(new GridLayout(1, 3, 10, 0));

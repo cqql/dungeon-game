@@ -7,6 +7,7 @@ import dungeon.ui.messages.MoveCommand;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +49,8 @@ public class GameLogic {
   private long lastAttackTime;
 
   private boolean useHealthPotion;
+
+  private final List<Item> useItems = new ArrayList<>();
 
   private GameState gameState = GameState.PLAYING;
 
@@ -95,6 +98,13 @@ public class GameLogic {
   }
 
   /**
+   * Use {@code item} during the next pulse.
+   */
+  public void useItem (Item item) {
+    this.useItems.add(item);
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -112,6 +122,7 @@ public class GameLogic {
     Transaction transaction = new Transaction(this.world);
 
     this.handleHealthPotion(transaction);
+    this.useItems(transaction);
     this.handleMovement(transaction, delta);
     this.handleProjectiles(transaction, delta);
     this.updateViewingDirection(transaction);
@@ -149,6 +160,21 @@ public class GameLogic {
         transaction.commit();
       }
     }
+  }
+
+  /**
+   * Use the items, that have been requested.
+   */
+  private void useItems (Transaction transaction) {
+    for (Item item : this.useItems) {
+      LOGGER.info("Use item " + item);
+
+      item.use(transaction);
+
+      transaction.pushAndCommit(new Player.RemoveItemTransform(item));
+    }
+
+    this.useItems.clear();
   }
 
   private void handleMovement (Transaction transaction, double delta) {

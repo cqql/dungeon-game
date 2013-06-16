@@ -1,10 +1,17 @@
 package dungeon.models;
 
+import dungeon.game.Transaction;
+
 public enum ItemType {
   HEALTH_POTION("Heiltrank", true, false, 5) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getHitPointDelta() + " HP";
+    }
+
+    @Override
+    public void use (Transaction transaction) {
+      transaction.pushAndCommit(new Player.HitpointTransform(this.getHitPointDelta()));
     }
   };
 
@@ -39,6 +46,13 @@ public enum ItemType {
 
   public int getHitPointDelta () {
     return this.hitPointDelta;
+  }
+
+  /**
+   * Use the item, e.g. apply the appropriate transforms.
+   */
+  public void use (Transaction transaction) {
+
   }
 
   @Override
