@@ -21,6 +21,10 @@ public class Player implements Spatial, Identifiable {
 
   private final int maxHitPoints;
 
+  private final int mana;
+
+  private final int maxMana;
+
   /**
    * The amount of money the player has.
    */
@@ -65,13 +69,15 @@ public class Player implements Spatial, Identifiable {
    */
   private final Position savePointPosition;
 
-  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, List<Item> items, String levelId, String roomId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
+  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, int mana, int maxMana, List<Item> items, String levelId, String roomId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
     this.id = id;
     this.name = name;
     this.lives = lives;
     this.hitPoints = hitPoints;
     this.maxHitPoints = maxHitPoints;
     this.money = money;
+    this.mana = mana;
+    this.maxMana = maxMana;
     this.items = Collections.unmodifiableList(new ArrayList<>(items));
     this.levelId = levelId;
     this.roomId = roomId;
@@ -103,6 +109,14 @@ public class Player implements Spatial, Identifiable {
 
   public int getMoney () {
     return this.money;
+  }
+
+  public int getMana () {
+    return this.mana;
+  }
+
+  public int getMaxMana () {
+    return this.maxMana;
   }
 
   public List<Item> getItems () {
@@ -157,7 +171,7 @@ public class Player implements Spatial, Identifiable {
    *
    * This means that the projectile is moving in the viewing direction and shot from the "hip".
    */
-  public Projectile shootProjectile (int id) {
+  private Projectile createProjectile (int id, int speed, int damage, DamageType type) {
     Position position = new Position(
       this.position.getVector()
         .plus(new Vector(SIZE / 2, SIZE / 2))
@@ -167,7 +181,15 @@ public class Player implements Spatial, Identifiable {
         )
     );
 
-    return new Projectile(id, this, position, this.viewingDirection.getVector().times(5000), 1, DamageType.NORMAL);
+    return new Projectile(id, this, position, this.viewingDirection.getVector().times(speed), damage, type);
+  }
+
+  public Projectile attack (int id) {
+    return createProjectile(id, 5000, 1, DamageType.NORMAL);
+  }
+
+  public Projectile iceBoltAttack (int id) {
+    return createProjectile(id, 7000, 2, DamageType.ICE);
   }
 
   public Player apply (Transform transform) {
@@ -177,6 +199,8 @@ public class Player implements Spatial, Identifiable {
     int hitPoints = this.hitPoints;
     int maxHitPoints = this.maxHitPoints;
     int money = this.money;
+    int mana = this.mana;
+    int maxMana = this.maxMana;
     List<Item> items = this.items;
     String levelId = this.levelId;
     String roomId = this.roomId;
@@ -214,6 +238,10 @@ public class Player implements Spatial, Identifiable {
     } else if (transform instanceof AddItemTransform) {
       items = new ArrayList<>(items);
       items.add(((AddItemTransform)transform).item);
+    } else if (transform instanceof ManaTransform) {
+      ManaTransform manaTransform = (Player.ManaTransform)transform;
+
+      mana = Math.max(Math.min(mana + manaTransform.delta, this.maxMana), 0);
     } else if (transform instanceof RemoveItemTransform) {
       items = new ArrayList<>();
 
@@ -224,7 +252,7 @@ public class Player implements Spatial, Identifiable {
       }
     }
 
-    return new Player(id, name, lives, hitPoints, maxHitPoints, money, items, levelId, roomId, position, viewingDirection, savePointRoomId, savePointPosition);
+    return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, position, viewingDirection, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {
@@ -289,6 +317,14 @@ public class Player implements Spatial, Identifiable {
 
     public AddItemTransform (Item item) {
       this.item = item;
+    }
+  }
+
+  public static class ManaTransform implements Transform {
+    private final int delta;
+
+    public ManaTransform (int delta) {
+      this.delta = delta;
     }
   }
 
