@@ -17,9 +17,12 @@ public class EnemyAdapter extends XmlAdapter<EnemyAdapter, Enemy> {
   @XmlJavaTypeAdapter(PositionAdapter.class)
   public Position position;
 
+  @XmlAttribute
+  public String moveStrategy;
+
   @Override
   public Enemy unmarshal (EnemyAdapter adapter) throws Exception {
-    return new Enemy(adapter.id, adapter.hitPoints, adapter.position);
+    return new Enemy(adapter.id, adapter.hitPoints, adapter.position, Enemy.MoveStrategy.valueOf(adapter.moveStrategy));
   }
 
   @Override
@@ -28,6 +31,7 @@ public class EnemyAdapter extends XmlAdapter<EnemyAdapter, Enemy> {
     adapter.id = enemy.getId();
     adapter.hitPoints = enemy.getHitPoints();
     adapter.position = enemy.getPosition();
+    adapter.moveStrategy = enemy.getMoveStrategy().toString();
 
     return adapter;
   }
