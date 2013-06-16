@@ -148,7 +148,10 @@ public class Room {
     List<Drop> drops = this.drops;
     List<Projectile> projectiles = this.projectiles;
 
-    if (transform instanceof RemoveDropTransform) {
+    if (transform instanceof AddDropTransform && this.id.equals(((AddDropTransform)transform).roomId)) {
+      drops = new ArrayList<>(drops);
+      drops.add(((AddDropTransform)transform).drop);
+    } else if (transform instanceof RemoveDropTransform) {
       drops = new ArrayList<>();
 
       for (Drop drop : this.drops) {
@@ -190,6 +193,17 @@ public class Room {
     }
 
     return new Room(id, enemies, savePoints, tiles, drops, projectiles);
+  }
+
+  public static class AddDropTransform implements Transform {
+    private final String roomId;
+
+    private final Drop drop;
+
+    public AddDropTransform (String roomId, Drop drop) {
+      this.roomId = roomId;
+      this.drop = drop;
+    }
   }
 
   public static class RemoveDropTransform implements Transform {
