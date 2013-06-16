@@ -44,6 +44,9 @@
           <position x="1500" y="1000"></position>
           <item id="3" type="MANA_POTION"></item>
       </drop>
+      <npc id="5" name="Wächter" saying="Angeblich spukt es hier...">
+        <position x="0" y="2000"></position>
+      </npc>
     </room>
     <room id="room-2">
       <tile blocking="true">

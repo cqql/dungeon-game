@@ -29,7 +29,9 @@ public class RoomTest {
         new TeleporterTile(new Position(0, 4000), new TeleporterTile.Target(ROOM_ID, 0, 0))
       ),
       new ArrayList<Drop>(),
-      new ArrayList<Projectile>());
+      new ArrayList<Projectile>(),
+      new ArrayList<NPC>()
+    );
   }
 
   @Test
