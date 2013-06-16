@@ -132,22 +132,8 @@ public class Player implements Spatial {
     return this.space().intersects(object.space());
   }
 
-  public boolean touches (SavePoint savePoint) {
-    Rectangle2D savePointSpace = new Rectangle2D.Float(savePoint.getPosition().getX(), savePoint.getPosition().getY(), SavePoint.SIZE, SavePoint.SIZE);
-
-    return this.playerSpace().intersects(savePointSpace);
-  }
-
-  /**
-   * Returns a rectangle that represents the space occupied by the player.
-   */
-  private Rectangle2D playerSpace () {
-    return new Rectangle2D.Float(this.getPosition().getX(), this.getPosition().getY(), Player.SIZE, Player.SIZE);
-  }
-
   public Rectangle2D space () {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
-
   }
 
   public Player apply (Transform transform) {
