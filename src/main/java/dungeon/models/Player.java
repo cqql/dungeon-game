@@ -152,7 +152,7 @@ public class Player implements Spatial, Identifiable {
         )
     );
 
-    return new Projectile(id, this, position, this.viewingDirection.getVector().times(5000), 1);
+    return new Projectile(id, this, position, this.viewingDirection.getVector().times(5000), 1, DamageType.NORMAL);
   }
 
   public Player apply (Transform transform) {

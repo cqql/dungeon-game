@@ -1,5 +1,6 @@
 package dungeon.load.adapters;
 
+import dungeon.models.DamageType;
 import dungeon.models.Position;
 import dungeon.models.Projectile;
 import dungeon.util.Vector;
@@ -20,9 +21,12 @@ public class ProjectileAdapter extends XmlAdapter<ProjectileAdapter, Projectile>
   @XmlAttribute
   public int damage;
 
+  @XmlAttribute
+  public String type;
+
   @Override
   public Projectile unmarshal (ProjectileAdapter adapter) throws Exception {
-    return new Projectile(adapter.id, null, adapter.position, adapter.direction, adapter.damage);
+    return new Projectile(adapter.id, null, adapter.position, adapter.direction, adapter.damage, DamageType.valueOf(adapter.type));
   }
 
   @Override
@@ -32,6 +36,7 @@ public class ProjectileAdapter extends XmlAdapter<ProjectileAdapter, Projectile>
     adapter.position = projectile.getPosition();
     adapter.direction = projectile.getVelocity();
     adapter.damage = projectile.getDamage();
+    adapter.type = projectile.getType().toString();
 
     return adapter;
   }
