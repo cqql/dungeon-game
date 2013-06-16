@@ -1474,7 +1474,7 @@
       </victory-tile>
     </room>
   </level>
-  <player id="1" name="Link" lives="3" hitPoints="1" maxHitPoints="3" money="0" mana="3" maxMana="10" levelId="level-1" roomId="room-1"
+  <player id="1" name="Link" lives="3" hitPoints="1" maxHitPoints="3" money="0" mana="3" maxMana="10" levelId="level-1" roomId="room-1" weaponId="Schwacher Bogen"
           viewingDirection="LEFT" savePointRoomId="room-1">
     <position x="0" y="0" />
     <savePointPosition x="0" y="0" />

@@ -66,8 +66,6 @@ public class LogicHandler implements MessageHandler {
       this.logic.useHealthPotion();
     } else if (command instanceof ManaPotionCommand) {
       this.logic.useManaPotion();
-    } else if (command instanceof WeaponAttackCommand) {
-      this.logic.activateWeaponAttack();
     }
   }
 
@@ -84,8 +82,6 @@ public class LogicHandler implements MessageHandler {
       this.logic.deactivateAttack();
     } else if (command instanceof IceBoltAttackCommand) {
       this.logic.deactivateIceBoltAttack();
-    } else if (command instanceof WeaponAttackCommand) {
-      this.logic.deactivateWeaponAttack();
     }
   }
 
