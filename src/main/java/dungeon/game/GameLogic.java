@@ -7,10 +7,7 @@ import dungeon.ui.messages.MoveCommand;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -354,11 +351,30 @@ public class GameLogic {
 
   /**
    * Destroy enemies when their hit points drop below 0.
+   *
+   * Enemies leave a random item.
    */
   private void handleEnemyLives (Transaction transaction) {
-    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
+    Room room = transaction.getWorld().getCurrentRoom();
+
+    for (Enemy enemy : room.getEnemies()) {
       if (enemy.getHitPoints() <= 0) {
         transaction.pushAndCommit(new Room.RemoveEnemyTransform(enemy));
+
+        ItemType[] itemTypes = ItemType.values();
+        ItemType itemType = itemTypes[(new Random()).nextInt(itemTypes.length)];
+
+        transaction.pushAndCommit(
+          new Room.AddDropTransform(
+            room.getId(),
+            new Drop(
+              this.nextId(),
+              enemy.getPosition(),
+              new Item(this.nextId(), itemType),
+              0
+            )
+          )
+        );
       }
     }
   }
