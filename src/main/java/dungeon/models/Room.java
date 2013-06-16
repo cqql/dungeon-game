@@ -146,7 +146,7 @@ public class Room {
     List<Tile> tiles = this.tiles;
     List<SavePoint> savePoints = this.savePoints;
     List<Drop> drops = this.drops;
-    List<Projectile> projectiles = new ArrayList<>();
+    List<Projectile> projectiles = this.projectiles;
 
     if (transform instanceof RemoveDropTransform) {
       drops = new ArrayList<>();
@@ -159,9 +159,19 @@ public class Room {
     } else if (transform instanceof AddProjectileTransform && this.id.equals(((AddProjectileTransform)transform).roomId)) {
       projectiles = new ArrayList<>(projectiles);
       projectiles.add(((AddProjectileTransform)transform).projectile);
+    } else if (transform instanceof RemoveProjectileTransform && this.id.equals(((RemoveProjectileTransform)transform).roomId)) {
+      projectiles = new ArrayList<>();
+
+      for (Projectile projectile : this.projectiles) {
+        if (projectile.getId() != ((RemoveProjectileTransform)transform).projectile.getId()) {
+          projectiles.add(projectile);
+        }
+      }
     }
 
-    for (Projectile projectile : this.projectiles) {
+    List<Projectile> temp = projectiles;
+    projectiles = new ArrayList<>();
+    for (Projectile projectile : temp) {
       projectiles.add(projectile.apply(transform));
     }
 
@@ -182,6 +192,17 @@ public class Room {
     private final Projectile projectile;
 
     public AddProjectileTransform (String roomId, Projectile projectile) {
+      this.roomId = roomId;
+      this.projectile = projectile;
+    }
+  }
+
+  public static class RemoveProjectileTransform implements Transform {
+    private final String roomId;
+
+    private final Projectile projectile;
+
+    public RemoveProjectileTransform (String roomId, Projectile projectile) {
       this.roomId = roomId;
       this.projectile = projectile;
     }

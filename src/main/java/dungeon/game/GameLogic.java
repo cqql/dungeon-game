@@ -178,11 +178,17 @@ public class GameLogic {
    * Move the projectiles and collide it with walls and borders.
    */
   private void handleProjectiles (Transaction transaction, double delta) {
-    for (Projectile projectile : transaction.getWorld().getCurrentRoom().getProjectiles()) {
+    Room room = transaction.getWorld().getCurrentRoom();
+
+    for (Projectile projectile : room.getProjectiles()) {
       transaction.pushAndCommit(new Projectile.MoveTransform(projectile.getId(), new Position(projectile.getPosition().getVector().plus(projectile.getVelocity().times(delta)))));
 
-      for (Tile wall : transaction.getWorld().getCurrentRoom().getWalls()) {
+      for (Tile wall : room.getWalls()) {
+        if (this.touch(wall, projectile)) {
+          transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
 
+          break;
+        }
       }
     }
   }

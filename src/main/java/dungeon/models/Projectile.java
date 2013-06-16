@@ -3,7 +3,9 @@ package dungeon.models;
 import dungeon.models.messages.Transform;
 import dungeon.util.Vector;
 
-public class Projectile {
+import java.awt.geom.Rectangle2D;
+
+public class Projectile implements Spatial {
   public static final int SIZE = 100;
 
   private final int id;
@@ -43,6 +45,11 @@ public class Projectile {
     } else {
       return this;
     }
+  }
+
+  @Override
+  public Rectangle2D space () {
+    return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
 
   public static class MoveTransform implements Transform {
