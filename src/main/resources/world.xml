@@ -2,7 +2,7 @@
 <world>
   <level id="level-1">
     <room id="room-1">
-      <enemy id="2" hitPoints="2">
+      <enemy id="2" hitPoints="2" moveStrategy="NORMAL">
         <position x="1000" y="2000" />
       </enemy>
       <tile blocking="false">
@@ -1279,97 +1279,97 @@
       <tile blocking='true'>
         <position x='19000' y='19000'></position>
       </tile>
-      <enemy hitPoints='8' id='100'>
+      <enemy hitPoints='8' id='100' moveStrategy="NORMAL">
         <position x='0' y='7000'></position>
       </enemy>
-      <enemy hitPoints='1' id='101'>
+      <enemy hitPoints='1' id='101' moveStrategy="NORMAL">
         <position x='0' y='19000'></position>
       </enemy>
-      <enemy hitPoints='4' id='102'>
+      <enemy hitPoints='4' id='102' moveStrategy="NORMAL">
         <position x='1000' y='4000'></position>
       </enemy>
-      <enemy hitPoints='4' id='103'>
+      <enemy hitPoints='4' id='103' moveStrategy="NORMAL">
         <position x='1000' y='9000'></position>
       </enemy>
-      <enemy hitPoints='9' id='104'>
+      <enemy hitPoints='9' id='104' moveStrategy="NORMAL">
         <position x='2000' y='4000'></position>
       </enemy>
-      <enemy hitPoints='3' id='105'>
+      <enemy hitPoints='3' id='105' moveStrategy="NORMAL">
         <position x='2000' y='14000'></position>
       </enemy>
-      <enemy hitPoints='5' id='106'>
+      <enemy hitPoints='5' id='106' moveStrategy="NORMAL">
         <position x='5000' y='14000'></position>
       </enemy>
-      <enemy hitPoints='5' id='107'>
+      <enemy hitPoints='5' id='107' moveStrategy="NORMAL">
         <position x='6000' y='0'></position>
       </enemy>
-      <enemy hitPoints='3' id='108'>
+      <enemy hitPoints='3' id='108' moveStrategy="NORMAL">
         <position x='6000' y='10000'></position>
       </enemy>
-      <enemy hitPoints='0' id='109'>
+      <enemy hitPoints='0' id='109' moveStrategy="NORMAL">
         <position x='6000' y='14000'></position>
       </enemy>
-      <enemy hitPoints='7' id='110'>
+      <enemy hitPoints='7' id='110' moveStrategy="NORMAL">
         <position x='7000' y='2000'></position>
       </enemy>
-      <enemy hitPoints='7' id='111'>
+      <enemy hitPoints='7' id='111' moveStrategy="NORMAL">
         <position x='7000' y='13000'></position>
       </enemy>
-      <enemy hitPoints='4' id='112'>
+      <enemy hitPoints='4' id='112' moveStrategy="NORMAL">
         <position x='7000' y='18000'></position>
       </enemy>
-      <enemy hitPoints='0' id='113'>
+      <enemy hitPoints='0' id='113' moveStrategy="NORMAL">
         <position x='8000' y='18000'></position>
       </enemy>
-      <enemy hitPoints='6' id='114'>
+      <enemy hitPoints='6' id='114' moveStrategy="NORMAL">
         <position x='11000' y='1000'></position>
       </enemy>
-      <enemy hitPoints='5' id='115'>
+      <enemy hitPoints='5' id='115' moveStrategy="NORMAL">
         <position x='11000' y='10000'></position>
       </enemy>
-      <enemy hitPoints='0' id='116'>
+      <enemy hitPoints='0' id='116' moveStrategy="NORMAL">
         <position x='12000' y='16000'></position>
       </enemy>
-      <enemy hitPoints='0' id='117'>
+      <enemy hitPoints='0' id='117' moveStrategy="NORMAL">
         <position x='13000' y='2000'></position>
       </enemy>
-      <enemy hitPoints='4' id='118'>
+      <enemy hitPoints='4' id='118' moveStrategy="NORMAL">
         <position x='13000' y='4000'></position>
       </enemy>
-      <enemy hitPoints='2' id='119'>
+      <enemy hitPoints='2' id='119' moveStrategy="NORMAL">
         <position x='13000' y='6000'></position>
       </enemy>
-      <enemy hitPoints='8' id='120'>
+      <enemy hitPoints='8' id='120' moveStrategy="BOSS">
         <position x='13000' y='7000'></position>
       </enemy>
-      <enemy hitPoints='7' id='121'>
+      <enemy hitPoints='7' id='121' moveStrategy="NORMAL">
         <position x='13000' y='14000'></position>
       </enemy>
-      <enemy hitPoints='4' id='122'>
+      <enemy hitPoints='4' id='122' moveStrategy="NORMAL">
         <position x='14000' y='1000'></position>
       </enemy>
-      <enemy hitPoints='3' id='123'>
+      <enemy hitPoints='3' id='123' moveStrategy="NORMAL">
         <position x='14000' y='7000'></position>
       </enemy>
-      <enemy hitPoints='5' id='124'>
+      <enemy hitPoints='5' id='124' moveStrategy="NORMAL">
         <position x='14000' y='16000'></position>
       </enemy>
-      <enemy hitPoints='3' id='125'>
+      <enemy hitPoints='3' id='125' moveStrategy="NORMAL">
         <position x='15000' y='5000'></position>
       </enemy>
-      <enemy hitPoints='5' id='126'>
+      <enemy hitPoints='5' id='126' moveStrategy="NORMAL">
         <position x='15000' y='12000'></position>
       </enemy>
-      <enemy hitPoints='5' id='127'>
+      <enemy hitPoints='5' id='127' moveStrategy="NORMAL">
         <position x='16000' y='0'></position>
       </enemy>
-      <enemy hitPoints='7' id='128'>
+      <enemy hitPoints='7' id='128' moveStrategy="NORMAL">
         <position x='16000' y='1000'></position>
       </enemy>
-      <enemy hitPoints='5' id='129'>
+      <enemy hitPoints='5' id='129' moveStrategy="NORMAL">
         <position x='16000' y='11000'></position>
       </enemy>
-      <enemy hitPoints='8' id='130'>
+      <enemy hitPoints='8' id='130' moveStrategy="NORMAL">
         <position x='18000' y='9000'></position>
       </enemy>
       <teleporter blocking='false'>
@@ -1474,7 +1474,7 @@
       </victory-tile>
     </room>
   </level>
-  <player id="1" name="Link" lives="3" hitPoints="1" maxHitPoints="3" money="0" mana="3" maxMana="10" levelId="level-1" roomId="room-1"
+  <player id="1" name="Link" lives="3" hitPoints="5" maxHitPoints="5" money="0" mana="3" maxMana="10" levelId="level-1" roomId="room-1"
           viewingDirection="LEFT" savePointRoomId="room-1">
     <position x="0" y="0" />
     <savePointPosition x="0" y="0" />

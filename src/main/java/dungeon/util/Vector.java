@@ -17,6 +17,10 @@ public class Vector {
     return new Vector(this.x + a.x, this.y + a.y);
   }
 
+  public Vector minus (Vector a) {
+    return this.plus(a.times(-1));
+  }
+
   public Vector times (double scalar) {
     return new Vector(this.x * scalar, this.y * scalar);
   }
