@@ -38,6 +38,10 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color itemColor = new Color(151, 151, 151);
 
+  private final Color healthPotionColor = new Color (200, 0, 0);
+
+  private final Color manaPotionColor = new Color (0, 170, 255);
+
   private final Color projectileColor = new Color(118, 77, 0);
 
   private final Color iceBoltProjectileColor = new Color(0, 200, 255);
@@ -113,8 +117,10 @@ public class Canvas extends JPanel implements MessageHandler {
     for (Drop drop : room.getDrops()) {
       if (drop.isMoney()) {
         g.setColor(this.moneyColor);
-      } else {
-        g.setColor(this.itemColor);
+      } else if (drop.getItem().getType() == ItemType.HEALTH_POTION) {
+        g.setColor(this.healthPotionColor);
+      } else if (drop.getItem().getType() == ItemType.MANA_POTION) {
+        g.setColor(this.manaPotionColor);
       }
 
       this.drawSquare(g, drop.getPosition(), Drop.SIZE);
