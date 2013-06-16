@@ -125,13 +125,6 @@ public class Player implements Spatial {
     return this.savePointPosition;
   }
 
-  /**
-   * @return true if the player touches the object.
-   */
-  public boolean touches (Spatial object) {
-    return this.space().intersects(object.space());
-  }
-
   public Rectangle2D space () {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
