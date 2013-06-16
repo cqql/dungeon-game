@@ -58,6 +58,8 @@ public class InputToMessageConverter implements KeyListener {
         return new AttackCommand();
       case 'h':
         return new HealthPotionCommand();
+      case 'k':
+        return new IceBoltAttackCommand();
       default:
         return null;
     }

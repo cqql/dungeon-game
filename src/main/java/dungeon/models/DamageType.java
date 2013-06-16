@@ -1,5 +1,5 @@
 package dungeon.models;
 
 public enum DamageType {
-  NORMAL;
+  NORMAL, ICE;
 }

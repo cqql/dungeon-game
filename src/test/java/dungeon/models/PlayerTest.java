@@ -22,6 +22,8 @@ public class PlayerTest {
       5,
       5,
       0,
+      0,
+      1,
       Arrays.asList(
         new Item(1, ItemType.HEALTH_POTION),
         new Item(2, ItemType.HEALTH_POTION)
@@ -61,14 +63,14 @@ public class PlayerTest {
 
   @Test
   public void playerShootsInViewingDirection () {
-    Projectile projectile = player.shootProjectile(1);
+    Projectile projectile = player.attack(1);
 
     assertEquals(Direction.RIGHT.getVector(), projectile.getVelocity().normalize());
   }
 
   @Test
   public void playerShootsFromHip () {
-    Projectile projectile = player.shootProjectile(1);
+    Projectile projectile = player.attack(1);
 
     assertTrue(projectile.getPosition().getX() >= player.getPosition().getX() + Player.SIZE - Projectile.SIZE);
     assertTrue(projectile.getPosition().getY() <= player.getPosition().getY() + (Player.SIZE / 2));

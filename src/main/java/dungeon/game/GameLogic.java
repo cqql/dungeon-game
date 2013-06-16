@@ -45,9 +45,15 @@ public class GameLogic {
 
   private boolean attacking;
 
-  private long lastAttackTime;
+  private boolean useIceBolt;
 
   private boolean useHealthPotion;
+
+  private long lastAttackTime;
+
+  private long lastManaUsedTime;
+
+  private long lastManaRestoreTime;
 
   private GameState gameState = GameState.PLAYING;
 
@@ -95,6 +101,20 @@ public class GameLogic {
   }
 
   /**
+   * Set the ice bolt attacking flag.
+   */
+  public void activateIceBolt () {
+    this.useIceBolt = true;
+  }
+
+  /**
+   * Reset the ice bolt attacking flag.
+   */
+  public void deactivateIceBoltAttack () {
+    this.useIceBolt = false;
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -121,7 +141,10 @@ public class GameLogic {
     this.handleTeleporters(transaction);
     this.handleCheckpoint(transaction);
     this.handleRespawn(transaction);
-    this.handleAttacking(transaction);
+    this.handleMana(transaction);
+    this.handleAttack(transaction);
+    this.handleIceBolt(transaction);
+
 
     this.world = transaction.getWorld();
 
@@ -333,6 +356,19 @@ public class GameLogic {
   }
 
   /**
+   * Restore mana every 5 seconds by 1
+   */
+  private void handleMana (Transaction transaction) {
+    if (transaction.getWorld().getPlayer().getMana() < transaction.getWorld().getPlayer().getMaxMana()
+      && System.currentTimeMillis() - this.lastManaRestoreTime > 5000
+      && System.currentTimeMillis() - this.lastManaUsedTime > 5000) {
+      this.lastManaRestoreTime = System.currentTimeMillis();
+
+      transaction.pushAndCommit(new Player.ManaTransform(1));
+    }
+  }
+
+  /**
    * Set the game state to DEFEAT when the player's hit points drop to 0.
    */
   private void handleDefeat () {
@@ -355,14 +391,31 @@ public class GameLogic {
   /**
    * Create a new projectile if the player is attacking.
    */
-  private void handleAttacking (Transaction transaction) {
+  private void handleAttack (Transaction transaction) {
     if (this.attacking && System.currentTimeMillis() - this.lastAttackTime > 200) {
       this.lastAttackTime = System.currentTimeMillis();
 
       Player player = transaction.getWorld().getPlayer();
 
-      Projectile projectile = player.shootProjectile(this.nextId());
+      Projectile projectile = player.attack(this.nextId());
 
+      transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
+    }
+  }
+
+  /**
+   * Create a new projectile if the player is attacking with ice bolts.
+   */
+  private void handleIceBolt (Transaction transaction) {
+    Player player = transaction.getWorld().getPlayer();
+
+    if (this.useIceBolt && player.getMana() > 0) {
+      this.lastManaUsedTime = System.currentTimeMillis();
+      this.useIceBolt = false;
+
+      Projectile projectile = player.iceBoltAttack(this.nextId());
+
+      transaction.pushAndCommit(new Player.ManaTransform(-1));
       transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
     }
   }
