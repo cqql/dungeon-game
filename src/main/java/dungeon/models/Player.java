@@ -152,6 +152,21 @@ public class Player implements Spatial, Identifiable {
   }
 
   /**
+   * @return a list of all health potions in the player's bag.
+   */
+  public List<Item> getHealthPotions () {
+    List<Item> healthPotions = new ArrayList<>();
+
+    for (Item item : this.items) {
+      if (item.getType() == ItemType.HEALTH_POTION) {
+        healthPotions.add(item);
+      }
+    }
+
+    return healthPotions;
+  }
+
+  /**
    * Returns a projectile that the player shoots.
    *
    * This means that the projectile is moving in the viewing direction and shot from the "hip".
@@ -195,7 +210,7 @@ public class Player implements Spatial, Identifiable {
     } else if (transform instanceof HitpointTransform) {
       HitpointTransform hpTransform = (HitpointTransform)transform;
 
-      hitPoints += hpTransform.delta;
+      hitPoints = Math.max(Math.min(hitPoints + hpTransform.delta, this.maxHitPoints), 0);
     } else if (transform instanceof LivesTransform) {
       LivesTransform livesTransform = (LivesTransform)transform;
 
@@ -219,6 +234,14 @@ public class Player implements Spatial, Identifiable {
       ManaTransform manaTransform = (Player.ManaTransform)transform;
 
       mana += manaTransform.delta;
+    } else if (transform instanceof RemoveItemTransform) {
+      items = new ArrayList<>();
+
+      for (Item item : this.items) {
+        if (!item.equals(((RemoveItemTransform)transform).item)) {
+          items.add(item);
+        }
+      }
     }
 
     return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, position, viewingDirection, savePointRoomId, savePointPosition);
@@ -294,6 +317,14 @@ public class Player implements Spatial, Identifiable {
 
     public ManaTransform (int delta) {
       this.delta = delta;
+    }
+  }
+
+  public static class RemoveItemTransform implements Transform {
+    private final Item item;
+
+    public RemoveItemTransform (Item item) {
+      this.item = item;
     }
   }
 

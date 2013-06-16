@@ -8,6 +8,7 @@ import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -46,7 +47,9 @@ public class GameLogic {
 
   private long lastAttackTime;
 
-  private long lastManaUseTime;
+  private long lastManaUsedTime;
+
+  private boolean useHealthPotion;
 
   private GameState gameState = GameState.PLAYING;
 
@@ -87,6 +90,13 @@ public class GameLogic {
   }
 
   /**
+   * Use a health potion during the next pulse.
+   */
+  public void useHealthPotion () {
+    this.useHealthPotion = true;
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -103,6 +113,7 @@ public class GameLogic {
   public Transaction pulse (double delta) {
     Transaction transaction = new Transaction(this.world);
 
+    this.handleHealthPotion(transaction);
     this.handleMovement(transaction, delta);
     this.handleProjectiles(transaction, delta);
     this.updateViewingDirection(transaction);
@@ -120,6 +131,26 @@ public class GameLogic {
     this.handleWin();
 
     return transaction;
+  }
+
+  /**
+   * Use a health potion if the player has one.
+   */
+  private void handleHealthPotion (Transaction transaction) {
+    if (this.useHealthPotion) {
+      this.useHealthPotion = false;
+
+      List<Item> healthPotions = transaction.getWorld().getPlayer().getHealthPotions();
+
+      if (healthPotions.size() > 0) {
+        Item healthPotion = healthPotions.get(0);
+
+        transaction.push(new Player.HitpointTransform(healthPotion.getType().getHitPointDelta()));
+        transaction.push(new Player.RemoveItemTransform(healthPotion));
+
+        transaction.commit();
+      }
+    }
   }
 
   private void handleMovement (Transaction transaction, double delta) {
@@ -308,7 +339,7 @@ public class GameLogic {
    */
 
   private void handleMana (Transaction transaction) {
-    if (this.world.getPlayer().getMana() < this.world.getPlayer().getMaxMana() && System.currentTimeMillis() - this.lastManaUseTime > 5000) {
+    if (this.world.getPlayer().getMana() < this.world.getPlayer().getMaxMana() && System.currentTimeMillis() - this.lastManaUsedTime > 5000) {
       transaction.pushAndCommit(new Player.ManaTransform(1));
     }
   }
