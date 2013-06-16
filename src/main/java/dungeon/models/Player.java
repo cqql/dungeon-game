@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Player implements Spatial {
+public class Player implements Spatial, Identifiable {
   public static final int SIZE = 900;
+
+  private final int id;
 
   private final String name;
 
@@ -62,7 +64,8 @@ public class Player implements Spatial {
    */
   private final Position savePointPosition;
 
-  public Player (String name, int lives, int hitPoints, int maxHitPoints, int money, List<Item> items, String levelId, String roomId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
+  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, List<Item> items, String levelId, String roomId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
+    this.id = id;
     this.name = name;
     this.lives = lives;
     this.hitPoints = hitPoints;
@@ -75,6 +78,10 @@ public class Player implements Spatial {
     this.viewingDirection = viewingDirection;
     this.savePointRoomId = savePointRoomId;
     this.savePointPosition = savePointPosition;
+  }
+
+  public int getId () {
+    return this.id;
   }
 
   public String getName () {
@@ -174,7 +181,7 @@ public class Player implements Spatial {
       items.add(((AddItemTransform)transform).item);
     }
 
-    return new Player(name, lives, hitPoints, maxHitPoints, money, items, levelId, roomId, position, viewingDirection, savePointRoomId, savePointPosition);
+    return new Player(id, name, lives, hitPoints, maxHitPoints, money, items, levelId, roomId, position, viewingDirection, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {
@@ -248,5 +255,29 @@ public class Player implements Spatial {
     public ViewingDirectionTransform (Direction direction) {
       this.direction = direction;
     }
+  }
+
+  @Override
+  public boolean equals (Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Player player = (Player)o;
+
+    if (id != player.id) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode () {
+    return id;
   }
 }

@@ -30,9 +30,11 @@ public class GameLogic {
   /**
    * The next available ID.
    *
+   * IDs in maps may only be between 0 and 999999.
+   *
    * @see #nextId()
    */
-  private int nextId;
+  private int nextId = 1000000;
 
   private long lastDamageTime;
 
@@ -185,7 +187,9 @@ public class GameLogic {
         break;
       }
 
-      if (this.touch(transaction.getWorld().getPlayer(), projectile)) {
+      Player player = transaction.getWorld().getPlayer();
+
+      if (this.touch(player, projectile) && !player.equals(projectile.getSource())) {
         this.damagePlayer(transaction, projectile.getDamage());
       }
     }
@@ -304,7 +308,9 @@ public class GameLogic {
     if (this.attacking && System.currentTimeMillis() - this.lastAttackTime > 200) {
       this.lastAttackTime = System.currentTimeMillis();
 
-      Projectile projectile = new Projectile(this.nextId(), transaction.getWorld().getPlayer().getPosition(), transaction.getWorld().getPlayer().getViewingDirection().getVector().times(5000), 1);
+      Player player = transaction.getWorld().getPlayer();
+
+      Projectile projectile = new Projectile(this.nextId(), player, player.getPosition(), player.getViewingDirection().getVector().times(5000), 1);
 
       transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
     }

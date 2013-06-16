@@ -10,14 +10,17 @@ public class Projectile implements Spatial {
 
   private final int id;
 
+  private final Identifiable source;
+
   private final Position position;
 
   private final Vector velocity;
 
   private final int damage;
 
-  public Projectile (int id, Position position, Vector velocity, int damage) {
+  public Projectile (int id, Identifiable source, Position position, Vector velocity, int damage) {
     this.id = id;
+    this.source = source;
     this.position = position;
     this.velocity = velocity;
     this.damage = damage;
@@ -25,6 +28,15 @@ public class Projectile implements Spatial {
 
   public int getId () {
     return this.id;
+  }
+
+  /**
+   * What created this projectile?
+   *
+   * This may be null.
+   */
+  public Identifiable getSource () {
+    return this.source;
   }
 
   public Position getPosition () {
@@ -41,7 +53,7 @@ public class Projectile implements Spatial {
 
   public Projectile apply (Transform transform) {
     if (transform instanceof MoveTransform && ((MoveTransform)transform).projectileId == this.id) {
-      return new Projectile(this.id, ((MoveTransform)transform).position, this.velocity, this.damage);
+      return new Projectile(this.id, source, ((MoveTransform)transform).position, this.velocity, this.damage);
     } else {
       return this;
     }

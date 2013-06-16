@@ -22,7 +22,7 @@ public class ProjectileAdapter extends XmlAdapter<ProjectileAdapter, Projectile>
 
   @Override
   public Projectile unmarshal (ProjectileAdapter adapter) throws Exception {
-    return new Projectile(adapter.id, adapter.position, adapter.direction, adapter.damage);
+    return new Projectile(adapter.id, null, adapter.position, adapter.direction, adapter.damage);
   }
 
   @Override
