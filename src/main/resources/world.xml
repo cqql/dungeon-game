@@ -40,6 +40,10 @@
       <drop id="2" money="20">
         <position x="1500" y="1500"></position>
       </drop>
+      <drop id="3" money="0">
+          <position x="1500" y="1000"></position>
+          <item id="3" type="MANA_POTION"></item>
+      </drop>
     </room>
     <room id="room-2">
       <tile blocking="true">
