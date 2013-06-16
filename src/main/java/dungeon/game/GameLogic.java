@@ -46,6 +46,8 @@ public class GameLogic {
 
   private long lastAttackTime;
 
+  private long lastManaUseTime;
+
   private GameState gameState = GameState.PLAYING;
 
   private World world;
@@ -298,6 +300,16 @@ public class GameLogic {
       transaction.pushAndCommit(new Player.LivesTransform(-1));
       transaction.pushAndCommit(new Player.HitpointTransform(player.getMaxHitPoints()));
       transaction.pushAndCommit(new Player.TeleportTransform(player.getSavePointRoomId(), player.getSavePointPosition()));
+    }
+  }
+
+  /**
+   * reload mana every 5 seconds by 1
+   */
+
+  private void handleMana (Transaction transaction) {
+    if (this.world.getPlayer().getMana() < this.world.getPlayer().getMaxMana() && System.currentTimeMillis() - this.lastManaUseTime > 5000) {
+      transaction.pushAndCommit(new Player.ManaTransform(1));
     }
   }
 
