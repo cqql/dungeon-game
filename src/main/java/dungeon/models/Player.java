@@ -167,6 +167,21 @@ public class Player implements Spatial, Identifiable {
   }
 
   /**
+   * @return a list of all mana potions in the player's bag.
+   */
+  public List<Item> getManaPotions () {
+    List<Item> manaPotions = new ArrayList<>();
+
+    for (Item item : this.items) {
+      if (item.getType() == ItemType.MANA_POTION) {
+        manaPotions.add(item);
+      }
+    }
+
+    return manaPotions;
+  }
+
+  /**
    * Returns a projectile that the player shoots.
    *
    * This means that the projectile is moving in the viewing direction and shot from the "hip".
