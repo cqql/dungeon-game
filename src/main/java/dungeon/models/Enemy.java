@@ -44,7 +44,11 @@ public class Enemy implements Spatial, Identifiable {
   }
 
   public Enemy apply (Transform transform) {
-    return this;
+    if (transform instanceof HitPointTransform && this.equals(((HitPointTransform)transform).enemy)) {
+      return new Enemy(this.id, this.hitPoints + ((HitPointTransform)transform).delta, this.position);
+    } else {
+      return this;
+    }
   }
 
   @Override
@@ -74,5 +78,16 @@ public class Enemy implements Spatial, Identifiable {
   @Override
   public int hashCode () {
     return this.id;
+  }
+
+  public static class HitPointTransform implements Transform {
+    private final Enemy enemy;
+
+    public final int delta;
+
+    public HitPointTransform (Enemy enemy, int delta) {
+      this.enemy = enemy;
+      this.delta = delta;
+    }
   }
 }

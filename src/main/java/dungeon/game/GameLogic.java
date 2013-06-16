@@ -196,7 +196,9 @@ public class GameLogic {
 
       for (Enemy enemy : room.getEnemies()) {
         if (this.touch(enemy, projectile) && !enemy.equals(projectile.getSource())) {
-
+          this.damageEnemy(transaction, enemy, projectile.getDamage());
+          transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+          break;
         }
       }
     }
@@ -350,6 +352,13 @@ public class GameLogic {
 
       transaction.pushAndCommit(new Player.HitpointTransform(-amount));
     }
+  }
+
+  /**
+   * Inflict {@code amount} damage on {@code enemy}.
+   */
+  private void damageEnemy (Transaction transaction, Enemy enemy, int amount) {
+    transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -amount));
   }
 
   /**
