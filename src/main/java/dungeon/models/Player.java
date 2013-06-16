@@ -137,6 +137,7 @@ public class Player implements Spatial, Identifiable {
   }
 
   public Player apply (Transform transform) {
+    int id = this.id;
     String name = this.name;
     int lives = this.lives;
     int hitPoints = this.hitPoints;
@@ -269,7 +270,7 @@ public class Player implements Spatial, Identifiable {
 
     Player player = (Player)o;
 
-    if (id != player.id) {
+    if (this.id != player.id) {
       return false;
     }
 
@@ -278,6 +279,6 @@ public class Player implements Spatial, Identifiable {
 
   @Override
   public int hashCode () {
-    return id;
+    return this.id;
   }
 }

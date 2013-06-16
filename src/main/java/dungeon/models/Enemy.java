@@ -4,11 +4,15 @@ import dungeon.models.messages.Transform;
 
 import java.awt.geom.Rectangle2D;
 
-public class Enemy implements Spatial {
+public class Enemy implements Spatial, Identifiable {
   public static final int SIZE = 1000;
 
+  private final int id;
+
+  private final int hitPoints;
+
   /**
-   * How much damage the enemy inflics on the player.
+   * How much damage the enemy inflicts on the player.
    */
   private final int strength = 1;
 
@@ -17,8 +21,18 @@ public class Enemy implements Spatial {
    */
   private final Position position;
 
-  public Enemy (Position position) {
+  public Enemy (int id, int hitPoints, Position position) {
+    this.id = id;
+    this.hitPoints = hitPoints;
     this.position = position;
+  }
+
+  public int getId () {
+    return this.id;
+  }
+
+  public int getHitPoints () {
+    return this.hitPoints;
   }
 
   public int getStrength () {
@@ -36,5 +50,29 @@ public class Enemy implements Spatial {
   @Override
   public Rectangle2D space () {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
+  }
+
+  @Override
+  public boolean equals (Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Enemy enemy = (Enemy)o;
+
+    if (this.id != enemy.id) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode () {
+    return this.id;
   }
 }

@@ -106,6 +106,7 @@ public class GameLogic {
     this.updateViewingDirection(transaction);
     this.handleDrops(transaction);
     this.handleEnemies(transaction);
+    this.handleEnemyLives(transaction);
     this.handleTeleporters(transaction);
     this.handleCheckpoint(transaction);
     this.handleRespawn(transaction);
@@ -176,14 +177,12 @@ public class GameLogic {
       for (Tile wall : room.getWalls()) {
         if (this.touch(wall, projectile)) {
           transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
-
           break;
         }
       }
 
       if (this.outOfBorders(projectile, room)) {
         transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
-
         break;
       }
 
@@ -191,6 +190,14 @@ public class GameLogic {
 
       if (this.touch(player, projectile) && !player.equals(projectile.getSource())) {
         this.damagePlayer(transaction, projectile.getDamage());
+        transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+        break;
+      }
+
+      for (Enemy enemy : room.getEnemies()) {
+        if (this.touch(enemy, projectile) && !enemy.equals(projectile.getSource())) {
+
+        }
       }
     }
   }
@@ -232,6 +239,17 @@ public class GameLogic {
     for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
       if (this.touch(transaction.getWorld().getPlayer(), enemy)) {
         this.damagePlayer(transaction, enemy.getStrength());
+      }
+    }
+  }
+
+  /**
+   * Destroy enemies when their hit points drop below 0.
+   */
+  private void handleEnemyLives (Transaction transaction) {
+    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
+      if (enemy.getHitPoints() <= 0) {
+        transaction.pushAndCommit(new Room.RemoveEnemyTransform(enemy));
       }
     }
   }

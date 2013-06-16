@@ -2,7 +2,7 @@
 <world>
   <level id="level-1">
     <room id="room-1">
-      <enemy>
+      <enemy id="2" hitPoints="2">
         <position x="1000" y="2000" />
       </enemy>
       <tile blocking="false">

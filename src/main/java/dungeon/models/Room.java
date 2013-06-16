@@ -167,12 +167,26 @@ public class Room {
           projectiles.add(projectile);
         }
       }
+    } else if (transform instanceof RemoveEnemyTransform) {
+      enemies = new ArrayList<>();
+
+      for (Enemy enemy : this.enemies) {
+        if (!enemy.equals(((RemoveEnemyTransform)transform).enemy)) {
+          enemies.add(enemy);
+        }
+      }
     }
 
-    List<Projectile> temp = projectiles;
+    List<Projectile> tempProjectiles = projectiles;
     projectiles = new ArrayList<>();
-    for (Projectile projectile : temp) {
+    for (Projectile projectile : tempProjectiles) {
       projectiles.add(projectile.apply(transform));
+    }
+
+    List<Enemy> tempEnemies = enemies;
+    enemies = new ArrayList<>();
+    for (Enemy enemy : tempEnemies) {
+      enemies.add(enemy.apply(transform));
     }
 
     return new Room(id, enemies, savePoints, tiles, drops, projectiles);
@@ -205,6 +219,14 @@ public class Room {
     public RemoveProjectileTransform (String roomId, Projectile projectile) {
       this.roomId = roomId;
       this.projectile = projectile;
+    }
+  }
+
+  public static class RemoveEnemyTransform implements Transform {
+    private final Enemy enemy;
+
+    public RemoveEnemyTransform (Enemy enemy) {
+      this.enemy = enemy;
     }
   }
 }

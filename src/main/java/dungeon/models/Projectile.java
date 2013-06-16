@@ -53,7 +53,7 @@ public class Projectile implements Spatial {
 
   public Projectile apply (Transform transform) {
     if (transform instanceof MoveTransform && ((MoveTransform)transform).projectileId == this.id) {
-      return new Projectile(this.id, source, ((MoveTransform)transform).position, this.velocity, this.damage);
+      return new Projectile(this.id, this.source, ((MoveTransform)transform).position, this.velocity, this.damage);
     } else {
       return this;
     }
