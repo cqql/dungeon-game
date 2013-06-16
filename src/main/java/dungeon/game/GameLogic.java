@@ -6,6 +6,7 @@ import dungeon.models.messages.Transform;
 import dungeon.ui.messages.MoveCommand;
 import dungeon.util.Vector;
 
+import java.awt.geom.Rectangle2D;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -119,8 +120,11 @@ public class GameLogic {
   private void handleMovement (Transaction transaction, double delta) {
     Transform movementTransform = moveTransform(delta);
     movementTransform = filterWalls(movementTransform);
+    Player movedPlayer = transaction.getWorld().getPlayer().apply(movementTransform);
 
-    transaction.pushAndCommit(filterBorders(movementTransform));
+    if (!this.outOfBorders(movedPlayer, transaction.getWorld().getCurrentRoom())) {
+      transaction.pushAndCommit(movementTransform);
+    }
   }
 
   /**
@@ -159,22 +163,6 @@ public class GameLogic {
   }
 
   /**
-   * Prevent movement if the player would leave the playing field.
-   */
-  private Transform filterBorders (Transform transform) {
-    Player movedPlayer = this.world.getPlayer().apply(transform);
-
-    if (movedPlayer.getPosition().getY() < 0
-      || movedPlayer.getPosition().getY() + Player.SIZE > this.world.getCurrentRoom().getYSize()
-      || movedPlayer.getPosition().getX() < 0
-      || movedPlayer.getPosition().getX() + Player.SIZE > this.world.getCurrentRoom().getXSize()) {
-      return new IdentityTransform();
-    } else {
-      return transform;
-    }
-  }
-
-  /**
    * Move the projectiles and collide it with walls and borders.
    */
   private void handleProjectiles (Transaction transaction, double delta) {
@@ -189,6 +177,12 @@ public class GameLogic {
 
           break;
         }
+      }
+
+      if (this.outOfBorders(projectile, room)) {
+        transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+
+        break;
       }
     }
   }
@@ -326,5 +320,14 @@ public class GameLogic {
    */
   private boolean touch (Spatial a, Spatial b) {
     return a.space().intersects(b.space());
+  }
+
+  /**
+   * Helper to check if a spatial object is out of the playing field.
+   */
+  private boolean outOfBorders (Spatial object, Room room) {
+    Rectangle2D space = object.space();
+
+    return space.getMinX() < 0 || space.getMinY() < 0 || space.getMaxX() > room.getXSize() || space.getMinY() > room.getYSize();
   }
 }
