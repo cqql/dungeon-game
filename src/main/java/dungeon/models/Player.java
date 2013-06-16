@@ -241,7 +241,7 @@ public class Player implements Spatial, Identifiable {
     } else if (transform instanceof ManaTransform) {
       ManaTransform manaTransform = (Player.ManaTransform)transform;
 
-      mana += manaTransform.delta;
+      mana = Math.max(Math.min(mana + manaTransform.delta, this.maxMana), 0);
     } else if (transform instanceof RemoveItemTransform) {
       items = new ArrayList<>();
 

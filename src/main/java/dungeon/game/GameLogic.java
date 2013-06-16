@@ -359,9 +359,11 @@ public class GameLogic {
    * Restore mana every 5 seconds by 1
    */
   private void handleMana (Transaction transaction) {
-    if (this.world.getPlayer().getMana() < this.world.getPlayer().getMaxMana()
+    if (transaction.getWorld().getPlayer().getMana() < transaction.getWorld().getPlayer().getMaxMana()
       && System.currentTimeMillis() - this.lastManaRestoreTime > 5000
-      || System.currentTimeMillis() - this.lastManaUsedTime > 5000) {
+      && System.currentTimeMillis() - this.lastManaUsedTime > 5000) {
+      this.lastManaRestoreTime = System.currentTimeMillis();
+
       transaction.pushAndCommit(new Player.ManaTransform(1));
     }
   }
@@ -405,11 +407,11 @@ public class GameLogic {
    * Create a new projectile if the player is attacking with ice bolts.
    */
   private void handleIceBolt (Transaction transaction) {
-    if (this.useIceBolt && System.currentTimeMillis() - this.lastAttackTime > 200) {
-      this.lastAttackTime = System.currentTimeMillis();
-      this.useIceBolt = false;
+    Player player = transaction.getWorld().getPlayer();
 
-      Player player = transaction.getWorld().getPlayer();
+    if (this.useIceBolt && player.getMana() > 0) {
+      this.lastManaUsedTime = System.currentTimeMillis();
+      this.useIceBolt = false;
 
       Projectile projectile = player.iceBoltAttack(this.nextId());
 
