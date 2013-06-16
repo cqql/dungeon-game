@@ -6,16 +6,23 @@ package dungeon.models;
 public class Item {
   private final int id;
 
-  public Item (int id) {
+  private final ItemType type;
+
+  public Item (int id, ItemType type) {
     this.id = id;
+    this.type = type;
   }
 
   public int getId () {
     return this.id;
   }
 
+  public ItemType getType () {
+    return this.type;
+  }
+
   @Override
   public String toString () {
-    return "Item#" + this.id;
+    return "Item#" + this.id + " " + this.type;
   }
 }

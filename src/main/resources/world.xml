@@ -35,7 +35,7 @@
       </teleporter>
       <drop id="1" money="0">
         <position x="1500" y="500"></position>
-        <item id="1"></item>
+        <item id="1" type="HEALTH_POTION"></item>
       </drop>
       <drop id="2" money="20">
         <position x="1500" y="1500"></position>
