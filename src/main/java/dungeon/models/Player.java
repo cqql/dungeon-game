@@ -184,12 +184,12 @@ public class Player implements Spatial, Identifiable {
     return new Projectile(id, this, position, this.viewingDirection.getVector().times(speed), damage, type);
   }
 
-  public Projectile Attack (int id) {
-    createProjectile(id, 5000, 1, DamageType.NORMAL);
+  public Projectile attack (int id) {
+    return createProjectile(id, 5000, 1, DamageType.NORMAL);
   }
 
   public Projectile iceBoltAttack (int id) {
-    createProjectile(id, 7000, 2, DamageType.ICE);
+    return createProjectile(id, 7000, 2, DamageType.ICE);
   }
 
   public Player apply (Transform transform) {
