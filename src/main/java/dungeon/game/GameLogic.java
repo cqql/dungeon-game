@@ -45,6 +45,8 @@ public class GameLogic {
 
   private boolean useIceBolt;
 
+  private boolean useWeapon;
+
   private boolean useHealthPotion;
 
   private boolean useManaPotion;
@@ -56,6 +58,8 @@ public class GameLogic {
   private long lastManaUsedTime;
 
   private long lastManaRestoreTime;
+
+  private long lastWeaponUseTime;
 
   private GameState gameState = GameState.PLAYING;
 
@@ -131,6 +135,20 @@ public class GameLogic {
   }
 
   /**
+   * Set the weapon attacking flag
+   */
+  public void activateWeaponAttack () {
+    this.useWeapon = true;
+  }
+
+  /**
+   * Reset the weapon attacking flag.
+   */
+  public void deactivateWeaponAttack () {
+    this.useWeapon = false;
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -162,7 +180,6 @@ public class GameLogic {
     this.handleMana(transaction);
     this.handleAttack(transaction);
     this.handleIceBolt(transaction);
-
 
     this.world = transaction.getWorld();
 
