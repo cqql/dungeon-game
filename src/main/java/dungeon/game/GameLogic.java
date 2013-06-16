@@ -302,6 +302,7 @@ public class GameLogic {
       for (Enemy enemy : room.getEnemies()) {
         if (this.touch(enemy, projectile) && !enemy.equals(projectile.getSource())) {
           this.damageEnemy(transaction, enemy, projectile.getDamage());
+          transaction.pushAndCommit(new Enemy.MoveTransform(enemy, projectile.getVelocity().normalize().times(100)));
           transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
           break;
         }
