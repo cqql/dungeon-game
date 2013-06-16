@@ -171,7 +171,7 @@ public class Player implements Spatial, Identifiable {
    *
    * This means that the projectile is moving in the viewing direction and shot from the "hip".
    */
-  public Projectile shootProjectile (int id) {
+  private Projectile createProjectile (int id, int speed, int damage, DamageType type) {
     Position position = new Position(
       this.position.getVector()
         .plus(new Vector(SIZE / 2, SIZE / 2))
@@ -181,7 +181,15 @@ public class Player implements Spatial, Identifiable {
         )
     );
 
-    return new Projectile(id, this, position, this.viewingDirection.getVector().times(5000), 1, DamageType.NORMAL);
+    return new Projectile(id, this, position, this.viewingDirection.getVector().times(speed), damage, type);
+  }
+
+  public Projectile Attack (int id) {
+    createProjectile(id, 5000, 1, DamageType.NORMAL);
+  }
+
+  public Projectile iceBoltAttack (int id) {
+    createProjectile(id, 7000, 2, DamageType.ICE);
   }
 
   public Player apply (Transform transform) {

@@ -38,7 +38,9 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color itemColor = new Color(151, 151, 151);
 
-  private final Color normalProjectileColor = new Color(118, 77, 0);
+  private final Color ProjectileColor = new Color(118, 77, 0);
+
+  private final Color iceBoltProjectileColor = new Color(0, 200, 255);
 
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
@@ -145,7 +147,9 @@ public class Canvas extends JPanel implements MessageHandler {
   private void drawProjectiles (Graphics g, Room room) {
     for (Projectile projectile : room.getProjectiles()) {
       if (projectile.getType() == DamageType.NORMAL) {
-        g.setColor(normalProjectileColor);
+        g.setColor(ProjectileColor);
+      } else if (projectile.getType() == DamageType.ICE) {
+        g.setColor(iceBoltProjectileColor);
       }
 
       this.drawSquare(g, projectile.getPosition(), Projectile.SIZE);
