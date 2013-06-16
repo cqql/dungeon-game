@@ -154,10 +154,8 @@ public class GameLogic {
       if (healthPotions.size() > 0) {
         Item healthPotion = healthPotions.get(0);
 
-        transaction.push(new Player.HitpointTransform(healthPotion.getType().getHitPointDelta()));
-        transaction.push(new Player.RemoveItemTransform(healthPotion));
-
-        transaction.commit();
+        healthPotion.use(transaction);
+        transaction.pushAndCommit(new Player.RemoveItemTransform(healthPotion));
       }
     }
   }
