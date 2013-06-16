@@ -22,13 +22,16 @@ public class Main {
 
     DefeatScreen defeatScreen = new DefeatScreen(mailman);
 
-    UiManager uiManager = new UiManager(canvas, startMenu, winScreen, defeatScreen);
+    InventoryScreen inventoryScreen = new InventoryScreen(mailman);
+
+    UiManager uiManager = new UiManager(canvas, startMenu, winScreen, defeatScreen, inventoryScreen);
 
     MainFrame mainFrame = new MainFrame(mailman, uiManager);
 
     mailman.addMailbox(new SwingMailbox(mainFrame));
     mailman.addMailbox(new SwingMailbox(canvas));
     mailman.addMailbox(new SwingMailbox(uiManager));
+    mailman.addMailbox(new SwingMailbox(inventoryScreen));
 
     mailman.addMailbox(new PulseGenerator(mailman));
 

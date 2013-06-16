@@ -6,10 +6,9 @@ import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.ui.messages.MenuCommand;
-import dungeon.ui.screens.Canvas;
-import dungeon.ui.screens.DefeatScreen;
-import dungeon.ui.screens.StartMenu;
-import dungeon.ui.screens.WinScreen;
+import dungeon.ui.messages.ShowGame;
+import dungeon.ui.messages.ShowInventory;
+import dungeon.ui.screens.*;
 
 import javax.swing.*;
 import java.awt.CardLayout;
@@ -31,11 +30,13 @@ public class UiManager extends JPanel implements MessageHandler {
 
   private static final String DEFEAT_SCREEN = "DEFEAT_SCREEN";
 
-  private final Map<String, JPanel> screens = new LinkedHashMap<>(4);
+  private static final String INVENTORY_SCREEN = "INVENTORY_SCREEN";
+
+  private final Map<String, JPanel> screens = new LinkedHashMap<>();
 
   private final CardLayout layout;
 
-  public UiManager (Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen) {
+  public UiManager (Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen) {
     super(new CardLayout());
 
     this.layout = (CardLayout)this.getLayout();
@@ -44,6 +45,7 @@ public class UiManager extends JPanel implements MessageHandler {
     this.screens.put(START_MENU, startMenu);
     this.screens.put(WIN_SCREEN, winScreen);
     this.screens.put(DEFEAT_SCREEN, defeatScreen);
+    this.screens.put(INVENTORY_SCREEN, inventoryScreen);
   }
 
   @Override
@@ -54,12 +56,14 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(START_MENU);
     } else if (message == MenuCommand.SHOW_MENU) {
       this.showScreen(START_MENU);
-    } else if (message == MenuCommand.START_GAME) {
+    } else if (message == MenuCommand.START_GAME || message instanceof ShowGame) {
       this.showScreen(CANVAS);
     } else if (message instanceof WinEvent) {
       this.showScreen(WIN_SCREEN);
     } else if (message instanceof DefeatEvent) {
       this.showScreen(DEFEAT_SCREEN);
+    } else if (message instanceof ShowInventory) {
+      this.showScreen(INVENTORY_SCREEN);
     }
   }
 
