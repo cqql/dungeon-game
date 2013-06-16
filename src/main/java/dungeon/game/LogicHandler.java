@@ -58,6 +58,8 @@ public class LogicHandler implements MessageHandler {
       this.logic.activateMoveDirection((MoveCommand)command);
     } else if (command instanceof AttackCommand) {
       this.logic.activateAttack();
+    } else if (command instanceof HealthPotionCommand) {
+      this.logic.useHealthPotion();
     }
   }
 

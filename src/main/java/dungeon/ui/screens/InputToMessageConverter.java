@@ -56,6 +56,8 @@ public class InputToMessageConverter implements KeyListener {
         return MoveCommand.RIGHT;
       case 'j':
         return new AttackCommand();
+      case 'h':
+        return new HealthPotionCommand();
       default:
         return null;
     }
