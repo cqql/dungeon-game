@@ -154,6 +154,7 @@ public class GameLogic {
     this.handleProjectiles(transaction, delta);
     this.updateViewingDirection(transaction);
     this.handleDrops(transaction);
+    this.moveEnemies(transaction, delta);
     this.handleEnemies(transaction);
     this.handleEnemyLives(transaction);
     this.handleTeleporters(transaction);
@@ -305,6 +306,12 @@ public class GameLogic {
           break;
         }
       }
+    }
+  }
+
+  private void moveEnemies (Transaction transaction, double delta) {
+    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
+      enemy.getMoveStrategy().move(transaction, enemy, delta);
     }
   }
 
