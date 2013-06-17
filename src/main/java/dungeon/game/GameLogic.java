@@ -49,6 +49,8 @@ public class GameLogic {
 
   private boolean useManaPotion;
 
+  private boolean interact;
+
   private final List<Item> useItems = new ArrayList<>();
 
   private long lastAttackTime;
@@ -131,6 +133,13 @@ public class GameLogic {
   }
 
   /**
+   * Interact with a nearby NPC on next pulse.
+   */
+  public void interact () {
+    this.interact = true;
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -163,7 +172,7 @@ public class GameLogic {
     this.handleMana(transaction);
     this.handleAttack(transaction);
     this.handleIceBolt(transaction);
-
+    this.handleInteractionWithNpcs(transaction);
 
     this.world = transaction.getWorld();
 
@@ -198,8 +207,7 @@ public class GameLogic {
     if (this.useManaPotion) {
       this.useManaPotion = false;
 
-
-    List<Item> manaPotions = transaction.getWorld().getPlayer().getManaPotions();
+      List<Item> manaPotions = transaction.getWorld().getPlayer().getManaPotions();
 
       if (manaPotions.size() > 0) {
         Item manaPotion = manaPotions.get(0);
@@ -494,6 +502,29 @@ public class GameLogic {
 
       transaction.pushAndCommit(new Player.ManaTransform(-1));
       transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
+    }
+  }
+
+  /**
+   * Interact with a nearby NPC.
+   */
+  private void handleInteractionWithNpcs (Transaction transaction) {
+    if (!this.interact) {
+      return;
+    }
+
+    this.interact = false;
+
+    for (NPC npc : transaction.getWorld().getCurrentRoom().getNpcs()) {
+      Vector playerPosition = transaction.getWorld().getPlayer().getCenter().getVector();
+      Vector npcPosition = npc.getCenter().getVector();
+
+      double distance = npcPosition.minus(playerPosition).length();
+
+      if (distance < (NPC.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
+        transaction.pushAndCommit(new NPC.InteractTransform(npc));
+        return;
+      }
     }
   }
 

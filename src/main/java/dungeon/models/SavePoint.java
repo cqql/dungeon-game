@@ -1,5 +1,7 @@
 package dungeon.models;
 
+import dungeon.util.Vector;
+
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -27,5 +29,10 @@ public class SavePoint implements Spatial {
   @Override
   public Rectangle2D space () {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
+  }
+
+  @Override
+  public Position getCenter () {
+    return new Position(this.position.getVector().plus(new Vector(SIZE / 2, SIZE / 2)));
   }
 }

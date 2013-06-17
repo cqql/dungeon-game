@@ -151,6 +151,11 @@ public class Player implements Spatial, Identifiable {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
 
+  @Override
+  public Position getCenter () {
+    return new Position(this.position.getVector().plus(new Vector(SIZE / 2, SIZE / 2)));
+  }
+
   /**
    * @return a list of all health potions in the player's bag.
    */
@@ -200,11 +205,11 @@ public class Player implements Spatial, Identifiable {
   }
 
   public Projectile attack (int id) {
-    return createProjectile(id, 5000, 1, DamageType.NORMAL);
+    return this.createProjectile(id, 5000, 1, DamageType.NORMAL);
   }
 
   public Projectile iceBoltAttack (int id) {
-    return createProjectile(id, 7000, 2, DamageType.ICE);
+    return this.createProjectile(id, 7000, 2, DamageType.ICE);
   }
 
   public Player apply (Transform transform) {

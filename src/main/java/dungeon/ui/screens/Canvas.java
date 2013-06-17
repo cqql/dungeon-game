@@ -10,8 +10,14 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public class Canvas extends JPanel implements MessageHandler {
+  /**
+   * How long to show dialogs in milliseconds.
+   */
+  private static final int DIALOG_TIME = 3000;
+
   private final Color blockingTile = new Color(181, 125, 147);
 
   private final Color passableTile = new Color(139, 108, 217);
@@ -21,6 +27,8 @@ public class Canvas extends JPanel implements MessageHandler {
   private final Color teleporterTile = new Color(0, 0, 0);
 
   private final Color playerColor = new Color(101, 202, 227);
+
+  private final Color npcColor = new Color(28, 31, 255);
 
   private final Color enemyColor = new Color(33, 237, 60);
 
@@ -38,9 +46,9 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color itemColor = new Color(151, 151, 151);
 
-  private final Color healthPotionColor = new Color (200, 0, 0);
+  private final Color healthPotionColor = new Color(200, 0, 0);
 
-  private final Color manaPotionColor = new Color (0, 170, 255);
+  private final Color manaPotionColor = new Color(0, 170, 255);
 
   private final Color projectileColor = new Color(118, 77, 0);
 
@@ -49,6 +57,10 @@ public class Canvas extends JPanel implements MessageHandler {
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
   private World world;
+
+  private long dialogTimeout;
+
+  private NPC dialogNpc;
 
   /**
    * The unit to pixel conversion factors for the current room.
@@ -65,6 +77,11 @@ public class Canvas extends JPanel implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
       this.world = this.world.apply((Transform)message);
+
+      if (message instanceof NPC.InteractTransform) {
+        this.dialogTimeout = System.currentTimeMillis() + DIALOG_TIME;
+        this.dialogNpc = ((NPC.InteractTransform)message).getNpc();
+      }
     } else if (message instanceof LevelLoadedEvent) {
       this.world = ((LevelLoadedEvent)message).getWorld();
     }
@@ -87,6 +104,7 @@ public class Canvas extends JPanel implements MessageHandler {
 
     this.drawTiles(g, room);
     this.drawDrops(g, room);
+    this.drawNPCs(g, room);
     this.drawEnemies(g, room);
     this.drawSavepoints(g, room);
     this.drawPlayer(g, this.world.getPlayer());
@@ -95,6 +113,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawMoneyIndicator(g);
     this.drawLifeIndicator(g);
     this.drawManaIndicator(g);
+    this.drawDialog(g);
   }
 
   private void drawTiles (Graphics g, Room room) {
@@ -127,6 +146,14 @@ public class Canvas extends JPanel implements MessageHandler {
     }
   }
 
+  private void drawNPCs (Graphics g, Room room) {
+    for (NPC npc : room.getNpcs()) {
+      g.setColor(this.npcColor);
+
+      this.drawSquare(g, npc.getPosition(), NPC.SIZE);
+    }
+  }
+
   private void drawEnemies (Graphics g, Room room) {
     for (Enemy enemy : room.getEnemies()) {
       g.setColor(this.enemyColor);
@@ -137,9 +164,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private void drawSavepoints (Graphics g, Room room) {
     for (SavePoint savePoint : room.getSavePoints()) {
-      Position position = savePoint.getPosition();
-
       g.setColor(this.savePointColor);
+
       this.drawSquare(g, savePoint.getPosition(), savePoint.SIZE);
     }
   }
@@ -155,7 +181,7 @@ public class Canvas extends JPanel implements MessageHandler {
       if (projectile.getType() == DamageType.NORMAL) {
         g.setColor(this.projectileColor);
       } else if (projectile.getType() == DamageType.ICE) {
-        g.setColor(iceBoltProjectileColor);
+        g.setColor(this.iceBoltProjectileColor);
       }
 
       this.drawSquare(g, projectile.getPosition(), Projectile.SIZE);
@@ -196,6 +222,23 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.white);
     g.setFont(this.font);
     g.drawString(String.format("%d / %d", this.world.getPlayer().getMana(), this.world.getPlayer().getMaxMana()), 60, 158);
+  }
+
+  private void drawDialog (Graphics g) {
+    if (System.currentTimeMillis() < this.dialogTimeout) {
+      Rectangle bounds = g.getClipBounds();
+
+      g.setColor(Color.BLACK);
+      g.fillRect(10, 10, bounds.width - 20, 200);
+
+      g.setFont(this.font);
+
+      g.setColor(Color.YELLOW);
+      g.drawString(this.dialogNpc.getName(), 20, 40);
+
+      g.setColor(Color.WHITE);
+      g.drawString(this.dialogNpc.getSaying(), 20, 80);
+    }
   }
 
   /**

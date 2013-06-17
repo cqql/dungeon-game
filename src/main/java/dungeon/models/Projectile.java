@@ -71,6 +71,11 @@ public class Projectile implements Spatial {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
 
+  @Override
+  public Position getCenter () {
+    return new Position(this.position.getVector().plus(new Vector(SIZE / 2, SIZE / 2)));
+  }
+
   public static class MoveTransform implements Transform {
     private final int projectileId;
 

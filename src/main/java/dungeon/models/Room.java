@@ -26,8 +26,11 @@ public class Room {
    */
   private final List<Projectile> projectiles;
 
-  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles, List<Drop> drops, List<Projectile> projectiles) {
+  private final List<NPC> npcs;
+
+  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles, List<Drop> drops, List<Projectile> projectiles, List<NPC> npcs) {
     this.id = id;
+    this.npcs = npcs;
     this.drops = Collections.unmodifiableList(new ArrayList<>(drops));
     this.enemies = Collections.unmodifiableList(new ArrayList<>(enemies));
     this.savePoints = Collections.unmodifiableList(new ArrayList<>(savePoints));
@@ -57,6 +60,10 @@ public class Room {
 
   public List<Projectile> getProjectiles () {
     return this.projectiles;
+  }
+
+  public List<NPC> getNpcs () {
+    return this.npcs;
   }
 
   /**
@@ -192,7 +199,7 @@ public class Room {
       enemies.add(enemy.apply(transform));
     }
 
-    return new Room(id, enemies, savePoints, tiles, drops, projectiles);
+    return new Room(id, enemies, savePoints, tiles, drops, projectiles, npcs);
   }
 
   public static class AddDropTransform implements Transform {
