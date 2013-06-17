@@ -30,8 +30,8 @@ public class RoomTest {
       ),
       new ArrayList<Drop>(),
       new ArrayList<Projectile>(),
-      new ArrayList<NPC>()
-    );
+      new ArrayList<NPC>(),
+      new ArrayList<Merchant>());
   }
 
   @Test

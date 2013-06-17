@@ -42,9 +42,13 @@ public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
   @XmlJavaTypeAdapter(NPCAdapter.class)
   public List<NPC> npcs = new ArrayList<>();
 
+  @XmlElement(name = "merchant")
+  @XmlJavaTypeAdapter(MerchantAdapter.class)
+  public List<Merchant> merchants = new ArrayList<>();
+
   @Override
   public Room unmarshal (RoomAdapter adapter) throws Exception {
-    return new Room(adapter.id, adapter.enemies, adapter.savePoints, adapter.tiles, adapter.drops, adapter.projectiles, adapter.npcs);
+    return new Room(adapter.id, adapter.enemies, adapter.savePoints, adapter.tiles, adapter.drops, adapter.projectiles, adapter.npcs, adapter.merchants);
   }
 
   @Override
@@ -57,6 +61,7 @@ public class RoomAdapter extends XmlAdapter<RoomAdapter, Room> {
     adapter.drops = room.getDrops();
     adapter.projectiles = room.getProjectiles();
     adapter.npcs = room.getNpcs();
+    adapter.merchants = room.getMerchants();
 
     return adapter;
   }

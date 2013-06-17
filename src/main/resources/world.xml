@@ -49,6 +49,12 @@
       </npc>
     </room>
     <room id="room-2">
+      <merchant id="6" money="0">
+        <position x="2000" y="0"></position>
+        <item id="7" type="HEALTH_POTION"></item>
+        <item id="8" type="HEALTH_POTION"></item>
+        <item id="9" type="MANA_POTION"></item>
+      </merchant>
       <tile blocking="true">
         <position x="0" y="0" />
       </tile>
