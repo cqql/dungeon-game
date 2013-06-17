@@ -19,6 +19,8 @@ public class Enemy implements Spatial, Identifiable {
    */
   private final int strength = 1;
 
+  private final int speed;
+
   /**
    * The enemy's position in the room.
    */
@@ -28,9 +30,10 @@ public class Enemy implements Spatial, Identifiable {
 
   private final String onDeath;
 
-  public Enemy (int id, int hitPoints, Position position, MoveStrategy moveStrategy, String onDeath) {
+  public Enemy (int id, int hitPoints, int speed, Position position, MoveStrategy moveStrategy, String onDeath) {
     this.id = id;
     this.hitPoints = hitPoints;
+    this.speed = speed;
     this.position = position;
     this.moveStrategy = moveStrategy;
     this.onDeath = onDeath;
@@ -46,6 +49,10 @@ public class Enemy implements Spatial, Identifiable {
 
   public int getStrength () {
     return this.strength;
+  }
+
+  public int getSpeed () {
+    return speed;
   }
 
   public Position getPosition () {
@@ -82,7 +89,7 @@ public class Enemy implements Spatial, Identifiable {
       position = ((TeleportTransform)transform).position;
     }
 
-    return new Enemy(id, hitPoints, position, moveStrategy, onDeath);
+    return new Enemy(id, hitPoints, speed, position, moveStrategy, onDeath);
   }
 
   @Override
@@ -159,11 +166,11 @@ public class Enemy implements Spatial, Identifiable {
         Vector enemyToPlayer = transaction.getWorld().getPlayer().getPosition().getVector().minus(enemy.getPosition().getVector());
 
         if (enemyToPlayer.length() < 5000 && !enemyToPlayer.isZero()) {
-          transaction.pushAndCommit(new Enemy.MoveTransform(enemy, enemyToPlayer.normalize().times(1000 * delta)));
+          transaction.pushAndCommit(new Enemy.MoveTransform(enemy, enemyToPlayer.normalize().times(enemy.getSpeed() * delta)));
         }
       }
     },
-    BOSS {
+    TELEPORT {
       @Override
       public void move (Transaction transaction, Enemy enemy, double delta) {
         Vector enemyToPlayer = transaction.getWorld().getPlayer().getPosition().getVector().minus(enemy.getPosition().getVector());
@@ -179,7 +186,7 @@ public class Enemy implements Spatial, Identifiable {
 
           transaction.pushAndCommit(new TeleportTransform(enemy, position));
         } else {
-          transaction.pushAndCommit(new Enemy.MoveTransform(enemy, enemyToPlayer.normalize().times(2000 * delta)));
+          transaction.pushAndCommit(new Enemy.MoveTransform(enemy, enemyToPlayer.normalize().times(enemy.getSpeed() * delta)));
         }
       }
     };
