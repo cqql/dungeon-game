@@ -154,6 +154,7 @@ public class Room {
     List<SavePoint> savePoints = this.savePoints;
     List<Drop> drops = this.drops;
     List<Projectile> projectiles = this.projectiles;
+    List<NPC> npcs = this.npcs;
 
     if (transform instanceof AddDropTransform && this.id.equals(((AddDropTransform)transform).roomId)) {
       drops = new ArrayList<>(drops);

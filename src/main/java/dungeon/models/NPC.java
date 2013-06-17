@@ -60,7 +60,7 @@ public class NPC implements Spatial {
     }
 
     public NPC getNpc () {
-      return npc;
+      return this.npc;
     }
   }
 }
