@@ -30,6 +30,7 @@ public class PlayerTest {
       ),
       "level",
       ROOM_ID,
+      1,
       new Position(2000, 2000),
       Direction.RIGHT,
       ROOM_ID,

@@ -1,9 +1,6 @@
 package dungeon.load.adapters;
 
-import dungeon.models.Direction;
-import dungeon.models.Item;
-import dungeon.models.Player;
-import dungeon.models.Position;
+import dungeon.models.*;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -47,6 +44,9 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
   @XmlAttribute
   public String roomId;
 
+  @XmlAttribute
+  public int weaponId;
+
   @XmlJavaTypeAdapter(PositionAdapter.class)
   public Position position;
 
@@ -61,7 +61,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
 
   @Override
   public Player unmarshal (PlayerAdapter adapter) throws Exception {
-    return new Player(adapter.id, adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.mana, adapter.maxMana, adapter.items, adapter.levelId, adapter.roomId, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
+    return new Player(adapter.id, adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.mana, adapter.maxMana, adapter.items, adapter.levelId, adapter.roomId, adapter.weaponId, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
   }
 
   @Override
@@ -78,6 +78,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
     adapter.items = player.getItems();
     adapter.levelId = player.getLevelId();
     adapter.roomId = player.getRoomId();
+    adapter.weaponId = player.getWeaponId();
     adapter.position = player.getPosition();
     adapter.viewingDirection = player.getViewingDirection().toString();
     adapter.savePointRoomId = player.getSavePointRoomId();

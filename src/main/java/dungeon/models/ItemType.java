@@ -3,7 +3,7 @@ package dungeon.models;
 import dungeon.game.Transaction;
 
 public enum ItemType {
-  HEALTH_POTION("Heiltrank", true, false, 5, 5, 0) {
+  HEALTH_POTION("Heiltrank", true, false, 5, 5, 0, 0) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getHitPointDelta() + " HP";
@@ -14,7 +14,7 @@ public enum ItemType {
       transaction.pushAndCommit(new Player.HitpointTransform(this.getHitPointDelta()));
     }
   },
-  MANA_POTION("Manatrank", true, false, 5, 0, 5) {
+  MANA_POTION("Manatrank", true, false, 5, 0, 5, 0) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getManaDelta() + " MP";
@@ -23,6 +23,18 @@ public enum ItemType {
     @Override
     public void use (Transaction transaction) {
       transaction.pushAndCommit(new Player.ManaTransform(this.getManaDelta()));
+    }
+  },
+  WEAK_BOW ("Schwacher Bogen", false, true, 10, 0, 0, 3) {
+    @Override
+    public String getDescription () {
+      return "Macht " + this.getDamageDelta() + " Schaden";
+    }
+  },
+  STRONG_BOW ("Starker Bogen", false, true, 20, 0, 0, 5) {
+    @Override
+    public String getDescription () {
+      return "Macht " + this.getDamageDelta() + " Schaden";
     }
   };
 
@@ -38,13 +50,16 @@ public enum ItemType {
 
   private final int manaDelta;
 
-  private ItemType (String name, boolean useable, boolean equipable, int value, int hitPointDelta, int manaDelta) {
+  private final int damageDelta;
+
+  private ItemType (String name, boolean useable, boolean equipable, int value, int hitPointDelta, int manaDelta, int damageDelta) {
     this.name = name;
     this.useable = useable;
     this.equipable = equipable;
     this.value = value;
     this.hitPointDelta = hitPointDelta;
     this.manaDelta = manaDelta;
+    this.damageDelta = damageDelta;
   }
 
   public String getName () {
@@ -73,6 +88,10 @@ public enum ItemType {
     return this.manaDelta;
   }
 
+  public int getDamageDelta () {
+    return this.damageDelta;
+  }
+
   /**
    * Use the item, e.g. apply the appropriate transforms.
    */
@@ -82,6 +101,6 @@ public enum ItemType {
 
   @Override
   public String toString () {
-    return "[" + this.name() + " useable=" + this.useable + ", equipable=" + this.equipable + ", hpDelta=" + this.hitPointDelta + ", mpDelta=" + this.manaDelta + "]";
+    return "[" + this.name() + " useable=" + this.useable + ", equipable=" + this.equipable + ", hpDelta=" + this.hitPointDelta + ", mpDelta=" + this.manaDelta + ", damage=" + this.damageDelta + "]";
   }
 }

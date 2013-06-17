@@ -116,6 +116,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawMoneyIndicator(g);
     this.drawLifeIndicator(g);
     this.drawManaIndicator(g);
+    this.drawWeaponIndicator(g);
     this.drawDialog(g);
   }
 
@@ -233,6 +234,19 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.white);
     g.setFont(this.font);
     g.drawString(String.format("%d / %d", this.world.getPlayer().getMana(), this.world.getPlayer().getMaxMana()), 60, 158);
+  }
+
+  private void drawWeaponIndicator (Graphics g) {
+    Item weapon = this.world.getPlayer().getWeapon();
+    String weaponName = "Keine Waffe";
+
+    if (weapon != null) {
+      weaponName = weapon.getType().getName();
+    }
+
+    g.setColor(this.white);
+    g.setFont(this.font);
+    g.drawString(weaponName, 120, 38);
   }
 
   private void drawDialog (Graphics g) {

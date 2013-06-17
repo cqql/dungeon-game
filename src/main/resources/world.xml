@@ -54,6 +54,7 @@
         <item id="7" type="HEALTH_POTION"></item>
         <item id="8" type="HEALTH_POTION"></item>
         <item id="9" type="MANA_POTION"></item>
+        <item id="10" type="STRONG_BOW"></item>
       </merchant>
       <tile blocking="true">
         <position x="0" y="0" />
@@ -1483,7 +1484,7 @@
       </victory-tile>
     </room>
   </level>
-  <player id="1" name="Link" lives="3" hitPoints="5" maxHitPoints="5" money="0" mana="3" maxMana="10" levelId="level-1" roomId="room-1"
+  <player id="1" name="Link" lives="3" hitPoints="1" maxHitPoints="5" money="0" mana="3" maxMana="10" levelId="level-1" roomId="room-1"
           viewingDirection="LEFT" savePointRoomId="room-1">
     <position x="0" y="0" />
     <savePointPosition x="0" y="0" />

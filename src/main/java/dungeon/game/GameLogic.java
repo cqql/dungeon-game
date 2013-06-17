@@ -54,6 +54,11 @@ public class GameLogic {
   private final List<Item> useItems = new ArrayList<>();
 
   /**
+   * Which weapon to equip on next pulse.
+   */
+  private Item equipWeapon;
+
+  /**
    * Which items to sell to which merchant on next pulse.
    */
   private final Map<Merchant, List<Item>> sellItems = new LinkedHashMap<>();
@@ -68,6 +73,7 @@ public class GameLogic {
   private long lastManaUsedTime;
 
   private long lastManaRestoreTime;
+
 
   private GameState gameState = GameState.PLAYING;
 
@@ -126,6 +132,13 @@ public class GameLogic {
    */
   public void useItem (Item item) {
     this.useItems.add(item);
+  }
+
+  /**
+   * Equip {@code item} during the next pulse.
+   */
+  public void equipWeapon (Item item) {
+    this.equipWeapon = item;
   }
 
   /**
@@ -199,6 +212,7 @@ public class GameLogic {
     this.handleHealthPotion(transaction);
     this.handleManaPotion(transaction);
     this.useItems(transaction);
+    this.equipWeapon(transaction);
     this.sellItems(transaction);
     this.buyItems(transaction);
     this.handleMovement(transaction, delta);
@@ -273,6 +287,16 @@ public class GameLogic {
     }
 
     this.useItems.clear();
+  }
+
+  private void equipWeapon (Transaction transaction) {
+    if (this.equipWeapon != null && this.equipWeapon.getType().isEquipable()) {
+      LOGGER.info("Equip weapon " + this.equipWeapon);
+
+      transaction.pushAndCommit(new Player.EquipWeaponTransform(this.equipWeapon.getId()));
+
+      this.equipWeapon = null;
+    }
   }
 
   private void sellItems (Transaction transaction) {

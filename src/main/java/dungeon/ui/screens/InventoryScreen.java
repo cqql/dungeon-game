@@ -8,6 +8,7 @@ import dungeon.messages.MessageHandler;
 import dungeon.models.Item;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
+import dungeon.ui.messages.EquipWeaponCommand;
 import dungeon.ui.messages.ShowGame;
 import dungeon.ui.messages.ShowInventory;
 import dungeon.ui.messages.UseItemCommand;
@@ -102,6 +103,19 @@ public class InventoryScreen extends JPanel implements MessageHandler {
         Item item = InventoryScreen.this.itemList.getSelectedValue();
 
         InventoryScreen.this.mailman.send(new UseItemCommand(item));
+      }
+    });
+
+    this.equipButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
+        if (!InventoryScreen.this.equipButton.isEnabled()) {
+          return;
+        }
+
+        Item item = InventoryScreen.this.itemList.getSelectedValue();
+
+        InventoryScreen.this.mailman.send(new EquipWeaponCommand(item));
       }
     });
 

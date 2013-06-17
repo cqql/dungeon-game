@@ -46,6 +46,11 @@ public class Player implements Spatial, Identifiable {
   private final String roomId;
 
   /**
+   * Which weapon has the player equipped?
+   */
+  private final int weaponId;
+
+  /**
    * His position in the room.
    */
   private final Position position;
@@ -69,7 +74,7 @@ public class Player implements Spatial, Identifiable {
    */
   private final Position savePointPosition;
 
-  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, int mana, int maxMana, List<Item> items, String levelId, String roomId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
+  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, int mana, int maxMana, List<Item> items, String levelId, String roomId, int weaponId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
     this.id = id;
     this.name = name;
     this.lives = lives;
@@ -81,6 +86,7 @@ public class Player implements Spatial, Identifiable {
     this.items = Collections.unmodifiableList(new ArrayList<>(items));
     this.levelId = levelId;
     this.roomId = roomId;
+    this.weaponId = weaponId;
     this.position = position;
     this.viewingDirection = viewingDirection;
     this.savePointRoomId = savePointRoomId;
@@ -129,6 +135,20 @@ public class Player implements Spatial, Identifiable {
 
   public String getRoomId () {
     return this.roomId;
+  }
+
+  public int getWeaponId () {
+    return this.weaponId;
+  }
+
+  public Item getWeapon () {
+    for (Item item : this.getItems()) {
+      if (item.getId() == this.getWeaponId()) {
+        return item;
+      }
+    }
+
+    return null;
   }
 
   public Position getPosition () {
@@ -205,12 +225,26 @@ public class Player implements Spatial, Identifiable {
   }
 
   public Projectile attack (int id) {
-    return this.createProjectile(id, 5000, 1, DamageType.NORMAL);
+    int damageBonus = 0;
+    int speedBonus = 0;
+
+    if (this.getWeapon() != null) {
+      damageBonus = getWeapon().getType().getDamageDelta();
+
+      if (this.getWeapon().getType() == ItemType.WEAK_BOW) {
+        speedBonus = 1000;
+      } else if (this.getWeapon().getType() == ItemType.STRONG_BOW) {
+        speedBonus = 2000;
+      }
+    }
+
+    return this.createProjectile(id, 5000 + speedBonus, 1 + damageBonus, DamageType.NORMAL);
   }
 
   public Projectile iceBoltAttack (int id) {
     return this.createProjectile(id, 7000, 2, DamageType.ICE);
   }
+
 
   public Player apply (Transform transform) {
     int id = this.id;
@@ -224,6 +258,7 @@ public class Player implements Spatial, Identifiable {
     List<Item> items = this.items;
     String levelId = this.levelId;
     String roomId = this.roomId;
+    int weaponId = this.weaponId;
     Position position = this.position;
     Direction viewingDirection = this.viewingDirection;
     String savePointRoomId = this.savePointRoomId;
@@ -270,9 +305,13 @@ public class Player implements Spatial, Identifiable {
           items.add(item);
         }
       }
+    } else if (transform instanceof EquipWeaponTransform) {
+      EquipWeaponTransform equipWeaponTransform = (Player.EquipWeaponTransform)transform;
+
+      weaponId = equipWeaponTransform.weaponId;
     }
 
-    return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, position, viewingDirection, savePointRoomId, savePointPosition);
+    return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, weaponId, position, viewingDirection, savePointRoomId, savePointPosition);
   }
 
   public static class MoveTransform implements Transform {
@@ -353,6 +392,14 @@ public class Player implements Spatial, Identifiable {
 
     public RemoveItemTransform (Item item) {
       this.item = item;
+    }
+  }
+
+  public static class EquipWeaponTransform implements Transform {
+    private final int weaponId;
+
+    public EquipWeaponTransform (int weaponId) {
+      this.weaponId = weaponId;
     }
   }
 
