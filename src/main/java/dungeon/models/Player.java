@@ -151,6 +151,11 @@ public class Player implements Spatial, Identifiable {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
 
+  @Override
+  public Position getCenter () {
+    return new Position(this.position.getVector().plus(new Vector(SIZE / 2, SIZE / 2)));
+  }
+
   /**
    * @return a list of all health potions in the player's bag.
    */

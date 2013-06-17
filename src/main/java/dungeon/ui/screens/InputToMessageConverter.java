@@ -64,6 +64,8 @@ public class InputToMessageConverter implements KeyListener {
         return new IceBoltAttackCommand();
       case 'm':
         return new ManaPotionCommand();
+      case 'z':
+        return new InteractCommand();
       default:
         return null;
     }

@@ -10,4 +10,9 @@ public interface Spatial {
    * @return the space occupied by this object.
    */
   public Rectangle2D space ();
+
+  /**
+   * Returns the center position.
+   */
+  public Position getCenter ();
 }

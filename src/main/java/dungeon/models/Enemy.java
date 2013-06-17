@@ -76,6 +76,11 @@ public class Enemy implements Spatial, Identifiable {
   }
 
   @Override
+  public Position getCenter () {
+    return new Position(this.position.getVector().plus(new Vector(SIZE / 2, SIZE / 2)));
+  }
+
+  @Override
   public boolean equals (Object o) {
     if (this == o) {
       return true;
