@@ -45,13 +45,13 @@ public class GameLogic {
 
   private boolean useIceBolt;
 
-  private boolean useWeapon;
-
   private boolean useHealthPotion;
 
   private boolean useManaPotion;
 
   private final List<Item> useItems = new ArrayList<>();
+
+  private final List<Item> equipWeapon = new ArrayList<>();
 
   private long lastAttackTime;
 
@@ -59,7 +59,6 @@ public class GameLogic {
 
   private long lastManaRestoreTime;
 
-  private long lastWeaponUseTime;
 
   private GameState gameState = GameState.PLAYING;
 
@@ -121,6 +120,13 @@ public class GameLogic {
   }
 
   /**
+   * Equip {@code item} during the next pulse.
+   */
+  public void equipWeapon (Item item) {
+    this.equipWeapon.add(item);
+  }
+
+  /**
    * Set the ice bolt attacking flag.
    */
   public void activateIceBolt () {
@@ -132,20 +138,6 @@ public class GameLogic {
    */
   public void deactivateIceBoltAttack () {
     this.useIceBolt = false;
-  }
-
-  /**
-   * Set the weapon attacking flag
-   */
-  public void activateWeaponAttack () {
-    this.useWeapon = true;
-  }
-
-  /**
-   * Reset the weapon attacking flag.
-   */
-  public void deactivateWeaponAttack () {
-    this.useWeapon = false;
   }
 
   /**
@@ -168,6 +160,7 @@ public class GameLogic {
     this.handleHealthPotion(transaction);
     this.handleManaPotion(transaction);
     this.useItems(transaction);
+    this.equipWeapon(transaction);
     this.handleMovement(transaction, delta);
     this.handleProjectiles(transaction, delta);
     this.updateViewingDirection(transaction);
@@ -240,6 +233,16 @@ public class GameLogic {
     }
 
     this.useItems.clear();
+  }
+
+  private void equipWeapon (Transaction transaction) {
+    for (Item item : this.equipWeapon) {
+      LOGGER.info("Equip weapon " + item);
+
+      item.equip(transaction);
+
+      transaction.pushAndCommit(new Player.RemoveItemTransform(item));
+    }
   }
 
   private void handleMovement (Transaction transaction, double delta) {

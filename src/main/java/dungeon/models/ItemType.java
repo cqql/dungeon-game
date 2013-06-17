@@ -3,7 +3,7 @@ package dungeon.models;
 import dungeon.game.Transaction;
 
 public enum ItemType {
-  HEALTH_POTION("Heiltrank", true, false, 5, 0, 0, "") {
+  HEALTH_POTION("Heiltrank", true, false, 5, 0, 0) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getHitPointDelta() + " HP";
@@ -14,7 +14,7 @@ public enum ItemType {
       transaction.pushAndCommit(new Player.HitpointTransform(this.getHitPointDelta()));
     }
   },
-  MANA_POTION("Manatrank", true, false, 0, 5, 0, "") {
+  MANA_POTION("Manatrank", true, false, 0, 5, 0) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getManaDelta() + " MP";
@@ -25,26 +25,26 @@ public enum ItemType {
       transaction.pushAndCommit(new Player.ManaTransform(this.getManaDelta()));
     }
   },
-  WEAK_BOW ("Schwacher Bogen", true, true, 0, 0, 3, "weakBow") {
+  WEAK_BOW ("Schwacher Bogen", false, true, 0, 0, 3) {
     @Override
     public String getDescription () {
-      return this.getWeaponId() + " macht " + this.getDamageDelta() + " Schaden";
+      return "Macht " + this.getDamageDelta() + " Schaden";
     }
 
     @Override
-    public void use (Transaction transaction) {
-      transaction.pushAndCommit(new Player.EquipWeaponTransform(this.getWeaponId(), WEAK_BOW, this.getDamageDelta()));
+    public void equip (Transaction transaction) {
+      transaction.pushAndCommit(new Player.EquipWeaponTransform(1));
     }
   },
-  STRONG_BOW ("Starker Bogen", true, true, 0, 0, 5, "strongBow") {
+  STRONG_BOW ("Starker Bogen", false, true, 0, 0, 5) {
     @Override
     public String getDescription () {
-      return this.getWeaponId() + " macht " + this.getDamageDelta() + " Schaden";
+      return "Macht " + this.getDamageDelta() + " Schaden";
     }
 
     @Override
-    public void use (Transaction transaction) {
-      transaction.pushAndCommit(new Player.EquipWeaponTransform(this.getWeaponId(), STRONG_BOW, this.getDamageDelta()));
+    public void equip (Transaction transaction) {
+      transaction.pushAndCommit(new Player.EquipWeaponTransform(2));
     }
   };
 
@@ -60,16 +60,14 @@ public enum ItemType {
 
   private final int damageDelta;
 
-  private final String weaponId;
 
-  private ItemType (String name, boolean useable, boolean equipable, int hitPointDelta, int manaDelta, int damageDelta, String weaponId) {
+  private ItemType (String name, boolean useable, boolean equipable, int hitPointDelta, int manaDelta, int damageDelta) {
     this.name = name;
     this.useable = useable;
     this.equipable = equipable;
     this.hitPointDelta = hitPointDelta;
     this.manaDelta = manaDelta;
     this.damageDelta = damageDelta;
-    this.weaponId = weaponId;
   }
 
   public String getName () {
@@ -98,14 +96,17 @@ public enum ItemType {
     return this.damageDelta;
   }
 
-  public String getWeaponId () {
-    return this.weaponId;
-  }
-
   /**
    * Use the item, e.g. apply the appropriate transforms.
    */
   public void use (Transaction transaction) {
+
+  }
+
+  /**
+   * Equip the item, e.g. apply the appropriate transforms.
+   */
+  public void equip (Transaction transaction) {
 
   }
 

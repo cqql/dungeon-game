@@ -27,6 +27,10 @@ public class Item {
     this.type.use(transaction);
   }
 
+  public void equip (Transaction transaction) {
+    this.type.equip(transaction);
+  }
+
   @Override
   public String toString () {
     return "Item#" + this.id + " " + this.type;
