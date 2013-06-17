@@ -171,6 +171,11 @@ public class Player implements Spatial, Identifiable {
     return new Rectangle2D.Float(this.position.getX(), this.position.getY(), SIZE, SIZE);
   }
 
+  @Override
+  public Position getCenter () {
+    return new Position(this.position.getVector().plus(new Vector(SIZE / 2, SIZE / 2)));
+  }
+
   /**
    * @return a list of all health potions in the player's bag.
    */
@@ -220,20 +225,24 @@ public class Player implements Spatial, Identifiable {
   }
 
   public Projectile attack (int id) {
+    int damageBonus = 0;
+    int speedBonus = 0;
+
     if (this.getWeapon() != null) {
-      int damageDelta = getWeapon().getType().getDamageDelta();
+      damageBonus = getWeapon().getType().getDamageDelta();
+
       if (this.getWeapon().getType() == ItemType.WEAK_BOW) {
-        return createProjectile(id, 5000 + 1500, 1 + damageDelta, DamageType.NORMAL);
+        speedBonus = 1000;
       } else if (this.getWeapon().getType() == ItemType.STRONG_BOW) {
-        return createProjectile(id, 5000 + 2000, 1 + damageDelta, DamageType.NORMAL);
+        speedBonus = 2000;
       }
     }
 
-    return createProjectile(id, 5000, 1, DamageType.NORMAL);
+    return this.createProjectile(id, 5000 + speedBonus, 1 + damageBonus, DamageType.NORMAL);
   }
 
   public Projectile iceBoltAttack (int id) {
-    return createProjectile(id, 7000, 2, DamageType.ICE);
+    return this.createProjectile(id, 7000, 2, DamageType.ICE);
   }
 
 

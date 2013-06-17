@@ -26,8 +26,14 @@ public class Room {
    */
   private final List<Projectile> projectiles;
 
-  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles, List<Drop> drops, List<Projectile> projectiles) {
+  private final List<NPC> npcs;
+
+  private final List<Merchant> merchants;
+
+  public Room (String id, List<Enemy> enemies, List<SavePoint> savePoints, List<Tile> tiles, List<Drop> drops, List<Projectile> projectiles, List<NPC> npcs, List<Merchant> merchants) {
     this.id = id;
+    this.npcs = npcs;
+    this.merchants = Collections.unmodifiableList(new ArrayList<>(merchants));
     this.drops = Collections.unmodifiableList(new ArrayList<>(drops));
     this.enemies = Collections.unmodifiableList(new ArrayList<>(enemies));
     this.savePoints = Collections.unmodifiableList(new ArrayList<>(savePoints));
@@ -57,6 +63,27 @@ public class Room {
 
   public List<Projectile> getProjectiles () {
     return this.projectiles;
+  }
+
+  public List<NPC> getNpcs () {
+    return this.npcs;
+  }
+
+  public List<Merchant> getMerchants () {
+    return this.merchants;
+  }
+
+  /**
+   * Returns the current version of the merchant, if it exists.
+   */
+  public Merchant findMerchant (Merchant merchant) {
+    for (Merchant merchant2 : this.merchants) {
+      if (merchant.equals(merchant2)) {
+        return merchant2;
+      }
+    }
+
+    return null;
   }
 
   /**
@@ -147,6 +174,8 @@ public class Room {
     List<SavePoint> savePoints = this.savePoints;
     List<Drop> drops = this.drops;
     List<Projectile> projectiles = this.projectiles;
+    List<NPC> npcs = this.npcs;
+    List<Merchant> merchants = this.merchants;
 
     if (transform instanceof AddDropTransform && this.id.equals(((AddDropTransform)transform).roomId)) {
       drops = new ArrayList<>(drops);
@@ -192,7 +221,13 @@ public class Room {
       enemies.add(enemy.apply(transform));
     }
 
-    return new Room(id, enemies, savePoints, tiles, drops, projectiles);
+    List<Merchant> tempMerchants = merchants;
+    merchants = new ArrayList<>();
+    for (Merchant merchant : tempMerchants) {
+      merchants.add(merchant.apply(transform));
+    }
+
+    return new Room(id, enemies, savePoints, tiles, drops, projectiles, npcs, merchants);
   }
 
   public static class AddDropTransform implements Transform {

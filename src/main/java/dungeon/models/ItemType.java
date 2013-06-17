@@ -3,7 +3,7 @@ package dungeon.models;
 import dungeon.game.Transaction;
 
 public enum ItemType {
-  HEALTH_POTION("Heiltrank", true, false, 5, 0, 0) {
+  HEALTH_POTION("Heiltrank", true, false, 5, 5, 0, 0) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getHitPointDelta() + " HP";
@@ -14,7 +14,7 @@ public enum ItemType {
       transaction.pushAndCommit(new Player.HitpointTransform(this.getHitPointDelta()));
     }
   },
-  MANA_POTION("Manatrank", true, false, 0, 5, 0) {
+  MANA_POTION("Manatrank", true, false, 5, 0, 5, 0) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getManaDelta() + " MP";
@@ -25,7 +25,7 @@ public enum ItemType {
       transaction.pushAndCommit(new Player.ManaTransform(this.getManaDelta()));
     }
   },
-  WEAK_BOW ("Schwacher Bogen", false, true, 0, 0, 3) {
+  WEAK_BOW ("Schwacher Bogen", false, true, 10, 0, 0, 3) {
     @Override
     public String getDescription () {
       return "Macht " + this.getDamageDelta() + " Schaden";
@@ -36,7 +36,7 @@ public enum ItemType {
       transaction.pushAndCommit(new Player.EquipWeaponTransform(1));
     }
   },
-  STRONG_BOW ("Starker Bogen", false, true, 0, 0, 5) {
+  STRONG_BOW ("Starker Bogen", false, true, 20, 0, 0, 5) {
     @Override
     public String getDescription () {
       return "Macht " + this.getDamageDelta() + " Schaden";
@@ -54,17 +54,19 @@ public enum ItemType {
 
   private final boolean equipable;
 
+  private final int value;
+
   private final int hitPointDelta;
 
   private final int manaDelta;
 
   private final int damageDelta;
 
-
-  private ItemType (String name, boolean useable, boolean equipable, int hitPointDelta, int manaDelta, int damageDelta) {
+  private ItemType (String name, boolean useable, boolean equipable, int value, int hitPointDelta, int manaDelta, int damageDelta) {
     this.name = name;
     this.useable = useable;
     this.equipable = equipable;
+    this.value = value;
     this.hitPointDelta = hitPointDelta;
     this.manaDelta = manaDelta;
     this.damageDelta = damageDelta;
@@ -82,6 +84,10 @@ public enum ItemType {
 
   public boolean isEquipable () {
     return this.equipable;
+  }
+
+  public int getValue () {
+    return this.value;
   }
 
   public int getHitPointDelta () {

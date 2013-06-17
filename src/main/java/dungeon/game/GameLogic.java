@@ -49,9 +49,21 @@ public class GameLogic {
 
   private boolean useManaPotion;
 
+  private boolean interact;
+
   private final List<Item> useItems = new ArrayList<>();
 
   private final List<Item> equipWeapon = new ArrayList<>();
+
+  /**
+   * Which items to sell to which merchant on next pulse.
+   */
+  private final Map<Merchant, List<Item>> sellItems = new LinkedHashMap<>();
+
+  /**
+   * Which items to buy from which merchant on next pulse.
+   */
+  private final Map<Merchant, List<Item>> buyItems = new LinkedHashMap<>();
 
   private long lastAttackTime;
 
@@ -141,6 +153,43 @@ public class GameLogic {
   }
 
   /**
+   * Sell item on next pulse.
+   */
+  public void sellItem (Merchant merchant, Item item) {
+    List<Item> items = this.sellItems.get(merchant);
+
+    if (items == null) {
+      items = new ArrayList<>();
+    }
+
+    items.add(item);
+
+    this.sellItems.put(merchant, items);
+  }
+
+  /**
+   * Buy item on next pulse.
+   */
+  public void buyItem (Merchant merchant, Item item) {
+    List<Item> items = this.buyItems.get(merchant);
+
+    if (items == null) {
+      items = new ArrayList<>();
+    }
+
+    items.add(item);
+
+    this.buyItems.put(merchant, items);
+  }
+
+  /**
+   * Interact with a nearby NPC on next pulse.
+   */
+  public void interact () {
+    this.interact = true;
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -161,6 +210,8 @@ public class GameLogic {
     this.handleManaPotion(transaction);
     this.useItems(transaction);
     this.equipWeapon(transaction);
+    this.sellItems(transaction);
+    this.buyItems(transaction);
     this.handleMovement(transaction, delta);
     this.handleProjectiles(transaction, delta);
     this.updateViewingDirection(transaction);
@@ -174,6 +225,7 @@ public class GameLogic {
     this.handleMana(transaction);
     this.handleAttack(transaction);
     this.handleIceBolt(transaction);
+    this.handleInteractionWithNpcs(transaction);
 
     this.world = transaction.getWorld();
 
@@ -208,8 +260,7 @@ public class GameLogic {
     if (this.useManaPotion) {
       this.useManaPotion = false;
 
-
-    List<Item> manaPotions = transaction.getWorld().getPlayer().getManaPotions();
+      List<Item> manaPotions = transaction.getWorld().getPlayer().getManaPotions();
 
       if (manaPotions.size() > 0) {
         Item manaPotion = manaPotions.get(0);
@@ -243,6 +294,38 @@ public class GameLogic {
 
       transaction.pushAndCommit(new Player.RemoveItemTransform(item));
     }
+  }
+
+  private void sellItems (Transaction transaction) {
+    for (Map.Entry<Merchant, List<Item>> entry : this.sellItems.entrySet()) {
+      for (Item item : entry.getValue()) {
+        Merchant merchant = transaction.getWorld().getCurrentRoom().findMerchant(entry.getKey());
+
+        if (merchant.getMoney() >= item.getValue()) {
+          transaction.pushAndCommit(new Merchant.BuyItemTransform(merchant, item));
+          transaction.pushAndCommit(new Player.MoneyTransform(item.getValue()));
+          transaction.pushAndCommit(new Player.RemoveItemTransform(item));
+        }
+      }
+    }
+
+    this.sellItems.clear();
+  }
+
+  private void buyItems (Transaction transaction) {
+    for (Map.Entry<Merchant, List<Item>> entry : this.buyItems.entrySet()) {
+      for (Item item : entry.getValue()) {
+        Merchant merchant = transaction.getWorld().getCurrentRoom().findMerchant(entry.getKey());
+
+        if (transaction.getWorld().getPlayer().getMoney() >= item.getValue()) {
+          transaction.pushAndCommit(new Merchant.SellItemTransform(merchant, item));
+          transaction.pushAndCommit(new Player.MoneyTransform(-item.getValue()));
+          transaction.pushAndCommit(new Player.AddItemTransform(item));
+        }
+      }
+    }
+
+    this.buyItems.clear();
   }
 
   private void handleMovement (Transaction transaction, double delta) {
@@ -515,6 +598,42 @@ public class GameLogic {
       transaction.pushAndCommit(new Player.ManaTransform(-1));
       transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
     }
+  }
+
+  /**
+   * Interact with a nearby NPC and merchants.
+   */
+  private void handleInteractionWithNpcs (Transaction transaction) {
+    if (!this.interact) {
+      return;
+    }
+
+    this.interact = false;
+
+    for (NPC npc : transaction.getWorld().getCurrentRoom().getNpcs()) {
+      Vector playerPosition = transaction.getWorld().getPlayer().getCenter().getVector();
+      Vector npcPosition = npc.getCenter().getVector();
+
+      double distance = npcPosition.minus(playerPosition).length();
+
+      if (distance < (NPC.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
+        transaction.pushAndCommit(new NPC.InteractTransform(npc));
+        return;
+      }
+    }
+
+    for (Merchant merchant : transaction.getWorld().getCurrentRoom().getMerchants()) {
+      Vector playerPosition = transaction.getWorld().getPlayer().getCenter().getVector();
+      Vector merchantPosition = merchant.getCenter().getVector();
+
+      double distance = merchantPosition.minus(playerPosition).length();
+
+      if (distance < (Merchant.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
+        transaction.pushAndCommit(new Merchant.InteractTransform(merchant));
+        return;
+      }
+    }
+
   }
 
   /**

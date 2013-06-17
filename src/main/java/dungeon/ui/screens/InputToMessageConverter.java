@@ -64,6 +64,8 @@ public class InputToMessageConverter implements KeyListener {
         return new HealthPotionCommand();
       case 'm':
         return new ManaPotionCommand();
+      case 'z':
+        return new InteractCommand();
       default:
         return null;
     }
