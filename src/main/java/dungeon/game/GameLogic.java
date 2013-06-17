@@ -506,7 +506,7 @@ public class GameLogic {
   }
 
   /**
-   * Interact with a nearby NPC.
+   * Interact with a nearby NPC and merchants.
    */
   private void handleInteractionWithNpcs (Transaction transaction) {
     if (!this.interact) {
@@ -526,6 +526,19 @@ public class GameLogic {
         return;
       }
     }
+
+    for (Merchant merchant : transaction.getWorld().getCurrentRoom().getMerchants()) {
+      Vector playerPosition = transaction.getWorld().getPlayer().getCenter().getVector();
+      Vector merchantPosition = merchant.getCenter().getVector();
+
+      double distance = merchantPosition.minus(playerPosition).length();
+
+      if (distance < (Merchant.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
+        transaction.pushAndCommit(new Merchant.InteractTransform(merchant));
+        return;
+      }
+    }
+
   }
 
   /**
