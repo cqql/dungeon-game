@@ -200,9 +200,16 @@ public class Canvas extends JPanel implements MessageHandler {
   }
 
   private void drawWeaponIndicator (Graphics g) {
+    Item weapon = this.world.getPlayer().getWeapon();
+    String weaponName = "Keine Waffe";
+
+    if (weapon != null) {
+      weaponName = weapon.getType().getName();
+    }
+
     g.setColor(this.white);
     g.setFont(this.font);
-    g.drawString(String.format("%s", this.world.getPlayer().getWeaponId()), 120, 38);
+    g.drawString(weaponName, 120, 38);
   }
 
   /**
