@@ -34,9 +34,6 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
   @XmlAttribute
   public int maxMana;
 
-  @XmlAttribute
-  public int damage;
-
   @XmlElement(name = "item")
   @XmlJavaTypeAdapter(ItemAdapter.class)
   public List<Item> items = new ArrayList<>();
@@ -48,10 +45,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
   public String roomId;
 
   @XmlAttribute
-  public String weaponId;
-
-  @XmlAttribute
-  public ItemType weapon;
+  public int weaponId;
 
   @XmlJavaTypeAdapter(PositionAdapter.class)
   public Position position;
@@ -67,7 +61,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
 
   @Override
   public Player unmarshal (PlayerAdapter adapter) throws Exception {
-    return new Player(adapter.id, adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.mana, adapter.maxMana, adapter.damage, adapter.items, adapter.levelId, adapter.roomId, adapter.weaponId, adapter.weapon, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
+    return new Player(adapter.id, adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.mana, adapter.maxMana, adapter.items, adapter.levelId, adapter.roomId, adapter.weaponId, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
   }
 
   @Override
@@ -81,12 +75,10 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
     adapter.money = player.getMoney();
     adapter.mana = player.getMana();
     adapter.maxMana = player.getMaxMana();
-    adapter.damage = player.getDamage();
     adapter.items = player.getItems();
     adapter.levelId = player.getLevelId();
     adapter.roomId = player.getRoomId();
     adapter.weaponId = player.getWeaponId();
-    adapter.weapon = player.getWeapon();
     adapter.position = player.getPosition();
     adapter.viewingDirection = player.getViewingDirection().toString();
     adapter.savePointRoomId = player.getSavePointRoomId();
