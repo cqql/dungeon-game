@@ -23,6 +23,13 @@ public class Item {
     return this.type;
   }
 
+  /**
+   * Returns the worth of the item in coins.
+   */
+  public int getValue () {
+    return this.type.getValue();
+  }
+
   public void use (Transaction transaction) {
     this.type.use(transaction);
   }

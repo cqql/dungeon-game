@@ -46,6 +46,10 @@ public class LogicHandler implements MessageHandler {
       this.pulse();
     } else if (message instanceof UseItemCommand) {
       this.logic.useItem(((UseItemCommand)message).getItem());
+    } else if (message instanceof BuyCommand) {
+      this.logic.buyItem(((BuyCommand)message).getMerchant(), ((BuyCommand)message).getItem());
+    } else if (message instanceof SellCommand) {
+      this.logic.sellItem(((SellCommand)message).getMerchant(), ((SellCommand)message).getItem());
     }
   }
 

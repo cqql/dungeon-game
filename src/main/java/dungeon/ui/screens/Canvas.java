@@ -30,6 +30,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color npcColor = new Color(28, 31, 255);
 
+  private final Color merchantColor = new Color(255, 124, 235);
+
   private final Color enemyColor = new Color(33, 237, 60);
 
   private final Color savePointColor = new Color(50, 122, 88);
@@ -105,6 +107,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawTiles(g, room);
     this.drawDrops(g, room);
     this.drawNPCs(g, room);
+    this.drawMerchants(g, room);
     this.drawEnemies(g, room);
     this.drawSavepoints(g, room);
     this.drawPlayer(g, this.world.getPlayer());
@@ -151,6 +154,14 @@ public class Canvas extends JPanel implements MessageHandler {
       g.setColor(this.npcColor);
 
       this.drawSquare(g, npc.getPosition(), NPC.SIZE);
+    }
+  }
+
+  private void drawMerchants (Graphics g, Room room) {
+    for (Merchant merchant : room.getMerchants()) {
+      g.setColor(this.merchantColor);
+
+      this.drawSquare(g, merchant.getPosition(), Merchant.SIZE);
     }
   }
 

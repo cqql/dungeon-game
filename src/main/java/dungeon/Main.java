@@ -24,7 +24,9 @@ public class Main {
 
     InventoryScreen inventoryScreen = new InventoryScreen(mailman);
 
-    UiManager uiManager = new UiManager(canvas, startMenu, winScreen, defeatScreen, inventoryScreen);
+    ShopScreen shopScreen = new ShopScreen(mailman);
+
+    UiManager uiManager = new UiManager(canvas, startMenu, winScreen, defeatScreen, inventoryScreen, shopScreen);
 
     MainFrame mainFrame = new MainFrame(mailman, uiManager);
 
@@ -32,6 +34,7 @@ public class Main {
     mailman.addMailbox(new SwingMailbox(canvas));
     mailman.addMailbox(new SwingMailbox(uiManager));
     mailman.addMailbox(new SwingMailbox(inventoryScreen));
+    mailman.addMailbox(new SwingMailbox(shopScreen));
 
     mailman.addMailbox(new PulseGenerator(mailman));
 

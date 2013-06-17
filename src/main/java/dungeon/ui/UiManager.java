@@ -5,6 +5,7 @@ import dungeon.game.messages.WinEvent;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
+import dungeon.models.Merchant;
 import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.ShowGame;
 import dungeon.ui.messages.ShowInventory;
@@ -32,11 +33,13 @@ public class UiManager extends JPanel implements MessageHandler {
 
   private static final String INVENTORY_SCREEN = "INVENTORY_SCREEN";
 
+  private static final String SHOP_SCREEN = "SHOP_SCREEN";
+
   private final Map<String, JPanel> screens = new LinkedHashMap<>();
 
   private final CardLayout layout;
 
-  public UiManager (Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen) {
+  public UiManager (Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen) {
     super(new CardLayout());
 
     this.layout = (CardLayout)this.getLayout();
@@ -46,6 +49,7 @@ public class UiManager extends JPanel implements MessageHandler {
     this.screens.put(WIN_SCREEN, winScreen);
     this.screens.put(DEFEAT_SCREEN, defeatScreen);
     this.screens.put(INVENTORY_SCREEN, inventoryScreen);
+    this.screens.put(SHOP_SCREEN, shopScreen);
   }
 
   @Override
@@ -64,6 +68,8 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(DEFEAT_SCREEN);
     } else if (message instanceof ShowInventory) {
       this.showScreen(INVENTORY_SCREEN);
+    } else if (message instanceof Merchant.InteractTransform) {
+      this.showScreen(SHOP_SCREEN);
     }
   }
 

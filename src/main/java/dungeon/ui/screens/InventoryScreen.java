@@ -16,8 +16,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputAdapter;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -27,9 +25,7 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
   private World world;
 
-  private final DefaultListModel<Item> listModel = new DefaultListModel<>();
-
-  private final JList<Item> itemList = new JList<>(this.listModel);
+  private final ItemList itemList = new ItemList();
 
   private final ItemPanel itemPanel = new ItemPanel();
 
@@ -66,19 +62,7 @@ public class InventoryScreen extends JPanel implements MessageHandler {
   private void reset () {
     List<Item> items = this.world.getPlayer().getItems();
 
-    for (Item item : items) {
-      if (!this.listModel.contains(item)) {
-        this.listModel.addElement(item);
-      }
-    }
-
-    for (Object object : this.listModel.toArray()) {
-      Item item = (Item)object;
-
-      if (!items.contains(item)) {
-        this.listModel.removeElement(item);
-      }
-    }
+    this.itemList.setItems(items);
 
     if (this.itemList.getSelectedValue() == null) {
       this.equipButton.setEnabled(false);
@@ -87,6 +71,16 @@ public class InventoryScreen extends JPanel implements MessageHandler {
   }
 
   private void initialize () {
+    this.setLayout(new GridLayout(1, 3, 10, 0));
+    this.add(this.itemList);
+    this.add(this.itemPanel);
+    this.add(this.actionBar);
+
+    this.actionBar.setLayout(new BoxLayout(this.actionBar, BoxLayout.Y_AXIS));
+    this.actionBar.add(this.equipButton);
+    this.actionBar.add(this.useButton);
+    this.actionBar.add(this.backButton);
+
     this.equipButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
@@ -133,31 +127,5 @@ public class InventoryScreen extends JPanel implements MessageHandler {
         }
       }
     });
-
-    this.itemList.setCellRenderer(new ListCellRenderer<Item>() {
-      @Override
-      public Component getListCellRendererComponent (JList<? extends Item> jList, Item item, int index, boolean isSelected, boolean cellHasFocus) {
-        DefaultListCellRenderer renderer = new DefaultListCellRenderer();
-        Component cell = renderer.getListCellRendererComponent(jList, item, index, isSelected, cellHasFocus);
-
-        ((JLabel)cell).setText(item.getType().getName());
-
-        return cell;
-      }
-    });
-
-    this.actionBar.add(this.equipButton);
-    this.actionBar.add(this.useButton);
-    this.actionBar.add(this.backButton);
-
-    this.setLayout(new GridLayout(1, 3, 10, 0));
-    this.actionBar.setLayout(new BoxLayout(this.actionBar, BoxLayout.Y_AXIS));
-
-    this.actionBar.setMinimumSize(new Dimension(200, 0));
-    this.itemList.setMinimumSize(new Dimension(300, 0));
-
-    this.add(this.itemList);
-    this.add(this.itemPanel);
-    this.add(this.actionBar);
   }
 }
