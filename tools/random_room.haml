@@ -1,37 +1,69 @@
 :ruby
-  SIZE_X = 20
-  SIZE_Y = 20
+  @_next_id = 100
 
-  next_id = 100
+  def next_id
+    @_next_id = @_next_id + 1
 
-  id = "room-3"
-  tiles = []
-  enemies = []
-  teleporters = []
-
-  (0...SIZE_X).each do |x|
-    (0...SIZE_Y).each do |y|
-      tiles << { x: x * 1000, y: y * 1000, blocking: Random.rand(5) == 0 }
-
-      if Random.rand(10) == 0 and !tiles.last[:blocking]
-        enemies << { id: next_id, x: x * 1000, y: y * 1000, hp: Random.rand(10) }
-        next_id = next_id + 1
-      end
-
-      if Random.rand(20) == 0 and !tiles.last[:blocking]
-        teleporters << { x: x * 1000, y: y * 1000, target_id: id, target_x: Random.rand((SIZE_X - 1) * 1000), target_y: Random.rand((SIZE_Y - 1) * 1000) }
-      end
-    end
+    @_next_id
   end
 
-%room{id: id}
-  - tiles.each do |tile|
-    %tile{blocking: tile[:blocking] ? "true" : "false"}
-      %position{x: tile[:x], y: tile[:y]}
-  - enemies.each do |enemy|
-    %enemy{id: enemy[:id], hitPoints: enemy[:hp]}
-      %position{x: enemy[:x], y: enemy[:y]}
-  - teleporters.each do |teleporter|
-    %teleporter{blocking: "false"}
-      %position{x: teleporter[:x], y: teleporter[:y]}
-      %target{roomId: teleporter[:target_id], x: teleporter[:target_x], y: teleporter[:target_y]}
+  def room id, size_x, size_y
+    tiles = []
+
+    (0...size_x).each do |x|
+      (0...size_y).each do |y|
+        tiles << { x: x * 1000, y: y * 1000, blocking: false }
+      end
+    end
+
+    {
+      id: id,
+      tiles: tiles,
+      enemies: [],
+      teleporters: []
+    }
+  end
+
+  def with_enemies room, num_enemies
+    num_enemies.times do
+      room[:enemies] << { id: next_id(), x: Random.rand(20) * 1000, y: Random.rand(20) * 1000, hp: Random.rand(8) + 2, speed: 1000, move_strategy: "NORMAL" }
+    end
+
+    room
+  end
+
+  def with_teleporter room, x, y, target_room, target_x, target_y
+    room[:teleporters] << { x: x * 1000, y: y * 1000, target_id: target_room, target_x: target_x, target_y: target_y }
+
+    room
+  end
+
+  levels = []
+
+  [
+    { id: "level-1", next_level: "level-2" },
+    { id: "level-2", next_level: "level-3" },
+    { id: "level-3", next_level: "VICTORY" }
+  ].each do |info|
+    levels << {
+      id: info[:id],
+      rooms: [
+        with_enemies(room(next_id(), 20, 20), 10)
+      ]
+    }
+  end
+
+- levels.each do |level|
+  %level{id: level[:id]}
+    - level[:rooms].each do |room|
+      %room{id: room[:id]}
+        - room[:tiles].each do |tile|
+          %tile{blocking: tile[:blocking] ? "true" : "false"}
+            %position{x: tile[:x], y: tile[:y]}
+        - room[:enemies].each do |enemy|
+          %enemy{id: enemy[:id], hitPoints: enemy[:hp]}
+            %position{x: enemy[:x], y: enemy[:y]}
+        - room[:teleporters].each do |teleporter|
+          %teleporter{blocking: "false"}
+            %position{x: teleporter[:x], y: teleporter[:y]}
+            %target{roomId: teleporter[:target_id], x: teleporter[:target_x], y: teleporter[:target_y]}
