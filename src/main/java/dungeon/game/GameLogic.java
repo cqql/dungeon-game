@@ -53,7 +53,10 @@ public class GameLogic {
 
   private final List<Item> useItems = new ArrayList<>();
 
-  private final List<Item> equipWeapon = new ArrayList<>();
+  /**
+   * Which weapon to equip on next pulse.
+   */
+  private Item equipWeapon;
 
   /**
    * Which items to sell to which merchant on next pulse.
@@ -135,7 +138,7 @@ public class GameLogic {
    * Equip {@code item} during the next pulse.
    */
   public void equipWeapon (Item item) {
-    this.equipWeapon.add(item);
+    this.equipWeapon = item;
   }
 
   /**
@@ -287,12 +290,12 @@ public class GameLogic {
   }
 
   private void equipWeapon (Transaction transaction) {
-    for (Item item : this.equipWeapon) {
-      LOGGER.info("Equip weapon " + item);
+    if (this.equipWeapon != null && this.equipWeapon.getType().isEquipable()) {
+      LOGGER.info("Equip weapon " + this.equipWeapon);
 
-      item.equip(transaction);
+      transaction.pushAndCommit(new Player.EquipWeaponTransform(this.equipWeapon.getId()));
 
-      transaction.pushAndCommit(new Player.RemoveItemTransform(item));
+      this.equipWeapon = null;
     }
   }
 

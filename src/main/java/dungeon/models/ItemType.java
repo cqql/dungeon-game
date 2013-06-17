@@ -30,21 +30,11 @@ public enum ItemType {
     public String getDescription () {
       return "Macht " + this.getDamageDelta() + " Schaden";
     }
-
-    @Override
-    public void equip (Transaction transaction) {
-      transaction.pushAndCommit(new Player.EquipWeaponTransform(1));
-    }
   },
   STRONG_BOW ("Starker Bogen", false, true, 20, 0, 0, 5) {
     @Override
     public String getDescription () {
       return "Macht " + this.getDamageDelta() + " Schaden";
-    }
-
-    @Override
-    public void equip (Transaction transaction) {
-      transaction.pushAndCommit(new Player.EquipWeaponTransform(2));
     }
   };
 
@@ -106,13 +96,6 @@ public enum ItemType {
    * Use the item, e.g. apply the appropriate transforms.
    */
   public void use (Transaction transaction) {
-
-  }
-
-  /**
-   * Equip the item, e.g. apply the appropriate transforms.
-   */
-  public void equip (Transaction transaction) {
 
   }
 
