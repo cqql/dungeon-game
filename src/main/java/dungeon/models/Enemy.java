@@ -26,11 +26,14 @@ public class Enemy implements Spatial, Identifiable {
 
   private final MoveStrategy moveStrategy;
 
-  public Enemy (int id, int hitPoints, Position position, MoveStrategy moveStrategy) {
+  private final String onDeath;
+
+  public Enemy (int id, int hitPoints, Position position, MoveStrategy moveStrategy, String onDeath) {
     this.id = id;
     this.hitPoints = hitPoints;
     this.position = position;
     this.moveStrategy = moveStrategy;
+    this.onDeath = onDeath;
   }
 
   public int getId () {
@@ -53,6 +56,17 @@ public class Enemy implements Spatial, Identifiable {
     return this.moveStrategy;
   }
 
+  /**
+   * What should happen when the enemy dies?
+   *
+   * null => nothing
+   * "VICTORY" => victory
+   * "some-id" => advance to level "some-id"
+   */
+  public String getOnDeath () {
+    return onDeath;
+  }
+
   public Enemy apply (Transform transform) {
     int id = this.id;
     int hitPoints = this.hitPoints;
@@ -67,7 +81,7 @@ public class Enemy implements Spatial, Identifiable {
       position = ((TeleportTransform)transform).position;
     }
 
-    return new Enemy(id, hitPoints, position, moveStrategy);
+    return new Enemy(id, hitPoints, position, moveStrategy, onDeath);
   }
 
   @Override

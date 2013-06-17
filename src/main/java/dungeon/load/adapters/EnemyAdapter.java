@@ -20,9 +20,12 @@ public class EnemyAdapter extends XmlAdapter<EnemyAdapter, Enemy> {
   @XmlAttribute
   public String moveStrategy;
 
+  @XmlAttribute
+  public String onDeath;
+
   @Override
   public Enemy unmarshal (EnemyAdapter adapter) throws Exception {
-    return new Enemy(adapter.id, adapter.hitPoints, adapter.position, Enemy.MoveStrategy.valueOf(adapter.moveStrategy));
+    return new Enemy(adapter.id, adapter.hitPoints, adapter.position, Enemy.MoveStrategy.valueOf(adapter.moveStrategy), adapter.onDeath);
   }
 
   @Override
@@ -32,6 +35,7 @@ public class EnemyAdapter extends XmlAdapter<EnemyAdapter, Enemy> {
     adapter.hitPoints = enemy.getHitPoints();
     adapter.position = enemy.getPosition();
     adapter.moveStrategy = enemy.getMoveStrategy().toString();
+    adapter.onDeath = enemy.getOnDeath();
 
     return adapter;
   }

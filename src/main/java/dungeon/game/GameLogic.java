@@ -233,7 +233,6 @@ public class GameLogic {
     this.world = transaction.getWorld();
 
     this.handleDefeat();
-    this.handleWin();
 
     return transaction;
   }
@@ -489,6 +488,14 @@ public class GameLogic {
             )
           )
         );
+
+        if (enemy.getOnDeath() != null) {
+          if (enemy.getOnDeath() == "VICTORY") {
+            this.gameState = GameState.VICTORY;
+          } else {
+            transaction.pushAndCommit(new Player.AdvanceLevelTransform(enemy.getOnDeath()));
+          }
+        }
       }
     }
   }
@@ -557,17 +564,6 @@ public class GameLogic {
   private void handleDefeat () {
     if (this.world.getPlayer().getLives() == 0) {
       this.gameState = GameState.DEFEAT;
-    }
-  }
-
-  /**
-   * Set the game state to VICTORY when the player touches a victory tile.
-   */
-  private void handleWin () {
-    for (VictoryTile tile : this.world.getCurrentRoom().getVictoryTiles()) {
-      if (this.touch(this.world.getPlayer(), tile)) {
-        this.gameState = GameState.VICTORY;
-      }
     }
   }
 
