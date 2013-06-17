@@ -9,6 +9,8 @@ import dungeon.models.Item;
 import dungeon.models.Merchant;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
+import dungeon.ui.messages.BuyCommand;
+import dungeon.ui.messages.SellCommand;
 import dungeon.ui.messages.ShowGame;
 
 import javax.swing.*;
@@ -34,6 +36,8 @@ public class ShopScreen extends JPanel implements MessageHandler {
   private final JPanel actionBar = new JPanel();
 
   private final JButton buyButton = new JButton("Kaufen");
+
+  private final JButton sellButton = new JButton("Verkaufen");
 
   private final JButton backButton = new JButton("Zurück");
 
@@ -79,6 +83,7 @@ public class ShopScreen extends JPanel implements MessageHandler {
 
     this.actionBar.setLayout(new BoxLayout(this.actionBar, BoxLayout.Y_AXIS));
     this.actionBar.add(this.buyButton);
+    this.actionBar.add(this.sellButton);
     this.actionBar.add(this.backButton);
 
     this.backButton.addMouseListener(new MouseInputAdapter() {
@@ -90,6 +95,32 @@ public class ShopScreen extends JPanel implements MessageHandler {
 
     this.playerItemList.addListSelectionListener(itemPanelListener);
     this.merchantItemList.addListSelectionListener(itemPanelListener);
+
+    this.buyButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
+        Item item = ShopScreen.this.merchantItemList.getSelectedValue();
+
+        if (item == null) {
+          return;
+        }
+
+        ShopScreen.this.mailman.send(new BuyCommand(ShopScreen.this.merchant, item));
+      }
+    });
+
+    this.sellButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
+        Item item = ShopScreen.this.playerItemList.getSelectedValue();
+
+        if (item == null) {
+          return;
+        }
+
+        ShopScreen.this.mailman.send(new SellCommand(ShopScreen.this.merchant, item));
+      }
+    });
   }
 
   /**

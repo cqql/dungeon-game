@@ -74,6 +74,19 @@ public class Room {
   }
 
   /**
+   * Returns the current version of the merchant, if it exists.
+   */
+  public Merchant findMerchant (Merchant merchant) {
+    for (Merchant merchant2 : this.merchants) {
+      if (merchant.equals(merchant2)) {
+        return merchant2;
+      }
+    }
+
+    return null;
+  }
+
+  /**
    * Returns all blocking tiles in this room.
    */
   public List<Tile> getWalls () {
@@ -162,6 +175,7 @@ public class Room {
     List<Drop> drops = this.drops;
     List<Projectile> projectiles = this.projectiles;
     List<NPC> npcs = this.npcs;
+    List<Merchant> merchants = this.merchants;
 
     if (transform instanceof AddDropTransform && this.id.equals(((AddDropTransform)transform).roomId)) {
       drops = new ArrayList<>(drops);
@@ -205,6 +219,12 @@ public class Room {
     enemies = new ArrayList<>();
     for (Enemy enemy : tempEnemies) {
       enemies.add(enemy.apply(transform));
+    }
+
+    List<Merchant> tempMerchants = merchants;
+    merchants = new ArrayList<>();
+    for (Merchant merchant : tempMerchants) {
+      merchants.add(merchant.apply(transform));
     }
 
     return new Room(id, enemies, savePoints, tiles, drops, projectiles, npcs, merchants);

@@ -3,7 +3,7 @@ package dungeon.models;
 import dungeon.game.Transaction;
 
 public enum ItemType {
-  HEALTH_POTION("Heiltrank", true, false, 5, 0) {
+  HEALTH_POTION("Heiltrank", true, false, 5, 5, 0) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getHitPointDelta() + " HP";
@@ -14,7 +14,7 @@ public enum ItemType {
       transaction.pushAndCommit(new Player.HitpointTransform(this.getHitPointDelta()));
     }
   },
-  MANA_POTION("Manatrank", true, false, 0, 5) {
+  MANA_POTION("Manatrank", true, false, 5, 0, 5) {
     @Override
     public String getDescription () {
       return "Heilt " + this.getManaDelta() + " MP";
@@ -32,14 +32,17 @@ public enum ItemType {
 
   private final boolean equipable;
 
+  private final int value;
+
   private final int hitPointDelta;
 
   private final int manaDelta;
 
-  private ItemType (String name, boolean useable, boolean equipable, int hitPointDelta, int manaDelta) {
+  private ItemType (String name, boolean useable, boolean equipable, int value, int hitPointDelta, int manaDelta) {
     this.name = name;
     this.useable = useable;
     this.equipable = equipable;
+    this.value = value;
     this.hitPointDelta = hitPointDelta;
     this.manaDelta = manaDelta;
   }
@@ -56,6 +59,10 @@ public enum ItemType {
 
   public boolean isEquipable () {
     return this.equipable;
+  }
+
+  public int getValue () {
+    return this.value;
   }
 
   public int getHitPointDelta () {
