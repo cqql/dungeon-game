@@ -76,10 +76,10 @@ public class Room {
   /**
    * Returns the current version of the merchant, if it exists.
    */
-  public Merchant findMerchant (Merchant merchant) {
-    for (Merchant merchant2 : this.merchants) {
-      if (merchant.equals(merchant2)) {
-        return merchant2;
+  public Merchant findMerchant (Merchant searched) {
+    for (Merchant merchant : this.merchants) {
+      if (searched.equals(merchant)) {
+        return merchant;
       }
     }
 

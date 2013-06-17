@@ -41,6 +41,18 @@ public class ShopScreen extends JPanel implements MessageHandler {
 
   private final JButton backButton = new JButton("Zurück");
 
+  /**
+   * Show the selected item in the item panel.
+   */
+  private ListSelectionListener itemPanelListener = new ListSelectionListener() {
+    @Override
+    public void valueChanged (ListSelectionEvent listSelectionEvent) {
+      Item item = ((JList<Item>)listSelectionEvent.getSource()).getSelectedValue();
+
+      ShopScreen.this.itemPanel.setItem(item);
+    }
+  };
+
   public ShopScreen (Mailman mailman) {
     this.mailman = mailman;
   }
@@ -93,8 +105,8 @@ public class ShopScreen extends JPanel implements MessageHandler {
       }
     });
 
-    this.playerItemList.addListSelectionListener(itemPanelListener);
-    this.merchantItemList.addListSelectionListener(itemPanelListener);
+    this.playerItemList.addListSelectionListener(this.itemPanelListener);
+    this.merchantItemList.addListSelectionListener(this.itemPanelListener);
 
     this.buyButton.addMouseListener(new MouseInputAdapter() {
       @Override
@@ -122,16 +134,4 @@ public class ShopScreen extends JPanel implements MessageHandler {
       }
     });
   }
-
-  /**
-   * Show the selected item in the item panel.
-   */
-  private ListSelectionListener itemPanelListener = new ListSelectionListener() {
-    @Override
-    public void valueChanged (ListSelectionEvent listSelectionEvent) {
-      Item item = ((JList<Item>)listSelectionEvent.getSource()).getSelectedValue();
-
-      ShopScreen.this.itemPanel.setItem(item);
-    }
-  };
 }

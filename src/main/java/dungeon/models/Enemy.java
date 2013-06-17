@@ -64,7 +64,7 @@ public class Enemy implements Spatial, Identifiable {
    * "some-id" => advance to level "some-id"
    */
   public String getOnDeath () {
-    return onDeath;
+    return this.onDeath;
   }
 
   public Enemy apply (Transform transform) {
@@ -72,6 +72,7 @@ public class Enemy implements Spatial, Identifiable {
     int hitPoints = this.hitPoints;
     Position position = this.position;
     MoveStrategy moveStrategy = this.moveStrategy;
+    String onDeath = this.onDeath;
 
     if (transform instanceof HitPointTransform && this.equals(((HitPointTransform)transform).enemy)) {
       hitPoints += ((HitPointTransform)transform).delta;

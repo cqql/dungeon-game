@@ -229,7 +229,7 @@ public class Player implements Spatial, Identifiable {
     int speedBonus = 0;
 
     if (this.getWeapon() != null) {
-      damageBonus = getWeapon().getType().getDamageDelta();
+      damageBonus = this.getWeapon().getType().getDamageDelta();
 
       if (this.getWeapon().getType() == ItemType.WEAK_BOW) {
         speedBonus = 1000;

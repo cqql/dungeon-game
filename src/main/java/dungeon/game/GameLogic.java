@@ -490,7 +490,7 @@ public class GameLogic {
         );
 
         if (enemy.getOnDeath() != null) {
-          if (enemy.getOnDeath() == "VICTORY") {
+          if ("VICTORY".equals(enemy.getOnDeath())) {
             this.gameState = GameState.VICTORY;
           } else {
             transaction.pushAndCommit(new Player.AdvanceLevelTransform(enemy.getOnDeath()));

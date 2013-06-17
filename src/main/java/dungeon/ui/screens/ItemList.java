@@ -10,7 +10,7 @@ public class ItemList extends JList<Item> {
   private final DefaultListModel<Item> listModel = new DefaultListModel<>();
 
   public ItemList () {
-    this.setModel(listModel);
+    this.setModel(this.listModel);
 
     this.setCellRenderer(new ListCellRenderer<Item>() {
       @Override

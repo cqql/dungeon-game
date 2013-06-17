@@ -15,10 +15,10 @@ public class BuyCommand implements Message {
   }
 
   public Merchant getMerchant () {
-    return merchant;
+    return this.merchant;
   }
 
   public Item getItem () {
-    return item;
+    return this.item;
   }
 }
