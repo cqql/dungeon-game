@@ -175,16 +175,12 @@ public class Enemy implements Spatial, Identifiable {
       public void move (Transaction transaction, Enemy enemy, double delta) {
         Vector enemyToPlayer = transaction.getWorld().getPlayer().getPosition().getVector().minus(enemy.getPosition().getVector());
 
-        if (enemyToPlayer.length() < 500) {
+        if (enemyToPlayer.length() < 500 || RANDOM.nextInt(200) == 0) {
           Room room = transaction.getWorld().getCurrentRoom();
+          Vector position = new Vector(RANDOM.nextFloat() * room.getXSize(), RANDOM.nextFloat() * room.getYSize());
+          position = position.times(0.5 + RANDOM.nextFloat() / 2);
 
-          transaction.pushAndCommit(new TeleportTransform(enemy, new Position((int)(RANDOM.nextFloat() * room.getXSize()), (int)(RANDOM.nextFloat() * room.getYSize()))));
-        } else if (RANDOM.nextInt(200) == 0) {
-          Position position = new Position(
-            transaction.getWorld().getPlayer().getPosition().getVector().plus(enemyToPlayer)
-          );
-
-          transaction.pushAndCommit(new TeleportTransform(enemy, position));
+          transaction.pushAndCommit(new TeleportTransform(enemy, new Position(position)));
         } else {
           transaction.pushAndCommit(new Enemy.MoveTransform(enemy, enemyToPlayer.normalize().times(enemy.getSpeed() * delta)));
         }
