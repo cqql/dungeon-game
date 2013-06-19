@@ -673,6 +673,6 @@ public class GameLogic {
   private boolean outOfBorders (Spatial object, Room room) {
     Rectangle2D space = object.space();
 
-    return space.getMinX() < 0 || space.getMinY() < 0 || space.getMaxX() > room.getXSize() || space.getMinY() > room.getYSize();
+    return space.getMinX() < 0 || space.getMinY() < 0 || space.getMaxX() > room.getXSize() || space.getMaxY() > room.getYSize();
   }
 }
