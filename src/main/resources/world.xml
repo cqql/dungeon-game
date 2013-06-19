@@ -1202,16 +1202,16 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='7' id='101' moveStrategy='NORMAL' speed='1000'>
+    <enemy hitPoints='8' id='101' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='6000'></position>
     </enemy>
-    <enemy hitPoints='4' id='102' moveStrategy='NORMAL' speed='1000'>
+    <enemy hitPoints='2' id='102' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='7000'></position>
     </enemy>
-    <enemy hitPoints='5' id='103' moveStrategy='NORMAL' speed='1000'>
+    <enemy hitPoints='9' id='103' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='3' id='104' moveStrategy='NORMAL' speed='1000'>
+    <enemy hitPoints='9' id='104' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='12000'></position>
     </enemy>
     <teleporter blocking='false'>
@@ -2424,6 +2424,9 @@
       <position x='19000' y='19000'></position>
       <target roomId='room-3' x='0' y='0'></target>
     </teleporter>
+    <save-point>
+      <position x='16000' y='17000'></position>
+    </save-point>
   </room>
   <room id='room-3'>
     <tile blocking='false'>
@@ -7245,6 +7248,9 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
+    <enemy hitPoints='20' id='106' moveStrategy='TELEPORT' onDeath='level-3#room-7' speed='1500'>
+      <position x='15000' y='7000'></position>
+    </enemy>
   </room>
 </level>
 <level id='level-3'>
@@ -10861,6 +10867,9 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
+    <enemy hitPoints='20' id='107' moveStrategy='TELEPORT' onDeath='VICTORY' speed='2500'>
+      <position x='15000' y='7000'></position>
+    </enemy>
   </room>
 </level>
   <player id="1" name="Link" lives="3" hitPoints="1" maxHitPoints="5" money="0" mana="3" maxMana="10" levelId="level-1"

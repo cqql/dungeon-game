@@ -40,7 +40,7 @@
   00000000000000000000
   00000000000000000000
   00000000000000000000
-  00000000000000000000
+  00000000000000003000
   00000000000000000000
   00000000000000000000
   ROOM0
@@ -221,6 +221,7 @@
   def room id, map
     tiles = []
     enemies = []
+    save_points = []
 
     map.each_with_index do |row, y|
       row.each_with_index do |column, x|
@@ -231,6 +232,9 @@
         elsif column == 2
           enemies << { id: next_id(), x: x * 1000, y: y * 1000, hp: Random.rand(8) + 2, speed: 1000, move_strategy: "NORMAL" }
           tiles << { x: x * 1000, y: y * 1000, blocking: false }
+        elsif column == 3
+          save_points << { x: x * 1000, y: y * 1000 }
+          tiles << { x: x * 1000, y: y * 1000, blocking: false }
         end
       end
     end
@@ -239,7 +243,8 @@
       id: id,
       tiles: tiles,
       enemies: enemies,
-      teleporters: []
+      teleporters: [],
+      save_points: save_points
     }
   end
 
@@ -277,7 +282,7 @@
       rooms: [
         with_teleporter(room("room-7", string_to_map(room7)), 19, 19, "room-8", 0, 0),
         with_teleporter(room("room-8", string_to_map(room8)), 19, 19, "room-9", 0, 0),
-        with_boss(room("room-9", string_to_map(room9)), 15, 7, 20, 2500, "VICTORY")
+        with_boss(room("room-9", string_to_map(room9)), 15, 7, 20, 1500, "VICTORY")
       ]
     }
   ]
@@ -296,3 +301,6 @@
           %teleporter{blocking: "false"}
             %position{x: teleporter[:x], y: teleporter[:y]}
             %target{roomId: teleporter[:target_id], x: teleporter[:target_x], y: teleporter[:target_y]}
+        - room[:save_points].each do |save_point|
+          %save-point
+            %position{x: save_point[:x], y: save_point[:y]}
