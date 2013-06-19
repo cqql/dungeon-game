@@ -271,8 +271,15 @@ public class Canvas extends JPanel implements MessageHandler {
 
   /**
    * Draw a square with the positions converted from our abstract unit to pixels.
+   *
+   * The squares bounds are rounded up to prevent gaps between squares.
    */
   private void drawSquare (Graphics g, Position position, int widthUnits) {
-    g.fillRect((int)(position.getX() * this.xPixelPerUnit), (int)(position.getY() * this.yPixelPerUnit), (int)(widthUnits * this.xPixelPerUnit), (int)(widthUnits * this.yPixelPerUnit));
+    g.fillRect(
+      (int)Math.ceil(position.getX() * this.xPixelPerUnit),
+      (int)Math.ceil(position.getY() * this.yPixelPerUnit),
+      (int)Math.ceil(widthUnits * this.xPixelPerUnit),
+      (int)Math.ceil(widthUnits * this.yPixelPerUnit)
+    );
   }
 }
