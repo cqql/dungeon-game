@@ -38,6 +38,9 @@ public class LogicHandler implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof LevelLoadedEvent) {
       this.logic = new GameLogic(((LevelLoadedEvent)message).getWorld());
+
+      // Initialize the pulse delta. If you don't the first pulse will be from the beginning of the unix epoch until today.
+      this.updatePulseDelta();
     } else if (message instanceof StartCommand) {
       this.startCommand((StartCommand)message);
     } else if (message instanceof EndCommand) {

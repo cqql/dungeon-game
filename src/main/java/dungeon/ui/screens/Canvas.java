@@ -11,8 +11,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.logging.Logger;
 
 public class Canvas extends JPanel implements MessageHandler {
+  private final static Logger LOGGER = Logger.getLogger(Canvas.class.getName());
+
   /**
    * How long to show dialogs in milliseconds.
    */
