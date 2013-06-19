@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class GameLogic {
   private static final Logger LOGGER = Logger.getLogger(GameLogic.class.getName());
 
-  private static final int SPEED = 20000;
+  private static final int SPEED = 3000;
 
   /**
    * The next available ID.
