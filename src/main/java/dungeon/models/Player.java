@@ -311,6 +311,9 @@ public class Player implements Spatial, Identifiable {
       weaponId = equipWeaponTransform.weaponId;
     } else if (transform instanceof AdvanceLevelTransform) {
       levelId = ((AdvanceLevelTransform)transform).levelId;
+      roomId = ((AdvanceLevelTransform)transform).roomId;
+      savePointRoomId = ((AdvanceLevelTransform)transform).roomId;
+      savePointPosition = new Position(0, 0);
     }
 
     return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, weaponId, position, viewingDirection, savePointRoomId, savePointPosition);
@@ -416,8 +419,11 @@ public class Player implements Spatial, Identifiable {
   public static class AdvanceLevelTransform implements Transform {
     private final String levelId;
 
-    public AdvanceLevelTransform (String levelId) {
+    private final String roomId;
+
+    public AdvanceLevelTransform (String levelId, String roomId) {
       this.levelId = levelId;
+      this.roomId = roomId;
     }
   }
 

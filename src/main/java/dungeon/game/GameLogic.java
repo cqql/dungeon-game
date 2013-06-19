@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class GameLogic {
   private static final Logger LOGGER = Logger.getLogger(GameLogic.class.getName());
 
-  private static final int SPEED = 2000;
+  private static final int SPEED = 20000;
 
   /**
    * The next available ID.
@@ -493,7 +493,11 @@ public class GameLogic {
           if ("VICTORY".equals(enemy.getOnDeath())) {
             this.gameState = GameState.VICTORY;
           } else {
-            transaction.pushAndCommit(new Player.AdvanceLevelTransform(enemy.getOnDeath()));
+            String[] parts = enemy.getOnDeath().split("#");
+            String levelId = parts[0];
+            String roomId = parts[1];
+
+            transaction.pushAndCommit(new Player.AdvanceLevelTransform(levelId, roomId));
           }
         }
       }

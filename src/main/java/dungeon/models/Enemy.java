@@ -68,7 +68,7 @@ public class Enemy implements Spatial, Identifiable {
    *
    * null => nothing
    * "VICTORY" => victory
-   * "some-id" => advance to level "some-id"
+   * "level-id#room-id" => advance to level "level-id" and room "room-id"
    */
   public String getOnDeath () {
     return this.onDeath;
