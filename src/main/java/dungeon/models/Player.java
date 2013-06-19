@@ -312,8 +312,9 @@ public class Player implements Spatial, Identifiable {
     } else if (transform instanceof AdvanceLevelTransform) {
       levelId = ((AdvanceLevelTransform)transform).levelId;
       roomId = ((AdvanceLevelTransform)transform).roomId;
-      savePointRoomId = ((AdvanceLevelTransform)transform).roomId;
-      savePointPosition = new Position(0, 0);
+      position = new Position(0, 0);
+      savePointRoomId = roomId;
+      savePointPosition = position;
     }
 
     return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, weaponId, position, viewingDirection, savePointRoomId, savePointPosition);
