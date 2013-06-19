@@ -175,7 +175,7 @@ public class Enemy implements Spatial, Identifiable {
       public void move (Transaction transaction, Enemy enemy, double delta) {
         Vector enemyToPlayer = transaction.getWorld().getPlayer().getPosition().getVector().minus(enemy.getPosition().getVector());
 
-        if (enemyToPlayer.length() < 500 || RANDOM.nextInt(200) == 0) {
+        if (enemyToPlayer.length() < 500 || RANDOM.nextInt(300) == 0) {
           Room room = transaction.getWorld().getCurrentRoom();
           Vector position = new Vector(RANDOM.nextFloat() * room.getXSize(), RANDOM.nextFloat() * room.getYSize());
           position = position.times(0.5 + RANDOM.nextFloat() / 2);
