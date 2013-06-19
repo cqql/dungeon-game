@@ -1,4 +1,13 @@
 :ruby
+  # The room maps
+  # 0 - just a tile
+  # 1 - wall
+  # 2 - enemy
+  # 3 - save point
+  #
+  # You will always spawn in the top left and the teleporter to the next room will be in the bottom right.
+  # There could also be NPCs and merchants next your spawn point or the teleporter so leave some space around there.
+
   room1 = <<-ROOM1
   00000000000000000000
   00000000000000000000
@@ -185,24 +194,24 @@
 
   room9 = <<-ROOM0
   00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
-  00000000000000000000
+  00020001111000000000
+  00000001111000000000
+  00000000000011111100
+  00001000000000000000
+  00001000000000000000
+  00001001111111100100
+  00001000000000100100
+  00001000000020100100
+  00001111110000100000
+  00000000010000100000
+  00000000010000100100
+  00000000000000100100
+  00111110010000100100
+  00100000010000100000
+  00100000010000100000
+  00100220000000100000
+  00100000000000100000
+  00111111111111100300
   00000000000000000000
   ROOM0
 
@@ -244,18 +253,32 @@
       tiles: tiles,
       enemies: enemies,
       teleporters: [],
-      save_points: save_points
+      save_points: save_points,
+      npcs: [],
+      merchants: []
     }
   end
 
-  def with_teleporter room, x, y, target_room, target_x, target_y
+  def teleporter room, x, y, target_room, target_x, target_y
     room[:teleporters] << { x: x * 1000, y: y * 1000, target_id: target_room, target_x: target_x, target_y: target_y }
 
     room
   end
 
-  def with_boss room, x, y, hp, speed, on_death
+  def boss room, x, y, hp, speed, on_death
     room[:enemies] << { id: next_id(), x: x * 1000, y: y * 1000, hp: hp, speed: speed, move_strategy: "TELEPORT", on_death: on_death }
+
+    room
+  end
+
+  def npc room, x, y, name, saying
+    room[:npcs] << { id: next_id(), x: x * 1000, y: y * 1000, name: name, saying: saying}
+
+    room
+  end
+
+  def merchant room, x, y, money, items
+    room[:merchants] << { id: next_id(), x: x * 1000, y: y * 1000, money: money, items: items}
 
     room
   end
@@ -264,25 +287,25 @@
     {
       id: "level-1",
       rooms: [
-        with_teleporter(room("room-1", string_to_map(room1)), 19, 19, "room-2", 0, 0),
-        with_teleporter(room("room-2", string_to_map(room2)), 19, 19, "room-3", 0, 0),
-        with_boss(room("room-3", string_to_map(room3)), 15, 7, 10, 1500, "level-2#room-4")
+        npc(teleporter(room("room-1", string_to_map(room1)), 19, 19, "room-2", 0, 0), 3, 0, "Wächter", "Willkommen im alten Schloss"),
+        merchant(teleporter(room("room-2", string_to_map(room2)), 19, 19, "room-3", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "HEALTH_POTION"}]),
+        boss(room("room-3", string_to_map(room3)), 15, 7, 15, 1500, "level-2#room-4")
       ]
     },
     {
       id: "level-2",
       rooms: [
-        with_teleporter(room("room-4", string_to_map(room4)), 19, 19, "room-5", 0, 0),
-        with_teleporter(room("room-5", string_to_map(room5)), 19, 19, "room-6", 0, 0),
-        with_boss(room("room-6", string_to_map(room6)), 15, 7, 20, 1500, "level-3#room-7")
+        npc(teleporter(room("room-4", string_to_map(room4)), 19, 19, "room-5", 0, 0), 3, 0, "Wächter", "Oh, du hast es ja sogar bis in den zweiten Stock geschafft"),
+        merchant(teleporter(room("room-5", string_to_map(room5)), 19, 19, "room-6", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "WEAK_BOW"}]),
+        boss(room("room-6", string_to_map(room6)), 15, 7, 30, 1500, "level-3#room-7")
       ]
     },
     {
       id: "level-3",
       rooms: [
-        with_teleporter(room("room-7", string_to_map(room7)), 19, 19, "room-8", 0, 0),
-        with_teleporter(room("room-8", string_to_map(room8)), 19, 19, "room-9", 0, 0),
-        with_boss(room("room-9", string_to_map(room9)), 15, 7, 20, 1500, "VICTORY")
+        npc(teleporter(room("room-7", string_to_map(room7)), 19, 19, "room-8", 0, 0), 3, 0, "Wächter", "Man sagt, dass im hintersten Zimmer ein Geist den Schlüssel zu großen Ruhm bewacht"),
+        merchant(teleporter(room("room-8", string_to_map(room8)), 19, 19, "room-9", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "STRONG_BOW"}]),
+        boss(room("room-9", string_to_map(room9)), 15, 7, 40, 1500, "VICTORY")
       ]
     }
   ]
@@ -304,3 +327,11 @@
         - room[:save_points].each do |save_point|
           %save-point
             %position{x: save_point[:x], y: save_point[:y]}
+        - room[:merchants].each do |merchant|
+          %merchant{id: merchant[:id], money: merchant[:money]}
+            %position{x: merchant[:x], y: merchant[:y]}
+            - merchant[:items].each do |item|
+              %item{id: item[:id], type: item[:type]}
+        - room[:npcs].each do |npc|
+          %npc{id: npc[:id], name: npc[:name], saying: npc[:saying]}
+            %position{x: npc[:x], y: npc[:y]}
