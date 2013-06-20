@@ -20,12 +20,10 @@ Running
 
 `./gradle run` führt die Applikation aus.
 
-
 Checks
 ------
 
 `./gradle check` überprüft den Quellcode auf potenzielle Fehlerquellen etc.
-
 
 Autoren
 -------
