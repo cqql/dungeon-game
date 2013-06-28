@@ -52,11 +52,19 @@ public class World {
     return null;
   }
 
+  /**
+   * Applies transforms only to the current level for performance reasons.
+   */
   public World apply (Transform transform) {
     List<Level> levels = new ArrayList<>(this.levels.size());
+    Level currentLevel = this.getCurrentLevel();
 
     for (Level level : this.levels) {
-      levels.add(level.apply(transform));
+      if (level == currentLevel) {
+        levels.add(level.apply(transform));
+      } else {
+        levels.add(level);
+      }
     }
 
     return new World(levels, this.player.apply(transform));
