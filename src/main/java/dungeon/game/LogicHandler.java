@@ -108,8 +108,8 @@ public class LogicHandler implements MessageHandler {
 
     Transaction transaction = this.logic.pulse(this.getPulseDelta());
 
-    for (Transform transform : transaction.getTransforms()) {
-      this.mailman.send(transform);
+    for (Message message : transaction.getMessages()) {
+      this.mailman.send(message);
     }
 
     switch (this.logic.getGameState()) {
