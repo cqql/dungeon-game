@@ -1,5 +1,6 @@
 package dungeon.ui.screens;
 
+import dungeon.game.messages.TradeWithMerchant;
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
@@ -66,8 +67,8 @@ public class ShopScreen extends JPanel implements MessageHandler {
         this.merchant = this.merchant.apply((Transform)message);
       }
 
-      if (message instanceof Merchant.InteractTransform) {
-        this.merchant = ((Merchant.InteractTransform)message).getMerchant();
+      if (message instanceof TradeWithMerchant) {
+        this.merchant = ((TradeWithMerchant)message).getMerchant();
       }
 
       this.reset();

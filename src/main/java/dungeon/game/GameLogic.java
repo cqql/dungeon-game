@@ -1,5 +1,7 @@
 package dungeon.game;
 
+import dungeon.game.messages.TalkToNpc;
+import dungeon.game.messages.TradeWithMerchant;
 import dungeon.models.*;
 import dungeon.models.messages.IdentityTransform;
 import dungeon.models.messages.Transform;
@@ -620,7 +622,7 @@ public class GameLogic {
       double distance = npcPosition.minus(playerPosition).length();
 
       if (distance < (NPC.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
-        transaction.pushAndCommit(new NPC.InteractTransform(npc));
+        transaction.pushAndCommit(new TalkToNpc(npc));
         return;
       }
     }
@@ -632,7 +634,7 @@ public class GameLogic {
       double distance = merchantPosition.minus(playerPosition).length();
 
       if (distance < (Merchant.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
-        transaction.pushAndCommit(new Merchant.InteractTransform(merchant));
+        transaction.pushAndCommit(new TradeWithMerchant(merchant));
         return;
       }
     }

@@ -6,7 +6,6 @@ import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.models.messages.Transform;
 import dungeon.pulse.Pulse;
 import dungeon.ui.messages.*;
 

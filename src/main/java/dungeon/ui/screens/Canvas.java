@@ -1,5 +1,6 @@
 package dungeon.ui.screens;
 
+import dungeon.game.messages.TalkToNpc;
 import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
@@ -82,13 +83,11 @@ public class Canvas extends JPanel implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
       this.world = this.world.apply((Transform)message);
-
-      if (message instanceof NPC.InteractTransform) {
-        this.dialogTimeout = System.currentTimeMillis() + DIALOG_TIME;
-        this.dialogNpc = ((NPC.InteractTransform)message).getNpc();
-      }
     } else if (message instanceof LevelLoadedEvent) {
       this.world = ((LevelLoadedEvent)message).getWorld();
+    } else if (message instanceof TalkToNpc) {
+      this.dialogTimeout = System.currentTimeMillis() + DIALOG_TIME;
+      this.dialogNpc = ((TalkToNpc)message).getNpc();
     }
 
     repaint();
