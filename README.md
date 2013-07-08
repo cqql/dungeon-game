@@ -30,5 +30,4 @@ Autoren
 
 - Louise
 - Phuong
-- Quynh
 - Marten
