@@ -1,5 +1,6 @@
 package dungeon.game;
 
+import dungeon.messages.Message;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
 
@@ -8,9 +9,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Allows you to commit a bunch of transforms to a world.
+ * A transaction of messages.
  *
- * When any one of those transforms fails, the transaction will be rolled back to the last time you committed.
+ * A transaction groups messages, so that they can be atomically committed or rolled back. If the messages are
+ * transforms, they are applied to the given world object. During the transaction you can access the current state of
+ * the world through {@link #getWorld()}. When any one of those transforms fails, the transaction will be rolled back
+ * to the last time you committed.
  *
  * Example
  *
@@ -28,72 +32,74 @@ public class Transaction {
   private World world;
 
   /**
-   * The committed transforms.
+   * The committed messages.
    */
-  private final List<Transform> transforms = new ArrayList<>();
+  private final List<Message> messages = new ArrayList<>();
 
   /**
    * The transforms currently in transaction.
    */
-  private final List<Transform> pendingTransforms = new ArrayList<>();
+  private final List<Message> pendingMessages = new ArrayList<>();
 
   public Transaction (World world) {
     this.world = world;
   }
 
   /**
-   * Pushes a transform into the current transaction.
+   * Adds a message to the current transaction.
    */
-  public void push (Transform transform) {
-    this.pendingTransforms.add(transform);
+  public void push (Message message) {
+    this.pendingMessages.add(message);
   }
 
   /**
    * Commits the currently pending transforms.
    *
-   * The world object is only updated, when all pending transforms succeed.
+   * The world object is only updated, when all pending messages succeed.
    */
   public void commit () {
     World world = this.world;
 
     try {
-      for (Transform transform : this.pendingTransforms) {
-        world = world.apply(transform);
+      for (Message message : this.pendingMessages) {
+        if (message instanceof Transform) {
+          world = world.apply((Transform) message);
+        }
       }
 
-      this.transforms.addAll(this.pendingTransforms);
+      this.messages.addAll(this.pendingMessages);
 
       this.world = world;
     } finally {
-      this.pendingTransforms.clear();
+      this.pendingMessages.clear();
     }
   }
 
   /**
-   * A shorthand for committing a single transform.
+   * A shorthand for committing a single message.
    */
-  public void pushAndCommit (Transform transform) {
-    this.push(transform);
+  public void pushAndCommit (Message message) {
+    this.push(message);
 
     this.commit();
   }
 
   /**
-   * Rollback to the last commit, e.g. dismiss all pending transforms.
+   * Rollback to the last commit, e.g. dismiss all pending messages.
    */
   public void rollback () {
-    this.pendingTransforms.clear();
+    this.pendingMessages.clear();
   }
 
   /**
-   * Returns all committed transforms.
+   * Returns all committed messages.
    */
-  public List<Transform> getTransforms () {
-    return Collections.unmodifiableList(this.transforms);
+  public List<Message> getMessages () {
+    return Collections.unmodifiableList(this.messages);
   }
 
   /**
-   * Returns the state of the world after applying all committed transforms.
+   * Returns the state of the world after applying all committed messages.
    */
   public World getWorld () {
     return this.world;
