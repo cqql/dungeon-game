@@ -264,40 +264,40 @@ public class Player implements Spatial, Identifiable {
     String savePointRoomId = this.savePointRoomId;
     Position savePointPosition = this.savePointPosition;
 
-    if (transform instanceof MoveTransform) {
+    if (transform instanceof MoveTransform && this.id == ((MoveTransform)transform).id) {
       MoveTransform move = (MoveTransform)transform;
 
       position = new Position(this.position.getX() + move.xDelta, this.position.getY() + move.yDelta);
-    } else if (transform instanceof ViewingDirectionTransform) {
+    } else if (transform instanceof ViewingDirectionTransform && this.id == ((ViewingDirectionTransform)transform).id) {
       viewingDirection = ((ViewingDirectionTransform)transform).direction;
-    } else if (transform instanceof HitpointTransform) {
+    } else if (transform instanceof HitpointTransform && this.id == ((HitpointTransform)transform).id) {
       HitpointTransform hpTransform = (HitpointTransform)transform;
 
       hitPoints = Math.max(Math.min(hitPoints + hpTransform.delta, this.maxHitPoints), 0);
-    } else if (transform instanceof LivesTransform) {
+    } else if (transform instanceof LivesTransform && this.id == ((LivesTransform)transform).id) {
       LivesTransform livesTransform = (LivesTransform)transform;
 
       lives += livesTransform.delta;
-    } else if (transform instanceof TeleportTransform) {
+    } else if (transform instanceof TeleportTransform && this.id == ((TeleportTransform)transform).id) {
       TeleportTransform teleportTransform = (TeleportTransform)transform;
 
       roomId = teleportTransform.roomId;
       position = teleportTransform.position;
-    } else if (transform instanceof SavePointTransform) {
+    } else if (transform instanceof SavePointTransform && this.id == ((SavePointTransform)transform).id) {
       SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
 
       savePointRoomId = savePointTransform.roomId;
       savePointPosition = savePointTransform.position;
-    } else if (transform instanceof MoneyTransform) {
+    } else if (transform instanceof MoneyTransform && this.id == ((MoneyTransform)transform).id) {
       money += ((MoneyTransform)transform).delta;
-    } else if (transform instanceof AddItemTransform) {
+    } else if (transform instanceof AddItemTransform && this.id == ((AddItemTransform)transform).id) {
       items = new ArrayList<>(items);
       items.add(((AddItemTransform)transform).item);
-    } else if (transform instanceof ManaTransform) {
+    } else if (transform instanceof ManaTransform && this.id == ((ManaTransform)transform).id) {
       ManaTransform manaTransform = (Player.ManaTransform)transform;
 
       mana = Math.max(Math.min(mana + manaTransform.delta, this.maxMana), 0);
-    } else if (transform instanceof RemoveItemTransform) {
+    } else if (transform instanceof RemoveItemTransform && this.id == ((RemoveItemTransform)transform).id) {
       items = new ArrayList<>();
 
       for (Item item : this.items) {
@@ -305,11 +305,11 @@ public class Player implements Spatial, Identifiable {
           items.add(item);
         }
       }
-    } else if (transform instanceof EquipWeaponTransform) {
+    } else if (transform instanceof EquipWeaponTransform && this.id == ((EquipWeaponTransform)transform).id) {
       EquipWeaponTransform equipWeaponTransform = (Player.EquipWeaponTransform)transform;
 
       weaponId = equipWeaponTransform.weaponId;
-    } else if (transform instanceof AdvanceLevelTransform) {
+    } else if (transform instanceof AdvanceLevelTransform && this.id == ((AdvanceLevelTransform)transform).id) {
       levelId = ((AdvanceLevelTransform)transform).levelId;
       roomId = ((AdvanceLevelTransform)transform).roomId;
       position = new Position(0, 0);
@@ -321,108 +321,144 @@ public class Player implements Spatial, Identifiable {
   }
 
   public static class MoveTransform implements Transform {
+    private final int id;
+
     private final int xDelta;
 
     private final int yDelta;
 
-    public MoveTransform (int xDelta, int yDelta) {
+    public MoveTransform (Player player, int xDelta, int yDelta) {
+      this.id = player.getId();
       this.xDelta = xDelta;
       this.yDelta = yDelta;
     }
   }
 
   public static class HitpointTransform implements Transform {
+    private final int id;
+
     private final int delta;
 
-    public HitpointTransform (int delta) {
+    public HitpointTransform (Player player, int delta) {
+      this.id = player.getId();
       this.delta = delta;
     }
   }
 
   public static class LivesTransform implements Transform {
+    private final int id;
+
     private final int delta;
 
-    public LivesTransform (int delta) {
+    public LivesTransform (Player player, int delta) {
+      this.id = player.getId();
       this.delta = delta;
     }
   }
 
   public static class TeleportTransform implements Transform {
+    private final int id;
+
     private final String roomId;
 
     private final Position position;
 
-    public TeleportTransform (String roomId, Position position) {
+    public TeleportTransform (Player player, String roomId, Position position) {
+      this.id = player.getId();
       this.roomId = roomId;
       this.position = position;
     }
   }
 
   public static class SavePointTransform implements Transform {
+    private final int id;
+
     private final String roomId;
 
     private final Position position;
 
-    public SavePointTransform (String roomId, Position position) {
+    public SavePointTransform (Player player, String roomId, Position position) {
+      this.id = player.getId();
       this.roomId = roomId;
       this.position = position;
     }
   }
 
   public static class MoneyTransform implements Transform {
+    private final int id;
+
     private final int delta;
 
-    public MoneyTransform (int delta) {
+    public MoneyTransform (Player player, int delta) {
+      this.id = player.getId();
       this.delta = delta;
     }
   }
 
   public static class AddItemTransform implements Transform {
+    private final int id;
+
     private final Item item;
 
-    public AddItemTransform (Item item) {
+    public AddItemTransform (Player player, Item item) {
+      this.id = player.getId();
       this.item = item;
     }
   }
 
   public static class ManaTransform implements Transform {
+    private final int id;
+
     private final int delta;
 
-    public ManaTransform (int delta) {
+    public ManaTransform (Player player, int delta) {
+      this.id = player.getId();
       this.delta = delta;
     }
   }
 
   public static class RemoveItemTransform implements Transform {
+    private final int id;
+
     private final Item item;
 
-    public RemoveItemTransform (Item item) {
+    public RemoveItemTransform (Player player, Item item) {
+      this.id = player.getId();
       this.item = item;
     }
   }
 
   public static class EquipWeaponTransform implements Transform {
+    private final int id;
+
     private final int weaponId;
 
-    public EquipWeaponTransform (int weaponId) {
+    public EquipWeaponTransform (Player player, int weaponId) {
+      this.id = player.getId();
       this.weaponId = weaponId;
     }
   }
 
   public static class ViewingDirectionTransform implements Transform {
+    private final int id;
+
     private final Direction direction;
 
-    public ViewingDirectionTransform (Direction direction) {
+    public ViewingDirectionTransform (Player player, Direction direction) {
+      this.id = player.getId();
       this.direction = direction;
     }
   }
 
   public static class AdvanceLevelTransform implements Transform {
+    private final int id;
+
     private final String levelId;
 
     private final String roomId;
 
-    public AdvanceLevelTransform (String levelId, String roomId) {
+    public AdvanceLevelTransform (Player player, String levelId, String roomId) {
+      this.id = player.getId();
       this.levelId = levelId;
       this.roomId = roomId;
     }
