@@ -333,19 +333,22 @@ public class GameLogic {
   }
 
   private void handleMovement (Transaction transaction, double delta) {
-    Transform movementTransform = moveTransform(delta);
-    movementTransform = filterWalls(movementTransform);
-    Player movedPlayer = transaction.getWorld().getPlayer().apply(movementTransform);
+    for (Player player : transaction.getWorld().getPlayers()) {
+      Transform movementTransform = moveTransform(player, delta);
+      movementTransform = filterWalls(player, movementTransform);
+      Player movedPlayer = player.apply(movementTransform);
 
-    if (!this.outOfBorders(movedPlayer, transaction.getWorld().getCurrentRoom())) {
-      transaction.pushAndCommit(movementTransform);
+      if (!this.outOfBorders(movedPlayer, transaction.getWorld().getCurrentRoom(player))) {
+        transaction.pushAndCommit(movementTransform);
+      }
     }
   }
 
   /**
    * Create the appropriate MoveTransform with respect to the currently active directions.
    */
-  private Transform moveTransform (double delta) {
+  private Transform moveTransform (Player player, double delta) {
+    // TODO: compute for the given player
     Vector finalDirection = new Vector(0, 0);
 
     for (Direction direction : this.activeMoveDirections) {
@@ -365,10 +368,10 @@ public class GameLogic {
   /**
    * Prevent movement if the player would walk on a wall.
    */
-  private Transform filterWalls (Transform transform) {
-    Player movedPlayer = this.world.getPlayer().apply(transform);
+  private Transform filterWalls (Player player, Transform transform) {
+    Player movedPlayer = player.apply(transform);
 
-    for (Tile wall : this.world.getCurrentRoom().getWalls()) {
+    for (Tile wall : this.world.getCurrentRoom(player).getWalls()) {
       if (this.touch(movedPlayer, wall)) {
         return new IdentityTransform();
       }
@@ -381,45 +384,49 @@ public class GameLogic {
    * Move the projectiles and collide it with walls and borders.
    */
   private void handleProjectiles (Transaction transaction, double delta) {
-    Room room = transaction.getWorld().getCurrentRoom();
+    List<Room> rooms = transaction.getWorld().getCurrentRooms();
 
-    for (Projectile projectile : room.getProjectiles()) {
-      transaction.pushAndCommit(new Projectile.MoveTransform(projectile.getId(), new Position(projectile.getPosition().getVector().plus(projectile.getVelocity().times(delta)))));
+    for (Room room : rooms) {
+      for (Projectile projectile : room.getProjectiles()) {
+        transaction.pushAndCommit(new Projectile.MoveTransform(projectile.getId(), new Position(projectile.getPosition().getVector().plus(projectile.getVelocity().times(delta)))));
 
-      for (Tile wall : room.getWalls()) {
-        if (this.touch(wall, projectile)) {
+        for (Tile wall : room.getWalls()) {
+          if (this.touch(wall, projectile)) {
+            transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+            break;
+          }
+        }
+
+        if (this.outOfBorders(projectile, room)) {
           transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
           break;
         }
-      }
 
-      if (this.outOfBorders(projectile, room)) {
-        transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
-        break;
-      }
+        for (Player player : transaction.getWorld().getPlayers()) {
+          if (this.touch(player, projectile) && !player.equals(projectile.getSource())) {
+            this.damagePlayer(transaction, player, projectile.getDamage());
+            transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+            break;
+          }
+        }
 
-      Player player = transaction.getWorld().getPlayer();
-
-      if (this.touch(player, projectile) && !player.equals(projectile.getSource())) {
-        this.damagePlayer(transaction, projectile.getDamage());
-        transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
-        break;
-      }
-
-      for (Enemy enemy : room.getEnemies()) {
-        if (this.touch(enemy, projectile) && !enemy.equals(projectile.getSource())) {
-          this.damageEnemy(transaction, enemy, projectile.getDamage());
-          transaction.pushAndCommit(new Enemy.MoveTransform(enemy, projectile.getVelocity().normalize().times(100)));
-          transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
-          break;
+        for (Enemy enemy : room.getEnemies()) {
+          if (this.touch(enemy, projectile) && !enemy.equals(projectile.getSource())) {
+            this.damageEnemy(transaction, enemy, projectile.getDamage());
+            transaction.pushAndCommit(new Enemy.MoveTransform(enemy, projectile.getVelocity().normalize().times(100)));
+            transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
+            break;
+          }
         }
       }
     }
   }
 
   private void moveEnemies (Transaction transaction, double delta) {
-    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
-      enemy.getMoveStrategy().move(transaction, enemy, delta);
+    for (Room room : transaction.getWorld().getCurrentRooms()) {
+      for (Enemy enemy : room.getEnemies()) {
+        enemy.getMoveStrategy().move(transaction, enemy, delta);
+      }
     }
   }
 
@@ -457,9 +464,11 @@ public class GameLogic {
    * Damage player on enemy contact.
    */
   private void handleEnemies (Transaction transaction) {
-    for (Enemy enemy : transaction.getWorld().getCurrentRoom().getEnemies()) {
-      if (this.touch(transaction.getWorld().getPlayer(), enemy)) {
-        this.damagePlayer(transaction, enemy.getStrength());
+    for (Player player : transaction.getWorld().getPlayers()) {
+      for (Enemy enemy : transaction.getWorld().getCurrentRoom(player).getEnemies()) {
+        if (this.touch(player, enemy)) {
+          this.damagePlayer(transaction, player, enemy.getStrength());
+        }
       }
     }
   }
@@ -470,36 +479,36 @@ public class GameLogic {
    * Enemies leave a random item.
    */
   private void handleEnemyLives (Transaction transaction) {
-    Room room = transaction.getWorld().getCurrentRoom();
+    for (Room room : transaction.getWorld().getCurrentRooms()) {
+      for (Enemy enemy : room.getEnemies()) {
+        if (enemy.getHitPoints() <= 0) {
+          transaction.pushAndCommit(new Room.RemoveEnemyTransform(enemy));
 
-    for (Enemy enemy : room.getEnemies()) {
-      if (enemy.getHitPoints() <= 0) {
-        transaction.pushAndCommit(new Room.RemoveEnemyTransform(enemy));
+          ItemType[] itemTypes = ItemType.values();
+          ItemType itemType = itemTypes[(new Random()).nextInt(itemTypes.length)];
 
-        ItemType[] itemTypes = ItemType.values();
-        ItemType itemType = itemTypes[(new Random()).nextInt(itemTypes.length)];
-
-        transaction.pushAndCommit(
-          new Room.AddDropTransform(
-            room.getId(),
-            new Drop(
-              this.nextId(),
-              enemy.getPosition(),
-              new Item(this.nextId(), itemType),
-              0
+          transaction.pushAndCommit(
+            new Room.AddDropTransform(
+              room.getId(),
+              new Drop(
+                this.nextId(),
+                enemy.getPosition(),
+                new Item(this.nextId(), itemType),
+                0
+              )
             )
-          )
-        );
+          );
 
-        if (enemy.getOnDeath() != null) {
-          if ("VICTORY".equals(enemy.getOnDeath())) {
-            this.gameState = GameState.VICTORY;
-          } else {
-            String[] parts = enemy.getOnDeath().split("#");
-            String levelId = parts[0];
-            String roomId = parts[1];
+          if (enemy.getOnDeath() != null) {
+            if ("VICTORY".equals(enemy.getOnDeath())) {
+              this.gameState = GameState.VICTORY;
+            } else {
+              String[] parts = enemy.getOnDeath().split("#");
+              String levelId = parts[0];
+              String roomId = parts[1];
 
-            transaction.pushAndCommit(new Player.AdvanceLevelTransform(levelId, roomId));
+              transaction.pushAndCommit(new Player.AdvanceLevelTransform(levelId, roomId));
+            }
           }
         }
       }
@@ -651,7 +660,8 @@ public class GameLogic {
   /**
    * Inflict {@code amount} damage on player if he has not suffered any damage lately.
    */
-  private void damagePlayer (Transaction transaction, int amount) {
+  private void damagePlayer (Transaction transaction, Player player, int amount) {
+    // TODO: Fix for multiplayer
     if (System.currentTimeMillis() - this.lastDamageTime > 1000) {
       this.lastDamageTime = System.currentTimeMillis();
 

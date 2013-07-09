@@ -38,6 +38,16 @@ public class World {
     return null;
   }
 
+  public List<Room> getCurrentRooms () {
+    List<Room> rooms = new ArrayList<>();
+
+    for (Player player : this.players) {
+      rooms.add(this.getCurrentRoom(player));
+    }
+
+    return rooms;
+  }
+
   private Level getCurrentLevel (Player player) {
     for (Level level : this.levels) {
       if (!level.getId().equals(player.getLevelId())) {
