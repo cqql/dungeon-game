@@ -17,19 +17,20 @@ public class WorldAdapter extends XmlAdapter<WorldAdapter, World> {
   @XmlJavaTypeAdapter(LevelAdapter.class)
   public List<Level> levels = new ArrayList<>();
 
+  @XmlElement(name = "player")
   @XmlJavaTypeAdapter(PlayerAdapter.class)
-  public Player player;
+  public List<Player> players;
 
   @Override
   public World unmarshal (WorldAdapter worldAdapter) throws Exception {
-    return new World(worldAdapter.levels, worldAdapter.player);
+    return new World(worldAdapter.levels, worldAdapter.players);
   }
 
   @Override
   public WorldAdapter marshal (World world) {
     WorldAdapter adapter = new WorldAdapter();
     adapter.levels = world.getLevels();
-    adapter.player = world.getPlayer();
+    adapter.players = world.getPlayers();
 
     return adapter;
   }
