@@ -97,7 +97,7 @@ public class Player implements Spatial, Identifiable {
    * Creates a new level 1 player with default values.
    */
   public Player (String name) {
-    this(1, name, 3, 5, 5, 0, 10, 10, null, "level-1", "room-1", 0, new Position(0, 0), Direction.RIGHT, "room-1", new Position(0, 0));
+    this(1, name, 3, 5, 5, 0, 10, 10, new ArrayList<Item>(), "level-1", "room-1", 0, new Position(0, 0), Direction.RIGHT, "room-1", new Position(0, 0));
   }
 
   public int getId () {
