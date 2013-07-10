@@ -62,20 +62,21 @@ public class LogicHandler implements MessageHandler {
       return;
     }
 
+    int playerId = message.getPlayerId();
     Command command = message.getCommand();
 
     if (command instanceof MoveCommand) {
-      this.logic.activateMoveDirection((MoveCommand)command);
+      this.logic.activateMoveDirection(playerId, (MoveCommand)command);
     } else if (command instanceof AttackCommand) {
-      this.logic.activateAttack();
+      this.logic.activateAttack(playerId);
     } else if (command instanceof IceBoltAttackCommand) {
-      this.logic.activateIceBolt();
+      this.logic.activateIceBolt(playerId);
     } else if (command instanceof HealthPotionCommand) {
-      this.logic.useHealthPotion();
+      this.logic.useHealthPotion(playerId);
     } else if (command instanceof ManaPotionCommand) {
-      this.logic.useManaPotion();
+      this.logic.useManaPotion(playerId);
     } else if (command instanceof InteractCommand) {
-      this.logic.interact();
+      this.logic.interact(playerId);
     }
   }
 
@@ -84,14 +85,15 @@ public class LogicHandler implements MessageHandler {
       return;
     }
 
+    int playerId = message.getPlayerId();
     Command command = message.getCommand();
 
     if (command instanceof MoveCommand) {
-      this.logic.deactivateMoveDirection((MoveCommand)command);
+      this.logic.deactivateMoveDirection(playerId, (MoveCommand)command);
     } else if (command instanceof AttackCommand) {
-      this.logic.deactivateAttack();
+      this.logic.deactivateAttack(playerId);
     } else if (command instanceof IceBoltAttackCommand) {
-      this.logic.deactivateIceBoltAttack();
+      this.logic.deactivateIceBoltAttack(playerId);
     }
   }
 

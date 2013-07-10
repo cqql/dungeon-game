@@ -283,7 +283,7 @@ public class Player implements Spatial, Identifiable {
 
       roomId = teleportTransform.roomId;
       position = teleportTransform.position;
-    } else if (transform instanceof SavePointTransform && this.id == ((SavePointTransform)transform).id) {
+    } else if (transform instanceof SavePointTransform) {
       SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
 
       savePointRoomId = savePointTransform.roomId;
@@ -309,7 +309,7 @@ public class Player implements Spatial, Identifiable {
       EquipWeaponTransform equipWeaponTransform = (Player.EquipWeaponTransform)transform;
 
       weaponId = equipWeaponTransform.weaponId;
-    } else if (transform instanceof AdvanceLevelTransform && this.id == ((AdvanceLevelTransform)transform).id) {
+    } else if (transform instanceof AdvanceLevelTransform) {
       levelId = ((AdvanceLevelTransform)transform).levelId;
       roomId = ((AdvanceLevelTransform)transform).roomId;
       position = new Position(0, 0);
@@ -370,15 +370,15 @@ public class Player implements Spatial, Identifiable {
     }
   }
 
+  /**
+   * This has no playerId, because all players have the same save point.
+   */
   public static class SavePointTransform implements Transform {
-    private final int id;
-
     private final String roomId;
 
     private final Position position;
 
-    public SavePointTransform (Player player, String roomId, Position position) {
-      this.id = player.getId();
+    public SavePointTransform (String roomId, Position position) {
       this.roomId = roomId;
       this.position = position;
     }
@@ -450,15 +450,15 @@ public class Player implements Spatial, Identifiable {
     }
   }
 
+  /**
+   * This has no playerId, because when one player advances, all do.
+   */
   public static class AdvanceLevelTransform implements Transform {
-    private final int id;
-
     private final String levelId;
 
     private final String roomId;
 
-    public AdvanceLevelTransform (Player player, String levelId, String roomId) {
-      this.id = player.getId();
+    public AdvanceLevelTransform (String levelId, String roomId) {
       this.levelId = levelId;
       this.roomId = roomId;
     }

@@ -37,45 +37,7 @@ public class GameLogic {
    */
   private int nextId = 1000000;
 
-  private long lastDamageTime;
-
-  private final Set<Direction> activeMoveDirections = EnumSet.noneOf(Direction.class);
-
-  private Direction viewingDirection = Direction.RIGHT;
-
-  private boolean attacking;
-
-  private boolean useIceBolt;
-
-  private boolean useHealthPotion;
-
-  private boolean useManaPotion;
-
-  private boolean interact;
-
-  private final List<Item> useItems = new ArrayList<>();
-
-  /**
-   * Which weapon to equip on next pulse.
-   */
-  private Item equipWeapon;
-
-  /**
-   * Which items to sell to which merchant on next pulse.
-   */
-  private final Map<Merchant, List<Item>> sellItems = new LinkedHashMap<>();
-
-  /**
-   * Which items to buy from which merchant on next pulse.
-   */
-  private final Map<Merchant, List<Item>> buyItems = new LinkedHashMap<>();
-
-  private long lastAttackTime;
-
-  private long lastManaUsedTime;
-
-  private long lastManaRestoreTime;
-
+  private Map<Integer, PlayerState> playerStates = new HashMap<>();
 
   private GameState gameState = GameState.PLAYING;
 
@@ -88,80 +50,101 @@ public class GameLogic {
   /**
    * Set a move flag.
    */
-  public void activateMoveDirection (MoveCommand command) {
-    this.activeMoveDirections.add(command.getDirection());
+  public void activateMoveDirection (int playerId, MoveCommand command) {
+    PlayerState state = this.getPlayerState(playerId);
 
-    this.viewingDirection = command.getDirection();
+    state.activeMoveDirections.add(command.getDirection());
+    state.viewingDirection = command.getDirection();
   }
 
   /**
    * Reset a move flag.
    */
-  public void deactivateMoveDirection (MoveCommand command) {
-    this.activeMoveDirections.remove(command.getDirection());
+  public void deactivateMoveDirection (int playerId, MoveCommand command) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.activeMoveDirections.remove(command.getDirection());
   }
 
   /**
    * Set the attacking flag.
    */
-  public void activateAttack () {
-    this.attacking = true;
+  public void activateAttack (int playerId) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.attacking = true;
   }
 
   /**
    * Reset the attacking flag.
    */
-  public void deactivateAttack () {
-    this.attacking = false;
+  public void deactivateAttack (int playerId) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.attacking = false;
   }
 
   /**
    * Use a health potion during the next pulse.
    */
-  public void useHealthPotion () {
-    this.useHealthPotion = true;
+  public void useHealthPotion (int playerId) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.useHealthPotion = true;
   }
 
   /**
    * Use a mana potion during the next pulse.
    */
-  public void useManaPotion () {
-    this.useManaPotion = true;
+  public void useManaPotion (int playerId) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.useManaPotion = true;
   }
 
   /**
    * Use {@code item} during the next pulse.
    */
-  public void useItem (Item item) {
-    this.useItems.add(item);
+  public void useItem (int playerId, Item item) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.useItems.add(item);
   }
 
   /**
    * Equip {@code item} during the next pulse.
    */
-  public void equipWeapon (Item item) {
-    this.equipWeapon = item;
+  public void equipWeapon (int playerId, Item item) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.equipWeapon = item;
   }
 
   /**
    * Set the ice bolt attacking flag.
    */
-  public void activateIceBolt () {
-    this.useIceBolt = true;
+  public void activateIceBolt (int playerId) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.useIceBolt = true;
   }
 
   /**
    * Reset the ice bolt attacking flag.
    */
-  public void deactivateIceBoltAttack () {
-    this.useIceBolt = false;
+  public void deactivateIceBoltAttack (int playerId) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.useIceBolt = false;
   }
 
   /**
    * Sell item on next pulse.
    */
-  public void sellItem (Merchant merchant, Item item) {
-    List<Item> items = this.sellItems.get(merchant);
+  public void sellItem (int playerId, Merchant merchant, Item item) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    List<Item> items = state.sellItems.get(merchant);
 
     if (items == null) {
       items = new ArrayList<>();
@@ -169,14 +152,16 @@ public class GameLogic {
 
     items.add(item);
 
-    this.sellItems.put(merchant, items);
+    state.sellItems.put(merchant, items);
   }
 
   /**
    * Buy item on next pulse.
    */
-  public void buyItem (Merchant merchant, Item item) {
-    List<Item> items = this.buyItems.get(merchant);
+  public void buyItem (int playerId, Merchant merchant, Item item) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    List<Item> items = state.buyItems.get(merchant);
 
     if (items == null) {
       items = new ArrayList<>();
@@ -184,14 +169,16 @@ public class GameLogic {
 
     items.add(item);
 
-    this.buyItems.put(merchant, items);
+    state.buyItems.put(merchant, items);
   }
 
   /**
    * Interact with a nearby NPC on next pulse.
    */
-  public void interact () {
-    this.interact = true;
+  public void interact (int playerId) {
+    PlayerState state = this.getPlayerState(playerId);
+
+    state.interact = true;
   }
 
   /**
@@ -243,16 +230,20 @@ public class GameLogic {
    * Use a health potion if the player has one.
    */
   private void handleHealthPotion (Transaction transaction) {
-    if (this.useHealthPotion) {
-      this.useHealthPotion = false;
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-      List<Item> healthPotions = transaction.getWorld().getPlayer().getHealthPotions();
+      if (state.useHealthPotion) {
+        state.useHealthPotion = false;
 
-      if (healthPotions.size() > 0) {
-        Item healthPotion = healthPotions.get(0);
+        List<Item> healthPotions = player.getHealthPotions();
 
-        healthPotion.use(transaction);
-        transaction.pushAndCommit(new Player.RemoveItemTransform(healthPotion));
+        if (healthPotions.size() > 0) {
+          Item healthPotion = healthPotions.get(0);
+
+          healthPotion.use(transaction);
+          transaction.pushAndCommit(new Player.RemoveItemTransform(player, healthPotion));
+        }
       }
     }
   }
@@ -261,16 +252,20 @@ public class GameLogic {
    * Use a mana potion if the player has one.
    */
   private void handleManaPotion (Transaction transaction) {
-    if (this.useManaPotion) {
-      this.useManaPotion = false;
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-      List<Item> manaPotions = transaction.getWorld().getPlayer().getManaPotions();
+      if (state.useManaPotion) {
+        state.useManaPotion = false;
 
-      if (manaPotions.size() > 0) {
-        Item manaPotion = manaPotions.get(0);
+        List<Item> manaPotions = player.getManaPotions();
 
-        manaPotion.use(transaction);
-        transaction.pushAndCommit(new Player.RemoveItemTransform(manaPotion));
+        if (manaPotions.size() > 0) {
+          Item manaPotion = manaPotions.get(0);
+
+          manaPotion.use(transaction);
+          transaction.pushAndCommit(new Player.RemoveItemTransform(player, manaPotion));
+        }
       }
     }
   }
@@ -279,57 +274,73 @@ public class GameLogic {
    * Use the items, that have been requested.
    */
   private void useItems (Transaction transaction) {
-    for (Item item : this.useItems) {
-      LOGGER.info("Use item " + item);
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-      item.use(transaction);
+      for (Item item : state.useItems) {
+        LOGGER.info("Use item " + item);
 
-      transaction.pushAndCommit(new Player.RemoveItemTransform(item));
+        item.use(transaction);
+
+        transaction.pushAndCommit(new Player.RemoveItemTransform(player, item));
+      }
+
+      state.useItems.clear();
     }
-
-    this.useItems.clear();
   }
 
   private void equipWeapon (Transaction transaction) {
-    if (this.equipWeapon != null && this.equipWeapon.getType().isEquipable()) {
-      LOGGER.info("Equip weapon " + this.equipWeapon);
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-      transaction.pushAndCommit(new Player.EquipWeaponTransform(this.equipWeapon.getId()));
+      if (state.equipWeapon != null && state.equipWeapon.getType().isEquipable()) {
+        LOGGER.info("Equip weapon " + state.equipWeapon);
 
-      this.equipWeapon = null;
+        transaction.pushAndCommit(new Player.EquipWeaponTransform(player, state.equipWeapon.getId()));
+
+        state.equipWeapon = null;
+      }
     }
   }
 
   private void sellItems (Transaction transaction) {
-    for (Map.Entry<Merchant, List<Item>> entry : this.sellItems.entrySet()) {
-      for (Item item : entry.getValue()) {
-        Merchant merchant = transaction.getWorld().getCurrentRoom().findMerchant(entry.getKey());
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-        if (merchant.getMoney() >= item.getValue()) {
-          transaction.pushAndCommit(new Merchant.BuyItemTransform(merchant, item));
-          transaction.pushAndCommit(new Player.MoneyTransform(item.getValue()));
-          transaction.pushAndCommit(new Player.RemoveItemTransform(item));
+      for (Map.Entry<Merchant, List<Item>> entry : state.sellItems.entrySet()) {
+        for (Item item : entry.getValue()) {
+          Merchant merchant = transaction.getWorld().getCurrentRoom(player).findMerchant(entry.getKey());
+
+          if (merchant.getMoney() >= item.getValue()) {
+            transaction.pushAndCommit(new Merchant.BuyItemTransform(merchant, item));
+            transaction.pushAndCommit(new Player.MoneyTransform(player, item.getValue()));
+            transaction.pushAndCommit(new Player.RemoveItemTransform(player, item));
+          }
         }
       }
-    }
 
-    this.sellItems.clear();
+      state.sellItems.clear();
+    }
   }
 
   private void buyItems (Transaction transaction) {
-    for (Map.Entry<Merchant, List<Item>> entry : this.buyItems.entrySet()) {
-      for (Item item : entry.getValue()) {
-        Merchant merchant = transaction.getWorld().getCurrentRoom().findMerchant(entry.getKey());
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-        if (transaction.getWorld().getPlayer().getMoney() >= item.getValue()) {
-          transaction.pushAndCommit(new Merchant.SellItemTransform(merchant, item));
-          transaction.pushAndCommit(new Player.MoneyTransform(-item.getValue()));
-          transaction.pushAndCommit(new Player.AddItemTransform(item));
+      for (Map.Entry<Merchant, List<Item>> entry : state.buyItems.entrySet()) {
+        for (Item item : entry.getValue()) {
+          Merchant merchant = transaction.getWorld().getCurrentRoom(player).findMerchant(entry.getKey());
+
+          if (player.getMoney() >= item.getValue()) {
+            transaction.pushAndCommit(new Merchant.SellItemTransform(merchant, item));
+            transaction.pushAndCommit(new Player.MoneyTransform(player, -item.getValue()));
+            transaction.pushAndCommit(new Player.AddItemTransform(player, item));
+          }
         }
       }
-    }
 
-    this.buyItems.clear();
+      state.buyItems.clear();
+    }
   }
 
   private void handleMovement (Transaction transaction, double delta) {
@@ -348,10 +359,11 @@ public class GameLogic {
    * Create the appropriate MoveTransform with respect to the currently active directions.
    */
   private Transform moveTransform (Player player, double delta) {
-    // TODO: compute for the given player
+    PlayerState state = this.getPlayerState(player);
+
     Vector finalDirection = new Vector(0, 0);
 
-    for (Direction direction : this.activeMoveDirections) {
+    for (Direction direction : state.activeMoveDirections) {
       finalDirection = finalDirection.plus(direction.getVector());
     }
 
@@ -361,7 +373,7 @@ public class GameLogic {
       finalDirection = finalDirection.normalize();
       finalDirection = finalDirection.times(SPEED * delta);
 
-      return new Player.MoveTransform((int)finalDirection.getX(), (int)finalDirection.getY());
+      return new Player.MoveTransform(player, (int)finalDirection.getX(), (int)finalDirection.getY());
     }
   }
 
@@ -431,11 +443,15 @@ public class GameLogic {
   }
 
   /**
-   * Update the direction the player is currently facing.
+   * Update the direction the players are currently facing.
    */
   private void updateViewingDirection (Transaction transaction) {
-    if (transaction.getWorld().getPlayer().getViewingDirection() != this.viewingDirection) {
-      transaction.pushAndCommit(new Player.ViewingDirectionTransform(this.viewingDirection));
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
+
+      if (player.getViewingDirection() != state.viewingDirection) {
+        transaction.pushAndCommit(new Player.ViewingDirectionTransform(player, state.viewingDirection));
+      }
     }
   }
 
@@ -443,19 +459,21 @@ public class GameLogic {
    * Pickup drops that the player is touching.
    */
   private void handleDrops (Transaction transaction) {
-    for (Drop drop : transaction.getWorld().getCurrentRoom().getDrops()) {
-      if (this.touch(transaction.getWorld().getPlayer(), drop)) {
-        LOGGER.info("Pick up " + drop);
+    for (Player player : transaction.getWorld().getPlayers()) {
+      for (Drop drop : transaction.getWorld().getCurrentRoom(player).getDrops()) {
+        if (this.touch(player, drop)) {
+          LOGGER.info("Pick up " + drop);
 
-        transaction.push(new Room.RemoveDropTransform(drop.getId()));
+          transaction.push(new Room.RemoveDropTransform(drop.getId()));
 
-        if (drop.isMoney()) {
-          transaction.push(new Player.MoneyTransform(drop.getMoney()));
-        } else {
-          transaction.push(new Player.AddItemTransform(drop.getItem()));
+          if (drop.isMoney()) {
+            transaction.push(new Player.MoneyTransform(player, drop.getMoney()));
+          } else {
+            transaction.push(new Player.AddItemTransform(player, drop.getItem()));
+          }
+
+          transaction.commit();
         }
-
-        transaction.commit();
       }
     }
   }
@@ -519,13 +537,16 @@ public class GameLogic {
    * Create a teleport transform if the player touches a teleporter.
    */
   private void handleTeleporters (Transaction transaction) {
-    for (TeleporterTile teleporter : transaction.getWorld().getCurrentRoom().getTeleporters()) {
-      if (this.touch(transaction.getWorld().getPlayer(), teleporter)) {
-        TeleporterTile.Target target = teleporter.getTarget();
+    for (Player player : transaction.getWorld().getPlayers()) {
+      for (TeleporterTile teleporter : transaction.getWorld().getCurrentRoom(player).getTeleporters()) {
+        if (this.touch(player, teleporter)) {
+          TeleporterTile.Target target = teleporter.getTarget();
 
-        transaction.pushAndCommit(new Player.TeleportTransform(target.getRoomId(), target.getPosition()));
+          transaction.pushAndCommit(new Player.TeleportTransform(player, target.getRoomId(), target.getPosition()));
 
-        return;
+          // Next player
+          break;
+        }
       }
     }
   }
@@ -534,15 +555,15 @@ public class GameLogic {
    * Create a savepoint transform if the player touches a savepoint
    */
   private void handleCheckpoint (Transaction transaction) {
-    Player player = transaction.getWorld().getPlayer();
+    for (Player player : transaction.getWorld().getPlayers()) {
+      for (SavePoint savePoint : transaction.getWorld().getCurrentRoom(player).getSavePoints()) {
+        if (this.touch(player, savePoint)) {
+          transaction.pushAndCommit(
+            new Player.SavePointTransform(player.getRoomId(), player.getPosition())
+          );
 
-    for (SavePoint savePoint : transaction.getWorld().getCurrentRoom().getSavePoints()) {
-      if (this.touch(player, savePoint)) {
-        transaction.pushAndCommit(
-          new Player.SavePointTransform(player.getRoomId(), player.getPosition())
-        );
-
-        return;
+          return;
+        }
       }
     }
   }
@@ -551,12 +572,12 @@ public class GameLogic {
    * Reset HP when players loses a life and respawn the player if he dies
    */
   private void handleRespawn (Transaction transaction) {
-    Player player = transaction.getWorld().getPlayer();
-
-    if (player.getHitPoints() == 0) {
-      transaction.pushAndCommit(new Player.LivesTransform(-1));
-      transaction.pushAndCommit(new Player.HitpointTransform(player.getMaxHitPoints()));
-      transaction.pushAndCommit(new Player.TeleportTransform(player.getSavePointRoomId(), player.getSavePointPosition()));
+    for (Player player : transaction.getWorld().getPlayers()) {
+      if (player.getHitPoints() == 0) {
+        transaction.pushAndCommit(new Player.LivesTransform(player, -1));
+        transaction.pushAndCommit(new Player.HitpointTransform(player, player.getMaxHitPoints()));
+        transaction.pushAndCommit(new Player.TeleportTransform(player, player.getSavePointRoomId(), player.getSavePointPosition()));
+      }
     }
   }
 
@@ -564,21 +585,27 @@ public class GameLogic {
    * Restore mana every 5 seconds by 1
    */
   private void handleMana (Transaction transaction) {
-    if (transaction.getWorld().getPlayer().getMana() < transaction.getWorld().getPlayer().getMaxMana()
-      && System.currentTimeMillis() - this.lastManaRestoreTime > 5000
-      && System.currentTimeMillis() - this.lastManaUsedTime > 5000) {
-      this.lastManaRestoreTime = System.currentTimeMillis();
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-      transaction.pushAndCommit(new Player.ManaTransform(1));
+      if (player.getMana() < player.getMaxMana()
+        && System.currentTimeMillis() - state.lastManaRestoreTime > 5000
+        && System.currentTimeMillis() - state.lastManaUsedTime > 5000) {
+        state.lastManaRestoreTime = System.currentTimeMillis();
+
+        transaction.pushAndCommit(new Player.ManaTransform(player, 1));
+      }
     }
   }
 
   /**
-   * Set the game state to DEFEAT when the player's hit points drop to 0.
+   * Set the game state to DEFEAT when any player's lives drop to 0.
    */
   private void handleDefeat () {
-    if (this.world.getPlayer().getLives() == 0) {
-      this.gameState = GameState.DEFEAT;
+    for (Player player : this.world.getPlayers()) {
+      if (player.getLives() == 0) {
+        this.gameState = GameState.DEFEAT;
+      }
     }
   }
 
@@ -586,14 +613,17 @@ public class GameLogic {
    * Create a new projectile if the player is attacking.
    */
   private void handleAttack (Transaction transaction) {
-    if (this.attacking && System.currentTimeMillis() - this.lastAttackTime > 200) {
-      this.lastAttackTime = System.currentTimeMillis();
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-      Player player = transaction.getWorld().getPlayer();
+      if (state.attacking && System.currentTimeMillis() - state.lastAttackTime > 200) {
+        state.lastAttackTime = System.currentTimeMillis();
 
-      Projectile projectile = player.attack(this.nextId());
+        Projectile projectile = player.attack(this.nextId());
+        Room currentRoom = transaction.getWorld().getCurrentRoom(player);
 
-      transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
+        transaction.pushAndCommit(new Room.AddProjectileTransform(currentRoom.getId(), projectile));
+      }
     }
   }
 
@@ -601,16 +631,19 @@ public class GameLogic {
    * Create a new projectile if the player is attacking with ice bolts.
    */
   private void handleIceBolt (Transaction transaction) {
-    Player player = transaction.getWorld().getPlayer();
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-    if (this.useIceBolt && player.getMana() > 0) {
-      this.lastManaUsedTime = System.currentTimeMillis();
-      this.useIceBolt = false;
+      if (state.useIceBolt && player.getMana() > 0) {
+        state.lastManaUsedTime = System.currentTimeMillis();
+        state.useIceBolt = false;
 
-      Projectile projectile = player.iceBoltAttack(this.nextId());
+        Projectile projectile = player.iceBoltAttack(this.nextId());
+        Room currentRoom = transaction.getWorld().getCurrentRoom(player);
 
-      transaction.pushAndCommit(new Player.ManaTransform(-1));
-      transaction.pushAndCommit(new Room.AddProjectileTransform(transaction.getWorld().getCurrentRoom().getId(), projectile));
+        transaction.pushAndCommit(new Player.ManaTransform(player, -1));
+        transaction.pushAndCommit(new Room.AddProjectileTransform(currentRoom.getId(), projectile));
+      }
     }
   }
 
@@ -618,36 +651,48 @@ public class GameLogic {
    * Interact with a nearby NPC and merchants.
    */
   private void handleInteractionWithNpcs (Transaction transaction) {
-    if (!this.interact) {
-      return;
-    }
+    for (Player player : transaction.getWorld().getPlayers()) {
+      PlayerState state = this.getPlayerState(player);
 
-    this.interact = false;
+      if (!state.interact) {
+        continue;
+      }
 
-    for (NPC npc : transaction.getWorld().getCurrentRoom().getNpcs()) {
-      Vector playerPosition = transaction.getWorld().getPlayer().getCenter().getVector();
-      Vector npcPosition = npc.getCenter().getVector();
+      state.interact = false;
 
-      double distance = npcPosition.minus(playerPosition).length();
+      Vector playerPosition = player.getCenter().getVector();
+      Room currentRoom = transaction.getWorld().getCurrentRoom(player);
 
-      if (distance < (NPC.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
-        transaction.pushAndCommit(new TalkToNpc(npc));
-        return;
+      for (NPC npc : currentRoom.getNpcs()) {
+        Vector npcPosition = npc.getCenter().getVector();
+
+        double distance = npcPosition.minus(playerPosition).length();
+
+        if (distance < (NPC.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
+          transaction.pushAndCommit(new TalkToNpc(npc));
+          break;
+        }
+      }
+
+      for (Merchant merchant : currentRoom.getMerchants()) {
+        Vector merchantPosition = merchant.getCenter().getVector();
+
+        double distance = merchantPosition.minus(playerPosition).length();
+
+        if (distance < (Merchant.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
+          transaction.pushAndCommit(new TradeWithMerchant(merchant));
+          break;
+        }
       }
     }
+  }
 
-    for (Merchant merchant : transaction.getWorld().getCurrentRoom().getMerchants()) {
-      Vector playerPosition = transaction.getWorld().getPlayer().getCenter().getVector();
-      Vector merchantPosition = merchant.getCenter().getVector();
+  private PlayerState getPlayerState (int playerId) {
+    return this.playerStates.get(playerId);
+  }
 
-      double distance = merchantPosition.minus(playerPosition).length();
-
-      if (distance < (Merchant.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
-        transaction.pushAndCommit(new TradeWithMerchant(merchant));
-        return;
-      }
-    }
-
+  private PlayerState getPlayerState (Player player) {
+    return this.playerStates.get(player.getId());
   }
 
   /**
@@ -661,11 +706,12 @@ public class GameLogic {
    * Inflict {@code amount} damage on player if he has not suffered any damage lately.
    */
   private void damagePlayer (Transaction transaction, Player player, int amount) {
-    // TODO: Fix for multiplayer
-    if (System.currentTimeMillis() - this.lastDamageTime > 1000) {
-      this.lastDamageTime = System.currentTimeMillis();
+    PlayerState state = this.getPlayerState(player);
 
-      transaction.pushAndCommit(new Player.HitpointTransform(-amount));
+    if (System.currentTimeMillis() - state.lastDamageTime > 1000) {
+      state.lastDamageTime = System.currentTimeMillis();
+
+      transaction.pushAndCommit(new Player.HitpointTransform(player, -amount));
     }
   }
 
