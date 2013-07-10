@@ -41,7 +41,7 @@ public class LogicHandler implements MessageHandler {
       // Initialize the pulse delta. If you don't the first pulse will be from the beginning of the unix epoch until today.
       this.updatePulseDelta();
     } else if (message instanceof PlayerMessage) {
-      int playerId = ((UseItemCommand)message).getPlayerId();
+      int playerId = ((PlayerMessage)message).getPlayerId();
 
       if (message instanceof StartCommand) {
         this.startCommand((StartCommand)message);
