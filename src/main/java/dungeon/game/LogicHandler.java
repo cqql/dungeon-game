@@ -2,7 +2,7 @@ package dungeon.game;
 
 import dungeon.game.messages.DefeatEvent;
 import dungeon.game.messages.WinEvent;
-import dungeon.load.messages.LevelLoadedEvent;
+import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
@@ -35,8 +35,16 @@ public class LogicHandler implements MessageHandler {
    */
   private boolean paused = true;
 
-  public LogicHandler (Mailman mailman) {
+  public LogicHandler (Mailman mailman, World world) {
     this.mailman = mailman;
+    this.logic = new GameLogic(world);
+  }
+
+  /**
+   * Returns the current state of the world.
+   */
+  public World getWorld () {
+    return this.logic.getWorld();
   }
 
   @Override
@@ -63,9 +71,7 @@ public class LogicHandler implements MessageHandler {
       this.logic.addPlayer((World.AddPlayerTransform)message);
     } else if (message == MenuCommand.START_GAME) {
       this.paused = false;
-    } else if (message instanceof LevelLoadedEvent) {
-      this.logic = new GameLogic(((LevelLoadedEvent)message).getWorld());
-
+    } else if (message == LifecycleEvent.INITIALIZE) {
       // Initialize the pulse delta. If you don't the first pulse will be from the beginning of the unix epoch until today.
       this.updatePulseDelta();
     }

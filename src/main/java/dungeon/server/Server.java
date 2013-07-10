@@ -1,8 +1,9 @@
 package dungeon.server;
 
 import dungeon.game.LogicHandler;
-import dungeon.load.LevelLoadHandler;
+import dungeon.load.WorldLoader;
 import dungeon.messages.Mailman;
+import dungeon.models.World;
 import dungeon.pulse.PulseGenerator;
 
 import java.io.IOException;
@@ -21,18 +22,33 @@ public class Server implements Runnable {
 
   private final Mailman mailman = new Mailman();
 
+  private final WorldLoader worldLoader = new WorldLoader();
+
+  private final LogicHandler logicHandler;
+
   private final int port;
 
   private final ExecutorService connections = Executors.newCachedThreadPool();
 
   private final AtomicBoolean running = new AtomicBoolean();
 
-  public Server (int port) {
+  public Server (int port) throws Exception {
     this.port = port;
 
+    World world;
+
+    try {
+      world = this.worldLoader.load();
+    } catch (Exception e) {
+      LOGGER.log(Level.WARNING, "Loading the world failed", e);
+
+      throw e;
+    }
+
+    this.logicHandler = new LogicHandler(this.mailman, world);
+
     this.mailman.addMailbox(new PulseGenerator(this.mailman));
-    this.mailman.addHandler(new LevelLoadHandler(this.mailman));
-    this.mailman.addHandler(new LogicHandler(this.mailman));
+    this.mailman.addHandler(this.logicHandler);
 
     this.thread.setDaemon(true);
   }
@@ -64,7 +80,7 @@ public class Server implements Runnable {
       }
 
       try {
-        this.connections.execute(new ClientConnection(connection));
+        this.connections.execute(new ClientConnection(connection, this.logicHandler));
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Could not setup connection", e);
       }

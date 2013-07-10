@@ -199,6 +199,10 @@ public class GameLogic {
     return this.gameState;
   }
 
+  public World getWorld () {
+    return this.world;
+  }
+
   /**
    * Compute all changes, that have happened in the last #delta seconds.
    *
