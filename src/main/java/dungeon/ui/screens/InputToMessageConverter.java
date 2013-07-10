@@ -48,7 +48,7 @@ public class InputToMessageConverter implements KeyListener {
   }
 
   /**
-   * @return The command that is associated with the #key.
+   * @return The command that is associated with the {@code key}.
    */
   private Command commandForKey (Character key) {
     switch (key) {
