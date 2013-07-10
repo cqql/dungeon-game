@@ -86,17 +86,6 @@ public class InventoryScreen extends JPanel implements MessageHandler {
     this.actionBar.add(this.useButton);
     this.actionBar.add(this.backButton);
 
-    this.equipButton.addMouseListener(new MouseInputAdapter() {
-      @Override
-      public void mouseClicked (MouseEvent e) {
-        if (!InventoryScreen.this.equipButton.isEnabled()) {
-          return;
-        }
-
-        Item item = InventoryScreen.this.itemList.getSelectedValue();
-      }
-    });
-
     this.useButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
