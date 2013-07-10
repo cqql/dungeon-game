@@ -1,12 +1,13 @@
 package dungeon.ui.messages;
 
-import dungeon.messages.Message;
 import dungeon.models.Item;
 
-public class UseItemCommand implements Message {
+public class UseItemCommand extends AbstractPlayerMessage {
   private final Item item;
 
-  public UseItemCommand (Item item) {
+  public UseItemCommand (int playerId, Item item) {
+    super(playerId);
+
     this.item = item;
   }
 

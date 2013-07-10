@@ -1,15 +1,16 @@
 package dungeon.ui.messages;
 
-import dungeon.messages.Message;
 import dungeon.models.Item;
 import dungeon.models.Merchant;
 
-public class SellCommand implements Message {
+public class SellCommand extends AbstractPlayerMessage {
   private final Merchant merchant;
 
   private final Item item;
 
-  public SellCommand (Merchant merchant, Item item) {
+  public SellCommand (int playerId, Merchant merchant, Item item) {
+    super(playerId);
+
     this.merchant = merchant;
     this.item = item;
   }

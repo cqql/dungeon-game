@@ -1,7 +1,7 @@
 package dungeon.ui.messages;
 
-import dungeon.messages.Message;
-
-public class ShowGame implements Message {
-
+public class ShowGame extends AbstractPlayerMessage {
+  public ShowGame (int playerId) {
+    super(playerId);
+  }
 }

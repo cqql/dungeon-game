@@ -1,12 +1,13 @@
 package dungeon.ui.messages;
 
-import dungeon.messages.Message;
 import dungeon.models.Item;
 
-public class EquipWeaponCommand implements Message {
+public class EquipWeaponCommand extends AbstractPlayerMessage {
   private final Item item;
 
-  public EquipWeaponCommand (Item item) {
+  public EquipWeaponCommand (int playerId, Item item) {
+    super(playerId);
+
     this.item = item;
   }
 

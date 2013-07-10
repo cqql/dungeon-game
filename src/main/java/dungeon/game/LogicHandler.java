@@ -40,20 +40,24 @@ public class LogicHandler implements MessageHandler {
 
       // Initialize the pulse delta. If you don't the first pulse will be from the beginning of the unix epoch until today.
       this.updatePulseDelta();
-    } else if (message instanceof StartCommand) {
-      this.startCommand((StartCommand)message);
-    } else if (message instanceof EndCommand) {
-      this.endCommand((EndCommand)message);
-    } else if (message instanceof Pulse) {
-      this.pulse();
-    } else if (message instanceof UseItemCommand) {
-      this.logic.useItem(((UseItemCommand)message).getItem());
-    } else if (message instanceof EquipWeaponCommand) {
-      this.logic.equipWeapon(((EquipWeaponCommand)message).getWeapon());
-    } else if (message instanceof BuyCommand) {
-      this.logic.buyItem(((BuyCommand)message).getMerchant(), ((BuyCommand)message).getItem());
-    } else if (message instanceof SellCommand) {
-      this.logic.sellItem(((SellCommand)message).getMerchant(), ((SellCommand)message).getItem());
+    } else if (message instanceof PlayerMessage) {
+      int playerId = ((UseItemCommand)message).getPlayerId();
+
+      if (message instanceof StartCommand) {
+        this.startCommand((StartCommand)message);
+      } else if (message instanceof EndCommand) {
+        this.endCommand((EndCommand)message);
+      } else if (message instanceof Pulse) {
+        this.pulse();
+      } else if (message instanceof UseItemCommand) {
+        this.logic.useItem(playerId, ((UseItemCommand)message).getItem());
+      } else if (message instanceof EquipWeaponCommand) {
+        this.logic.equipWeapon(playerId, ((EquipWeaponCommand)message).getWeapon());
+      } else if (message instanceof BuyCommand) {
+        this.logic.buyItem(playerId, ((BuyCommand)message).getMerchant(), ((BuyCommand)message).getItem());
+      } else if (message instanceof SellCommand) {
+        this.logic.sellItem(playerId, ((SellCommand)message).getMerchant(), ((SellCommand)message).getItem());
+      }
     }
   }
 

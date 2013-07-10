@@ -1,7 +1,5 @@
 package dungeon.ui.messages;
 
-import dungeon.messages.Message;
-
 /**
  * This message means that the player starts a command.
  *
@@ -9,21 +7,13 @@ import dungeon.messages.Message;
  *
  * @see EndCommand
  */
-public class StartCommand implements Message {
-  private final int playerId;
-
+public class StartCommand extends AbstractPlayerMessage {
   private final Command command;
 
   public StartCommand (int playerId, Command command) {
-    this.playerId = playerId;
-    this.command = command;
-  }
+    super(playerId);
 
-  /**
-   * Who started the command?
-   */
-  public int getPlayerId () {
-    return playerId;
+    this.command = command;
   }
 
   public Command getCommand () {
