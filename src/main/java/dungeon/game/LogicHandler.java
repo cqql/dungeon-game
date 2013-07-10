@@ -30,17 +30,19 @@ public class LogicHandler implements MessageHandler {
 
   private GameLogic logic;
 
+  /**
+   * Is the game paused?
+   */
+  private boolean paused = true;
+
   public LogicHandler (Mailman mailman) {
     this.mailman = mailman;
   }
 
   @Override
   public void handleMessage (Message message) {
-    if (message instanceof LevelLoadedEvent) {
-      this.logic = new GameLogic(((LevelLoadedEvent)message).getWorld());
-
-      // Initialize the pulse delta. If you don't the first pulse will be from the beginning of the unix epoch until today.
-      this.updatePulseDelta();
+    if (message instanceof Pulse && !this.paused) {
+      this.pulse();
     } else if (message instanceof PlayerMessage) {
       int playerId = ((PlayerMessage)message).getPlayerId();
 
@@ -48,8 +50,6 @@ public class LogicHandler implements MessageHandler {
         this.startCommand((StartCommand)message);
       } else if (message instanceof EndCommand) {
         this.endCommand((EndCommand)message);
-      } else if (message instanceof Pulse) {
-        this.pulse();
       } else if (message instanceof UseItemCommand) {
         this.logic.useItem(playerId, ((UseItemCommand)message).getItem());
       } else if (message instanceof EquipWeaponCommand) {
@@ -61,6 +61,13 @@ public class LogicHandler implements MessageHandler {
       }
     } else if (message instanceof World.AddPlayerTransform) {
       this.logic.addPlayer((World.AddPlayerTransform)message);
+    } else if (message == MenuCommand.START_GAME) {
+      this.paused = false;
+    } else if (message instanceof LevelLoadedEvent) {
+      this.logic = new GameLogic(((LevelLoadedEvent)message).getWorld());
+
+      // Initialize the pulse delta. If you don't the first pulse will be from the beginning of the unix epoch until today.
+      this.updatePulseDelta();
     }
   }
 
