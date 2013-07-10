@@ -8,6 +8,6 @@ public class AbstractPlayerMessage implements PlayerMessage {
   }
 
   public int getPlayerId () {
-    return playerId;
+    return this.playerId;
   }
 }

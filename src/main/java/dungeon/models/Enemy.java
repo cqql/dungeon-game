@@ -53,7 +53,7 @@ public class Enemy implements Spatial, Identifiable {
   }
 
   public int getSpeed () {
-    return speed;
+    return this.speed;
   }
 
   public Position getPosition () {
@@ -78,6 +78,7 @@ public class Enemy implements Spatial, Identifiable {
   public Enemy apply (Transform transform) {
     int id = this.id;
     int hitPoints = this.hitPoints;
+    int speed = this.speed;
     Position position = this.position;
     MoveStrategy moveStrategy = this.moveStrategy;
     String onDeath = this.onDeath;

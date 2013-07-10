@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 public class Canvas extends JPanel implements MessageHandler {
-  private final static Logger LOGGER = Logger.getLogger(Canvas.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(Canvas.class.getName());
 
   /**
    * How long to show dialogs in milliseconds.

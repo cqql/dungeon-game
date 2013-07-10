@@ -3,7 +3,6 @@ package dungeon;
 import dungeon.game.LogicHandler;
 import dungeon.load.LevelLoadHandler;
 import dungeon.messages.Mailman;
-import dungeon.models.Player;
 import dungeon.pulse.PulseGenerator;
 import dungeon.ui.*;
 import dungeon.ui.screens.*;
