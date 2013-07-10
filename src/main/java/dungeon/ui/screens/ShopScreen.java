@@ -1,15 +1,13 @@
 package dungeon.ui.screens;
 
 import dungeon.game.messages.TradeWithMerchant;
-import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.LifecycleEvent;
-import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.Item;
 import dungeon.models.Merchant;
-import dungeon.models.World;
 import dungeon.models.messages.Transform;
+import dungeon.ui.Client;
 import dungeon.ui.messages.BuyCommand;
 import dungeon.ui.messages.SellCommand;
 import dungeon.ui.messages.ShowGame;
@@ -20,14 +18,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ShopScreen extends JPanel implements MessageHandler {
-  private final Mailman mailman;
-
-  private final AtomicReference<Integer> localPlayerId;
-
-  private World world;
+  private final Client client;
 
   private Merchant merchant;
 
@@ -57,16 +50,17 @@ public class ShopScreen extends JPanel implements MessageHandler {
     }
   };
 
-  public ShopScreen (Mailman mailman, AtomicReference<Integer> localPlayerId) {
-    this.mailman = mailman;
-    this.localPlayerId = localPlayerId;
+  public ShopScreen (Client client) {
+    this.client = client;
   }
 
   @Override
   public void handleMessage (Message message) {
-    if (message instanceof Transform) {
-      this.world = this.world.apply((Transform)message);
+    if (message == LifecycleEvent.INITIALIZE) {
+      this.initialize();
+    }
 
+    if (message instanceof Transform) {
       if (this.merchant != null) {
         this.merchant = this.merchant.apply((Transform)message);
       }
@@ -76,15 +70,11 @@ public class ShopScreen extends JPanel implements MessageHandler {
       }
 
       this.reset();
-    } else if (message instanceof LevelLoadedEvent) {
-      this.world = ((LevelLoadedEvent)message).getWorld();
-    } else if (message == LifecycleEvent.INITIALIZE) {
-      this.initialize();
     }
   }
 
   private void reset () {
-    this.playerItemList.setItems(this.world.getPlayer(ShopScreen.this.localPlayerId.get()).getItems());
+    this.playerItemList.setItems(this.client.getPlayer().getItems());
 
     if (this.merchant != null) {
       this.merchantItemList.setItems(this.merchant.getItems());
@@ -106,7 +96,7 @@ public class ShopScreen extends JPanel implements MessageHandler {
     this.backButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        ShopScreen.this.mailman.send(new ShowGame(ShopScreen.this.localPlayerId.get()));
+        ShopScreen.this.client.send(new ShowGame(ShopScreen.this.client.getPlayerId()));
       }
     });
 
@@ -122,7 +112,7 @@ public class ShopScreen extends JPanel implements MessageHandler {
           return;
         }
 
-        ShopScreen.this.mailman.send(new BuyCommand(ShopScreen.this.localPlayerId.get(), ShopScreen.this.merchant, item));
+        ShopScreen.this.client.send(new BuyCommand(ShopScreen.this.client.getPlayerId(), ShopScreen.this.merchant, item));
       }
     });
 
@@ -135,7 +125,7 @@ public class ShopScreen extends JPanel implements MessageHandler {
           return;
         }
 
-        ShopScreen.this.mailman.send(new SellCommand(ShopScreen.this.localPlayerId.get(), ShopScreen.this.merchant, item));
+        ShopScreen.this.client.send(new SellCommand(ShopScreen.this.client.getPlayerId(), ShopScreen.this.merchant, item));
       }
     });
   }

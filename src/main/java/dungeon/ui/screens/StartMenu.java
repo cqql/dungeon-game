@@ -1,16 +1,12 @@
 package dungeon.ui.screens;
 
 import dungeon.messages.LifecycleEvent;
-import dungeon.messages.Mailman;
-import dungeon.models.Player;
-import dungeon.models.World;
-import dungeon.ui.messages.MenuCommand;
+import dungeon.ui.Client;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The start menu that shows things like a start and quit button.
@@ -20,15 +16,12 @@ public class StartMenu extends JPanel {
 
   private final JButton quitButton;
 
-  private final Mailman mailman;
+  private final Client client;
 
-  private final AtomicReference<Integer> localPlayerId;
-
-  public StartMenu (Mailman mailman, AtomicReference<Integer> localPlayerId) {
+  public StartMenu (Client client) {
     super(new BorderLayout());
 
-    this.mailman = mailman;
-    this.localPlayerId = localPlayerId;
+    this.client = client;
 
     this.startButton = new JButton("Start");
     this.quitButton = new JButton("Beenden");
@@ -39,22 +32,14 @@ public class StartMenu extends JPanel {
     this.startButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        if (StartMenu.this.mailman != null) {
-          Player player = new Player("Link");
-
-          StartMenu.this.localPlayerId.set(player.getId());
-          StartMenu.this.mailman.send(new World.AddPlayerTransform(player));
-          StartMenu.this.mailman.send(MenuCommand.START_GAME);
-        }
+        StartMenu.this.client.startGame();
       }
     });
 
     this.quitButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        if (StartMenu.this.mailman != null) {
-          StartMenu.this.mailman.send(LifecycleEvent.SHUTDOWN);
-        }
+        StartMenu.this.client.send(LifecycleEvent.SHUTDOWN);
       }
     });
   }

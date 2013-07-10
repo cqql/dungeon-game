@@ -1,6 +1,6 @@
 package dungeon.ui.screens;
 
-import dungeon.messages.Mailman;
+import dungeon.ui.Client;
 import dungeon.ui.messages.MenuCommand;
 
 import javax.swing.*;
@@ -9,20 +9,18 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 
 public class DefeatScreen extends JPanel {
-  private final Mailman mailman;
+  private final Client client;
 
-  public DefeatScreen (Mailman mailman) {
+  public DefeatScreen (Client client) {
     super(new BorderLayout());
 
-    this.mailman = mailman;
+    this.client = client;
 
     JButton backButton = new JButton("Zurück");
     backButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        if (DefeatScreen.this.mailman != null) {
-          DefeatScreen.this.mailman.send(MenuCommand.SHOW_MENU);
-        }
+        DefeatScreen.this.client.send(MenuCommand.SHOW_MENU);
       }
     });
 

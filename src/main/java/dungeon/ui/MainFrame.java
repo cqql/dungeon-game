@@ -1,7 +1,6 @@
 package dungeon.ui;
 
 import dungeon.messages.LifecycleEvent;
-import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 
@@ -18,12 +17,12 @@ import java.awt.event.WindowEvent;
 public class MainFrame extends JFrame implements MessageHandler {
   public static final String TITLE = "DUNGEON GAME";
 
-  private final Mailman mailman;
+  private final Client client;
 
   private final UiManager uiManager;
 
-  public MainFrame (Mailman mailman, UiManager uiManager) {
-    this.mailman = mailman;
+  public MainFrame (Client client, UiManager uiManager) {
+    this.client = client;
     this.uiManager = uiManager;
   }
 
@@ -48,7 +47,7 @@ public class MainFrame extends JFrame implements MessageHandler {
     this.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing (WindowEvent e) {
-        MainFrame.this.mailman.send(LifecycleEvent.SHUTDOWN);
+        MainFrame.this.client.send(LifecycleEvent.SHUTDOWN);
       }
     });
 

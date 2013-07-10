@@ -1,13 +1,10 @@
 package dungeon.ui.screens;
 
-import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.LifecycleEvent;
-import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.Item;
-import dungeon.models.World;
-import dungeon.models.messages.Transform;
+import dungeon.ui.Client;
 import dungeon.ui.messages.EquipWeaponCommand;
 import dungeon.ui.messages.ShowGame;
 import dungeon.ui.messages.ShowInventory;
@@ -20,14 +17,9 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class InventoryScreen extends JPanel implements MessageHandler {
-  private final Mailman mailman;
-
-  private final AtomicReference<Integer> localPlayerId;
-
-  private World world;
+  private final Client client;
 
   private final ItemList itemList = new ItemList();
 
@@ -41,20 +33,13 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
   private final JButton backButton = new JButton("Zurück");
 
-  public InventoryScreen (Mailman mailman, AtomicReference<Integer> localPlayerId) {
-    this.mailman = mailman;
-    this.localPlayerId = localPlayerId;
+  public InventoryScreen (Client client) {
+    this.client = client;
   }
 
   @Override
   public void handleMessage (Message message) {
-    if (message instanceof Transform) {
-      this.world = this.world.apply((Transform)message);
-
-      this.reset();
-    } else if (message instanceof LevelLoadedEvent) {
-      this.world = ((LevelLoadedEvent)message).getWorld();
-    } else if (message == LifecycleEvent.INITIALIZE) {
+    if (message == LifecycleEvent.INITIALIZE) {
       this.initialize();
     } else if (message instanceof ShowInventory) {
       this.reset();
@@ -65,7 +50,7 @@ public class InventoryScreen extends JPanel implements MessageHandler {
    * Synchronize the items in the list with the items in the player's bag and enable/disable the buttons.
    */
   private void reset () {
-    List<Item> items = this.world.getPlayer(this.localPlayerId.get()).getItems();
+    List<Item> items = this.client.getPlayer().getItems();
 
     this.itemList.setItems(items);
 
@@ -95,7 +80,7 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
         Item item = InventoryScreen.this.itemList.getSelectedValue();
 
-        InventoryScreen.this.mailman.send(new UseItemCommand(InventoryScreen.this.localPlayerId.get(), item));
+        InventoryScreen.this.client.send(new UseItemCommand(InventoryScreen.this.client.getPlayerId(), item));
       }
     });
 
@@ -108,14 +93,14 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
         Item item = InventoryScreen.this.itemList.getSelectedValue();
 
-        InventoryScreen.this.mailman.send(new EquipWeaponCommand(InventoryScreen.this.localPlayerId.get(), item));
+        InventoryScreen.this.client.send(new EquipWeaponCommand(InventoryScreen.this.client.getPlayerId(), item));
       }
     });
 
     this.backButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        InventoryScreen.this.mailman.send(new ShowGame(InventoryScreen.this.localPlayerId.get()));
+        InventoryScreen.this.client.send(new ShowGame(InventoryScreen.this.client.getPlayerId()));
       }
     });
 

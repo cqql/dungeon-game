@@ -7,33 +7,26 @@ import dungeon.pulse.PulseGenerator;
 import dungeon.ui.*;
 import dungeon.ui.screens.*;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class Main {
   public static void main (String[] args) {
-    AtomicReference<Integer> localPlayerId = new AtomicReference<>();
-
     Mailman mailman = new Mailman();
+    Client client = new Client(mailman);
 
-    InputToMessageConverter converter = new InputToMessageConverter(mailman, localPlayerId);
+    Canvas canvas = new Canvas(client);
+    StartMenu startMenu = new StartMenu(client);
+    WinScreen winScreen = new WinScreen(client);
+    DefeatScreen defeatScreen = new DefeatScreen(client);
+    InventoryScreen inventoryScreen = new InventoryScreen(client);
+    ShopScreen shopScreen = new ShopScreen(client);
 
-    Canvas canvas = new Canvas(localPlayerId);
+    InputToMessageConverter converter = new InputToMessageConverter(client);
     canvas.addKeyListener(converter);
-
-    StartMenu startMenu = new StartMenu(mailman, localPlayerId);
-
-    WinScreen winScreen = new WinScreen(mailman);
-
-    DefeatScreen defeatScreen = new DefeatScreen(mailman);
-
-    InventoryScreen inventoryScreen = new InventoryScreen(mailman, localPlayerId);
-
-    ShopScreen shopScreen = new ShopScreen(mailman, localPlayerId);
 
     UiManager uiManager = new UiManager(canvas, startMenu, winScreen, defeatScreen, inventoryScreen, shopScreen);
 
-    MainFrame mainFrame = new MainFrame(mailman, uiManager);
+    MainFrame mainFrame = new MainFrame(client, uiManager);
 
+    mailman.addMailbox(new SwingMailbox(client));
     mailman.addMailbox(new SwingMailbox(mainFrame));
     mailman.addMailbox(new SwingMailbox(canvas));
     mailman.addMailbox(new SwingMailbox(uiManager));

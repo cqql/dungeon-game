@@ -6,13 +6,13 @@ import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.*;
 import dungeon.models.messages.Transform;
+import dungeon.ui.Client;
 
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 public class Canvas extends JPanel implements MessageHandler {
@@ -63,7 +63,7 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
-  private final AtomicReference<Integer> localPlayerId;
+  private final Client client;
 
   private World world;
 
@@ -78,8 +78,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private double yPixelPerUnit;
 
-  public Canvas (AtomicReference<Integer> localPlayerId) {
-    this.localPlayerId = localPlayerId;
+  public Canvas (Client client) {
+    this.client = client;
 
     this.setFocusable(true);
   }
@@ -106,7 +106,7 @@ public class Canvas extends JPanel implements MessageHandler {
       return;
     }
 
-    Player player = this.world.getPlayer(this.localPlayerId.get());
+    Player player = this.world.getPlayer(this.client.getPlayerId());
     Room room = this.world.getCurrentRoom(player);
 
     this.xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();

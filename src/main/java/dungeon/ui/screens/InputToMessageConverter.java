@@ -1,11 +1,10 @@
 package dungeon.ui.screens;
 
-import dungeon.messages.Mailman;
+import dungeon.ui.Client;
 import dungeon.ui.messages.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * This converts input events like key presses in internal messages that can then be interpreted by the other modules.
@@ -13,13 +12,10 @@ import java.util.concurrent.atomic.AtomicReference;
  * WARNING: For this class to be thread safe, handleMessage() has to be called on the EDT.
  */
 public class InputToMessageConverter implements KeyListener {
-  private final Mailman mailman;
+  private final Client client;
 
-  private final AtomicReference<Integer> localPlayerId;
-
-  public InputToMessageConverter (Mailman mailman, AtomicReference<Integer> localPlayerId) {
-    this.mailman = mailman;
-    this.localPlayerId = localPlayerId;
+  public InputToMessageConverter (Client client) {
+    this.client = client;
   }
 
   @Override
@@ -32,9 +28,9 @@ public class InputToMessageConverter implements KeyListener {
     Command command = this.commandForKey(keyEvent.getKeyChar());
 
     if (command != null) {
-      this.mailman.send(new StartCommand(this.localPlayerId.get(), command));
+      this.client.send(new StartCommand(this.client.getPlayerId(), command));
     }  else if (keyEvent.getKeyChar() == 'i') {
-      this.mailman.send(new ShowInventory(this.localPlayerId.get()));
+      this.client.send(new ShowInventory(this.client.getPlayerId()));
     }
   }
 
@@ -43,7 +39,7 @@ public class InputToMessageConverter implements KeyListener {
     Command command = this.commandForKey(keyEvent.getKeyChar());
 
     if (command != null) {
-      this.mailman.send(new EndCommand(this.localPlayerId.get(), command));
+      this.client.send(new EndCommand(this.client.getPlayerId(), command));
     }
   }
 
