@@ -93,6 +93,13 @@ public class Player implements Spatial, Identifiable {
     this.savePointPosition = savePointPosition;
   }
 
+  /**
+   * Creates a new level 1 player with default values.
+   */
+  public Player (String name) {
+    this(1, name, 3, 5, 5, 0, 10, 10, null, "level-1", "room-1", 0, new Position(0, 0), Direction.RIGHT, "room-1", new Position(0, 0));
+  }
+
   public int getId () {
     return this.id;
   }
@@ -244,7 +251,6 @@ public class Player implements Spatial, Identifiable {
   public Projectile iceBoltAttack (int id) {
     return this.createProjectile(id, 7000, 2, DamageType.ICE);
   }
-
 
   public Player apply (Transform transform) {
     int id = this.id;

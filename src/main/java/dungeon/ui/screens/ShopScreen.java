@@ -20,9 +20,12 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ShopScreen extends JPanel implements MessageHandler {
   private final Mailman mailman;
+
+  private final AtomicReference<Integer> localPlayerId;
 
   private World world;
 
@@ -54,8 +57,9 @@ public class ShopScreen extends JPanel implements MessageHandler {
     }
   };
 
-  public ShopScreen (Mailman mailman) {
+  public ShopScreen (Mailman mailman, AtomicReference<Integer> localPlayerId) {
     this.mailman = mailman;
+    this.localPlayerId = localPlayerId;
   }
 
   @Override
@@ -80,7 +84,7 @@ public class ShopScreen extends JPanel implements MessageHandler {
   }
 
   private void reset () {
-    this.playerItemList.setItems(this.world.getPlayer().getItems());
+    this.playerItemList.setItems(this.world.getPlayer(ShopScreen.this.localPlayerId.get()).getItems());
 
     if (this.merchant != null) {
       this.merchantItemList.setItems(this.merchant.getItems());
@@ -102,7 +106,7 @@ public class ShopScreen extends JPanel implements MessageHandler {
     this.backButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        ShopScreen.this.mailman.send(new ShowGame());
+        ShopScreen.this.mailman.send(new ShowGame(ShopScreen.this.localPlayerId.get()));
       }
     });
 
@@ -118,7 +122,7 @@ public class ShopScreen extends JPanel implements MessageHandler {
           return;
         }
 
-        ShopScreen.this.mailman.send(new BuyCommand(ShopScreen.this.merchant, item));
+        ShopScreen.this.mailman.send(new BuyCommand(ShopScreen.this.localPlayerId.get(), ShopScreen.this.merchant, item));
       }
     });
 
@@ -131,7 +135,7 @@ public class ShopScreen extends JPanel implements MessageHandler {
           return;
         }
 
-        ShopScreen.this.mailman.send(new SellCommand(ShopScreen.this.merchant, item));
+        ShopScreen.this.mailman.send(new SellCommand(ShopScreen.this.localPlayerId.get(), ShopScreen.this.merchant, item));
       }
     });
   }

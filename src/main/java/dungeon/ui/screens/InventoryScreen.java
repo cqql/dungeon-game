@@ -20,9 +20,12 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class InventoryScreen extends JPanel implements MessageHandler {
   private final Mailman mailman;
+
+  private final AtomicReference<Integer> localPlayerId;
 
   private World world;
 
@@ -38,8 +41,9 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
   private final JButton backButton = new JButton("Zurück");
 
-  public InventoryScreen (Mailman mailman) {
+  public InventoryScreen (Mailman mailman, AtomicReference<Integer> localPlayerId) {
     this.mailman = mailman;
+    this.localPlayerId = localPlayerId;
   }
 
   @Override
@@ -61,7 +65,7 @@ public class InventoryScreen extends JPanel implements MessageHandler {
    * Synchronize the items in the list with the items in the player's bag and enable/disable the buttons.
    */
   private void reset () {
-    List<Item> items = this.world.getPlayer().getItems();
+    List<Item> items = this.world.getPlayer(this.localPlayerId.get()).getItems();
 
     this.itemList.setItems(items);
 
@@ -102,7 +106,7 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
         Item item = InventoryScreen.this.itemList.getSelectedValue();
 
-        InventoryScreen.this.mailman.send(new UseItemCommand(item));
+        InventoryScreen.this.mailman.send(new UseItemCommand(InventoryScreen.this.localPlayerId.get(), item));
       }
     });
 
@@ -115,14 +119,14 @@ public class InventoryScreen extends JPanel implements MessageHandler {
 
         Item item = InventoryScreen.this.itemList.getSelectedValue();
 
-        InventoryScreen.this.mailman.send(new EquipWeaponCommand(item));
+        InventoryScreen.this.mailman.send(new EquipWeaponCommand(InventoryScreen.this.localPlayerId.get(), item));
       }
     });
 
     this.backButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        InventoryScreen.this.mailman.send(new ShowGame());
+        InventoryScreen.this.mailman.send(new ShowGame(InventoryScreen.this.localPlayerId.get()));
       }
     });
 

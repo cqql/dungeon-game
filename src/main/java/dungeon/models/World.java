@@ -48,6 +48,18 @@ public class World {
     return rooms;
   }
 
+  public Player getPlayer (int id) {
+    Player player = null;
+
+    for (Player a : this.players) {
+      if (a.getId() == id) {
+        player = a;
+      }
+    }
+
+    return player;
+  }
+
   private Level getCurrentLevel (Player player) {
     for (Level level : this.levels) {
       if (!level.getId().equals(player.getLevelId())) {

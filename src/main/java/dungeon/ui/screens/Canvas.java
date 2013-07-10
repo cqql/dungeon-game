@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 public class Canvas extends JPanel implements MessageHandler {
@@ -62,6 +63,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
+  private final AtomicReference<Integer> localPlayerId;
+
   private World world;
 
   private long dialogTimeout;
@@ -75,7 +78,9 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private double yPixelPerUnit;
 
-  public Canvas () {
+  public Canvas (AtomicReference<Integer> localPlayerId) {
+    this.localPlayerId = localPlayerId;
+
     this.setFocusable(true);
   }
 
@@ -101,7 +106,8 @@ public class Canvas extends JPanel implements MessageHandler {
       return;
     }
 
-    Room room = this.world.getCurrentRoom();
+    Player player = this.world.getPlayer(this.localPlayerId.get());
+    Room room = this.world.getCurrentRoom(player);
 
     this.xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();
     this.yPixelPerUnit = (double)g.getClipBounds().height / room.getYSize();
@@ -112,13 +118,13 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawMerchants(g, room);
     this.drawEnemies(g, room);
     this.drawSavepoints(g, room);
-    this.drawPlayer(g, this.world.getPlayer());
+    this.drawPlayer(g, player);
     this.drawProjectiles(g, room);
-    this.drawHpIndicator(g);
-    this.drawMoneyIndicator(g);
-    this.drawLifeIndicator(g);
-    this.drawManaIndicator(g);
-    this.drawWeaponIndicator(g);
+    this.drawHpIndicator(g, player);
+    this.drawMoneyIndicator(g, player);
+    this.drawLifeIndicator(g, player);
+    this.drawManaIndicator(g, player);
+    this.drawWeaponIndicator(g, player);
     this.drawDialog(g);
   }
 

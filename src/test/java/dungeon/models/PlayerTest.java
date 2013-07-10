@@ -40,7 +40,7 @@ public class PlayerTest {
 
   @Test
   public void moveTransformUpdatesPosition () {
-    Player transformed = this.player.apply(new Player.MoveTransform(1200, 2000));
+    Player transformed = this.player.apply(new Player.MoveTransform(this.player, 1200, 2000));
 
     assertEquals(3200, transformed.getPosition().getX());
     assertEquals(4000, transformed.getPosition().getY());
@@ -48,14 +48,14 @@ public class PlayerTest {
 
   @Test
   public void hitpointTransformUpdatesHitpoints () {
-    Player transformed = this.player.apply(new Player.HitpointTransform(-1));
+    Player transformed = this.player.apply(new Player.HitpointTransform(this.player, -1));
 
     assertEquals(4, transformed.getHitPoints());
   }
 
   @Test
   public void teleportTransformUpdatesPosition () {
-    Player teleported = this.player.apply(new Player.TeleportTransform("another-room", new Position(5, 1)));
+    Player teleported = this.player.apply(new Player.TeleportTransform(this.player, "another-room", new Position(5, 1)));
 
     assertEquals("another-room", teleported.getRoomId());
     assertEquals(5, teleported.getPosition().getX());
