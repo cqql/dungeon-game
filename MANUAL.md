@@ -12,7 +12,7 @@
 
 <h3>Interaktion</h3>
 <ul>
-<li>H - Health Potions benutzen</li>
+<li>H - Heiltränke benutzen</li>
 <li>J - Schießen</li>
 <li>K - Eispfeil schießen</li>
 <li>Z - mit NPC sprechen</li>
@@ -44,7 +44,6 @@ Am Ende des letzten Levels ist das Siegerpodest, welches beim Betreten zum Ende 
 
 <h2>Entwickler</h2>
 <ul>
-<li>Quynh</li>
 <li>Louise</li>
 <li>Marten</li>
 <li>Phuong</li>
