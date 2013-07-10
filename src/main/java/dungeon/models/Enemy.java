@@ -5,6 +5,7 @@ import dungeon.models.messages.Transform;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 import java.util.Random;
 
 public class Enemy implements Spatial, Identifiable {
@@ -163,7 +164,7 @@ public class Enemy implements Spatial, Identifiable {
     NORMAL {
       @Override
       public void move (Transaction transaction, Enemy enemy, double delta) {
-        Vector enemyToPlayer = transaction.getWorld().getPlayer().getPosition().getVector().minus(enemy.getPosition().getVector());
+        Vector enemyToPlayer = this.getShortestDistance(enemy, transaction.getWorld().getPlayers());
 
         if (enemyToPlayer.length() < 5000 && !enemyToPlayer.isZero()) {
           transaction.pushAndCommit(new Enemy.MoveTransform(enemy, enemyToPlayer.normalize().times(enemy.getSpeed() * delta)));
@@ -173,10 +174,11 @@ public class Enemy implements Spatial, Identifiable {
     TELEPORT {
       @Override
       public void move (Transaction transaction, Enemy enemy, double delta) {
-        Vector enemyToPlayer = transaction.getWorld().getPlayer().getPosition().getVector().minus(enemy.getPosition().getVector());
+        Player targetPlayer = this.getClosestPlayer(enemy, transaction.getWorld().getPlayers());
+        Vector enemyToPlayer = targetPlayer.getPosition().getVector().minus(enemy.getPosition().getVector());
 
         if (enemyToPlayer.length() < 500 || RANDOM.nextInt(300) == 0) {
-          Room room = transaction.getWorld().getCurrentRoom();
+          Room room = transaction.getWorld().getCurrentRoom(targetPlayer);
           Vector position = new Vector(RANDOM.nextFloat() * room.getXSize(), RANDOM.nextFloat() * room.getYSize());
           position = position.times(0.5 + RANDOM.nextFloat() / 2);
 
@@ -190,5 +192,35 @@ public class Enemy implements Spatial, Identifiable {
     private static final Random RANDOM = new Random();
 
     public abstract void move (Transaction transaction, Enemy enemy, double delta);
+
+    /**
+     * Finds the {@link Player}, that is closest to {@code enemy}.
+     */
+    Player getClosestPlayer (Enemy enemy, List<Player> players) {
+      Player closest = players.get(0);
+      double shortestDistance = closest.getPosition().getVector().minus(enemy.getPosition().getVector()).length();
+
+      for (Player player : players) {
+        double distance = player.getPosition().getVector().minus(enemy.getPosition().getVector()).length();
+
+        if (distance < shortestDistance) {
+          shortestDistance = distance;
+          closest = player;
+        }
+      }
+
+      return closest;
+    }
+
+    /**
+     * Finds the shortest distance between {@code enemy} and any of {@code players}.
+     *
+     * @return A vector pointing from {@code enemy} to the {@link Player}, that is closest to it
+     */
+    Vector getShortestDistance (Enemy enemy, List<Player> players) {
+      Player closest = this.getClosestPlayer(enemy, players);
+
+      return closest.getPosition().getVector().minus(enemy.getPosition().getVector());
+    }
   }
 }
