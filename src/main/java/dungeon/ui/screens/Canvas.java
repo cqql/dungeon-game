@@ -202,44 +202,44 @@ public class Canvas extends JPanel implements MessageHandler {
     }
   }
 
-  private void drawHpIndicator (Graphics g) {
+  private void drawHpIndicator (Graphics g, Player player) {
     g.setColor(this.hpColor);
     g.fillRect(20, 20, 20, 20);
 
     g.setColor(this.white);
     g.setFont(this.font);
-    g.drawString(String.format("%d / %d", this.world.getPlayer().getHitPoints(), this.world.getPlayer().getMaxHitPoints()), 60, 38);
+    g.drawString(String.format("%d / %d", player.getHitPoints(), player.getMaxHitPoints()), 60, 38);
   }
 
-  private void drawLifeIndicator (Graphics g) {
+  private void drawLifeIndicator (Graphics g, Player player) {
     g.setColor(this.lifeColor);
     g.fillRect(20, 100, 20, 20);
 
     g.setColor(this.white);
     g.setFont(this.font);
-    g.drawString(String.format("%d", this.world.getPlayer().getLives()), 60, 118);
+    g.drawString(String.format("%d", player.getLives()), 60, 118);
   }
 
-  private void drawMoneyIndicator (Graphics g) {
+  private void drawMoneyIndicator (Graphics g, Player player) {
     g.setColor(this.moneyColor);
     g.fillRect(20, 60, 20, 20);
 
     g.setColor(this.white);
     g.setFont(this.font);
-    g.drawString(String.format("%d", this.world.getPlayer().getMoney()), 60, 78);
+    g.drawString(String.format("%d", player.getMoney()), 60, 78);
   }
 
-  private void drawManaIndicator (Graphics g) {
+  private void drawManaIndicator (Graphics g, Player player) {
     g.setColor(this.manaColor);
     g.fillRect(20, 140, 20, 20);
 
     g.setColor(this.white);
     g.setFont(this.font);
-    g.drawString(String.format("%d / %d", this.world.getPlayer().getMana(), this.world.getPlayer().getMaxMana()), 60, 158);
+    g.drawString(String.format("%d / %d", player.getMana(), player.getMaxMana()), 60, 158);
   }
 
-  private void drawWeaponIndicator (Graphics g) {
-    Item weapon = this.world.getPlayer().getWeapon();
+  private void drawWeaponIndicator (Graphics g, Player player) {
+    Item weapon = player.getWeapon();
     String weaponName = "Keine Waffe";
 
     if (weapon != null) {
