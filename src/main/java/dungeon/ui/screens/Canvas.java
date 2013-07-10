@@ -1,11 +1,9 @@
 package dungeon.ui.screens;
 
 import dungeon.game.messages.TalkToNpc;
-import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.*;
-import dungeon.models.messages.Transform;
 import dungeon.ui.Client;
 
 import javax.swing.*;
@@ -65,8 +63,6 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Client client;
 
-  private World world;
-
   private long dialogTimeout;
 
   private NPC dialogNpc;
@@ -86,11 +82,7 @@ public class Canvas extends JPanel implements MessageHandler {
 
   @Override
   public void handleMessage (Message message) {
-    if (message instanceof Transform) {
-      this.world = this.world.apply((Transform)message);
-    } else if (message instanceof LevelLoadedEvent) {
-      this.world = ((LevelLoadedEvent)message).getWorld();
-    } else if (message instanceof TalkToNpc) {
+    if (message instanceof TalkToNpc) {
       this.dialogTimeout = System.currentTimeMillis() + DIALOG_TIME;
       this.dialogNpc = ((TalkToNpc)message).getNpc();
     }
@@ -102,12 +94,12 @@ public class Canvas extends JPanel implements MessageHandler {
   protected void paintComponent (Graphics g) {
     super.paintComponent(g);
 
-    if (this.world == null) {
+    Player player = this.client.getPlayer();
+    Room room = this.client.getCurrentRoom();
+
+    if (player == null || room == null) {
       return;
     }
-
-    Player player = this.world.getPlayer(this.client.getPlayerId());
-    Room room = this.world.getCurrentRoom(player);
 
     this.xPixelPerUnit = (double)g.getClipBounds().width / room.getXSize();
     this.yPixelPerUnit = (double)g.getClipBounds().height / room.getYSize();

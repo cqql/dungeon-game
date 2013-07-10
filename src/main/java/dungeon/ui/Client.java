@@ -5,6 +5,7 @@ import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.Player;
+import dungeon.models.Room;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
 import dungeon.ui.messages.MenuCommand;
@@ -49,6 +50,19 @@ public class Client implements MessageHandler {
    */
   public Player getPlayer () {
     return this.world.get().getPlayer(this.getPlayerId());
+  }
+
+  /**
+   * @return The room that this client is currently in
+   */
+  public Room getCurrentRoom () {
+    Player player = this.getPlayer();
+
+    if (player == null) {
+      return null;
+    } else {
+      return this.world.get().getCurrentRoom(player);
+    }
   }
 
   /**
