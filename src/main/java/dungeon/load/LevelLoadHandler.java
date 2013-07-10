@@ -2,11 +2,11 @@ package dungeon.load;
 
 import dungeon.load.adapters.WorldAdapter;
 import dungeon.load.messages.LevelLoadedEvent;
+import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.World;
-import dungeon.ui.messages.MenuCommand;
 
 import javax.xml.bind.JAXB;
 import java.util.logging.Level;
@@ -23,7 +23,7 @@ public class LevelLoadHandler implements MessageHandler {
 
   @Override
   public void handleMessage (Message message) {
-    if (message == MenuCommand.START_GAME) {
+    if (message == LifecycleEvent.INITIALIZE) {
       WorldAdapter worldAdapter = new WorldAdapter();
 
       try {
