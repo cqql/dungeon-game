@@ -91,6 +91,18 @@ public class World {
       }
     }
 
+    if (transform instanceof AddPlayerTransform) {
+      players.add(((AddPlayerTransform)transform).player);
+    }
+
     return new World(levels, players);
+  }
+
+  public static class AddPlayerTransform implements Transform {
+    public final Player player;
+
+    public AddPlayerTransform (Player player) {
+      this.player = player;
+    }
   }
 }
