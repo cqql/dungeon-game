@@ -19,7 +19,7 @@ public class WorldAdapter extends XmlAdapter<WorldAdapter, World> {
 
   @XmlElement(name = "player")
   @XmlJavaTypeAdapter(PlayerAdapter.class)
-  public List<Player> players;
+  public List<Player> players = new ArrayList<>();
 
   @Override
   public World unmarshal (WorldAdapter worldAdapter) throws Exception {
