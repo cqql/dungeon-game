@@ -10,8 +10,8 @@ public enum ItemType {
     }
 
     @Override
-    public void use (Transaction transaction) {
-      transaction.pushAndCommit(new Player.HitpointTransform(this.getHitPointDelta()));
+    public void use (Transaction transaction, Player player) {
+      transaction.pushAndCommit(new Player.HitpointTransform(player, this.getHitPointDelta()));
     }
   },
   MANA_POTION("Manatrank", true, false, 5, 0, 5, 0) {
@@ -21,8 +21,8 @@ public enum ItemType {
     }
 
     @Override
-    public void use (Transaction transaction) {
-      transaction.pushAndCommit(new Player.ManaTransform(this.getManaDelta()));
+    public void use (Transaction transaction, Player player) {
+      transaction.pushAndCommit(new Player.ManaTransform(player, this.getManaDelta()));
     }
   },
   WEAK_BOW ("Schwacher Bogen", false, true, 10, 0, 0, 3) {
@@ -94,8 +94,11 @@ public enum ItemType {
 
   /**
    * Use the item, e.g. apply the appropriate transforms.
+   *
+   * @param transaction The current transaction on which the item should operate
+   * @param player The player who is using the item
    */
-  public void use (Transaction transaction) {
+  public void use (Transaction transaction, Player player) {
 
   }
 

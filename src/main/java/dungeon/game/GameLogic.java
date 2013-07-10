@@ -241,7 +241,7 @@ public class GameLogic {
         if (healthPotions.size() > 0) {
           Item healthPotion = healthPotions.get(0);
 
-          healthPotion.use(transaction);
+          healthPotion.use(transaction, player);
           transaction.pushAndCommit(new Player.RemoveItemTransform(player, healthPotion));
         }
       }
@@ -263,7 +263,7 @@ public class GameLogic {
         if (manaPotions.size() > 0) {
           Item manaPotion = manaPotions.get(0);
 
-          manaPotion.use(transaction);
+          manaPotion.use(transaction, player);
           transaction.pushAndCommit(new Player.RemoveItemTransform(player, manaPotion));
         }
       }
@@ -280,7 +280,7 @@ public class GameLogic {
       for (Item item : state.useItems) {
         LOGGER.info("Use item " + item);
 
-        item.use(transaction);
+        item.use(transaction, player);
 
         transaction.pushAndCommit(new Player.RemoveItemTransform(player, item));
       }

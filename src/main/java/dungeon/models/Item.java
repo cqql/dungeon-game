@@ -30,8 +30,8 @@ public class Item {
     return this.type.getValue();
   }
 
-  public void use (Transaction transaction) {
-    this.type.use(transaction);
+  public void use (Transaction transaction, Player player) {
+    this.type.use(transaction, player);
   }
 
   @Override
