@@ -2,7 +2,9 @@ package dungeon.models;
 
 import dungeon.util.Vector;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
   private final int x;
 
   private final int y;

@@ -3,6 +3,7 @@ package dungeon.models;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 /**
  * A save point.
@@ -10,7 +11,7 @@ import java.awt.geom.Rectangle2D;
  * If the player interacts with it (touching or attacking), it will activate and set the player's save point to it's
  * current position.
  */
-public class SavePoint implements Spatial {
+public class SavePoint implements Spatial, Serializable {
   public static final int SIZE = 500;
 
   /**

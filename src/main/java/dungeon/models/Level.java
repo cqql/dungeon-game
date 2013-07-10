@@ -2,13 +2,14 @@ package dungeon.models;
 
 import dungeon.models.messages.Transform;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A level is a collection of rooms.
  */
-public class Level {
+public class Level implements Serializable {
   private final String id;
 
   private final List<Room> rooms;

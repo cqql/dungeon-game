@@ -4,11 +4,12 @@ import dungeon.models.messages.Transform;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Merchant implements Spatial {
+public class Merchant implements Spatial, Serializable {
   public static final int SIZE = 1000;
 
   private final int id;

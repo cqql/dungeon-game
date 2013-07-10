@@ -2,9 +2,10 @@ package dungeon.models;
 
 import dungeon.models.messages.Transform;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class World {
+public class World implements Serializable {
   private final List<Level> levels;
 
   private final List<Player> players;

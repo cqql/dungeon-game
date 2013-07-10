@@ -2,7 +2,9 @@ package dungeon.models;
 
 import dungeon.game.Transaction;
 
-public enum ItemType {
+import java.io.Serializable;
+
+public enum ItemType implements Serializable {
   HEALTH_POTION("Heiltrank", true, false, 5, 5, 0, 0) {
     @Override
     public String getDescription () {

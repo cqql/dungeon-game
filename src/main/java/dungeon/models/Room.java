@@ -2,12 +2,13 @@ package dungeon.models;
 
 import dungeon.models.messages.Transform;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Room {
+public class Room implements Serializable {
   private final String id;
 
   private final List<Enemy> enemies;

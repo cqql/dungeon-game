@@ -3,8 +3,9 @@ package dungeon.models;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
-public class NPC implements Spatial {
+public class NPC implements Spatial, Serializable {
   public static final int SIZE = 1000;
 
   private final int id;

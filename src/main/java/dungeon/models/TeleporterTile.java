@@ -2,7 +2,9 @@ package dungeon.models;
 
 import dungeon.models.messages.Transform;
 
-public class TeleporterTile extends Tile {
+import java.io.Serializable;
+
+public class TeleporterTile extends Tile implements Serializable {
   private final Target target;
 
   public TeleporterTile (Position position, Target target) {
@@ -15,7 +17,7 @@ public class TeleporterTile extends Tile {
     return this.target;
   }
 
-  public static class Target {
+  public static class Target implements Serializable {
     private final String roomId;
 
     private final int x;

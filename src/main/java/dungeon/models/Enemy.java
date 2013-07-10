@@ -5,10 +5,11 @@ import dungeon.models.messages.Transform;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
-public class Enemy implements Spatial, Identifiable {
+public class Enemy implements Spatial, Identifiable, Serializable {
   public static final int SIZE = 1000;
 
   private final int id;

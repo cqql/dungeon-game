@@ -4,8 +4,9 @@ import dungeon.models.messages.Transform;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
-public class Tile implements Spatial {
+public class Tile implements Spatial, Serializable {
   public static final int SIZE = 1000;
 
   /**

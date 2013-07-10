@@ -2,10 +2,12 @@ package dungeon.models;
 
 import dungeon.game.Transaction;
 
+import java.io.Serializable;
+
 /**
  * This can be any item, that could exist - A sword, a shield, a potion, etc.
  */
-public class Item {
+public class Item implements Serializable {
   private final int id;
 
   private final ItemType type;

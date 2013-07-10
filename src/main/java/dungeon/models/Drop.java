@@ -3,13 +3,14 @@ package dungeon.models;
 import dungeon.util.Vector;
 
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 /**
  * A dropped item that is lying around somewhere in a room.
  *
  * It can be either an amount of money (item == null) or an item (money == 0).
  */
-public class Drop implements Spatial {
+public class Drop implements Spatial, Serializable {
   public static final int SIZE = 500;
 
   private final int id;

@@ -2,7 +2,9 @@ package dungeon.models;
 
 import dungeon.models.messages.Transform;
 
-public class VictoryTile extends Tile {
+import java.io.Serializable;
+
+public class VictoryTile extends Tile implements Serializable {
   public VictoryTile (Position position) {
     super(false, position);
   }

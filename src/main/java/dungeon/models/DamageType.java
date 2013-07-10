@@ -1,5 +1,7 @@
 package dungeon.models;
 
-public enum DamageType {
+import java.io.Serializable;
+
+public enum DamageType implements Serializable {
   NORMAL, ICE;
 }
