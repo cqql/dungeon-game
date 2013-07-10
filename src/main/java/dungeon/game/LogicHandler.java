@@ -6,6 +6,7 @@ import dungeon.load.messages.LevelLoadedEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
+import dungeon.models.World;
 import dungeon.pulse.Pulse;
 import dungeon.ui.messages.*;
 
@@ -58,6 +59,8 @@ public class LogicHandler implements MessageHandler {
       } else if (message instanceof SellCommand) {
         this.logic.sellItem(playerId, ((SellCommand)message).getMerchant(), ((SellCommand)message).getItem());
       }
+    } else if (message instanceof World.AddPlayerTransform) {
+      this.logic.addPlayer((World.AddPlayerTransform)message);
     }
   }
 

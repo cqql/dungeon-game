@@ -182,6 +182,15 @@ public class GameLogic {
   }
 
   /**
+   * Create a new player state, when a player joins the game.
+   */
+  public void addPlayer (World.AddPlayerTransform transform) {
+    this.world = this.world.apply(transform);
+
+    this.playerStates.put(transform.player.getId(), new PlayerState());
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
