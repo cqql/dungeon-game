@@ -1,34 +1,34 @@
-Dungeon-Game für das Programmierpraktikum
-=========================================
+# Dungeon-Game für das Programmierpraktikum
 
-Anforderungen
--------------
+## Anforderungen
 
 Um das Programm kompilieren zu können, braucht man:
 
 - JDK7
 
 
-Testing
--------
+## Testing
 
 `./gradle` führt alle Tests aus.
 
 
-Running
--------
+## Running
 
 `./gradle run` führt die Applikation aus.
 
-Checks
-------
+
+## Checks
 
 `./gradle check` überprüft den Quellcode auf potenzielle Fehlerquellen etc.
 
-Autoren
--------
+
+## Javadoc
+
+`./gradle javadoc` erstellt die javadoc-Dateien, die danach in `build/docs/javadoc` zu finden sind.
+
+
+## Autoren
 
 - Louise
 - Phuong
-- Quynh
 - Marten

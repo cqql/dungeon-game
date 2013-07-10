@@ -1,11 +1,11 @@
 package dungeon.ui;
 
 import dungeon.game.messages.DefeatEvent;
+import dungeon.game.messages.TradeWithMerchant;
 import dungeon.game.messages.WinEvent;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.models.Merchant;
 import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.ShowGame;
 import dungeon.ui.messages.ShowInventory;
@@ -68,7 +68,7 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(DEFEAT_SCREEN);
     } else if (message instanceof ShowInventory) {
       this.showScreen(INVENTORY_SCREEN);
-    } else if (message instanceof Merchant.InteractTransform) {
+    } else if (message instanceof TradeWithMerchant) {
       this.showScreen(SHOP_SCREEN);
     }
   }

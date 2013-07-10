@@ -102,21 +102,6 @@ public class Merchant implements Spatial {
     return this.id;
   }
 
-  /**
-   * This does not actually transform anything, but tells the UI to show the shop screen.
-   */
-  public static class InteractTransform implements Transform {
-    private final Merchant merchant;
-
-    public InteractTransform (Merchant merchant) {
-      this.merchant = merchant;
-    }
-
-    public Merchant getMerchant () {
-      return this.merchant;
-    }
-  }
-
   public static class BuyItemTransform implements Transform {
     private final Merchant merchant;
 
