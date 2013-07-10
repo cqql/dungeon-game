@@ -10,10 +10,20 @@ import dungeon.messages.Message;
  * @see EndCommand
  */
 public class StartCommand implements Message {
+  private final int playerId;
+
   private final Command command;
 
-  public StartCommand (Command command) {
+  public StartCommand (int playerId, Command command) {
+    this.playerId = playerId;
     this.command = command;
+  }
+
+  /**
+   * Who started the command?
+   */
+  public int getPlayerId () {
+    return playerId;
   }
 
   public Command getCommand () {
