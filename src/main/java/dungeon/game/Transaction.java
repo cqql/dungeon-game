@@ -2,6 +2,7 @@ package dungeon.game;
 
 import dungeon.messages.Message;
 import dungeon.models.World;
+import dungeon.models.messages.IdentityTransform;
 import dungeon.models.messages.Transform;
 
 import java.util.ArrayList;
@@ -49,6 +50,10 @@ public class Transaction {
    * Adds a message to the current transaction.
    */
   public void push (Message message) {
+    if (message instanceof IdentityTransform) {
+      return;
+    }
+
     this.pendingMessages.add(message);
   }
 
