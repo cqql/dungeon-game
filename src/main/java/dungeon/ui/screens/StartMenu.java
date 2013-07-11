@@ -53,8 +53,16 @@ public class StartMenu extends JPanel {
     this.joinNetworkButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
+        String server = "localhost";
+
+        server = JOptionPane.showInputDialog(null, "Adresse des Servers", server);
+
+        if (server == null) {
+          return;
+        }
+
         try {
-          StartMenu.this.client.connect("localhost", 6077);
+          StartMenu.this.client.connect(server, 6077);
         } catch (Client.ConnectException e1) {
           JOptionPane.showMessageDialog(null, "Es konnte keine Verbindung hergestellt werden");
         }
