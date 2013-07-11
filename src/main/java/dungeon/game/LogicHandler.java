@@ -1,6 +1,7 @@
 package dungeon.game;
 
 import dungeon.game.messages.DefeatEvent;
+import dungeon.game.messages.PlayerJoinCommand;
 import dungeon.game.messages.WinEvent;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
@@ -67,8 +68,8 @@ public class LogicHandler implements MessageHandler {
       } else if (message instanceof SellCommand) {
         this.logic.sellItem(playerId, ((SellCommand)message).getMerchant(), ((SellCommand)message).getItem());
       }
-    } else if (message instanceof World.AddPlayerTransform) {
-      this.logic.addPlayer((World.AddPlayerTransform)message);
+    } else if (message instanceof PlayerJoinCommand) {
+      this.logic.addPlayer(((PlayerJoinCommand)message).getPlayer());
     } else if (message == MenuCommand.START_GAME) {
       this.paused = false;
     } else if (message == LifecycleEvent.INITIALIZE) {

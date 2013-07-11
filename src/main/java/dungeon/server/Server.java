@@ -3,12 +3,16 @@ package dungeon.server;
 import dungeon.game.LogicHandler;
 import dungeon.load.WorldLoader;
 import dungeon.messages.Mailman;
+import dungeon.messages.Message;
+import dungeon.messages.MessageHandler;
 import dungeon.models.World;
 import dungeon.pulse.PulseGenerator;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,7 +32,9 @@ public class Server implements Runnable {
 
   private final int port;
 
-  private final ExecutorService connections = Executors.newCachedThreadPool();
+  private final List<ClientConnection> connections = new ArrayList<>();
+
+  private final ExecutorService connectionExecutor = Executors.newCachedThreadPool();
 
   private final AtomicBoolean running = new AtomicBoolean();
 
@@ -49,6 +55,15 @@ public class Server implements Runnable {
 
     this.mailman.addMailbox(new PulseGenerator(this.mailman));
     this.mailman.addHandler(this.logicHandler);
+
+    this.mailman.addHandler(new MessageHandler() {
+      @Override
+      public void handleMessage (Message message) {
+        for (ClientConnection connection : Server.this.connections) {
+          connection.send(message);
+        }
+      }
+    });
 
     this.thread.setDaemon(true);
   }
@@ -80,7 +95,10 @@ public class Server implements Runnable {
       }
 
       try {
-        this.connections.execute(new ClientConnection(connection, this.logicHandler));
+        ClientConnection clientConnection = new ClientConnection(connection, this.mailman, this.logicHandler);
+
+        this.connections.add(clientConnection);
+        this.connectionExecutor.execute(clientConnection);
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Could not setup connection", e);
       }

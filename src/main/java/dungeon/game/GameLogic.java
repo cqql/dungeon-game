@@ -37,6 +37,8 @@ public class GameLogic {
    */
   private int nextId = 1000000;
 
+  private final List<Player> joiningPlayers = new ArrayList<>();
+
   private Map<Integer, PlayerState> playerStates = new HashMap<>();
 
   private GameState gameState = GameState.PLAYING;
@@ -184,10 +186,8 @@ public class GameLogic {
   /**
    * Create a new player state, when a player joins the game.
    */
-  public void addPlayer (World.AddPlayerTransform transform) {
-    this.world = this.world.apply(transform);
-
-    this.playerStates.put(transform.player.getId(), new PlayerState());
+  public void addPlayer (Player player) {
+    this.joiningPlayers.add(player);
   }
 
   /**
@@ -231,6 +231,7 @@ public class GameLogic {
     this.handleAttack(transaction);
     this.handleIceBolt(transaction);
     this.handleInteractionWithNpcs(transaction);
+    this.joinPlayers(transaction);
 
     this.world = transaction.getWorld();
 
@@ -698,6 +699,14 @@ public class GameLogic {
         }
       }
     }
+  }
+
+  private void joinPlayers (Transaction transaction) {
+    for (Player player : this.joiningPlayers) {
+      transaction.pushAndCommit(new World.AddPlayerTransform(player));
+    }
+
+    this.joiningPlayers.clear();
   }
 
   private PlayerState getPlayerState (int playerId) {

@@ -43,4 +43,8 @@ public class ServerConnection {
   public Object read () throws IOException, ClassNotFoundException {
     return this.inputStream.readObject();
   }
+
+  public void write (Object object) throws IOException {
+    this.outputStream.writeObject(object);
+  }
 }

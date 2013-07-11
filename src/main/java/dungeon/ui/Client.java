@@ -1,5 +1,6 @@
 package dungeon.ui;
 
+import dungeon.game.messages.PlayerJoinCommand;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
@@ -69,17 +70,6 @@ public class Client implements MessageHandler {
     }
   }
 
-  /**
-   * Adds the player to the world and starts the game.
-   */
-  public void startGame () {
-    Player player = new Player("Link");
-
-    this.playerId.set(player.getId());
-    this.send(new World.AddPlayerTransform(player));
-    this.send(MenuCommand.START_GAME);
-  }
-
   public void connect (String host, int port) {
     try {
       this.serverConnection = new ServerConnection(host, port);
@@ -95,6 +85,15 @@ public class Client implements MessageHandler {
       LOGGER.log(Level.WARNING, "IOError", e);
     } catch (ClassNotFoundException e) {
       LOGGER.log(Level.WARNING, "Class not found", e);
+    }
+
+    LOGGER.info("Join player");
+    Player player = new Player("Link");
+    this.playerId.set(player.getId());
+    try {
+      this.serverConnection.write(new PlayerJoinCommand(player));
+    } catch (IOException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     }
 
     this.send(MenuCommand.START_GAME);

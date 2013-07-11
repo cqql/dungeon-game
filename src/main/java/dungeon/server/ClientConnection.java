@@ -1,11 +1,15 @@
 package dungeon.server;
 
 import dungeon.game.LogicHandler;
+import dungeon.game.messages.PlayerJoinCommand;
+import dungeon.messages.Mailman;
+import dungeon.messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,14 +21,19 @@ public class ClientConnection implements Runnable {
 
   private final Socket socket;
 
+  private final Mailman mailman;
+
   private final ObjectInputStream inputStream;
 
   private final ObjectOutputStream outputStream;
 
   private final LogicHandler logicHandler;
 
-  public ClientConnection (Socket socket, LogicHandler logicHandler) throws IOException {
+  private final AtomicBoolean running = new AtomicBoolean(false);
+
+  public ClientConnection (Socket socket, Mailman mailman, LogicHandler logicHandler) throws IOException {
     this.socket = socket;
+    this.mailman = mailman;
     this.logicHandler = logicHandler;
 
     try {
@@ -39,15 +48,39 @@ public class ClientConnection implements Runnable {
 
   @Override
   public void run () {
+    this.running.set(true);
+
     LOGGER.info("Send world object");
     this.send(this.logicHandler.getWorld());
+
+    while (this.running.get()) {
+      Object received = this.read();
+
+      if (received == null) {
+        continue;
+      } else if (received instanceof PlayerJoinCommand) {
+        this.mailman.send((Message)received);
+      }
+    }
   }
 
-  private void send (Object object) {
+  public void send (Object object) {
     try {
       this.outputStream.writeObject(object);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not send object " + object, e);
+    }
+  }
+
+  private Object read () {
+    try {
+      return this.inputStream.readObject();
+    } catch (IOException e) {
+      LOGGER.log(Level.WARNING, "Network IO error", e);
+      return null;
+    } catch (ClassNotFoundException e) {
+      LOGGER.log(Level.WARNING, "Received object of unkown class", e);
+      return null;
     }
   }
 }
