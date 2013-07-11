@@ -3,6 +3,7 @@ package dungeon.server;
 import dungeon.game.LogicHandler;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
+import dungeon.server.commands.CloseConnection;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -56,13 +57,50 @@ public class ClientConnection implements Runnable {
     this.send(this.logicHandler.getWorld());
 
     while (this.running.get()) {
-      Object received = this.read();
+      Object received = null;
 
-      if (received == null) {
-        continue;
-      } else if (received instanceof Message) {
-        this.mailman.send((Message)received);
+      try {
+        received = this.read();
+      } catch (IOException e) {
+        LOGGER.log(Level.WARNING, "Connection is broken", e);
+        this.stop();
+      } catch (ClassNotFoundException e) {
+        LOGGER.log(Level.WARNING, "Received object of unkown class", e);
       }
+
+      if (received instanceof Message) {
+        this.mailman.send((Message)received);
+      } else if (received instanceof CloseConnection) {
+        this.stop();
+      }
+    }
+  }
+
+  public void stop () {
+    if (!this.running.get()) {
+      return;
+    }
+
+    LOGGER.info("Shutdown client connection");
+
+    this.running.set(false);
+
+    try {
+      this.inputStream.close();
+    } catch (IOException e) {
+      LOGGER.log(Level.INFO, "Could not close stream", e);
+    }
+
+    try {
+      this.outputStream.close();
+    } catch (IOException e) {
+      LOGGER.log(Level.INFO, "Could not close stream", e);
+    }
+
+    try {
+      this.socket.close();
+    } catch (IOException e) {
+      LOGGER.log(Level.INFO, "Could not close socket", e);
     }
   }
 
@@ -74,15 +112,7 @@ public class ClientConnection implements Runnable {
     }
   }
 
-  private Object read () {
-    try {
-      return this.inputStream.readObject();
-    } catch (IOException e) {
-      LOGGER.log(Level.WARNING, "Network IO error", e);
-      return null;
-    } catch (ClassNotFoundException e) {
-      LOGGER.log(Level.WARNING, "Received object of unkown class", e);
-      return null;
-    }
+  private Object read () throws IOException, ClassNotFoundException {
+    return this.inputStream.readObject();
   }
 }

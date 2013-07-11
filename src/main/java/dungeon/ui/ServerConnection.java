@@ -1,5 +1,7 @@
 package dungeon.ui;
 
+import dungeon.server.commands.CloseConnection;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -49,6 +51,12 @@ public class ServerConnection {
   }
 
   public void close () {
+    try {
+      this.write(new CloseConnection());
+    } catch (IOException e) {
+      LOGGER.log(Level.INFO, "Could not close connection", e);
+    }
+
     try {
       this.inputStream.close();
     } catch (IOException e) {

@@ -9,10 +9,12 @@ import dungeon.models.Player;
 import dungeon.models.Room;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
+import dungeon.server.Server;
 import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.PlayerMessage;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -36,6 +38,8 @@ public class Client implements MessageHandler {
   private ServerConnection serverConnection;
 
   private final MessageForwarder messageForwarder = new MessageForwarder(this);
+
+  private Server server;
 
   public Client (Mailman mailman) {
     this.mailman = mailman;
@@ -134,9 +138,34 @@ public class Client implements MessageHandler {
     this.send(MenuCommand.START_GAME);
   }
 
+  public void startServer (int port) {
+    try {
+      this.server = new Server(port);
+    } catch (Exception ex) {
+      LOGGER.warning("Could not start server");
+      return;
+    }
+
+    server.start();
+
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e1) {
+      // Ignore
+    }
+
+    this.connect("localhost", port);
+  }
+
   private void stop () {
+    LOGGER.info("Shutdown client");
+
     this.messageForwarder.stop();
     this.serverConnection.close();
+
+    if (this.server != null) {
+      this.server.stop();
+    }
   }
 
   /**
@@ -164,8 +193,11 @@ public class Client implements MessageHandler {
           Object received = this.client.serverConnection.read();
 
           if (received instanceof Message) {
-            this.client.mailman.send((Message) received);
+            this.client.mailman.send((Message)received);
           }
+        } catch (SocketException e) {
+          LOGGER.log(Level.INFO, "The socket has been closed", e);
+          this.stop();
         } catch (IOException e) {
           LOGGER.log(Level.WARNING, "Something failed while receiving from the server", e);
         } catch (ClassNotFoundException e) {

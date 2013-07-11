@@ -14,6 +14,7 @@ import dungeon.pulse.PulseGenerator;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -74,6 +75,7 @@ public class Server implements Runnable {
 
     try {
       serverSocket = new ServerSocket(this.port);
+      serverSocket.setSoTimeout(1000);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not bind port " + this.port, e);
       this.stopMailman();
@@ -81,17 +83,19 @@ public class Server implements Runnable {
     }
 
     while (this.running.get()) {
-      Socket socket;
-
       try {
-        socket = serverSocket.accept();
+        Socket socket = serverSocket.accept();
+
+        this.setUpConnection(socket);
+      } catch (SocketTimeoutException e) {
+        // This just happens when no new client has connected for 1 second, so that the server does not hang forever.
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Failed while connecting", e);
-        continue;
       }
-
-      this.setUpConnection(socket);
     }
+
+    this.closeConnections();
+    this.stopMailman();
   }
 
   /**
@@ -99,6 +103,10 @@ public class Server implements Runnable {
    */
   public void start () {
     this.thread.start();
+  }
+
+  public void stop () {
+    this.running.set(false);
   }
 
   private void startMailman () {
@@ -122,6 +130,12 @@ public class Server implements Runnable {
       this.connectionExecutor.execute(clientConnection);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not setup connection", e);
+    }
+  }
+
+  private void closeConnections () {
+    for (ClientConnection connection : this.connections) {
+      connection.stop();
     }
   }
 
