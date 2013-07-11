@@ -1,9 +1,11 @@
 package dungeon.util;
 
+import java.io.Serializable;
+
 /**
  * An immutable 2D-vector.
  */
-public class Vector {
+public class Vector implements Serializable {
   private final double x;
 
   private final double y;

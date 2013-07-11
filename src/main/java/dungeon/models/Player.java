@@ -327,7 +327,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, weaponId, position, viewingDirection, savePointRoomId, savePointPosition);
   }
 
-  public static class MoveTransform implements Transform {
+  public static class MoveTransform implements Transform, Serializable {
     private final int id;
 
     private final int xDelta;
@@ -341,7 +341,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class HitpointTransform implements Transform {
+  public static class HitpointTransform implements Transform, Serializable {
     private final int id;
 
     private final int delta;
@@ -352,7 +352,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class LivesTransform implements Transform {
+  public static class LivesTransform implements Transform, Serializable {
     private final int id;
 
     private final int delta;
@@ -363,7 +363,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class TeleportTransform implements Transform {
+  public static class TeleportTransform implements Transform, Serializable {
     private final int id;
 
     private final String roomId;
@@ -380,7 +380,7 @@ public class Player implements Spatial, Identifiable, Serializable {
   /**
    * This has no playerId, because all players have the same save point.
    */
-  public static class SavePointTransform implements Transform {
+  public static class SavePointTransform implements Transform, Serializable {
     private final String roomId;
 
     private final Position position;
@@ -391,7 +391,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class MoneyTransform implements Transform {
+  public static class MoneyTransform implements Transform, Serializable {
     private final int id;
 
     private final int delta;
@@ -402,7 +402,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class AddItemTransform implements Transform {
+  public static class AddItemTransform implements Transform, Serializable {
     private final int id;
 
     private final Item item;
@@ -413,7 +413,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class ManaTransform implements Transform {
+  public static class ManaTransform implements Transform, Serializable {
     private final int id;
 
     private final int delta;
@@ -424,7 +424,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class RemoveItemTransform implements Transform {
+  public static class RemoveItemTransform implements Transform, Serializable {
     private final int id;
 
     private final Item item;
@@ -435,7 +435,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class EquipWeaponTransform implements Transform {
+  public static class EquipWeaponTransform implements Transform, Serializable {
     private final int id;
 
     private final int weaponId;
@@ -446,7 +446,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class ViewingDirectionTransform implements Transform {
+  public static class ViewingDirectionTransform implements Transform, Serializable {
     private final int id;
 
     private final Direction direction;
@@ -460,7 +460,7 @@ public class Player implements Spatial, Identifiable, Serializable {
   /**
    * This has no playerId, because when one player advances, all do.
    */
-  public static class AdvanceLevelTransform implements Transform {
+  public static class AdvanceLevelTransform implements Transform, Serializable {
     private final String levelId;
 
     private final String roomId;

@@ -111,7 +111,7 @@ public class World implements Serializable {
     return new World(levels, players);
   }
 
-  public static class AddPlayerTransform implements Transform {
+  public static class AddPlayerTransform implements Transform, Serializable {
     public final Player player;
 
     public AddPlayerTransform (Player player) {
