@@ -60,8 +60,6 @@ public class Server implements Runnable {
     this.mailman.addMailbox(new PulseGenerator(this.mailman));
     this.mailman.addHandler(new MessageBroadcaster(this));
     this.mailman.addHandler(this.logicHandler);
-
-    this.thread.setDaemon(true);
   }
 
   public void run () {

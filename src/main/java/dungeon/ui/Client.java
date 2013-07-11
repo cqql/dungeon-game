@@ -161,7 +161,10 @@ public class Client implements MessageHandler {
     LOGGER.info("Shutdown client");
 
     this.messageForwarder.stop();
-    this.serverConnection.close();
+
+    if (this.serverConnection != null) {
+      this.serverConnection.close();
+    }
 
     if (this.server != null) {
       this.server.stop();
