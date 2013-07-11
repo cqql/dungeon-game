@@ -2,6 +2,7 @@ package dungeon.server;
 
 import dungeon.game.LogicHandler;
 import dungeon.load.WorldLoader;
+import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
@@ -64,42 +65,31 @@ public class Server implements Runnable {
   public void run () {
     this.running.set(true);
 
-    LOGGER.info("Start the event system");
-    Thread eventThread = new Thread(this.mailman);
-    eventThread.setDaemon(true);
-    eventThread.start();
-
-    ServerSocket serverSocket;
+    this.startMailman();
 
     LOGGER.info("Start server on port " + this.port);
+
+    ServerSocket serverSocket;
 
     try {
       serverSocket = new ServerSocket(this.port);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not bind port " + this.port, e);
+      this.stopMailman();
       return;
     }
 
     while (this.running.get()) {
-      Socket connection;
+      Socket socket;
 
       try {
-        connection = serverSocket.accept();
-
-        LOGGER.info("Connection from " + connection.getRemoteSocketAddress());
+        socket = serverSocket.accept();
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Failed while connecting", e);
         continue;
       }
 
-      try {
-        ClientConnection clientConnection = new ClientConnection(connection, this.mailman, this.logicHandler);
-
-        this.connections.add(clientConnection);
-        this.connectionExecutor.execute(clientConnection);
-      } catch (IOException e) {
-        LOGGER.log(Level.WARNING, "Could not setup connection", e);
-      }
+      this.setUpConnection(socket);
     }
   }
 
@@ -110,10 +100,34 @@ public class Server implements Runnable {
     this.thread.start();
   }
 
+  private void startMailman () {
+    LOGGER.info("Start the event system");
+    Thread eventThread = new Thread(this.mailman);
+    eventThread.start();
+  }
+
+  private void stopMailman () {
+    LOGGER.info("Stop the event system");
+    this.mailman.send(LifecycleEvent.SHUTDOWN);
+  }
+
+  private void setUpConnection (Socket socket) {
+    LOGGER.info("Connection from " + socket.getRemoteSocketAddress());
+
+    try {
+      ClientConnection clientConnection = new ClientConnection(socket, this.mailman, this.logicHandler);
+
+      this.connections.add(clientConnection);
+      this.connectionExecutor.execute(clientConnection);
+    } catch (IOException e) {
+      LOGGER.log(Level.WARNING, "Could not setup connection", e);
+    }
+  }
+
   /**
    * Broadcasts messages to all connected clients.
    */
-  public static class MessageBroadcaster implements MessageHandler {
+  private static class MessageBroadcaster implements MessageHandler {
     private final Server server;
 
     public MessageBroadcaster (Server server) {

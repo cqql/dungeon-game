@@ -1,7 +1,6 @@
 package dungeon.server;
 
 import dungeon.game.LogicHandler;
-import dungeon.game.messages.PlayerJoinCommand;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 
@@ -14,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Handles the connection to one client.
+ * Sends messages to the client and injects all received messages into the server mailman.
  */
 public class ClientConnection implements Runnable {
   private static final Logger LOGGER = Logger.getLogger(ClientConnection.class.getName());
