@@ -40,14 +40,24 @@ public class StartMenu extends JPanel {
     this.startButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        StartMenu.this.client.startServer(6077);
+        try {
+          StartMenu.this.client.startServer(6077);
+        } catch (Client.ServerStartException e1) {
+          JOptionPane.showMessageDialog(null, "Spiel konnte nicht gestartet werden");
+        } catch (Client.ConnectException e1) {
+          JOptionPane.showMessageDialog(null, "Spiel konnte nicht gestartet werden");
+        }
       }
     });
 
     this.joinNetworkButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        StartMenu.this.client.connect("localhost", 6077);
+        try {
+          StartMenu.this.client.connect("localhost", 6077);
+        } catch (Client.ConnectException e1) {
+          JOptionPane.showMessageDialog(null, "Es konnte keine Verbindung hergestellt werden");
+        }
       }
     });
 

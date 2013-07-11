@@ -97,11 +97,12 @@ public class Client implements MessageHandler {
     }
   }
 
-  public void connect (String host, int port) {
+  public void connect (String host, int port) throws ConnectException {
     try {
       this.serverConnection = new ServerConnection(host, port);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not connect", e);
+      throw new ConnectException();
     }
 
     LOGGER.info("Acquire ID");
@@ -109,9 +110,11 @@ public class Client implements MessageHandler {
     try {
       this.playerId.set((Integer)this.serverConnection.read());
     } catch (IOException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      LOGGER.warning("Could not read from connection");
+      throw new ConnectException();
     } catch (ClassNotFoundException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      LOGGER.warning("Expected Integer");
+      throw new ConnectException();
     }
 
     LOGGER.info("Synchronize world");
@@ -120,8 +123,10 @@ public class Client implements MessageHandler {
       this.world.set((World)this.serverConnection.read());
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "IOError", e);
+      throw new ConnectException();
     } catch (ClassNotFoundException e) {
-      LOGGER.log(Level.WARNING, "Class not found", e);
+      LOGGER.log(Level.WARNING, "Expected World", e);
+      throw new ConnectException();
     }
 
     LOGGER.info("Join player");
@@ -131,6 +136,7 @@ public class Client implements MessageHandler {
       this.serverConnection.write(new PlayerJoinCommand(player));
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not join", e);
+      throw new ConnectException();
     }
 
     this.messageForwarder.start();
@@ -138,12 +144,12 @@ public class Client implements MessageHandler {
     this.send(MenuCommand.START_GAME);
   }
 
-  public void startServer (int port) {
+  public void startServer (int port) throws ServerStartException, ConnectException {
     try {
       this.server = new Server(port);
     } catch (Exception e) {
-      LOGGER.warning("Could not start server");
-      return;
+      LOGGER.log(Level.WARNING, "Could not start server", e);
+      throw new ServerStartException();
     }
 
     this.server.start();
@@ -216,5 +222,13 @@ public class Client implements MessageHandler {
     public void stop () {
       this.running.set(false);
     }
+  }
+
+  public static class ServerStartException extends Exception {
+
+  }
+
+  public static class ConnectException extends Exception {
+
   }
 }
