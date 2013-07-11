@@ -93,6 +93,7 @@ public class Server implements Runnable {
     }
 
     this.closeConnections();
+    this.connectionExecutor.shutdown();
     this.stopMailman();
   }
 

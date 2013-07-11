@@ -199,7 +199,7 @@ public class Client implements MessageHandler {
             this.client.mailman.send((Message)received);
           }
         } catch (SocketException e) {
-          LOGGER.log(Level.INFO, "The socket has been closed", e);
+          LOGGER.log(Level.INFO, "The socket has been closed");
           this.stop();
         } catch (IOException e) {
           LOGGER.log(Level.WARNING, "Something failed while receiving from the server", e);
