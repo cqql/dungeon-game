@@ -44,7 +44,7 @@ public class StartMenu extends JPanel {
     this.startButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        Server server = null;
+        Server server;
 
         try {
           server = new Server(6077);
