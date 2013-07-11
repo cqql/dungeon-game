@@ -12,13 +12,13 @@ import java.awt.event.MouseEvent;
  * The start menu that shows things like a start and quit button.
  */
 public class StartMenu extends JPanel {
-  private final JButton startButton;
+  private final JButton startButton = new JButton("Lokales Spiel starten");
 
-  private final JButton startNetworkButton;
+  private final JButton startNetworkButton = new JButton("Netzwerkspiel starten");
 
-  private final JButton joinNetworkButton;
+  private final JButton joinNetworkButton = new JButton("Netzwerkspiel beitreten");
 
-  private final JButton quitButton;
+  private final JButton quitButton = new JButton("Beenden");
 
   private final Client client;
 
@@ -26,11 +26,6 @@ public class StartMenu extends JPanel {
     super(new GridLayout(4, 1));
 
     this.client = client;
-
-    this.startButton = new JButton("Lokales Spiel starten");
-    this.startNetworkButton = new JButton("Netzwerkspiel starten");
-    this.joinNetworkButton = new JButton("Netzwerkspiel beitreten");
-    this.quitButton = new JButton("Beenden");
 
     this.add(this.startButton);
     this.add(this.startNetworkButton);
