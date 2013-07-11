@@ -48,6 +48,10 @@ public class LogicHandler implements MessageHandler {
     return this.logic.getWorld();
   }
 
+  public int nextId () {
+    return this.logic.nextId();
+  }
+
   @Override
   public void handleMessage (Message message) {
     if (message instanceof Pulse) {

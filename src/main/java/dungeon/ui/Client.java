@@ -94,6 +94,16 @@ public class Client implements MessageHandler {
       LOGGER.log(Level.WARNING, "Could not connect", e);
     }
 
+    LOGGER.info("Acquire ID");
+
+    try {
+      this.playerId.set((Integer)this.serverConnection.read());
+    } catch (IOException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    }
+
     LOGGER.info("Synchronize world");
 
     try {
@@ -105,8 +115,7 @@ public class Client implements MessageHandler {
     }
 
     LOGGER.info("Join player");
-    Player player = new Player("Link");
-    this.playerId.set(player.getId());
+    Player player = new Player(this.playerId.get(), "Link");
 
     try {
       this.serverConnection.write(new PlayerJoinCommand(player));

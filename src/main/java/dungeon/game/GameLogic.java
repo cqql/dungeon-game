@@ -724,7 +724,7 @@ public class GameLogic {
   /**
    * Returns a free ID.
    */
-  private int nextId () {
+  public int nextId () {
     return this.nextId++;
   }
 

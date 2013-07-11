@@ -49,6 +49,9 @@ public class ClientConnection implements Runnable {
   public void run () {
     this.running.set(true);
 
+    LOGGER.info("Send ID");
+    this.send(this.logicHandler.nextId());
+
     LOGGER.info("Send world object");
     this.send(this.logicHandler.getWorld());
 
