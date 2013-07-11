@@ -58,7 +58,6 @@ public class ClientConnection implements Runnable {
       if (received == null) {
         continue;
       } else if (received instanceof Message) {
-        LOGGER.info("Received " + received);
         this.mailman.send((Message)received);
       }
     }
