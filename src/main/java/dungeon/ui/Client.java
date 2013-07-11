@@ -12,6 +12,7 @@ import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.PlayerMessage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,6 +65,13 @@ public class Client implements MessageHandler {
    */
   public Player getPlayer () {
     return this.world.get().getPlayer(this.getPlayerId());
+  }
+
+  /**
+   * @return All connected players
+   */
+  public List<Player> getPlayers () {
+    return this.world.get().getPlayers();
   }
 
   /**
