@@ -47,4 +47,24 @@ public class ServerConnection {
   public void write (Object object) throws IOException {
     this.outputStream.writeObject(object);
   }
+
+  public void close () {
+    try {
+      this.inputStream.close();
+    } catch (IOException e) {
+      LOGGER.log(Level.INFO, "Could not close stream", e);
+    }
+
+    try {
+      this.outputStream.close();
+    } catch (IOException e) {
+      LOGGER.log(Level.INFO, "Could not close stream", e);
+    }
+
+    try {
+      this.socket.close();
+    } catch (IOException e) {
+      LOGGER.log(Level.INFO, "Could not close socket", e);
+    }
+  }
 }

@@ -1,6 +1,7 @@
 package dungeon.ui;
 
 import dungeon.game.messages.PlayerJoinCommand;
+import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
@@ -13,6 +14,7 @@ import dungeon.ui.messages.PlayerMessage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +35,8 @@ public class Client implements MessageHandler {
 
   private ServerConnection serverConnection;
 
+  private final MessageForwarder messageForwarder = new MessageForwarder(this);
+
   public Client (Mailman mailman) {
     this.mailman = mailman;
   }
@@ -49,6 +53,8 @@ public class Client implements MessageHandler {
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Could not send message to server", e);
       }
+    } else if (message == LifecycleEvent.SHUTDOWN) {
+      this.stop();
     }
   }
 
@@ -123,27 +129,57 @@ public class Client implements MessageHandler {
       LOGGER.log(Level.WARNING, "Could not join", e);
     }
 
-    Thread messageForwarder = new Thread(new Runnable() {
-      @Override
-      public void run () {
-        while (true) {
-          try {
-            Object received = Client.this.serverConnection.read();
-
-            if (received instanceof Message) {
-              Client.this.mailman.send((Message) received);
-            }
-          } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-          } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-          }
-        }
-      }
-    });
-
-    messageForwarder.start();
+    this.messageForwarder.start();
 
     this.send(MenuCommand.START_GAME);
+  }
+
+  private void stop () {
+    this.messageForwarder.stop();
+    this.serverConnection.close();
+  }
+
+  /**
+   * Injects messages from the server into the local event system.
+   */
+  private static class MessageForwarder implements Runnable {
+    private static final Logger LOGGER = Logger.getLogger(MessageForwarder.class.getName());
+
+    private final Client client;
+
+    private final Thread thread = new Thread(this);
+
+    private final AtomicBoolean running = new AtomicBoolean(false);
+
+    private MessageForwarder (Client client) {
+      this.client = client;
+    }
+
+    @Override
+    public void run () {
+      this.running.set(true);
+
+      while (this.running.get()) {
+        try {
+          Object received = this.client.serverConnection.read();
+
+          if (received instanceof Message) {
+            this.client.mailman.send((Message) received);
+          }
+        } catch (IOException e) {
+          LOGGER.log(Level.WARNING, "Something failed while receiving from the server", e);
+        } catch (ClassNotFoundException e) {
+          LOGGER.log(Level.WARNING, "Received message of unknown class", e);
+        }
+      }
+    }
+
+    public void start () {
+      this.thread.start();
+    }
+
+    public void stop () {
+      this.running.set(false);
+    }
   }
 }
