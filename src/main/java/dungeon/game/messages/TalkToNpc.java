@@ -17,7 +17,7 @@ public class TalkToNpc implements ClientCommand {
   }
 
   public int getPlayerId () {
-    return playerId;
+    return this.playerId;
   }
 
   public NPC getNpc () {

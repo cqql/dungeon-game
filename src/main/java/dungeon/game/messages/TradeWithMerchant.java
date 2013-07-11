@@ -17,7 +17,7 @@ public class TradeWithMerchant implements ClientCommand {
   }
 
   public int getPlayerId () {
-    return playerId;
+    return this.playerId;
   }
 
   public Merchant getMerchant () {

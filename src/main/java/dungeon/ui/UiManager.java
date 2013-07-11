@@ -72,7 +72,7 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(DEFEAT_SCREEN);
     } else if (message instanceof ShowInventory) {
       this.showScreen(INVENTORY_SCREEN);
-    } else if (message instanceof TradeWithMerchant && ((TradeWithMerchant)message).getPlayerId() == client.getPlayerId()) {
+    } else if (message instanceof TradeWithMerchant && ((TradeWithMerchant)message).getPlayerId() == this.client.getPlayerId()) {
       this.showScreen(SHOP_SCREEN);
     }
   }

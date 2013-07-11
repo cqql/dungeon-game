@@ -33,8 +33,8 @@ public class ServerConnection {
     }
 
     try {
-      this.outputStream = new ObjectOutputStream(socket.getOutputStream());
-      this.inputStream = new ObjectInputStream(socket.getInputStream());
+      this.outputStream = new ObjectOutputStream(this.socket.getOutputStream());
+      this.inputStream = new ObjectInputStream(this.socket.getInputStream());
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not create in/out streams", e);
 

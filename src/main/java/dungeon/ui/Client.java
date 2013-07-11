@@ -141,16 +141,16 @@ public class Client implements MessageHandler {
   public void startServer (int port) {
     try {
       this.server = new Server(port);
-    } catch (Exception ex) {
+    } catch (Exception e) {
       LOGGER.warning("Could not start server");
       return;
     }
 
-    server.start();
+    this.server.start();
 
     try {
       Thread.sleep(500);
-    } catch (InterruptedException e1) {
+    } catch (InterruptedException e) {
       // Ignore
     }
 
@@ -174,7 +174,7 @@ public class Client implements MessageHandler {
   /**
    * Injects messages from the server into the local event system.
    */
-  private static class MessageForwarder implements Runnable {
+  private static final class MessageForwarder implements Runnable {
     private static final Logger LOGGER = Logger.getLogger(MessageForwarder.class.getName());
 
     private final Client client;

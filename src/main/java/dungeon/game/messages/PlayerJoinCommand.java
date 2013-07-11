@@ -13,6 +13,6 @@ public class PlayerJoinCommand implements Message, Serializable {
   }
 
   public Player getPlayer () {
-    return player;
+    return this.player;
   }
 }
