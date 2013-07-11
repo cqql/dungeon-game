@@ -6,7 +6,7 @@ import dungeon.ui.Client;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
@@ -18,20 +18,28 @@ public class StartMenu extends JPanel {
 
   private final JButton startButton;
 
+  private final JButton startNetworkButton;
+
+  private final JButton joinNetworkButton;
+
   private final JButton quitButton;
 
   private final Client client;
 
   public StartMenu (Client client) {
-    super(new BorderLayout());
+    super(new GridLayout(4, 1));
 
     this.client = client;
 
-    this.startButton = new JButton("Start");
+    this.startButton = new JButton("Lokales Spiel starten");
+    this.startNetworkButton = new JButton("Netzwerkspiel starten");
+    this.joinNetworkButton = new JButton("Netzwerkspiel beitreten");
     this.quitButton = new JButton("Beenden");
 
-    this.add(this.startButton, BorderLayout.NORTH);
-    this.add(this.quitButton, BorderLayout.SOUTH);
+    this.add(this.startButton);
+    this.add(this.startNetworkButton);
+    this.add(this.joinNetworkButton);
+    this.add(this.quitButton);
 
     this.startButton.addMouseListener(new MouseInputAdapter() {
       @Override
@@ -53,6 +61,13 @@ public class StartMenu extends JPanel {
           // Ignore
         }
 
+        StartMenu.this.client.connect("localhost", 6077);
+      }
+    });
+
+    this.joinNetworkButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
         StartMenu.this.client.connect("localhost", 6077);
       }
     });
