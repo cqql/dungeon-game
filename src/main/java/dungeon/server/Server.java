@@ -108,6 +108,10 @@ public class Server implements Runnable {
     this.running.set(false);
   }
 
+  public void removeConnection (ClientConnection connection) {
+    this.connections.remove(connection);
+  }
+
   private void startMailman () {
     LOGGER.info("Start the event system");
     Thread eventThread = new Thread(this.mailman);
@@ -123,7 +127,7 @@ public class Server implements Runnable {
     LOGGER.info("Connection from " + socket.getRemoteSocketAddress());
 
     try {
-      ClientConnection clientConnection = new ClientConnection(socket, this.mailman, this.logicHandler);
+      ClientConnection clientConnection = new ClientConnection(this, socket, this.mailman, this.logicHandler);
 
       this.connections.add(clientConnection);
       this.connectionExecutor.execute(clientConnection);

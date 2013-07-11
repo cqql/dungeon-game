@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 public class ClientConnection implements Runnable {
   private static final Logger LOGGER = Logger.getLogger(ClientConnection.class.getName());
 
+  private final Server server;
+
   private final Socket socket;
 
   private final Mailman mailman;
@@ -31,7 +33,8 @@ public class ClientConnection implements Runnable {
 
   private final AtomicBoolean running = new AtomicBoolean(false);
 
-  public ClientConnection (Socket socket, Mailman mailman, LogicHandler logicHandler) throws IOException {
+  public ClientConnection (Server server, Socket socket, Mailman mailman, LogicHandler logicHandler) throws IOException {
+    this.server = server;
     this.socket = socket;
     this.mailman = mailman;
     this.logicHandler = logicHandler;
@@ -84,6 +87,8 @@ public class ClientConnection implements Runnable {
     LOGGER.info("Shutdown client connection");
 
     this.running.set(false);
+
+    this.server.removeConnection(this);
 
     try {
       this.inputStream.close();
