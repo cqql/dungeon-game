@@ -9,6 +9,7 @@ import dungeon.models.Room;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
 import dungeon.ui.messages.MenuCommand;
+import dungeon.ui.messages.PlayerMessage;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,6 +40,14 @@ public class Client implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
       this.world.set(this.world.get().apply((Transform)message));
+    } else if (message instanceof PlayerMessage
+      && ((PlayerMessage) message).getPlayerId() == this.playerId.get()
+      && this.serverConnection != null) {
+      try {
+        this.serverConnection.write(message);
+      } catch (IOException e) {
+        LOGGER.log(Level.WARNING, "Could not send message to server", e);
+      }
     }
   }
 
@@ -90,10 +99,11 @@ public class Client implements MessageHandler {
     LOGGER.info("Join player");
     Player player = new Player("Link");
     this.playerId.set(player.getId());
+
     try {
       this.serverConnection.write(new PlayerJoinCommand(player));
     } catch (IOException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      LOGGER.log(Level.WARNING, "Could not join", e);
     }
 
     this.send(MenuCommand.START_GAME);
