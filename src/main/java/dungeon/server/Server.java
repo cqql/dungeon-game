@@ -6,6 +6,7 @@ import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.World;
+import dungeon.models.messages.Transform;
 import dungeon.pulse.PulseGenerator;
 
 import java.io.IOException;
@@ -59,8 +60,10 @@ public class Server implements Runnable {
     this.mailman.addHandler(new MessageHandler() {
       @Override
       public void handleMessage (Message message) {
-        for (ClientConnection connection : Server.this.connections) {
-          connection.send(message);
+        if (message instanceof Transform) {
+          for (ClientConnection connection : Server.this.connections) {
+            connection.send(message);
+          }
         }
       }
     });
@@ -70,6 +73,11 @@ public class Server implements Runnable {
 
   public void run () {
     this.running.set(true);
+
+    LOGGER.info("Start the event system");
+    Thread eventThread = new Thread(this.mailman);
+    eventThread.setDaemon(true);
+    eventThread.start();
 
     ServerSocket serverSocket;
 

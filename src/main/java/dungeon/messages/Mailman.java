@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * Be aware of the fact that each mailbox will be running in it's own thread.
  */
-public final class Mailman {
+public final class Mailman implements Runnable {
   private static final Logger LOGGER = Logger.getLogger(Mailman.class.getName());
 
   private final ExecutorService executor = Executors.newCachedThreadPool();

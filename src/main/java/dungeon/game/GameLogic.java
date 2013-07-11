@@ -187,6 +187,7 @@ public class GameLogic {
    * Create a new player state, when a player joins the game.
    */
   public void addPlayer (Player player) {
+    LOGGER.info("Player joined " + player);
     this.joiningPlayers.add(player);
   }
 
@@ -703,6 +704,7 @@ public class GameLogic {
 
   private void joinPlayers (Transaction transaction) {
     for (Player player : this.joiningPlayers) {
+      LOGGER.info("Player joined " + player.getName());
       transaction.pushAndCommit(new World.AddPlayerTransform(player));
     }
 
