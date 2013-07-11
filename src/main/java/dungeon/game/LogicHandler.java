@@ -50,7 +50,7 @@ public class LogicHandler implements MessageHandler {
 
   @Override
   public void handleMessage (Message message) {
-    if (message instanceof Pulse && !this.paused) {
+    if (message instanceof Pulse) {
       this.pulse();
     } else if (message instanceof PlayerMessage) {
       int playerId = ((PlayerMessage)message).getPlayerId();
