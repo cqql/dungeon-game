@@ -55,18 +55,8 @@ public class Server implements Runnable {
     this.logicHandler = new LogicHandler(this.mailman, world);
 
     this.mailman.addMailbox(new PulseGenerator(this.mailman));
+    this.mailman.addHandler(new MessageBroadcaster(this));
     this.mailman.addHandler(this.logicHandler);
-
-    this.mailman.addHandler(new MessageHandler() {
-      @Override
-      public void handleMessage (Message message) {
-        if (message instanceof Transform) {
-          for (ClientConnection connection : Server.this.connections) {
-            connection.send(message);
-          }
-        }
-      }
-    });
 
     this.thread.setDaemon(true);
   }
@@ -118,5 +108,25 @@ public class Server implements Runnable {
    */
   public void start () {
     this.thread.start();
+  }
+
+  /**
+   * Broadcasts messages to all connected clients.
+   */
+  public static class MessageBroadcaster implements MessageHandler {
+    private final Server server;
+
+    public MessageBroadcaster (Server server) {
+      this.server = server;
+    }
+
+    @Override
+    public void handleMessage (Message message) {
+      if (message instanceof Transform) {
+        for (ClientConnection connection : this.server.connections) {
+          connection.send(message);
+        }
+      }
+    }
   }
 }
