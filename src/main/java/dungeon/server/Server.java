@@ -1,6 +1,7 @@
 package dungeon.server;
 
 import dungeon.game.LogicHandler;
+import dungeon.game.messages.ClientCommand;
 import dungeon.load.WorldLoader;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
@@ -136,7 +137,7 @@ public class Server implements Runnable {
 
     @Override
     public void handleMessage (Message message) {
-      if (message instanceof Transform) {
+      if (message instanceof Transform || message instanceof ClientCommand) {
         for (ClientConnection connection : this.server.connections) {
           connection.send(message);
         }

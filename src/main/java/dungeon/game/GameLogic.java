@@ -683,7 +683,7 @@ public class GameLogic {
         double distance = npcPosition.minus(playerPosition).length();
 
         if (distance < (NPC.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
-          transaction.pushAndCommit(new TalkToNpc(npc));
+          transaction.pushAndCommit(new TalkToNpc(player, npc));
           break;
         }
       }
@@ -694,7 +694,7 @@ public class GameLogic {
         double distance = merchantPosition.minus(playerPosition).length();
 
         if (distance < (Merchant.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
-          transaction.pushAndCommit(new TradeWithMerchant(merchant));
+          transaction.pushAndCommit(new TradeWithMerchant(player, merchant));
           break;
         }
       }

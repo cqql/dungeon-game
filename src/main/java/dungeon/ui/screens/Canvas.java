@@ -82,7 +82,7 @@ public class Canvas extends JPanel implements MessageHandler {
 
   @Override
   public void handleMessage (Message message) {
-    if (message instanceof TalkToNpc) {
+    if (message instanceof TalkToNpc && ((TalkToNpc)message).getPlayerId() == this.client.getPlayerId()) {
       this.dialogTimeout = System.currentTimeMillis() + DIALOG_TIME;
       this.dialogNpc = ((TalkToNpc)message).getNpc();
     }

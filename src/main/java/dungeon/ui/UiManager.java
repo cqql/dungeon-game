@@ -35,12 +35,16 @@ public class UiManager extends JPanel implements MessageHandler {
 
   private static final String SHOP_SCREEN = "SHOP_SCREEN";
 
+  private final Client client;
+
   private final Map<String, JPanel> screens = new LinkedHashMap<>();
 
   private final CardLayout layout;
 
-  public UiManager (Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen) {
+  public UiManager (Client client, Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen) {
     super(new CardLayout());
+
+    this.client = client;
 
     this.layout = (CardLayout)this.getLayout();
 
@@ -68,7 +72,7 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(DEFEAT_SCREEN);
     } else if (message instanceof ShowInventory) {
       this.showScreen(INVENTORY_SCREEN);
-    } else if (message instanceof TradeWithMerchant) {
+    } else if (message instanceof TradeWithMerchant && ((TradeWithMerchant)message).getPlayerId() == client.getPlayerId()) {
       this.showScreen(SHOP_SCREEN);
     }
   }
