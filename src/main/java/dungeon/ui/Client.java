@@ -106,6 +106,27 @@ public class Client implements MessageHandler {
       LOGGER.log(Level.WARNING, "Could not join", e);
     }
 
+    Thread messageForwarder = new Thread(new Runnable() {
+      @Override
+      public void run () {
+        while (true) {
+          try {
+            Object received = Client.this.serverConnection.read();
+
+            if (received instanceof Message) {
+              Client.this.mailman.send((Message) received);
+            }
+          } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          }
+        }
+      }
+    });
+
+    messageForwarder.start();
+
     this.send(MenuCommand.START_GAME);
   }
 }
