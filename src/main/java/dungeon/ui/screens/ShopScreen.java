@@ -65,9 +65,9 @@ public class ShopScreen extends JPanel implements MessageHandler {
         this.merchant = this.merchant.apply((Transform)message);
       }
 
-      if (message instanceof TradeWithMerchant) {
-        this.merchant = ((TradeWithMerchant)message).getMerchant();
-      }
+      this.reset();
+    } else if (message instanceof TradeWithMerchant) {
+      this.merchant = ((TradeWithMerchant)message).getMerchant();
 
       this.reset();
     }
