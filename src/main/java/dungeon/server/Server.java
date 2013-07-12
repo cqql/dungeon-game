@@ -139,7 +139,7 @@ public class Server implements Runnable {
 
   private void closeConnections () {
     for (ClientConnection connection : this.connections) {
-      connection.stop();
+      connection.close();
     }
   }
 

@@ -31,7 +31,10 @@ public class ClientConnection implements Runnable {
 
   private final LogicHandler logicHandler;
 
-  private final AtomicBoolean running = new AtomicBoolean(false);
+  /**
+   * Is the connection still open?
+   */
+  private final AtomicBoolean open = new AtomicBoolean(false);
 
   public ClientConnection (Server server, Socket socket, Mailman mailman, LogicHandler logicHandler) throws IOException {
     this.server = server;
@@ -51,7 +54,7 @@ public class ClientConnection implements Runnable {
 
   @Override
   public void run () {
-    this.running.set(true);
+    this.open.set(true);
 
     LOGGER.info("Send ID");
     this.send(this.logicHandler.nextId());
@@ -59,34 +62,35 @@ public class ClientConnection implements Runnable {
     LOGGER.info("Send world object");
     this.send(this.logicHandler.getWorld());
 
-    while (this.running.get()) {
+    while (this.open.get()) {
       Object received = null;
 
       try {
         received = this.read();
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Connection is broken", e);
-        this.stop();
+        this.close();
       } catch (ClassNotFoundException e) {
         LOGGER.log(Level.WARNING, "Received object of unkown class", e);
+        this.close();
       }
 
       if (received instanceof Message) {
         this.mailman.send((Message)received);
       } else if (received instanceof CloseConnection) {
-        this.stop();
+        this.close();
       }
     }
   }
 
-  public void stop () {
-    if (!this.running.get()) {
+  public void close () {
+    if (!this.open.get()) {
       return;
     }
 
-    LOGGER.info("Shutdown client connection");
+    this.open.set(false);
 
-    this.running.set(false);
+    LOGGER.info("Shutdown client connection");
 
     this.server.removeConnection(this);
 
@@ -111,9 +115,13 @@ public class ClientConnection implements Runnable {
 
   public void send (Object object) {
     try {
-      this.outputStream.writeObject(object);
+      if (this.open.get()) {
+        this.outputStream.writeObject(object);
+      }
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not send object " + object, e);
+
+      this.close();
     }
   }
 
