@@ -23,6 +23,22 @@ public class World implements Serializable {
     return this.players;
   }
 
+  public List<Player> getPlayersInRoom (Room room) {
+    return this.getPlayersInRoom(room.getId());
+  }
+
+  public List<Player> getPlayersInRoom (String roomId) {
+    List<Player> players = new ArrayList<>();
+
+    for (Player player : this.players) {
+      if (player.getRoomId().equals(roomId)) {
+        players.add(player);
+      }
+    }
+
+    return players;
+  }
+
   public Room getCurrentRoom (Player player) {
     Level currentLevel = this.getCurrentLevel(player);
 

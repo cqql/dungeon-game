@@ -165,8 +165,8 @@ public class Enemy implements Spatial, Identifiable, Serializable {
   public static enum MoveStrategy {
     NORMAL {
       @Override
-      public void move (Transaction transaction, Enemy enemy, double delta) {
-        Vector enemyToPlayer = this.getShortestDistance(enemy, transaction.getWorld().getPlayers());
+      public void move (Transaction transaction, Room room, Enemy enemy, double delta) {
+        Vector enemyToPlayer = this.getShortestDistance(enemy, transaction.getWorld().getPlayersInRoom(room));
 
         if (enemyToPlayer.length() < 5000 && !enemyToPlayer.isZero()) {
           transaction.pushAndCommit(new Enemy.MoveTransform(enemy, enemyToPlayer.normalize().times(enemy.getSpeed() * delta)));
@@ -175,12 +175,11 @@ public class Enemy implements Spatial, Identifiable, Serializable {
     },
     TELEPORT {
       @Override
-      public void move (Transaction transaction, Enemy enemy, double delta) {
-        Player targetPlayer = this.getClosestPlayer(enemy, transaction.getWorld().getPlayers());
+      public void move (Transaction transaction, Room room, Enemy enemy, double delta) {
+        Player targetPlayer = this.getClosestPlayer(enemy, transaction.getWorld().getPlayersInRoom(room));
         Vector enemyToPlayer = targetPlayer.getPosition().getVector().minus(enemy.getPosition().getVector());
 
         if (enemyToPlayer.length() < 500 || RANDOM.nextInt(300) == 0) {
-          Room room = transaction.getWorld().getCurrentRoom(targetPlayer);
           Vector position = new Vector(RANDOM.nextFloat() * room.getXSize(), RANDOM.nextFloat() * room.getYSize());
           position = position.times(0.5 + RANDOM.nextFloat() / 2);
 
@@ -193,7 +192,15 @@ public class Enemy implements Spatial, Identifiable, Serializable {
 
     private static final Random RANDOM = new Random();
 
-    public abstract void move (Transaction transaction, Enemy enemy, double delta);
+    /**
+     * Move the enemy.
+     *
+     * @param transaction
+     * @param room The room in which the enemy
+     * @param enemy The enemy to move
+     * @param delta How long to move
+     */
+    public abstract void move (Transaction transaction, Room room, Enemy enemy, double delta);
 
     /**
      * Finds the {@link Player}, that is closest to {@code enemy}.

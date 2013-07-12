@@ -78,10 +78,10 @@ public class Client implements MessageHandler {
   }
 
   /**
-   * @return All connected players
+   * @return A list of all players in the same room as {@code player}
    */
-  public List<Player> getPlayers () {
-    return this.world.get().getPlayers();
+  public List<Player> getPlayersInRoom (Player player) {
+    return this.world.get().getPlayersInRoom(player.getRoomId());
   }
 
   /**

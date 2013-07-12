@@ -451,7 +451,7 @@ public class GameLogic {
   private void moveEnemies (Transaction transaction, double delta) {
     for (Room room : transaction.getWorld().getCurrentRooms()) {
       for (Enemy enemy : room.getEnemies()) {
-        enemy.getMoveStrategy().move(transaction, enemy, delta);
+        enemy.getMoveStrategy().move(transaction, room, enemy, delta);
       }
     }
   }

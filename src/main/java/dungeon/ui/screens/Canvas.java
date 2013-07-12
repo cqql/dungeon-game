@@ -111,7 +111,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawEnemies(g, room);
     this.drawSavepoints(g, room);
 
-    for (Player p : this.client.getPlayers()) {
+    for (Player p : this.client.getPlayersInRoom(player)) {
       this.drawPlayer(g, p);
     }
 
