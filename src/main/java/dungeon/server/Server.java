@@ -68,30 +68,7 @@ public class Server implements Runnable {
 
     this.startMailman();
 
-    LOGGER.info("Start server on port " + this.port);
-
-    ServerSocket serverSocket;
-
-    try {
-      serverSocket = new ServerSocket(this.port);
-      serverSocket.setSoTimeout(1000);
-    } catch (IOException e) {
-      LOGGER.log(Level.WARNING, "Could not bind port " + this.port, e);
-      this.stopMailman();
-      return;
-    }
-
-    while (this.running.get()) {
-      try {
-        Socket socket = serverSocket.accept();
-
-        this.setUpConnection(socket);
-      } catch (SocketTimeoutException e) {
-        // This just happens when no new client has connected for 1 second, so that the server does not hang forever.
-      } catch (IOException e) {
-        LOGGER.log(Level.WARNING, "Failed while connecting", e);
-      }
-    }
+    this.handleConnections();
 
     this.closeConnections();
     this.connectionExecutor.shutdown();
@@ -110,7 +87,9 @@ public class Server implements Runnable {
   }
 
   public void removeConnection (ClientConnection connection) {
-    this.connections.remove(connection);
+    synchronized (this.connections) {
+      this.connections.remove(connection);
+    }
   }
 
   private void startMailman () {
@@ -124,13 +103,42 @@ public class Server implements Runnable {
     this.mailman.send(LifecycleEvent.SHUTDOWN);
   }
 
-  private void setUpConnection (Socket socket) {
+  private void handleConnections () {
+    LOGGER.info("Start server on port " + this.port);
+
+    ServerSocket serverSocket;
+
+    try {
+      serverSocket = new ServerSocket(this.port);
+      serverSocket.setSoTimeout(1000);
+    } catch (IOException e) {
+      LOGGER.log(Level.WARNING, "Could not bind port " + this.port, e);
+      return;
+    }
+
+    while (this.running.get()) {
+      try {
+        Socket socket = serverSocket.accept();
+
+        this.handleConnection(socket);
+      } catch (SocketTimeoutException e) {
+        // This just happens when no new client has connected for 1 second, so that the server does not hang forever.
+      } catch (IOException e) {
+        LOGGER.log(Level.WARNING, "Failed while connecting", e);
+      }
+    }
+  }
+
+  private void handleConnection (Socket socket) {
     LOGGER.info("Connection from " + socket.getRemoteSocketAddress());
 
     try {
       ClientConnection clientConnection = new ClientConnection(this, socket, this.mailman, this.logicHandler);
 
-      this.connections.add(clientConnection);
+      synchronized (this.connections) {
+        this.connections.add(clientConnection);
+      }
+
       this.connectionExecutor.execute(clientConnection);
     } catch (IOException e) {
       LOGGER.log(Level.WARNING, "Could not setup connection", e);
@@ -138,8 +146,10 @@ public class Server implements Runnable {
   }
 
   private void closeConnections () {
-    for (ClientConnection connection : this.connections) {
-      connection.close();
+    synchronized (this.connections) {
+      for (ClientConnection connection : this.connections) {
+        connection.close();
+      }
     }
   }
 
@@ -156,8 +166,10 @@ public class Server implements Runnable {
     @Override
     public void handleMessage (Message message) {
       if (message instanceof Transform || message instanceof ClientCommand) {
-        for (ClientConnection connection : this.server.connections) {
-          connection.send(message);
+        synchronized (this.server.connections) {
+          for (ClientConnection connection : this.server.connections) {
+            connection.send(message);
+          }
         }
       }
     }

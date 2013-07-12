@@ -32,6 +32,11 @@ public class ClientConnection implements Runnable {
   private final LogicHandler logicHandler;
 
   /**
+   * The player ID that will be assigned to the client.
+   */
+  private final int playerId;
+
+  /**
    * Is the connection still open?
    */
   private final AtomicBoolean open = new AtomicBoolean(false);
@@ -41,6 +46,8 @@ public class ClientConnection implements Runnable {
     this.socket = socket;
     this.mailman = mailman;
     this.logicHandler = logicHandler;
+
+    this.playerId = this.logicHandler.nextId();
 
     try {
       this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -57,32 +64,17 @@ public class ClientConnection implements Runnable {
     this.open.set(true);
 
     LOGGER.info("Send ID");
-    this.send(this.logicHandler.nextId());
+    this.send(this.playerId);
 
     LOGGER.info("Send world object");
     this.send(this.logicHandler.getWorld());
 
-    while (this.open.get()) {
-      Object received = null;
-
-      try {
-        received = this.read();
-      } catch (IOException e) {
-        LOGGER.log(Level.WARNING, "Connection is broken", e);
-        this.close();
-      } catch (ClassNotFoundException e) {
-        LOGGER.log(Level.WARNING, "Received object of unkown class", e);
-        this.close();
-      }
-
-      if (received instanceof Message) {
-        this.mailman.send((Message)received);
-      } else if (received instanceof CloseConnection) {
-        this.close();
-      }
-    }
+    this.receiveMessages();
   }
 
+  /**
+   * Close the connection from the server side.
+   */
   public void close () {
     if (!this.open.get()) {
       return;
@@ -92,8 +84,71 @@ public class ClientConnection implements Runnable {
 
     LOGGER.info("Shutdown client connection");
 
+    this.send(new CloseConnection());
+
     this.server.removeConnection(this);
 
+    this.closeStreams();
+  }
+
+  public void send (Object object) {
+    try {
+      if (this.open.get()) {
+        this.outputStream.writeObject(object);
+      }
+    } catch (IOException e) {
+      LOGGER.log(Level.WARNING, "Could not send object " + object, e);
+
+      this.closedByClient();
+    }
+  }
+
+  private void receiveMessages () {
+    while (this.open.get()) {
+      Object received;
+
+      try {
+        received = this.read();
+      } catch (IOException e) {
+        LOGGER.log(Level.WARNING, "Connection is broken", e);
+        this.closedByClient();
+        return;
+      } catch (ClassNotFoundException e) {
+        LOGGER.log(Level.WARNING, "Received object of unkown class", e);
+        this.closedByClient();
+        return;
+      }
+
+      if (received instanceof Message) {
+        this.mailman.send((Message)received);
+      } else if (received instanceof CloseConnection) {
+        LOGGER.info("Client disconnected");
+
+        this.closedByClient();
+      }
+    }
+  }
+
+  private Object read () throws IOException, ClassNotFoundException {
+    return this.inputStream.readObject();
+  }
+
+  /**
+   * The connection was somehow closed/corrupted from the client side.
+   */
+  private void closedByClient () {
+    if (!this.open.get()) {
+      return;
+    }
+
+    this.open.set(false);
+
+    this.server.removeConnection(this);
+
+    this.closeStreams();
+  }
+
+  private void closeStreams () {
     try {
       this.inputStream.close();
     } catch (IOException e) {
@@ -111,21 +166,5 @@ public class ClientConnection implements Runnable {
     } catch (IOException e) {
       LOGGER.log(Level.INFO, "Could not close socket", e);
     }
-  }
-
-  public void send (Object object) {
-    try {
-      if (this.open.get()) {
-        this.outputStream.writeObject(object);
-      }
-    } catch (IOException e) {
-      LOGGER.log(Level.WARNING, "Could not send object " + object, e);
-
-      this.close();
-    }
-  }
-
-  private Object read () throws IOException, ClassNotFoundException {
-    return this.inputStream.readObject();
   }
 }
