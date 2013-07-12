@@ -16,6 +16,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,7 +37,7 @@ public class Server implements Runnable {
 
   private final int port;
 
-  private final List<ClientConnection> connections = new ArrayList<>();
+  private final List<ClientConnection> connections = Collections.synchronizedList(new ArrayList<ClientConnection>());
 
   private final ExecutorService connectionExecutor = Executors.newCachedThreadPool();
 
