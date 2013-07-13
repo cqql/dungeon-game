@@ -1,7 +1,7 @@
 package dungeon.ui.screens;
 
 import dungeon.messages.LifecycleEvent;
-import dungeon.ui.Client;
+import dungeon.client.Client;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;

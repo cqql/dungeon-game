@@ -4,7 +4,7 @@ import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.Item;
-import dungeon.ui.Client;
+import dungeon.client.Client;
 import dungeon.ui.messages.EquipWeaponCommand;
 import dungeon.ui.messages.ShowGame;
 import dungeon.ui.messages.ShowInventory;

@@ -4,7 +4,7 @@ import dungeon.game.messages.TalkToNpc;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.*;
-import dungeon.ui.Client;
+import dungeon.client.Client;
 
 import javax.swing.*;
 import java.awt.Color;

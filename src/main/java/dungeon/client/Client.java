@@ -1,4 +1,4 @@
-package dungeon.ui;
+package dungeon.client;
 
 import dungeon.game.messages.PlayerJoinCommand;
 import dungeon.messages.LifecycleEvent;
@@ -10,6 +10,7 @@ import dungeon.models.Room;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
 import dungeon.server.Server;
+import dungeon.ui.ServerConnection;
 import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.PlayerMessage;
 
@@ -182,6 +183,8 @@ public class Client implements MessageHandler {
       this.server.stop();
       this.server = null;
     }
+
+    this.mailman.send(new ServerDisconnected());
   }
 
   /**

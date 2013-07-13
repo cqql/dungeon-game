@@ -7,7 +7,7 @@ import dungeon.messages.MessageHandler;
 import dungeon.models.Item;
 import dungeon.models.Merchant;
 import dungeon.models.messages.Transform;
-import dungeon.ui.Client;
+import dungeon.client.Client;
 import dungeon.ui.messages.BuyCommand;
 import dungeon.ui.messages.SellCommand;
 import dungeon.ui.messages.ShowGame;

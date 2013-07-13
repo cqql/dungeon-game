@@ -1,5 +1,6 @@
 package dungeon.ui;
 
+import dungeon.client.Client;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;

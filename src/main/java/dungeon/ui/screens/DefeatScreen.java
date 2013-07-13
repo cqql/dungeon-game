@@ -1,6 +1,6 @@
 package dungeon.ui.screens;
 
-import dungeon.ui.Client;
+import dungeon.client.Client;
 import dungeon.ui.messages.MenuCommand;
 
 import javax.swing.*;

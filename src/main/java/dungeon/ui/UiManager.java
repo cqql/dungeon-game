@@ -1,5 +1,7 @@
 package dungeon.ui;
 
+import dungeon.client.Client;
+import dungeon.client.ServerDisconnected;
 import dungeon.game.messages.DefeatEvent;
 import dungeon.game.messages.TradeWithMerchant;
 import dungeon.game.messages.WinEvent;
@@ -74,6 +76,8 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(INVENTORY_SCREEN);
     } else if (message instanceof TradeWithMerchant && ((TradeWithMerchant)message).getPlayerId() == this.client.getPlayerId()) {
       this.showScreen(SHOP_SCREEN);
+    } else if (message instanceof ServerDisconnected) {
+      this.showScreen(START_MENU);
     }
   }
 

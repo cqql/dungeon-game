@@ -1,5 +1,6 @@
 package dungeon.ui;
 
+import dungeon.client.Client;
 import dungeon.messages.Mailman;
 import dungeon.ui.screens.*;
 
