@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,8 +87,6 @@ public class ClientConnection implements Runnable {
 
     this.send(new CloseConnection());
 
-    this.server.removeConnection(this);
-
     this.closeStreams();
   }
 
@@ -109,6 +108,9 @@ public class ClientConnection implements Runnable {
 
       try {
         received = this.read();
+      } catch (SocketException e) {
+        // Socket has been closed. Do nothing
+        return;
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Connection is broken", e);
         this.closedByClient();
