@@ -42,9 +42,9 @@ public class StartMenu extends JPanel {
 
         try {
           StartMenu.this.client.startServer(6077);
-        } catch (Client.ServerStartException e1) {
+        } catch (Client.ServerStartException ex) {
           JOptionPane.showMessageDialog(null, "Spiel konnte nicht gestartet werden");
-        } catch (Client.ConnectException e1) {
+        } catch (Client.ConnectException ex) {
           JOptionPane.showMessageDialog(null, "Spiel konnte nicht gestartet werden");
         }
       }

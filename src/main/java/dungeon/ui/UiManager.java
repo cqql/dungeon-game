@@ -37,13 +37,15 @@ public class UiManager extends JPanel implements MessageHandler {
 
   private static final String SHOP_SCREEN = "SHOP_SCREEN";
 
+  private static final String LOBBY_SCREEN = "LOBBY_SCREEN";
+
   private final Client client;
 
   private final Map<String, JPanel> screens = new LinkedHashMap<>();
 
   private final CardLayout layout;
 
-  public UiManager (Client client, Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen) {
+  public UiManager (Client client, Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen, LobbyScreen lobbyScreen) {
     super(new CardLayout());
 
     this.client = client;
@@ -56,6 +58,7 @@ public class UiManager extends JPanel implements MessageHandler {
     this.screens.put(DEFEAT_SCREEN, defeatScreen);
     this.screens.put(INVENTORY_SCREEN, inventoryScreen);
     this.screens.put(SHOP_SCREEN, shopScreen);
+    this.screens.put(LOBBY_SCREEN, lobbyScreen);
   }
 
   @Override

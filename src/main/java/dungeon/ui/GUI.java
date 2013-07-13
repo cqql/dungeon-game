@@ -24,9 +24,11 @@ public class GUI {
 
   private final ShopScreen shopScreen = new ShopScreen(this.client);
 
+  private final LobbyScreen lobbyScreen = new LobbyScreen(this.client);
+
   private final InputToMessageConverter converter = new InputToMessageConverter(this.client);
 
-  private final UiManager uiManager = new UiManager(this.client, this.canvas, this.startMenu, this.winScreen, this.defeatScreen, this.inventoryScreen, this.shopScreen);
+  private final UiManager uiManager = new UiManager(this.client, this.canvas, this.startMenu, this.winScreen, this.defeatScreen, this.inventoryScreen, this.shopScreen, this.lobbyScreen);
 
   private final MainFrame mainFrame = new MainFrame(this.client, this.uiManager);
 
