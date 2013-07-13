@@ -175,6 +175,8 @@ public class Client implements MessageHandler {
   }
 
   public void sendReady () {
+    this.sendChatMessage(this.playerName + " ist bereit");
+
     this.send(MenuCommand.START_GAME);
   }
 
