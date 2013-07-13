@@ -1,25 +1,46 @@
-# Benutzerhandbuch
+# Dungeon-Game - Benutzerhandbuch
 
-## Steuerung
+## Generelle Informationen
 
-### Navigation
+- **Version**: 1.0.0
+- **Erstelldatum**: 14.07.2013
+
+## Entwickler
+
+- Marten
+- Phuong
+- Louise
+
+
+## Voraussetzungen
+
+- 300 MB RAM
+- 3 GHz Prozessor
+- JRE7
+- freier Port 6077 für den Mehrspielermodus
+
+
+## Wie starte ich das Spiel?
+
+`./gradle run`
+
+
+## Wie spiele ich?
+
+### Steuerung
 
 - W - hoch
 - A - links
 - S - runter
 - D - rechts
-
-
-### Interaktion
-
-- H - Heiltränke benutzen
+- H - Heiltrank benutzen
 - J - Schießen
 - K - Eispfeil schießen
 - Z - mit NPC sprechen
 - I - Inventar öffnen
 
 
-## Welt
+## Was ist was?
 
 - dunkelrosa - nicht begehbare Flächen
 - gelb - Siegerpodest
@@ -35,16 +56,4 @@
 
 ## Das Spiel
 
-Man navigiert durch die 3 Levels à 3 Räume. Dabei steht am Ende jeden Levels ein Boss Gegner, der zufällig seine Bewegungsrichtung ändert.
-Bei den NPCs kann man Items kaufen oder sich in die Story einlesen.
-Der Spieler hat die Auswahl zwischen verschiedenen Waffen, zusätzlich gibt es Mana Angriffe die MP verbrauchen.
-Die MP regenerieren sich nach wenigen Sekunden wieder um 1.
-Am Ende des letzten Levels ist das Siegerpodest, welches beim Betreten zum Ende des Spiels führt.
-
-
-## Entwickler
-
-- Louise
-- Marten
-- Phuong
-
+Du bist in einem alten Schloss und, weil du unbedingt mal die Aussicht genießen möchtest, musst du dich in den obersten Stock vorkämpfen, wo der Balkon von einem besonders langlebigen Geist bewacht wird.
