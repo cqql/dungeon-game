@@ -261,11 +261,18 @@ public class Canvas extends JPanel implements MessageHandler {
     g.drawString(weaponName, 120, 38);
   }
 
+  /**
+   * Draws the last 5 chat messages.
+   */
   private void drawChat (Graphics g) {
     int screenHeight = g.getClipBounds().height;
     int i = 0;
 
     for (ChatMessage message : this.chatMessages) {
+      if (i == 5) {
+        break;
+      }
+
       String line = String.format("%s: %s", this.client.getPlayerName(message.getAuthorId()), message.getText());
 
       g.setFont(this.font);
