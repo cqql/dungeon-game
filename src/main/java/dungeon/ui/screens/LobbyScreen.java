@@ -25,7 +25,11 @@ public class LobbyScreen extends JPanel implements MessageHandler {
 
   private final JTextArea playerList = new JTextArea();
 
+  private final JScrollPane playersScrollPane = new JScrollPane(this.playerList);
+
   private final JTextArea chatMessageList = new JTextArea();
+
+  private final JScrollPane chatScrollPane = new JScrollPane(this.chatMessageList);
 
   private final JButton messageButton = new JButton("Nachricht schreiben");
 
@@ -40,8 +44,8 @@ public class LobbyScreen extends JPanel implements MessageHandler {
 
     this.add(this.backButton);
     this.add(this.readyButton);
-    this.add(this.playerList);
-    this.add(this.chatMessageList);
+    this.add(this.playersScrollPane);
+    this.add(this.chatScrollPane);
     this.add(this.messageButton);
 
     this.backButton.addMouseListener(new MouseInputAdapter() {
@@ -97,6 +101,9 @@ public class LobbyScreen extends JPanel implements MessageHandler {
     }
 
     this.chatMessageList.setText(text.toString());
+
+    JScrollBar scrollBar = this.chatScrollPane.getVerticalScrollBar();
+    scrollBar.setValue(scrollBar.getMaximum());
   }
 
   private void reloadPlayerList () {
