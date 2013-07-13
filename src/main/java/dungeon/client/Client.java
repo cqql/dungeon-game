@@ -85,6 +85,16 @@ public class Client implements MessageHandler {
     return this.world.get().getPlayer(this.getPlayerId());
   }
 
+  public String getPlayerName (int id) {
+    for (Player player : this.world.get().getPlayers()) {
+      if (player.getId() == id) {
+        return player.getName();
+      }
+    }
+
+    return "Unbekannt";
+  }
+
   /**
    * @return A list of all players in the same room as {@code player}
    */
@@ -218,6 +228,11 @@ public class Client implements MessageHandler {
           Object received = this.client.serverConnection.read();
 
           if (received instanceof Message) {
+            if (received instanceof ChatMessage && ((ChatMessage)received).getAuthorId() == this.client.getPlayerId()) {
+              // Prevent bouncing of chat messages
+              continue;
+            }
+
             this.client.mailman.send((Message)received);
           }
         } catch (SocketException e) {

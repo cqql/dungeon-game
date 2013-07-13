@@ -1,16 +1,19 @@
 package dungeon.ui.screens;
 
+import dungeon.client.Client;
 import dungeon.game.messages.TalkToNpc;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.*;
-import dungeon.client.Client;
+import dungeon.ui.messages.ChatMessage;
 
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.logging.Logger;
 
 public class Canvas extends JPanel implements MessageHandler {
@@ -20,6 +23,11 @@ public class Canvas extends JPanel implements MessageHandler {
    * How long to show dialogs in milliseconds.
    */
   private static final int DIALOG_TIME = 3000;
+
+  /**
+   * How long to show chat messages in milliseconds.
+   */
+  private static final int CHAT_TIME = 5000;
 
   private final Color blockingTile = new Color(181, 125, 147);
 
@@ -61,9 +69,16 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
+  private final Deque<ChatMessage> chatMessages = new ArrayDeque<>();
+
   private final Client client;
 
   private long dialogTimeout;
+
+  /**
+   * The timestamp of the last chat message.
+   */
+  private long lastChatMessageTime;
 
   private NPC dialogNpc;
 
@@ -85,6 +100,9 @@ public class Canvas extends JPanel implements MessageHandler {
     if (message instanceof TalkToNpc && ((TalkToNpc)message).getPlayerId() == this.client.getPlayerId()) {
       this.dialogTimeout = System.currentTimeMillis() + DIALOG_TIME;
       this.dialogNpc = ((TalkToNpc)message).getNpc();
+    } else if (message instanceof ChatMessage) {
+      this.chatMessages.addFirst((ChatMessage)message);
+      this.lastChatMessageTime = System.currentTimeMillis();
     }
 
     repaint();
@@ -121,6 +139,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawLifeIndicator(g, player);
     this.drawManaIndicator(g, player);
     this.drawWeaponIndicator(g, player);
+    this.drawChat(g);
     this.drawDialog(g);
   }
 
@@ -251,6 +270,22 @@ public class Canvas extends JPanel implements MessageHandler {
     g.setColor(this.white);
     g.setFont(this.font);
     g.drawString(weaponName, 120, 38);
+  }
+
+  private void drawChat (Graphics g) {
+    if (System.currentTimeMillis() < this.lastChatMessageTime + CHAT_TIME) {
+      int screenHeight = g.getClipBounds().height;
+      int i = 0;
+
+      for (ChatMessage message : this.chatMessages) {
+        String line = String.format("%s: %s", this.client.getPlayerName(message.getAuthorId()), message.getText());
+
+        g.setFont(this.font);
+        g.drawString(line, 20, screenHeight - 20 - i * 35);
+
+        i++;
+      }
+    }
   }
 
   private void drawDialog (Graphics g) {
