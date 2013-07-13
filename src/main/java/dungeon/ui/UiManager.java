@@ -11,6 +11,7 @@ import dungeon.messages.MessageHandler;
 import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.ShowGame;
 import dungeon.ui.messages.ShowInventory;
+import dungeon.ui.messages.ShowLobby;
 import dungeon.ui.screens.*;
 
 import javax.swing.*;
@@ -69,7 +70,7 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(START_MENU);
     } else if (message == MenuCommand.SHOW_MENU) {
       this.showScreen(START_MENU);
-    } else if (message == MenuCommand.START_GAME || message instanceof ShowGame) {
+    } else if (message == MenuCommand.START_GAME || (message instanceof ShowGame && ((ShowGame)message).getPlayerId() == this.client.getPlayerId())) {
       this.showScreen(CANVAS);
     } else if (message instanceof WinEvent) {
       this.showScreen(WIN_SCREEN);
@@ -81,6 +82,8 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(SHOP_SCREEN);
     } else if (message instanceof ServerDisconnected) {
       this.showScreen(START_MENU);
+    } else if (message instanceof ShowLobby && ((ShowLobby)message).getPlayerId() == this.client.getPlayerId()) {
+      this.showScreen(LOBBY_SCREEN);
     }
   }
 

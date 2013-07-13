@@ -165,7 +165,9 @@ public class Client implements MessageHandler {
 
     this.messageForwarder = new MessageForwarder(this);
     this.messageForwarder.start();
+  }
 
+  public void sendReady () {
     this.send(MenuCommand.START_GAME);
   }
 
