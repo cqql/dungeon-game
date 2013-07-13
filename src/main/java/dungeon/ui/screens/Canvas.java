@@ -24,11 +24,6 @@ public class Canvas extends JPanel implements MessageHandler {
    */
   private static final int DIALOG_TIME = 3000;
 
-  /**
-   * How long to show chat messages in milliseconds.
-   */
-  private static final int CHAT_TIME = 5000;
-
   private final Color blockingTile = new Color(181, 125, 147);
 
   private final Color passableTile = new Color(139, 108, 217);
@@ -75,11 +70,6 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private long dialogTimeout;
 
-  /**
-   * The timestamp of the last chat message.
-   */
-  private long lastChatMessageTime;
-
   private NPC dialogNpc;
 
   /**
@@ -102,7 +92,6 @@ public class Canvas extends JPanel implements MessageHandler {
       this.dialogNpc = ((TalkToNpc)message).getNpc();
     } else if (message instanceof ChatMessage) {
       this.chatMessages.addFirst((ChatMessage)message);
-      this.lastChatMessageTime = System.currentTimeMillis();
     }
 
     repaint();
@@ -273,18 +262,16 @@ public class Canvas extends JPanel implements MessageHandler {
   }
 
   private void drawChat (Graphics g) {
-    if (System.currentTimeMillis() < this.lastChatMessageTime + CHAT_TIME) {
-      int screenHeight = g.getClipBounds().height;
-      int i = 0;
+    int screenHeight = g.getClipBounds().height;
+    int i = 0;
 
-      for (ChatMessage message : this.chatMessages) {
-        String line = String.format("%s: %s", this.client.getPlayerName(message.getAuthorId()), message.getText());
+    for (ChatMessage message : this.chatMessages) {
+      String line = String.format("%s: %s", this.client.getPlayerName(message.getAuthorId()), message.getText());
 
-        g.setFont(this.font);
-        g.drawString(line, 20, screenHeight - 20 - i * 35);
+      g.setFont(this.font);
+      g.drawString(line, 20, screenHeight - 20 - i * 35);
 
-        i++;
-      }
+      i++;
     }
   }
 
