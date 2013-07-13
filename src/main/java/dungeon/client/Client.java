@@ -37,6 +37,11 @@ public class Client implements MessageHandler {
 
   private final AtomicReference<World> world = new AtomicReference<>();
 
+  /**
+   * The preferred name.
+   */
+  private String playerName;
+
   private ServerConnection serverConnection;
 
   private MessageForwarder messageForwarder;
@@ -59,7 +64,7 @@ public class Client implements MessageHandler {
       return;
     }
 
-    if ((message instanceof PlayerMessage && ((PlayerMessage) message).getPlayerId() == this.playerId.get())
+    if ((message instanceof PlayerMessage && ((PlayerMessage)message).getPlayerId() == this.playerId.get())
       || (message instanceof ChatMessage && ((ChatMessage)message).getAuthorId() == this.playerId.get())) {
       try {
         this.serverConnection.write(message);
@@ -115,6 +120,13 @@ public class Client implements MessageHandler {
     }
   }
 
+  /**
+   * Set the name as whom the player wants to join the game.
+   */
+  public void setPlayerName (String playerName) {
+    this.playerName = playerName;
+  }
+
   public void connect (String host, int port) throws ConnectException {
     try {
       this.serverConnection = new ServerConnection(host, port);
@@ -148,7 +160,7 @@ public class Client implements MessageHandler {
     }
 
     LOGGER.info("Join player");
-    Player player = new Player(this.playerId.get(), "Link");
+    Player player = new Player(this.playerId.get(), this.playerName);
 
     try {
       this.serverConnection.write(new PlayerJoinCommand(player));

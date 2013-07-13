@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
  * The start menu that shows things like a start and quit button.
  */
 public class StartMenu extends JPanel {
+  private final JTextField nameField = new JTextField("Link");
+
   private final JButton startButton = new JButton("Lokales Spiel starten");
 
   private final JButton startNetworkButton = new JButton("Netzwerkspiel starten");
@@ -23,10 +25,11 @@ public class StartMenu extends JPanel {
   private final Client client;
 
   public StartMenu (Client client) {
-    super(new GridLayout(4, 1));
+    super(new GridLayout(5, 1));
 
     this.client = client;
 
+    this.add(this.nameField);
     this.add(this.startButton);
     this.add(this.startNetworkButton);
     this.add(this.joinNetworkButton);
@@ -35,6 +38,8 @@ public class StartMenu extends JPanel {
     this.startButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
+        StartMenu.this.client.setPlayerName(StartMenu.this.nameField.getText());
+
         try {
           StartMenu.this.client.startServer(6077);
         } catch (Client.ServerStartException e1) {
@@ -48,6 +53,8 @@ public class StartMenu extends JPanel {
     this.joinNetworkButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
+        StartMenu.this.client.setPlayerName(StartMenu.this.nameField.getText());
+
         String server = "localhost";
 
         server = JOptionPane.showInputDialog(null, "Adresse des Servers", server);
