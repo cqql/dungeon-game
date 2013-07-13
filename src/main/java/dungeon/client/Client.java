@@ -11,6 +11,7 @@ import dungeon.models.World;
 import dungeon.models.messages.Transform;
 import dungeon.server.Server;
 import dungeon.ui.ServerConnection;
+import dungeon.ui.messages.ChatMessage;
 import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.PlayerMessage;
 
@@ -50,17 +51,22 @@ public class Client implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
       this.world.set(this.world.get().apply((Transform)message));
-    } else if (message instanceof PlayerMessage
-      && ((PlayerMessage) message).getPlayerId() == this.playerId.get()
-      && this.serverConnection != null) {
+    } else if (message == LifecycleEvent.SHUTDOWN) {
+      this.stop();
+    }
+
+    if (this.serverConnection == null) {
+      return;
+    }
+
+    if ((message instanceof PlayerMessage && ((PlayerMessage) message).getPlayerId() == this.playerId.get())
+      || (message instanceof ChatMessage && ((ChatMessage)message).getAuthorId() == this.playerId.get())) {
       try {
         this.serverConnection.write(message);
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Could not send message to server", e);
         this.stop();
       }
-    } else if (message == LifecycleEvent.SHUTDOWN) {
-      this.stop();
     }
   }
 

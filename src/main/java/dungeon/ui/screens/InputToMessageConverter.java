@@ -3,6 +3,7 @@ package dungeon.ui.screens;
 import dungeon.client.Client;
 import dungeon.ui.messages.*;
 
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -31,6 +32,8 @@ public class InputToMessageConverter implements KeyListener {
       this.client.send(new StartCommand(this.client.getPlayerId(), command));
     }  else if (keyEvent.getKeyChar() == 'i') {
       this.client.send(new ShowInventory(this.client.getPlayerId()));
+    } else if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+      this.sendChatMessage();
     }
   }
 
@@ -68,6 +71,14 @@ public class InputToMessageConverter implements KeyListener {
         return new InteractCommand();
       default:
         return null;
+    }
+  }
+
+  private void sendChatMessage () {
+    String message = JOptionPane.showInputDialog("Nachricht");
+
+    if (message != null) {
+
     }
   }
 }

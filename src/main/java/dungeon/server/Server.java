@@ -10,6 +10,7 @@ import dungeon.messages.MessageHandler;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
 import dungeon.pulse.PulseGenerator;
+import dungeon.ui.messages.ChatMessage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -165,7 +166,7 @@ public class Server implements Runnable {
 
     @Override
     public void handleMessage (Message message) {
-      if (message instanceof Transform || message instanceof ClientCommand) {
+      if (message instanceof Transform || message instanceof ClientCommand || message instanceof ChatMessage) {
         synchronized (this.server.connections) {
           for (ClientConnection connection : this.server.connections) {
             connection.send(message);
