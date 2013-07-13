@@ -43,7 +43,15 @@ public class LobbyScreen extends JPanel implements MessageHandler {
     this.add(this.chatMessageList);
     this.add(this.messageButton);
 
+    this.backButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
+        LobbyScreen.this.client.disconnect();
+      }
+    });
+
     this.playerList.setEnabled(false);
+    this.playerList.setFont(this.chatFont);
 
     this.chatMessageList.setEnabled(false);
     this.chatMessageList.setFont(this.chatFont);

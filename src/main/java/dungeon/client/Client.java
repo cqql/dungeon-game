@@ -190,6 +190,15 @@ public class Client implements MessageHandler {
     this.connect("localhost", port);
   }
 
+  /**
+   * Removes the player from the world/lobby and leaves the world.
+   */
+  public void disconnect () {
+    this.send(new World.RemovePlayerTransform(this.getPlayerId()));
+
+    this.stop();
+  }
+
   private void stop () {
     LOGGER.info("Shutdown client");
 
