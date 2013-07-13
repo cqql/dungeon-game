@@ -3,6 +3,7 @@ package dungeon.ui.screens;
 import dungeon.client.Client;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
+import dungeon.models.Player;
 import dungeon.models.World;
 import dungeon.ui.messages.ChatMessage;
 import dungeon.ui.messages.ShowLobby;
@@ -50,6 +51,13 @@ public class LobbyScreen extends JPanel implements MessageHandler {
       }
     });
 
+    this.readyButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
+        LobbyScreen.this.client.sendReady();
+      }
+    });
+
     this.playerList.setEnabled(false);
     this.playerList.setFont(this.chatFont);
 
@@ -92,6 +100,12 @@ public class LobbyScreen extends JPanel implements MessageHandler {
   }
 
   private void reloadPlayerList () {
+    StringBuilder text = new StringBuilder();
 
+    for (Player player : this.client.getPlayers()) {
+      text.append(String.format("%s\n", player.getName()));
+    }
+
+    this.playerList.setText(text.toString());
   }
 }

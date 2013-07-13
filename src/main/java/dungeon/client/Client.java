@@ -95,6 +95,13 @@ public class Client implements MessageHandler {
   }
 
   /**
+   * @return A list of all players in the world
+   */
+  public List<Player> getPlayers () {
+    return this.world.get().getPlayers();
+  }
+
+  /**
    * @return A list of all players in the same room as {@code player}
    */
   public List<Player> getPlayersInRoom (Player player) {
