@@ -1,21 +1,25 @@
 package dungeon.game;
 
-import dungeon.game.messages.DefeatEvent;
-import dungeon.game.messages.PlayerJoinCommand;
-import dungeon.game.messages.PlayerLeaveCommand;
-import dungeon.game.messages.WinEvent;
+import dungeon.game.messages.*;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
+import dungeon.models.Player;
 import dungeon.models.World;
 import dungeon.pulse.Pulse;
 import dungeon.ui.messages.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Handles the game logic.
  */
 public class LogicHandler implements MessageHandler {
+  private static final Logger LOGGER = Logger.getLogger(LogicHandler.class.getName());
+
   private static final double MS_PER_SECOND = 1000;
 
   private final Mailman mailman;
@@ -33,9 +37,9 @@ public class LogicHandler implements MessageHandler {
   private GameLogic logic;
 
   /**
-   * Is the game paused?
+   * Which players are ready?
    */
-  private boolean paused = true;
+  private Map<Integer, Boolean> playersReady = new HashMap<>();
 
   public LogicHandler (Mailman mailman, World world) {
     this.mailman = mailman;
@@ -74,11 +78,17 @@ public class LogicHandler implements MessageHandler {
         this.logic.sellItem(playerId, ((SellCommand)message).getMerchant(), ((SellCommand)message).getItem());
       }
     } else if (message instanceof PlayerJoinCommand) {
-      this.logic.addPlayer(((PlayerJoinCommand)message).getPlayer());
+      Player player = ((PlayerJoinCommand)message).getPlayer();
+
+      this.logic.addPlayer(player);
+      this.playersReady.put(player.getId(), false);
     } else if (message instanceof PlayerLeaveCommand) {
-      this.logic.removePlayer(((PlayerLeaveCommand)message).getPlayerId());
-    } else if (message == MenuCommand.START_GAME) {
-      this.paused = false;
+      int playerId = ((PlayerLeaveCommand)message).getPlayerId();
+
+      this.logic.removePlayer(playerId);
+      this.playersReady.remove(playerId);
+    } else if (message instanceof PlayerReadyCommand) {
+      this.setPlayerReady(((PlayerReadyCommand)message).getPlayerId());
     } else if (message == LifecycleEvent.INITIALIZE) {
       // Initialize the pulse delta. If you don't the first pulse will be from the beginning of the unix epoch until today.
       this.updatePulseDelta();
@@ -183,5 +193,26 @@ public class LogicHandler implements MessageHandler {
    */
   private double getPulseDelta () {
     return this.pulseDelta / MS_PER_SECOND;
+  }
+
+  /**
+   * Sets the player status to ready and starts the game when all players are ready.
+   */
+  private void setPlayerReady (int playerId) {
+    this.playersReady.put(playerId, true);
+
+    boolean allReady = true;
+
+    for (Boolean readyStatus : this.playersReady.values()) {
+      if (readyStatus == false) {
+        allReady = false;
+      }
+    }
+
+    if (allReady) {
+      LOGGER.info("All players ready -> start game");
+
+      this.mailman.send(new StartGame());
+    }
   }
 }

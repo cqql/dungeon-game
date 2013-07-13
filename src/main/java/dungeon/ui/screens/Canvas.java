@@ -273,7 +273,7 @@ public class Canvas extends JPanel implements MessageHandler {
         break;
       }
 
-      String line = String.format("%s: %s", this.client.getPlayerName(message.getAuthorId()), message.getText());
+      String line = String.format("%s: %s", message.getAuthor(), message.getText());
 
       g.setFont(this.font);
       g.drawString(line, 20, screenHeight - 20 - i * 35);

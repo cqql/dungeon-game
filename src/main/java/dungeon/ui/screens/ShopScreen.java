@@ -6,6 +6,7 @@ import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.Item;
 import dungeon.models.Merchant;
+import dungeon.models.Player;
 import dungeon.models.messages.Transform;
 import dungeon.client.Client;
 import dungeon.ui.messages.BuyCommand;
@@ -74,7 +75,11 @@ public class ShopScreen extends JPanel implements MessageHandler {
   }
 
   private void reset () {
-    this.playerItemList.setItems(this.client.getPlayer().getItems());
+    Player player = this.client.getPlayer();
+
+    if (player != null) {
+      this.playerItemList.setItems(player.getItems());
+    }
 
     if (this.merchant != null) {
       this.merchantItemList.setItems(this.merchant.getItems());

@@ -3,6 +3,7 @@ package dungeon.ui;
 import dungeon.client.Client;
 import dungeon.client.ServerDisconnected;
 import dungeon.game.messages.DefeatEvent;
+import dungeon.game.messages.StartGame;
 import dungeon.game.messages.TradeWithMerchant;
 import dungeon.game.messages.WinEvent;
 import dungeon.messages.LifecycleEvent;
@@ -11,6 +12,7 @@ import dungeon.messages.MessageHandler;
 import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.ShowGame;
 import dungeon.ui.messages.ShowInventory;
+import dungeon.ui.messages.ShowLobby;
 import dungeon.ui.screens.*;
 
 import javax.swing.*;
@@ -37,13 +39,15 @@ public class UiManager extends JPanel implements MessageHandler {
 
   private static final String SHOP_SCREEN = "SHOP_SCREEN";
 
+  private static final String LOBBY_SCREEN = "LOBBY_SCREEN";
+
   private final Client client;
 
   private final Map<String, JPanel> screens = new LinkedHashMap<>();
 
   private final CardLayout layout;
 
-  public UiManager (Client client, Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen) {
+  public UiManager (Client client, Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen, LobbyScreen lobbyScreen) {
     super(new CardLayout());
 
     this.client = client;
@@ -56,6 +60,7 @@ public class UiManager extends JPanel implements MessageHandler {
     this.screens.put(DEFEAT_SCREEN, defeatScreen);
     this.screens.put(INVENTORY_SCREEN, inventoryScreen);
     this.screens.put(SHOP_SCREEN, shopScreen);
+    this.screens.put(LOBBY_SCREEN, lobbyScreen);
   }
 
   @Override
@@ -66,7 +71,7 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(START_MENU);
     } else if (message == MenuCommand.SHOW_MENU) {
       this.showScreen(START_MENU);
-    } else if (message == MenuCommand.START_GAME || message instanceof ShowGame) {
+    } else if (message instanceof StartGame || (message instanceof ShowGame && ((ShowGame)message).getPlayerId() == this.client.getPlayerId())) {
       this.showScreen(CANVAS);
     } else if (message instanceof WinEvent) {
       this.showScreen(WIN_SCREEN);
@@ -78,6 +83,8 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(SHOP_SCREEN);
     } else if (message instanceof ServerDisconnected) {
       this.showScreen(START_MENU);
+    } else if (message instanceof ShowLobby && ((ShowLobby)message).getPlayerId() == this.client.getPlayerId()) {
+      this.showScreen(LOBBY_SCREEN);
     }
   }
 

@@ -1,6 +1,7 @@
 package dungeon.client;
 
 import dungeon.game.messages.PlayerJoinCommand;
+import dungeon.game.messages.PlayerReadyCommand;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
@@ -12,7 +13,6 @@ import dungeon.models.messages.Transform;
 import dungeon.server.Server;
 import dungeon.ui.ServerConnection;
 import dungeon.ui.messages.ChatMessage;
-import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.PlayerMessage;
 
 import java.io.IOException;
@@ -65,7 +65,8 @@ public class Client implements MessageHandler {
     }
 
     if ((message instanceof PlayerMessage && ((PlayerMessage)message).getPlayerId() == this.playerId.get())
-      || (message instanceof ChatMessage && ((ChatMessage)message).getAuthorId() == this.playerId.get())) {
+      || (message instanceof ChatMessage && ((ChatMessage)message).getAuthorId() == this.playerId.get())
+      || (message instanceof PlayerReadyCommand && ((PlayerReadyCommand)message).getPlayerId() == this.playerId.get())) {
       try {
         this.serverConnection.write(message);
       } catch (IOException e) {
@@ -79,6 +80,10 @@ public class Client implements MessageHandler {
     this.mailman.send(message);
   }
 
+  public void sendChatMessage (String message) {
+    this.send(new ChatMessage(this.playerId.get(), this.playerName, message));
+  }
+
   public int getPlayerId () {
     return this.playerId.get();
   }
@@ -90,14 +95,11 @@ public class Client implements MessageHandler {
     return this.world.get().getPlayer(this.getPlayerId());
   }
 
-  public String getPlayerName (int id) {
-    for (Player player : this.world.get().getPlayers()) {
-      if (player.getId() == id) {
-        return player.getName();
-      }
-    }
-
-    return "Unbekannt";
+  /**
+   * @return A list of all players in the world
+   */
+  public List<Player> getPlayers () {
+    return this.world.get().getPlayers();
   }
 
   /**
@@ -171,8 +173,12 @@ public class Client implements MessageHandler {
 
     this.messageForwarder = new MessageForwarder(this);
     this.messageForwarder.start();
+  }
 
-    this.send(MenuCommand.START_GAME);
+  public void sendReady () {
+    this.sendChatMessage("Ich bin bereit");
+
+    this.send(new PlayerReadyCommand(this.playerId.get()));
   }
 
   public void startServer (int port) throws ServerStartException, ConnectException {
@@ -192,6 +198,15 @@ public class Client implements MessageHandler {
     }
 
     this.connect("localhost", port);
+  }
+
+  /**
+   * Removes the player from the world/lobby and leaves the world.
+   */
+  public void disconnect () {
+    this.send(new World.RemovePlayerTransform(this.getPlayerId()));
+
+    this.stop();
   }
 
   private void stop () {

@@ -2,6 +2,7 @@ package dungeon.ui.screens;
 
 import dungeon.messages.LifecycleEvent;
 import dungeon.client.Client;
+import dungeon.ui.messages.ShowLobby;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -16,9 +17,9 @@ public class StartMenu extends JPanel {
 
   private final JButton startButton = new JButton("Lokales Spiel starten");
 
-  private final JButton startNetworkButton = new JButton("Netzwerkspiel starten");
+  private final JButton startNetworkButton = new JButton("Lobby erstellen");
 
-  private final JButton joinNetworkButton = new JButton("Netzwerkspiel beitreten");
+  private final JButton joinNetworkButton = new JButton("Lobby beitreten");
 
   private final JButton quitButton = new JButton("Beenden");
 
@@ -42,10 +43,29 @@ public class StartMenu extends JPanel {
 
         try {
           StartMenu.this.client.startServer(6077);
-        } catch (Client.ServerStartException e1) {
+
+          StartMenu.this.client.sendReady();
+        } catch (Client.ServerStartException ex) {
           JOptionPane.showMessageDialog(null, "Spiel konnte nicht gestartet werden");
-        } catch (Client.ConnectException e1) {
+        } catch (Client.ConnectException ex) {
           JOptionPane.showMessageDialog(null, "Spiel konnte nicht gestartet werden");
+        }
+      }
+    });
+
+    this.startNetworkButton.addMouseListener(new MouseInputAdapter() {
+      @Override
+      public void mouseClicked (MouseEvent e) {
+        StartMenu.this.client.setPlayerName(StartMenu.this.nameField.getText());
+
+        try {
+          StartMenu.this.client.startServer(6077);
+
+          StartMenu.this.client.send(new ShowLobby(StartMenu.this.client.getPlayerId()));
+        } catch (Client.ServerStartException ex) {
+          JOptionPane.showMessageDialog(null, "Lobby konnte nicht erstellt werden");
+        } catch (Client.ConnectException ex) {
+          JOptionPane.showMessageDialog(null, "Lobby konnte nicht erstellt werden");
         }
       }
     });
@@ -65,6 +85,8 @@ public class StartMenu extends JPanel {
 
         try {
           StartMenu.this.client.connect(server, 6077);
+
+          StartMenu.this.client.send(new ShowLobby(StartMenu.this.client.getPlayerId()));
         } catch (Client.ConnectException e1) {
           JOptionPane.showMessageDialog(null, "Es konnte keine Verbindung hergestellt werden");
         }
