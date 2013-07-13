@@ -37,7 +37,7 @@ public class Client implements MessageHandler {
 
   private ServerConnection serverConnection;
 
-  private final MessageForwarder messageForwarder = new MessageForwarder(this);
+  private MessageForwarder messageForwarder;
 
   private Server server;
 
@@ -56,6 +56,7 @@ public class Client implements MessageHandler {
         this.serverConnection.write(message);
       } catch (IOException e) {
         LOGGER.log(Level.WARNING, "Could not send message to server", e);
+        this.stop();
       }
     } else if (message == LifecycleEvent.SHUTDOWN) {
       this.stop();
@@ -139,6 +140,7 @@ public class Client implements MessageHandler {
       throw new ConnectException();
     }
 
+    this.messageForwarder = new MessageForwarder(this);
     this.messageForwarder.start();
 
     this.send(MenuCommand.START_GAME);
@@ -166,14 +168,19 @@ public class Client implements MessageHandler {
   private void stop () {
     LOGGER.info("Shutdown client");
 
-    this.messageForwarder.stop();
+    if (this.messageForwarder != null) {
+      this.messageForwarder.stop();
+      this.messageForwarder = null;
+    }
 
     if (this.serverConnection != null) {
       this.serverConnection.close();
+      this.serverConnection = null;
     }
 
     if (this.server != null) {
       this.server.stop();
+      this.server = null;
     }
   }
 
@@ -206,11 +213,13 @@ public class Client implements MessageHandler {
           }
         } catch (SocketException e) {
           LOGGER.log(Level.INFO, "The socket has been closed");
-          this.stop();
+          this.client.stop();
         } catch (IOException e) {
           LOGGER.log(Level.WARNING, "Something failed while receiving from the server", e);
+          this.client.stop();
         } catch (ClassNotFoundException e) {
           LOGGER.log(Level.WARNING, "Received message of unknown class", e);
+          this.client.stop();
         }
       }
     }
