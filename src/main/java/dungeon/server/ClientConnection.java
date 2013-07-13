@@ -1,6 +1,7 @@
 package dungeon.server;
 
 import dungeon.game.LogicHandler;
+import dungeon.game.messages.PlayerLeaveCommand;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.server.commands.CloseConnection;
@@ -148,6 +149,8 @@ public class ClientConnection implements Runnable {
     this.server.removeConnection(this);
 
     this.closeStreams();
+
+    this.mailman.send(new PlayerLeaveCommand(this.playerId));
   }
 
   private void closeStreams () {

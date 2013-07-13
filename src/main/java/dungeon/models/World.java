@@ -107,7 +107,9 @@ public class World implements Serializable {
     List<Player> players = new ArrayList<>();
 
     for (Player player : this.players) {
-      players.add(player.apply(transform));
+      if (!(transform instanceof RemovePlayerTransform) || player.getId() != ((RemovePlayerTransform)transform).playerId) {
+        players.add(player.apply(transform));
+      }
     }
 
     Set<Level> currentLevels = this.getCurrentLevels();
@@ -132,6 +134,14 @@ public class World implements Serializable {
 
     public AddPlayerTransform (Player player) {
       this.player = player;
+    }
+  }
+
+  public static class RemovePlayerTransform implements Transform, Serializable {
+    public final int playerId;
+
+    public RemovePlayerTransform (int playerId) {
+      this.playerId = playerId;
     }
   }
 }

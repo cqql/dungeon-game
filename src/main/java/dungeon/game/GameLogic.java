@@ -39,6 +39,8 @@ public class GameLogic {
 
   private final List<Player> joiningPlayers = new ArrayList<>();
 
+  private final List<Integer> leavingPlayerIds = new ArrayList<>();
+
   private Map<Integer, PlayerState> playerStates = new HashMap<>();
 
   private GameState gameState = GameState.PLAYING;
@@ -191,6 +193,13 @@ public class GameLogic {
   }
 
   /**
+   * Removes the player from the world.
+   */
+  public void removePlayer (int playerId) {
+    this.leavingPlayerIds.add(playerId);
+  }
+
+  /**
    * Returns the current game state.
    *
    * You can use this to check, if the player has died, won, etc.
@@ -232,6 +241,7 @@ public class GameLogic {
     this.handleIceBolt(transaction);
     this.handleInteractionWithNpcs(transaction);
     this.joinPlayers(transaction);
+    this.removePlayers(transaction);
 
     this.world = transaction.getWorld();
 
@@ -711,6 +721,18 @@ public class GameLogic {
     }
 
     this.joiningPlayers.clear();
+  }
+
+  private void removePlayers (Transaction transaction) {
+    for (int id : this.leavingPlayerIds) {
+      LOGGER.info("Player left " + id);
+
+      transaction.pushAndCommit(new World.RemovePlayerTransform(id));
+
+      this.playerStates.remove(id);
+    }
+
+    this.leavingPlayerIds.clear();
   }
 
   private PlayerState getPlayerState (int playerId) {
