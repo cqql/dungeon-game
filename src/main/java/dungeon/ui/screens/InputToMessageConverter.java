@@ -81,7 +81,7 @@ public class InputToMessageConverter implements KeyListener {
     String message = JOptionPane.showInputDialog("Nachricht");
 
     if (message != null) {
-      this.client.send(new ChatMessage(this.client.getPlayerId(), message));
+      this.client.sendChatMessage(message);
     }
   }
 }

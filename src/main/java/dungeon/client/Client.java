@@ -79,6 +79,10 @@ public class Client implements MessageHandler {
     this.mailman.send(message);
   }
 
+  public void sendChatMessage (String message) {
+    this.send(new ChatMessage(this.playerId.get(), this.playerName, message));
+  }
+
   public int getPlayerId () {
     return this.playerId.get();
   }
@@ -88,16 +92,6 @@ public class Client implements MessageHandler {
    */
   public Player getPlayer () {
     return this.world.get().getPlayer(this.getPlayerId());
-  }
-
-  public String getPlayerName (int id) {
-    for (Player player : this.world.get().getPlayers()) {
-      if (player.getId() == id) {
-        return player.getName();
-      }
-    }
-
-    return "Unbekannt";
   }
 
   /**
