@@ -1,6 +1,7 @@
 package dungeon.client;
 
 import dungeon.game.messages.PlayerJoinCommand;
+import dungeon.game.messages.PlayerReadyCommand;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
@@ -12,7 +13,6 @@ import dungeon.models.messages.Transform;
 import dungeon.server.Server;
 import dungeon.ui.ServerConnection;
 import dungeon.ui.messages.ChatMessage;
-import dungeon.ui.messages.MenuCommand;
 import dungeon.ui.messages.PlayerMessage;
 
 import java.io.IOException;
@@ -65,7 +65,8 @@ public class Client implements MessageHandler {
     }
 
     if ((message instanceof PlayerMessage && ((PlayerMessage)message).getPlayerId() == this.playerId.get())
-      || (message instanceof ChatMessage && ((ChatMessage)message).getAuthorId() == this.playerId.get())) {
+      || (message instanceof ChatMessage && ((ChatMessage)message).getAuthorId() == this.playerId.get())
+      || (message instanceof PlayerReadyCommand && ((PlayerReadyCommand)message).getPlayerId() == this.playerId.get())) {
       try {
         this.serverConnection.write(message);
       } catch (IOException e) {
@@ -175,9 +176,9 @@ public class Client implements MessageHandler {
   }
 
   public void sendReady () {
-    this.sendChatMessage(this.playerName + " ist bereit");
+    this.sendChatMessage("Ich bin bereit");
 
-    this.send(MenuCommand.START_GAME);
+    this.send(new PlayerReadyCommand(this.playerId.get()));
   }
 
   public void startServer (int port) throws ServerStartException, ConnectException {

@@ -3,6 +3,7 @@ package dungeon.ui;
 import dungeon.client.Client;
 import dungeon.client.ServerDisconnected;
 import dungeon.game.messages.DefeatEvent;
+import dungeon.game.messages.StartGame;
 import dungeon.game.messages.TradeWithMerchant;
 import dungeon.game.messages.WinEvent;
 import dungeon.messages.LifecycleEvent;
@@ -70,7 +71,7 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(START_MENU);
     } else if (message == MenuCommand.SHOW_MENU) {
       this.showScreen(START_MENU);
-    } else if (message == MenuCommand.START_GAME || (message instanceof ShowGame && ((ShowGame)message).getPlayerId() == this.client.getPlayerId())) {
+    } else if (message instanceof StartGame || (message instanceof ShowGame && ((ShowGame)message).getPlayerId() == this.client.getPlayerId())) {
       this.showScreen(CANVAS);
     } else if (message instanceof WinEvent) {
       this.showScreen(WIN_SCREEN);
