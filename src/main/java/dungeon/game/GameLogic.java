@@ -598,9 +598,7 @@ public class GameLogic {
   private void handleRespawn (Transaction transaction) {
     for (Player player : transaction.getWorld().getPlayers()) {
       if (player.getHitPoints() == 0) {
-        transaction.pushAndCommit(new Player.LivesTransform(player, -1));
-        transaction.pushAndCommit(new Player.HitpointTransform(player, player.getMaxHitPoints()));
-        transaction.pushAndCommit(new Player.TeleportTransform(player, player.getSavePointRoomId(), player.getSavePointPosition()));
+        transaction.pushAndCommit(new Player.RespawnTransform(player));
       }
     }
   }

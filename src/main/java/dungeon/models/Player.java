@@ -322,6 +322,8 @@ public class Player implements Spatial, Identifiable, Serializable {
       position = new Position(0, 0);
       savePointRoomId = roomId;
       savePointPosition = position;
+    } else if (transform instanceof RespawnTransform) {
+      return ((RespawnTransform)transform).apply(this);
     }
 
     return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, weaponId, position, viewingDirection, savePointRoomId, savePointPosition);
@@ -468,6 +470,39 @@ public class Player implements Spatial, Identifiable, Serializable {
     public AdvanceLevelTransform (String levelId, String roomId) {
       this.levelId = levelId;
       this.roomId = roomId;
+    }
+  }
+
+  public static class RespawnTransform implements Transform, Serializable {
+    private final int playerId;
+
+    public RespawnTransform (Player player) {
+      this.playerId = player.getId();
+    }
+
+    public Player apply (Player player) {
+      if (player.id == this.playerId) {
+        return new Player(
+          player.id,
+          player.name,
+          player.lives - 1,
+          player.maxHitPoints,
+          player.maxHitPoints,
+          player.money,
+          player.mana,
+          player.maxMana,
+          player.items,
+          player.levelId,
+          player.savePointRoomId,
+          player.weaponId,
+          player.savePointPosition,
+          player.viewingDirection,
+          player.savePointRoomId,
+          player.savePointPosition
+        );
+      } else {
+        return player;
+      }
     }
   }
 
