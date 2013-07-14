@@ -5,6 +5,8 @@ import dungeon.util.Vector;
 import java.io.Serializable;
 
 public class Position implements Serializable {
+  public static final Position ZERO = new Position(0, 0);
+
   private final int x;
 
   private final int y;

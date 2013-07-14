@@ -254,50 +254,36 @@ public class Player implements Spatial, Identifiable, Serializable {
   }
 
   public Player apply (Transform transform) {
-    int id = this.id;
-    String name = this.name;
-    int lives = this.lives;
-    int hitPoints = this.hitPoints;
-    int maxHitPoints = this.maxHitPoints;
-    int money = this.money;
-    int mana = this.mana;
-    int maxMana = this.maxMana;
-    List<Item> items = this.items;
-    String levelId = this.levelId;
-    String roomId = this.roomId;
-    int weaponId = this.weaponId;
-    Position position = this.position;
-    Direction viewingDirection = this.viewingDirection;
-    String savePointRoomId = this.savePointRoomId;
-    Position savePointPosition = this.savePointPosition;
-
-    if (transform instanceof SavePointTransform) {
-      SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
-
-      savePointRoomId = savePointTransform.roomId;
-      savePointPosition = savePointTransform.position;
-    } else if (transform instanceof AdvanceLevelTransform) {
-      levelId = ((AdvanceLevelTransform)transform).levelId;
-      roomId = ((AdvanceLevelTransform)transform).roomId;
-      position = new Position(0, 0);
-      savePointRoomId = roomId;
-      savePointPosition = position;
-    } else if (transform instanceof PlayerTransform) {
+    if (transform instanceof PlayerTransform) {
       return ((PlayerTransform)transform).apply(this);
+    } else {
+      return this;
     }
-
-    return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, weaponId, position, viewingDirection, savePointRoomId, savePointPosition);
   }
 
-  public static class PlayerTransform implements Transform {
+  /**
+   * Describes a general transformation of a player.
+   */
+  private static class PlayerTransform implements Transform {
     private final int playerId;
 
+    private final boolean appliesToAll;
+
+    /**
+     * @param player To which player should this apply? It applies to all, if you pass null.
+     */
     public PlayerTransform (Player player) {
-      this.playerId = player.id;
+      if (player == null) {
+        this.playerId = 0;
+        this.appliesToAll = true;
+      } else {
+        this.playerId = player.id;
+        this.appliesToAll = false;
+      }
     }
 
     public Player apply (Player player) {
-      if (player.id == this.playerId) {
+      if (this.appliesToAll || player.id == this.playerId) {
         return new Player(
           this.id(player),
           this.name(player),
@@ -457,14 +443,26 @@ public class Player implements Spatial, Identifiable, Serializable {
   /**
    * This has no playerId, because all players have the same save point.
    */
-  public static class SavePointTransform implements Transform {
+  public static class SavePointTransform extends PlayerTransform {
     private final String roomId;
 
     private final Position position;
 
     public SavePointTransform (String roomId, Position position) {
+      super(null);
+
       this.roomId = roomId;
       this.position = position;
+    }
+
+    @Override
+    protected String savePointRoomId (Player player) {
+      return this.roomId;
+    }
+
+    @Override
+    protected Position savePointPosition (Player player) {
+      return this.position;
     }
   }
 
@@ -571,14 +569,41 @@ public class Player implements Spatial, Identifiable, Serializable {
   /**
    * This has no playerId, because when one player advances, all do.
    */
-  public static class AdvanceLevelTransform implements Transform {
+  public static class AdvanceLevelTransform extends PlayerTransform {
     private final String levelId;
 
     private final String roomId;
 
     public AdvanceLevelTransform (String levelId, String roomId) {
+      super(null);
+
       this.levelId = levelId;
       this.roomId = roomId;
+    }
+
+    @Override
+    protected String levelId (Player player) {
+      return this.levelId;
+    }
+
+    @Override
+    protected String roomId (Player player) {
+      return this.roomId;
+    }
+
+    @Override
+    protected Position position (Player player) {
+      return Position.ZERO;
+    }
+
+    @Override
+    protected String savePointRoomId (Player player) {
+      return this.roomId;
+    }
+
+    @Override
+    protected Position savePointPosition (Player player) {
+      return Position.ZERO;
     }
   }
 
