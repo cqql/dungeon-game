@@ -1,7 +1,9 @@
 package dungeon.client;
 
+import dungeon.game.messages.DefeatEvent;
 import dungeon.game.messages.PlayerJoinCommand;
 import dungeon.game.messages.PlayerReadyCommand;
+import dungeon.game.messages.WinEvent;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
@@ -56,7 +58,7 @@ public class Client implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof Transform) {
       this.world.set(this.world.get().apply((Transform)message));
-    } else if (message == LifecycleEvent.SHUTDOWN) {
+    } else if (message == LifecycleEvent.SHUTDOWN || message instanceof WinEvent || message instanceof DefeatEvent) {
       this.stop();
     }
 
