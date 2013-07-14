@@ -2,6 +2,7 @@ package dungeon.ui.screens;
 
 import dungeon.client.Client;
 import dungeon.load.WorldLoader;
+import dungeon.models.World;
 import dungeon.ui.messages.*;
 
 import javax.swing.*;
@@ -96,6 +97,13 @@ public class InputToMessageConverter implements KeyListener {
   }
 
   private void saveGame () {
+    World world = this.client.getWorld();
+
+    if (world.getPlayers().size() > 1) {
+      JOptionPane.showMessageDialog(this.canvas, "Man kann im Mehrspielermodus nicht speichern.");
+      return;
+    }
+
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Dungeon Game Speicherstand", "dungeon"));
 
