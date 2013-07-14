@@ -77,7 +77,7 @@ public class Projectile implements Spatial, Serializable {
     return new Position(this.position.getVector().plus(new Vector(SIZE / 2, SIZE / 2)));
   }
 
-  public static class MoveTransform implements Transform, Serializable {
+  public static class MoveTransform implements Transform {
     private final int projectileId;
 
     private final Position position;

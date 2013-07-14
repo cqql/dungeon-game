@@ -129,7 +129,7 @@ public class Enemy implements Spatial, Identifiable, Serializable {
     return this.id;
   }
 
-  public static class HitPointTransform implements Transform, Serializable {
+  public static class HitPointTransform implements Transform {
     private final Enemy enemy;
 
     private final int delta;
@@ -140,7 +140,7 @@ public class Enemy implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class MoveTransform implements Transform, Serializable {
+  public static class MoveTransform implements Transform {
     private final Enemy enemy;
 
     private final Vector delta;
@@ -151,7 +151,7 @@ public class Enemy implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class TeleportTransform implements Transform, Serializable {
+  public static class TeleportTransform implements Transform {
     private final Enemy enemy;
 
     private final Position position;

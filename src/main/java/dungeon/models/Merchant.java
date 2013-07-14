@@ -103,7 +103,7 @@ public class Merchant implements Spatial, Serializable {
     return this.id;
   }
 
-  public static class BuyItemTransform implements Transform, Serializable {
+  public static class BuyItemTransform implements Transform {
     private final Merchant merchant;
 
     private final Item item;
@@ -114,7 +114,7 @@ public class Merchant implements Spatial, Serializable {
     }
   }
 
-  public static class SellItemTransform implements Transform, Serializable {
+  public static class SellItemTransform implements Transform {
     private final Merchant merchant;
 
     private final Item item;

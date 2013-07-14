@@ -129,7 +129,7 @@ public class World implements Serializable {
     return new World(levels, players);
   }
 
-  public static class AddPlayerTransform implements Transform, Serializable {
+  public static class AddPlayerTransform implements Transform {
     public final Player player;
 
     public AddPlayerTransform (Player player) {
@@ -137,7 +137,7 @@ public class World implements Serializable {
     }
   }
 
-  public static class RemovePlayerTransform implements Transform, Serializable {
+  public static class RemovePlayerTransform implements Transform {
     public final int playerId;
 
     public RemovePlayerTransform (int playerId) {

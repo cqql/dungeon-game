@@ -231,7 +231,7 @@ public class Room implements Serializable {
     return new Room(id, enemies, savePoints, tiles, drops, projectiles, npcs, merchants);
   }
 
-  public static class AddDropTransform implements Transform, Serializable {
+  public static class AddDropTransform implements Transform {
     private final String roomId;
 
     private final Drop drop;
@@ -242,7 +242,7 @@ public class Room implements Serializable {
     }
   }
 
-  public static class RemoveDropTransform implements Transform, Serializable {
+  public static class RemoveDropTransform implements Transform {
     private final int dropId;
 
     public RemoveDropTransform (int dropId) {
@@ -250,7 +250,7 @@ public class Room implements Serializable {
     }
   }
 
-  public static class AddProjectileTransform implements Transform, Serializable {
+  public static class AddProjectileTransform implements Transform {
     private final String roomId;
 
     private final Projectile projectile;
@@ -261,7 +261,7 @@ public class Room implements Serializable {
     }
   }
 
-  public static class RemoveProjectileTransform implements Transform, Serializable {
+  public static class RemoveProjectileTransform implements Transform {
     private final String roomId;
 
     private final Projectile projectile;
@@ -272,7 +272,7 @@ public class Room implements Serializable {
     }
   }
 
-  public static class RemoveEnemyTransform implements Transform, Serializable {
+  public static class RemoveEnemyTransform implements Transform {
     private final Enemy enemy;
 
     public RemoveEnemyTransform (Enemy enemy) {

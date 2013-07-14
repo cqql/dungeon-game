@@ -9,6 +9,6 @@ import java.io.Serializable;
  * applicable, you should return an IdentityTransform instead of null. This way callers of your method can rely on your
  * method returning a valid Transform and never have to check for null.
  */
-public class IdentityTransform implements Transform, Serializable {
+public class IdentityTransform implements Transform {
 
 }
