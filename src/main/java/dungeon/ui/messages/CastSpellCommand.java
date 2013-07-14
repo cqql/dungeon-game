@@ -10,6 +10,6 @@ public class CastSpellCommand implements Command {
   }
 
   public DamageType getDamageType () {
-    return damageType;
+    return this.damageType;
   }
 }

@@ -19,10 +19,10 @@ public class LoadWorld implements Message, Serializable {
   }
 
   public int getPlayerId () {
-    return playerId;
+    return this.playerId;
   }
 
   public World getWorld () {
-    return world;
+    return this.world;
   }
 }
