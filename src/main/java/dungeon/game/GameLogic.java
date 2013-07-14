@@ -757,7 +757,7 @@ public class GameLogic {
     if (System.currentTimeMillis() - state.lastDamageTime > 1000) {
       state.lastDamageTime = System.currentTimeMillis();
 
-      transaction.pushAndCommit(new Player.HitpointTransform(player, -amount));
+      transaction.pushAndCommit(new Player.HitPointTransform(player, -amount));
     }
   }
 

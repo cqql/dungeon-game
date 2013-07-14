@@ -48,7 +48,7 @@ public class PlayerTest {
 
   @Test
   public void hitpointTransformUpdatesHitpoints () {
-    Player transformed = this.player.apply(new Player.HitpointTransform(this.player, -1));
+    Player transformed = this.player.apply(new Player.HitPointTransform(this.player, -1));
 
     assertEquals(4, transformed.getHitPoints());
   }

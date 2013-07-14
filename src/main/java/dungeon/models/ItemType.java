@@ -13,7 +13,7 @@ public enum ItemType implements Serializable {
 
     @Override
     public void use (Transaction transaction, Player player) {
-      transaction.pushAndCommit(new Player.HitpointTransform(player, this.getHitPointDelta()));
+      transaction.pushAndCommit(new Player.HitPointTransform(player, this.getHitPointDelta()));
     }
   },
   MANA_POTION("Manatrank", true, false, 5, 0, 5, 0) {

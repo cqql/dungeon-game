@@ -271,55 +271,17 @@ public class Player implements Spatial, Identifiable, Serializable {
     String savePointRoomId = this.savePointRoomId;
     Position savePointPosition = this.savePointPosition;
 
-    if (transform instanceof ViewingDirectionTransform && this.id == ((ViewingDirectionTransform)transform).id) {
-      viewingDirection = ((ViewingDirectionTransform)transform).direction;
-    } else if (transform instanceof HitpointTransform && this.id == ((HitpointTransform)transform).id) {
-      HitpointTransform hpTransform = (HitpointTransform)transform;
-
-      hitPoints = Math.max(Math.min(hitPoints + hpTransform.delta, this.maxHitPoints), 0);
-    } else if (transform instanceof LivesTransform && this.id == ((LivesTransform)transform).id) {
-      LivesTransform livesTransform = (LivesTransform)transform;
-
-      lives += livesTransform.delta;
-    } else if (transform instanceof TeleportTransform && this.id == ((TeleportTransform)transform).id) {
-      TeleportTransform teleportTransform = (TeleportTransform)transform;
-
-      roomId = teleportTransform.roomId;
-      position = teleportTransform.position;
-    } else if (transform instanceof SavePointTransform) {
+    if (transform instanceof SavePointTransform) {
       SavePointTransform savePointTransform = (Player.SavePointTransform)transform;
 
       savePointRoomId = savePointTransform.roomId;
       savePointPosition = savePointTransform.position;
-    } else if (transform instanceof MoneyTransform && this.id == ((MoneyTransform)transform).id) {
-      money += ((MoneyTransform)transform).delta;
-    } else if (transform instanceof AddItemTransform && this.id == ((AddItemTransform)transform).id) {
-      items = new ArrayList<>(items);
-      items.add(((AddItemTransform)transform).item);
-    } else if (transform instanceof ManaTransform && this.id == ((ManaTransform)transform).id) {
-      ManaTransform manaTransform = (Player.ManaTransform)transform;
-
-      mana = Math.max(Math.min(mana + manaTransform.delta, this.maxMana), 0);
-    } else if (transform instanceof RemoveItemTransform && this.id == ((RemoveItemTransform)transform).id) {
-      items = new ArrayList<>();
-
-      for (Item item : this.items) {
-        if (!item.equals(((RemoveItemTransform)transform).item)) {
-          items.add(item);
-        }
-      }
-    } else if (transform instanceof EquipWeaponTransform && this.id == ((EquipWeaponTransform)transform).id) {
-      EquipWeaponTransform equipWeaponTransform = (Player.EquipWeaponTransform)transform;
-
-      weaponId = equipWeaponTransform.weaponId;
     } else if (transform instanceof AdvanceLevelTransform) {
       levelId = ((AdvanceLevelTransform)transform).levelId;
       roomId = ((AdvanceLevelTransform)transform).roomId;
       position = new Position(0, 0);
       savePointRoomId = roomId;
       savePointPosition = position;
-    } else if (transform instanceof RespawnTransform) {
-      return ((RespawnTransform)transform).apply(this);
     } else if (transform instanceof PlayerTransform) {
       return ((PlayerTransform)transform).apply(this);
     }
@@ -439,39 +401,56 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class HitpointTransform implements Transform {
-    private final int id;
-
+  public static class HitPointTransform extends PlayerTransform {
     private final int delta;
 
-    public HitpointTransform (Player player, int delta) {
-      this.id = player.getId();
+    public HitPointTransform (Player player, int delta) {
+      super(player);
+
       this.delta = delta;
+    }
+
+    @Override
+    protected int hitPoints (Player player) {
+      return Math.max(Math.min(player.hitPoints + this.delta, player.maxHitPoints), 0);
     }
   }
 
-  public static class LivesTransform implements Transform {
-    private final int id;
-
+  public static class LivesTransform extends PlayerTransform {
     private final int delta;
 
     public LivesTransform (Player player, int delta) {
-      this.id = player.getId();
+      super(player);
+
       this.delta = delta;
+    }
+
+    @Override
+    protected int lives (Player player) {
+      return Math.max(0, player.lives + delta);
     }
   }
 
-  public static class TeleportTransform implements Transform {
-    private final int id;
-
+  public static class TeleportTransform extends PlayerTransform {
     private final String roomId;
 
     private final Position position;
 
     public TeleportTransform (Player player, String roomId, Position position) {
-      this.id = player.getId();
+      super(player);
+
       this.roomId = roomId;
       this.position = position;
+    }
+
+    @Override
+    protected String roomId (Player player) {
+      return this.roomId;
+    }
+
+    @Override
+    protected Position position (Player player) {
+      return this.position;
     }
   }
 
@@ -489,69 +468,103 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class MoneyTransform implements Transform {
-    private final int id;
-
+  public static class MoneyTransform extends PlayerTransform {
     private final int delta;
 
     public MoneyTransform (Player player, int delta) {
-      this.id = player.getId();
+      super(player);
+
       this.delta = delta;
+    }
+
+    @Override
+    protected int money (Player player) {
+      return Math.max(0, player.money + delta);
     }
   }
 
-  public static class AddItemTransform implements Transform {
-    private final int id;
-
+  public static class AddItemTransform extends PlayerTransform {
     private final Item item;
 
     public AddItemTransform (Player player, Item item) {
-      this.id = player.getId();
+      super(player);
+
       this.item = item;
+    }
+
+    @Override
+    protected List<Item> items (Player player) {
+      List<Item> items = new ArrayList<>(player.items);
+      items.add(this.item);
+      return items;
     }
   }
 
-  public static class ManaTransform implements Transform {
-    private final int id;
-
+  public static class ManaTransform extends PlayerTransform {
     private final int delta;
 
     public ManaTransform (Player player, int delta) {
-      this.id = player.getId();
+      super(player);
+
       this.delta = delta;
+    }
+
+    @Override
+    protected int mana (Player player) {
+      return Math.max(Math.min(player.mana + this.delta, player.maxMana), 0);
     }
   }
 
-  public static class RemoveItemTransform implements Transform {
-    private final int id;
-
+  public static class RemoveItemTransform extends PlayerTransform {
     private final Item item;
 
     public RemoveItemTransform (Player player, Item item) {
-      this.id = player.getId();
+      super(player);
+
       this.item = item;
+    }
+
+    @Override
+    protected List<Item> items (Player player) {
+      List<Item> items = new ArrayList<>();
+
+      for (Item item : player.items) {
+        if (!item.equals(this.item)) {
+          items.add(item);
+        }
+      }
+
+      return items;
     }
   }
 
-  public static class EquipWeaponTransform implements Transform {
-    private final int id;
-
+  public static class EquipWeaponTransform extends PlayerTransform {
     private final int weaponId;
 
     public EquipWeaponTransform (Player player, int weaponId) {
-      this.id = player.getId();
+      super(player);
+
       this.weaponId = weaponId;
+    }
+
+    @Override
+    protected int weaponId (Player player) {
+      return this.weaponId;
     }
   }
 
-  public static class ViewingDirectionTransform implements Transform {
-    private final int id;
-
+  public static class ViewingDirectionTransform extends PlayerTransform {
     private final Direction direction;
 
     public ViewingDirectionTransform (Player player, Direction direction) {
-      this.id = player.getId();
+      super(player);
+
       this.direction = direction;
+    }
+
+    @Override
+    protected Direction viewingDirection (Player player) {
+      return this.direction;
     }
   }
 
@@ -569,38 +582,30 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
-  public static class RespawnTransform implements Transform {
-    private final int playerId;
-
+  public static class RespawnTransform extends PlayerTransform {
     public RespawnTransform (Player player) {
-      this.playerId = player.getId();
+      super(player);
     }
 
-    public Player apply (Player player) {
-      if (player.id == this.playerId) {
-        return new Player(
-          player.id,
-          player.name,
-          player.lives - 1,
-          player.maxHitPoints,
-          player.maxHitPoints,
-          player.money,
-          player.mana,
-          player.maxMana,
-          player.items,
-          player.levelId,
-          player.savePointRoomId,
-          player.weaponId,
-          player.savePointPosition,
-          player.viewingDirection,
-          player.savePointRoomId,
-          player.savePointPosition
-        );
-      } else {
-        return player;
-      }
+    @Override
+    protected int lives (Player player) {
+      return player.lives - 1;
     }
 
+    @Override
+    protected int hitPoints (Player player) {
+      return player.maxHitPoints;
+    }
+
+    @Override
+    protected String roomId (Player player) {
+      return player.savePointRoomId;
+    }
+
+    @Override
+    protected Position position (Player player) {
+      return player.savePointPosition;
+    }
   }
 
   @Override
