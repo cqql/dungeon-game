@@ -131,7 +131,7 @@ public class ClientConnection implements Runnable {
         this.closedByClient();
       } else if (received instanceof LoadWorld) {
         this.playerId = ((LoadWorld)received).getPlayerId();
-        this.logicHandler.setWorld(((LoadWorld)received).getWorld());
+        this.mailman.send((Message)received);
       }
     }
   }

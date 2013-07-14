@@ -8,6 +8,7 @@ import dungeon.messages.MessageHandler;
 import dungeon.models.Player;
 import dungeon.models.World;
 import dungeon.pulse.Pulse;
+import dungeon.server.commands.LoadWorld;
 import dungeon.ui.messages.*;
 
 import java.util.HashMap;
@@ -107,6 +108,8 @@ public class LogicHandler implements MessageHandler {
     } else if (message == LifecycleEvent.INITIALIZE) {
       // Initialize the pulse delta. If you don't the first pulse will be from the beginning of the unix epoch until today.
       this.updatePulseDelta();
+    } else if (message instanceof LoadWorld) {
+      this.setWorld(((LoadWorld)message).getWorld());
     }
   }
 
