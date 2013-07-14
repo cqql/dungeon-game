@@ -16,6 +16,8 @@ public class Enemy implements Spatial, Identifiable, Serializable {
 
   private final int hitPoints;
 
+  private final DamageType type;
+
   /**
    * How much damage the enemy inflicts on the player.
    */
@@ -32,9 +34,10 @@ public class Enemy implements Spatial, Identifiable, Serializable {
 
   private final String onDeath;
 
-  public Enemy (int id, int hitPoints, int speed, Position position, MoveStrategy moveStrategy, String onDeath) {
+  public Enemy (int id, int hitPoints, DamageType type, int speed, Position position, MoveStrategy moveStrategy, String onDeath) {
     this.id = id;
     this.hitPoints = hitPoints;
+    this.type = type;
     this.speed = speed;
     this.position = position;
     this.moveStrategy = moveStrategy;
@@ -47,6 +50,10 @@ public class Enemy implements Spatial, Identifiable, Serializable {
 
   public int getHitPoints () {
     return this.hitPoints;
+  }
+
+  public DamageType getType () {
+    return this.type;
   }
 
   public int getStrength () {
@@ -130,6 +137,7 @@ public class Enemy implements Spatial, Identifiable, Serializable {
         return new Enemy(
           this.id(enemy),
           this.hitPoints(enemy),
+          this.type(enemy),
           this.speed(enemy),
           this.position(enemy),
           this.moveStrategy(enemy),
@@ -146,6 +154,10 @@ public class Enemy implements Spatial, Identifiable, Serializable {
 
     protected int hitPoints (Enemy enemy) {
       return enemy.hitPoints;
+    }
+
+    protected DamageType type (Enemy enemy) {
+      return enemy.type;
     }
 
     protected int strength (Enemy enemy) {

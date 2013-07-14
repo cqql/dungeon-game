@@ -1,5 +1,6 @@
 package dungeon.load.adapters;
 
+import dungeon.models.DamageType;
 import dungeon.models.Enemy;
 import dungeon.models.Position;
 
@@ -15,6 +16,9 @@ public class EnemyAdapter extends XmlAdapter<EnemyAdapter, Enemy> {
   public int hitPoints;
 
   @XmlAttribute
+  public String type;
+
+  @XmlAttribute
   public int speed;
 
   @XmlJavaTypeAdapter(PositionAdapter.class)
@@ -28,7 +32,7 @@ public class EnemyAdapter extends XmlAdapter<EnemyAdapter, Enemy> {
 
   @Override
   public Enemy unmarshal (EnemyAdapter adapter) throws Exception {
-    return new Enemy(adapter.id, adapter.hitPoints, adapter.speed, adapter.position, Enemy.MoveStrategy.valueOf(adapter.moveStrategy), adapter.onDeath);
+    return new Enemy(adapter.id, adapter.hitPoints, DamageType.valueOf(adapter.type), adapter.speed, adapter.position, Enemy.MoveStrategy.valueOf(adapter.moveStrategy), adapter.onDeath);
   }
 
   @Override
@@ -36,6 +40,7 @@ public class EnemyAdapter extends XmlAdapter<EnemyAdapter, Enemy> {
     EnemyAdapter adapter = new EnemyAdapter();
     adapter.id = enemy.getId();
     adapter.hitPoints = enemy.getHitPoints();
+    adapter.type = enemy.getType().name();
     adapter.speed = enemy.getSpeed();
     adapter.position = enemy.getPosition();
     adapter.moveStrategy = enemy.getMoveStrategy().toString();

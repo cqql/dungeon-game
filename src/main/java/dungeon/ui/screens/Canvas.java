@@ -196,6 +196,10 @@ public class Canvas extends JPanel implements MessageHandler {
       g.setColor(Color.BLACK);
       g.setFont(this.infoFont);
       g.drawString(String.format("%d HP", enemy.getHitPoints()), (int)(enemy.getPosition().getX() * this.xPixelPerUnit) + 10, (int)(enemy.getPosition().getY() * this.yPixelPerUnit) + 22);
+
+      Image icon = this.getTypeIcon(enemy.getType());
+      Position enemyCenter = enemy.getCenter();
+      g.drawImage(icon, (int)(enemyCenter.getX() * this.xPixelPerUnit) - 5, (int)(enemyCenter.getY() * this.yPixelPerUnit) - 5, null);
     }
   }
 
@@ -219,21 +223,7 @@ public class Canvas extends JPanel implements MessageHandler {
         g.setColor(this.projectileColor);
         this.drawSquare(g, projectile.getPosition(), Projectile.SIZE);
       } else {
-        Image image;
-
-        switch (projectile.getType()) {
-          case ROCK:
-            image = this.rock;
-            break;
-          case PAPER:
-            image = this.paper;
-            break;
-          case SCISSORS:
-          default:
-            image = this.scissors;
-        }
-
-        g.drawImage(image, (int)(projectile.getPosition().getX() * this.xPixelPerUnit), (int)(projectile.getPosition().getY() * this.yPixelPerUnit), null);
+        g.drawImage(this.getTypeIcon(projectile.getType()), (int)(projectile.getPosition().getX() * this.xPixelPerUnit), (int)(projectile.getPosition().getY() * this.yPixelPerUnit), null);
       }
     }
   }
@@ -337,5 +327,17 @@ public class Canvas extends JPanel implements MessageHandler {
       (int)Math.ceil(widthUnits * this.xPixelPerUnit),
       (int)Math.ceil(widthUnits * this.yPixelPerUnit)
     );
+  }
+
+  private Image getTypeIcon (DamageType type) {
+    switch (type) {
+      case ROCK:
+        return this.rock;
+      case PAPER:
+        return this.paper;
+      case SCISSORS:
+      default:
+        return this.scissors;
+    }
   }
 }

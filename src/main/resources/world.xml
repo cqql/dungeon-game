@@ -1202,34 +1202,34 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='4' id='101' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="ROCK" hitPoints='4' id='101' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='2000'></position>
     </enemy>
-    <enemy hitPoints='3' id='102' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='102' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='3000'></position>
     </enemy>
-    <enemy hitPoints='2' id='103' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="ROCK" hitPoints='2' id='103' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='6000'></position>
     </enemy>
-    <enemy hitPoints='6' id='104' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="PAPER" hitPoints='6' id='104' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='7000'></position>
     </enemy>
-    <enemy hitPoints='4' id='105' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="PAPER" hitPoints='4' id='105' moveStrategy='NORMAL' speed='1000'>
       <position x='11000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='9' id='106' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="ROCK" hitPoints='9' id='106' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='4' id='107' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='107' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='12000'></position>
     </enemy>
-    <enemy hitPoints='5' id='108' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="ROCK" hitPoints='5' id='108' moveStrategy='NORMAL' speed='1000'>
       <position x='17000' y='12000'></position>
     </enemy>
-    <enemy hitPoints='3' id='109' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="ROCK" hitPoints='3' id='109' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='5' id='110' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="PAPER" hitPoints='5' id='110' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='18000'></position>
     </enemy>
     <teleporter blocking='false'>
@@ -2441,34 +2441,34 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='6' id='112' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='112' moveStrategy='NORMAL' speed='1000'>
       <position x='9000' y='2000'></position>
     </enemy>
-    <enemy hitPoints='8' id='113' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='113' moveStrategy='NORMAL' speed='1000'>
       <position x='11000' y='2000'></position>
     </enemy>
-    <enemy hitPoints='7' id='114' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='114' moveStrategy='NORMAL' speed='1000'>
       <position x='1000' y='5000'></position>
     </enemy>
-    <enemy hitPoints='8' id='115' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='115' moveStrategy='NORMAL' speed='1000'>
       <position x='2000' y='5000'></position>
     </enemy>
-    <enemy hitPoints='9' id='116' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='9' id='116' moveStrategy='NORMAL' speed='1000'>
       <position x='3000' y='5000'></position>
     </enemy>
-    <enemy hitPoints='9' id='117' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='9' id='117' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='3' id='118' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='118' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='2' id='119' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='119' moveStrategy='NORMAL' speed='1000'>
       <position x='17000' y='12000'></position>
     </enemy>
-    <enemy hitPoints='2' id='120' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='120' moveStrategy='NORMAL' speed='1000'>
       <position x='9000' y='18000'></position>
     </enemy>
-    <enemy hitPoints='7' id='121' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='121' moveStrategy='NORMAL' speed='1000'>
       <position x='9000' y='19000'></position>
     </enemy>
     <teleporter blocking='false'>
@@ -3685,31 +3685,31 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='3' id='125' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='125' moveStrategy='NORMAL' speed='1000'>
       <position x='9000' y='6000'></position>
     </enemy>
-    <enemy hitPoints='8' id='126' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='126' moveStrategy='NORMAL' speed='1000'>
       <position x='10000' y='6000'></position>
     </enemy>
-    <enemy hitPoints='6' id='127' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='127' moveStrategy='NORMAL' speed='1000'>
       <position x='0' y='11000'></position>
     </enemy>
-    <enemy hitPoints='9' id='128' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='9' id='128' moveStrategy='NORMAL' speed='1000'>
       <position x='0' y='12000'></position>
     </enemy>
-    <enemy hitPoints='3' id='129' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='129' moveStrategy='NORMAL' speed='1000'>
       <position x='19000' y='14000'></position>
     </enemy>
-    <enemy hitPoints='8' id='130' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='130' moveStrategy='NORMAL' speed='1000'>
       <position x='19000' y='15000'></position>
     </enemy>
-    <enemy hitPoints='4' id='131' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='131' moveStrategy='NORMAL' speed='1000'>
       <position x='9000' y='17000'></position>
     </enemy>
-    <enemy hitPoints='7' id='132' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='132' moveStrategy='NORMAL' speed='1000'>
       <position x='9000' y='19000'></position>
     </enemy>
-    <enemy hitPoints='15' id='133' moveStrategy='TELEPORT' onDeath='level-2#room-4' speed='1500'>
+    <enemy type="SCISSORS" hitPoints='15' id='133' moveStrategy='TELEPORT' onDeath='level-2#room-4' speed='1500'>
       <position x='15000' y='7000'></position>
     </enemy>
   </room>
@@ -4916,58 +4916,58 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='4' id='134' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='134' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='1000'></position>
     </enemy>
-    <enemy hitPoints='3' id='135' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='135' moveStrategy='NORMAL' speed='1000'>
       <position x='14000' y='1000'></position>
     </enemy>
-    <enemy hitPoints='6' id='136' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='136' moveStrategy='NORMAL' speed='1000'>
       <position x='15000' y='1000'></position>
     </enemy>
-    <enemy hitPoints='8' id='137' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='137' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='2000'></position>
     </enemy>
-    <enemy hitPoints='8' id='138' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='138' moveStrategy='NORMAL' speed='1000'>
       <position x='15000' y='2000'></position>
     </enemy>
-    <enemy hitPoints='4' id='139' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='139' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='3000'></position>
     </enemy>
-    <enemy hitPoints='6' id='140' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='140' moveStrategy='NORMAL' speed='1000'>
       <position x='14000' y='3000'></position>
     </enemy>
-    <enemy hitPoints='2' id='141' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='141' moveStrategy='NORMAL' speed='1000'>
       <position x='15000' y='3000'></position>
     </enemy>
-    <enemy hitPoints='4' id='142' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='142' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='10000'></position>
     </enemy>
-    <enemy hitPoints='8' id='143' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='143' moveStrategy='NORMAL' speed='1000'>
       <position x='14000' y='10000'></position>
     </enemy>
-    <enemy hitPoints='7' id='144' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='144' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='13000'></position>
     </enemy>
-    <enemy hitPoints='4' id='145' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='145' moveStrategy='NORMAL' speed='1000'>
       <position x='10000' y='13000'></position>
     </enemy>
-    <enemy hitPoints='8' id='146' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='146' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='8' id='147' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='147' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='7' id='148' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='148' moveStrategy='NORMAL' speed='1000'>
       <position x='8000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='3' id='149' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='149' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='17000'></position>
     </enemy>
-    <enemy hitPoints='7' id='150' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='150' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='18000'></position>
     </enemy>
-    <enemy hitPoints='7' id='151' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='151' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='19000'></position>
     </enemy>
     <teleporter blocking='false'>
@@ -6182,25 +6182,25 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='9' id='153' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='9' id='153' moveStrategy='NORMAL' speed='1000'>
       <position x='16000' y='5000'></position>
     </enemy>
-    <enemy hitPoints='6' id='154' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='154' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='8' id='155' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='8' id='155' moveStrategy='NORMAL' speed='1000'>
       <position x='13000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='3' id='156' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='156' moveStrategy='NORMAL' speed='1000'>
       <position x='4000' y='10000'></position>
     </enemy>
-    <enemy hitPoints='2' id='157' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='157' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='12000'></position>
     </enemy>
-    <enemy hitPoints='4' id='158' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='158' moveStrategy='NORMAL' speed='1000'>
       <position x='4000' y='14000'></position>
     </enemy>
-    <enemy hitPoints='7' id='159' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='159' moveStrategy='NORMAL' speed='1000'>
       <position x='11000' y='14000'></position>
     </enemy>
     <teleporter blocking='false'>
@@ -7417,16 +7417,16 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='2' id='163' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='163' moveStrategy='NORMAL' speed='1000'>
       <position x='8000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='4' id='164' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='164' moveStrategy='NORMAL' speed='1000'>
       <position x='9000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='4' id='165' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='165' moveStrategy='NORMAL' speed='1000'>
       <position x='10000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='30' id='166' moveStrategy='TELEPORT' onDeath='level-3#room-7' speed='1500'>
+    <enemy type="SCISSORS" hitPoints='30' id='166' moveStrategy='TELEPORT' onDeath='level-3#room-7' speed='1500'>
       <position x='15000' y='7000'></position>
     </enemy>
   </room>
@@ -8633,67 +8633,67 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='7' id='167' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='167' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='3000'></position>
     </enemy>
-    <enemy hitPoints='6' id='168' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='168' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='4000'></position>
     </enemy>
-    <enemy hitPoints='4' id='169' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='169' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='4000'></position>
     </enemy>
-    <enemy hitPoints='6' id='170' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='170' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='5000'></position>
     </enemy>
-    <enemy hitPoints='3' id='171' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='171' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='5000'></position>
     </enemy>
-    <enemy hitPoints='7' id='172' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='172' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='6000'></position>
     </enemy>
-    <enemy hitPoints='3' id='173' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='173' moveStrategy='NORMAL' speed='1000'>
       <position x='4000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='9' id='174' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='9' id='174' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='3' id='175' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='175' moveStrategy='NORMAL' speed='1000'>
       <position x='7000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='4' id='176' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='176' moveStrategy='NORMAL' speed='1000'>
       <position x='8000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='7' id='177' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='177' moveStrategy='NORMAL' speed='1000'>
       <position x='10000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='2' id='178' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='178' moveStrategy='NORMAL' speed='1000'>
       <position x='11000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='4' id='179' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='179' moveStrategy='NORMAL' speed='1000'>
       <position x='12000' y='9000'></position>
     </enemy>
-    <enemy hitPoints='3' id='180' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='180' moveStrategy='NORMAL' speed='1000'>
       <position x='3000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='6' id='181' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='181' moveStrategy='NORMAL' speed='1000'>
       <position x='4000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='7' id='182' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='182' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='6' id='183' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='183' moveStrategy='NORMAL' speed='1000'>
       <position x='3000' y='17000'></position>
     </enemy>
-    <enemy hitPoints='2' id='184' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='184' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='17000'></position>
     </enemy>
-    <enemy hitPoints='3' id='185' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='185' moveStrategy='NORMAL' speed='1000'>
       <position x='3000' y='18000'></position>
     </enemy>
-    <enemy hitPoints='6' id='186' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='186' moveStrategy='NORMAL' speed='1000'>
       <position x='4000' y='18000'></position>
     </enemy>
-    <enemy hitPoints='2' id='187' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='187' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='18000'></position>
     </enemy>
     <teleporter blocking='false'>
@@ -9908,34 +9908,34 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='5' id='189' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='5' id='189' moveStrategy='NORMAL' speed='1000'>
       <position x='3000' y='2000'></position>
     </enemy>
-    <enemy hitPoints='5' id='190' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='5' id='190' moveStrategy='NORMAL' speed='1000'>
       <position x='4000' y='3000'></position>
     </enemy>
-    <enemy hitPoints='4' id='191' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='191' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='4000'></position>
     </enemy>
-    <enemy hitPoints='4' id='192' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='192' moveStrategy='NORMAL' speed='1000'>
       <position x='9000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='4' id='193' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='4' id='193' moveStrategy='NORMAL' speed='1000'>
       <position x='0' y='10000'></position>
     </enemy>
-    <enemy hitPoints='3' id='194' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='194' moveStrategy='NORMAL' speed='1000'>
       <position x='19000' y='10000'></position>
     </enemy>
-    <enemy hitPoints='3' id='195' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='3' id='195' moveStrategy='NORMAL' speed='1000'>
       <position x='1000' y='17000'></position>
     </enemy>
-    <enemy hitPoints='2' id='196' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='196' moveStrategy='NORMAL' speed='1000'>
       <position x='18000' y='17000'></position>
     </enemy>
-    <enemy hitPoints='7' id='197' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='197' moveStrategy='NORMAL' speed='1000'>
       <position x='1000' y='18000'></position>
     </enemy>
-    <enemy hitPoints='6' id='198' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='6' id='198' moveStrategy='NORMAL' speed='1000'>
       <position x='18000' y='18000'></position>
     </enemy>
     <teleporter blocking='false'>
@@ -11149,19 +11149,19 @@
     <tile blocking='false'>
       <position x='19000' y='19000'></position>
     </tile>
-    <enemy hitPoints='9' id='202' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='9' id='202' moveStrategy='NORMAL' speed='1000'>
       <position x='3000' y='1000'></position>
     </enemy>
-    <enemy hitPoints='5' id='203' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='5' id='203' moveStrategy='NORMAL' speed='1000'>
       <position x='12000' y='8000'></position>
     </enemy>
-    <enemy hitPoints='2' id='204' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='2' id='204' moveStrategy='NORMAL' speed='1000'>
       <position x='5000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='7' id='205' moveStrategy='NORMAL' speed='1000'>
+    <enemy type="SCISSORS" hitPoints='7' id='205' moveStrategy='NORMAL' speed='1000'>
       <position x='6000' y='16000'></position>
     </enemy>
-    <enemy hitPoints='40' id='206' moveStrategy='TELEPORT' onDeath='VICTORY' speed='1500'>
+    <enemy type="SCISSORS" hitPoints='40' id='206' moveStrategy='TELEPORT' onDeath='VICTORY' speed='1500'>
       <position x='15000' y='7000'></position>
     </enemy>
     <save-point>
