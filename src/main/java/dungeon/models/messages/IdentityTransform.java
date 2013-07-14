@@ -1,7 +1,5 @@
 package dungeon.models.messages;
 
-import java.io.Serializable;
-
 /**
  * This transform does nothing and is an implementation of the null object pattern.
  *

@@ -413,7 +413,7 @@ public class Player implements Spatial, Identifiable, Serializable {
 
     @Override
     protected int lives (Player player) {
-      return Math.max(0, player.lives + delta);
+      return Math.max(0, player.lives + this.delta);
     }
   }
 
@@ -477,7 +477,7 @@ public class Player implements Spatial, Identifiable, Serializable {
 
     @Override
     protected int money (Player player) {
-      return Math.max(0, player.money + delta);
+      return Math.max(0, player.money + this.delta);
     }
   }
 
