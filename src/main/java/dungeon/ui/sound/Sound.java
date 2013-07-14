@@ -3,12 +3,15 @@ package dungeon.ui.sound;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * A sound that can be played/looped.
  */
 class Sound {
+  private static final Logger LOGGER = Logger.getLogger(Sound.class.getName());
+
   private final long size;
 
   private final AudioFormat format;
@@ -33,14 +36,25 @@ class Sound {
   }
 
   public void play () {
-    Logger.getAnonymousLogger().info(this.format.toString());
-
     try {
       Clip clip = (Clip)AudioSystem.getLine(this.info);
       clip.open(this.format, this.data, 0, (int)this.size);
+      clip.addLineListener(new CloseAfterPlayListener());
       clip.start();
     } catch (LineUnavailableException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      LOGGER.log(Level.INFO, "Could allocate line. Probably to many open sounds.", e);
+    }
+  }
+
+  /**
+   * Closes the line after playing to redeem resources.
+   */
+  private static class CloseAfterPlayListener implements LineListener {
+    @Override
+    public void update (LineEvent lineEvent) {
+      if (lineEvent.getType() == LineEvent.Type.STOP) {
+        lineEvent.getLine().close();
+      }
     }
   }
 }
