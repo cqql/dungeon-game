@@ -64,6 +64,8 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
+  private final Font infoFont = new Font("Arial", Font.PLAIN, 12);
+
   private final Deque<ChatMessage> chatMessages = new ArrayDeque<>();
 
   private final Client client;
@@ -183,6 +185,10 @@ public class Canvas extends JPanel implements MessageHandler {
       g.setColor(this.enemyColor);
 
       this.drawSquare(g, enemy.getPosition(), Enemy.SIZE);
+
+      g.setColor(Color.BLACK);
+      g.setFont(this.infoFont);
+      g.drawString(String.format("%d HP", enemy.getHitPoints()), (int)(enemy.getPosition().getX() * this.xPixelPerUnit) + 10, (int)(enemy.getPosition().getY() * this.yPixelPerUnit) + 22);
     }
   }
 
