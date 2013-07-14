@@ -38,6 +38,7 @@
 - K - Eispfeil schießen
 - Z - mit NPC sprechen
 - I - Inventar öffnen
+- T - Speichern
 
 
 ## Was ist was?

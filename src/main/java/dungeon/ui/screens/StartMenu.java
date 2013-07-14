@@ -46,9 +46,9 @@ public class StartMenu extends JPanel {
 
           StartMenu.this.client.sendReady();
         } catch (Client.ServerStartException ex) {
-          JOptionPane.showMessageDialog(null, "Spiel konnte nicht gestartet werden");
+          JOptionPane.showMessageDialog(StartMenu.this, "Spiel konnte nicht gestartet werden");
         } catch (Client.ConnectException ex) {
-          JOptionPane.showMessageDialog(null, "Spiel konnte nicht gestartet werden");
+          JOptionPane.showMessageDialog(StartMenu.this, "Spiel konnte nicht gestartet werden");
         }
       }
     });
@@ -63,9 +63,9 @@ public class StartMenu extends JPanel {
 
           StartMenu.this.client.send(new ShowLobby(StartMenu.this.client.getPlayerId()));
         } catch (Client.ServerStartException ex) {
-          JOptionPane.showMessageDialog(null, "Lobby konnte nicht erstellt werden");
+          JOptionPane.showMessageDialog(StartMenu.this, "Lobby konnte nicht erstellt werden");
         } catch (Client.ConnectException ex) {
-          JOptionPane.showMessageDialog(null, "Lobby konnte nicht erstellt werden");
+          JOptionPane.showMessageDialog(StartMenu.this, "Lobby konnte nicht erstellt werden");
         }
       }
     });
@@ -77,7 +77,7 @@ public class StartMenu extends JPanel {
 
         String server = "localhost";
 
-        server = JOptionPane.showInputDialog(null, "Adresse des Servers", server);
+        server = JOptionPane.showInputDialog(StartMenu.this, "Adresse des Servers", server);
 
         if (server == null) {
           return;
@@ -88,7 +88,7 @@ public class StartMenu extends JPanel {
 
           StartMenu.this.client.send(new ShowLobby(StartMenu.this.client.getPlayerId()));
         } catch (Client.ConnectException ex) {
-          JOptionPane.showMessageDialog(null, "Es konnte keine Verbindung hergestellt werden");
+          JOptionPane.showMessageDialog(StartMenu.this, "Es konnte keine Verbindung hergestellt werden");
         }
       }
     });

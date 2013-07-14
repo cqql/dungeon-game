@@ -86,6 +86,10 @@ public class Client implements MessageHandler {
     this.send(new ChatMessage(this.playerId.get(), this.playerName, message));
   }
 
+  public World getWorld () {
+    return this.world.get();
+  }
+
   public int getPlayerId () {
     return this.playerId.get();
   }
