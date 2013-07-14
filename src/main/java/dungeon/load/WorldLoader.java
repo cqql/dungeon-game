@@ -16,6 +16,12 @@ public class WorldLoader {
     JAXB.marshal(this.worldAdapter.marshal(world), file);
   }
 
+  public World loadFromFile (File file) throws Exception {
+    World world = this.worldAdapter.unmarshal(JAXB.unmarshal(file, WorldAdapter.class));
+
+    return world;
+  }
+
   public World load () throws Exception {
     World world = this.worldAdapter.unmarshal(JAXB.unmarshal(getClass().getClassLoader().getResourceAsStream("world.xml"), WorldAdapter.class));
 
