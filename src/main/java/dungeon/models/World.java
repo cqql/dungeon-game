@@ -103,45 +103,80 @@ public class World implements Serializable {
    * Applies transforms only to the current levels for performance reasons.
    */
   public World apply (Transform transform) {
-    List<Level> levels = new ArrayList<>();
-    List<Player> players = new ArrayList<>();
+    if (transform instanceof WorldTransform) {
+      return ((WorldTransform)transform).apply(this);
+    } else {
+      List<Level> levels = new ArrayList<>();
+      List<Player> players = new ArrayList<>();
 
-    for (Player player : this.players) {
-      if (!(transform instanceof RemovePlayerTransform) || player.getId() != ((RemovePlayerTransform)transform).playerId) {
+      for (Player player : this.players) {
         players.add(player.apply(transform));
       }
-    }
 
-    Set<Level> currentLevels = this.getCurrentLevels();
+      Set<Level> currentLevels = this.getCurrentLevels();
 
-    for (Level level : this.levels) {
-      if (currentLevels.contains(level)) {
-        levels.add(level.apply(transform));
-      } else {
-        levels.add(level);
+      for (Level level : this.levels) {
+        if (currentLevels.contains(level)) {
+          levels.add(level.apply(transform));
+        } else {
+          levels.add(level);
+        }
       }
-    }
 
-    if (transform instanceof AddPlayerTransform) {
-      players.add(((AddPlayerTransform)transform).player);
+      return new World(levels, players);
     }
-
-    return new World(levels, players);
   }
 
-  public static class AddPlayerTransform implements Transform {
+  private static class WorldTransform implements Transform {
+    public World apply (World world) {
+      return new World(
+        this.levels(world),
+        this.players(world)
+      );
+    }
+
+    protected List<Level> levels (World world) {
+      return world.levels;
+    }
+
+    protected List<Player> players (World world) {
+      return world.players;
+    }
+  }
+
+  public static class AddPlayerTransform extends WorldTransform {
     public final Player player;
 
     public AddPlayerTransform (Player player) {
       this.player = player;
     }
+
+    @Override
+    protected List<Player> players (World world) {
+      List<Player> players = new ArrayList<>(world.players);
+      players.add(player);
+      return players;
+    }
   }
 
-  public static class RemovePlayerTransform implements Transform {
+  public static class RemovePlayerTransform extends WorldTransform {
     public final int playerId;
 
     public RemovePlayerTransform (int playerId) {
       this.playerId = playerId;
+    }
+
+    @Override
+    protected List<Player> players (World world) {
+      List<Player> players = new ArrayList<>();
+
+      for (Player player : world.players) {
+        if (this.playerId != player.getId()) {
+          players.add(player);
+        }
+      }
+
+      return players;
     }
   }
 }
