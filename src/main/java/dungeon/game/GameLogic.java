@@ -397,7 +397,7 @@ public class GameLogic {
       finalDirection = finalDirection.normalize();
       finalDirection = finalDirection.times(SPEED * delta);
 
-      return new Player.MoveTransform(player, (int)finalDirection.getX(), (int)finalDirection.getY());
+      return new Player.MoveTransform(player, finalDirection);
     }
   }
 

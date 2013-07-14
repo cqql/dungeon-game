@@ -271,11 +271,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     String savePointRoomId = this.savePointRoomId;
     Position savePointPosition = this.savePointPosition;
 
-    if (transform instanceof MoveTransform && this.id == ((MoveTransform)transform).id) {
-      MoveTransform move = (MoveTransform)transform;
-
-      position = new Position(this.position.getX() + move.xDelta, this.position.getY() + move.yDelta);
-    } else if (transform instanceof ViewingDirectionTransform && this.id == ((ViewingDirectionTransform)transform).id) {
+    if (transform instanceof ViewingDirectionTransform && this.id == ((ViewingDirectionTransform)transform).id) {
       viewingDirection = ((ViewingDirectionTransform)transform).direction;
     } else if (transform instanceof HitpointTransform && this.id == ((HitpointTransform)transform).id) {
       HitpointTransform hpTransform = (HitpointTransform)transform;
@@ -324,22 +320,122 @@ public class Player implements Spatial, Identifiable, Serializable {
       savePointPosition = position;
     } else if (transform instanceof RespawnTransform) {
       return ((RespawnTransform)transform).apply(this);
+    } else if (transform instanceof PlayerTransform) {
+      return ((PlayerTransform)transform).apply(this);
     }
 
     return new Player(id, name, lives, hitPoints, maxHitPoints, money, mana, maxMana, items, levelId, roomId, weaponId, position, viewingDirection, savePointRoomId, savePointPosition);
   }
 
-  public static class MoveTransform implements Transform {
-    private final int id;
+  public static class PlayerTransform implements Transform {
+    private final int playerId;
 
-    private final int xDelta;
+    public PlayerTransform (Player player) {
+      this.playerId = player.id;
+    }
 
-    private final int yDelta;
+    public Player apply (Player player) {
+      if (player.id == this.playerId) {
+        return new Player(
+          this.id(player),
+          this.name(player),
+          this.lives(player),
+          this.hitPoints(player),
+          this.maxHitPoints(player),
+          this.money(player),
+          this.mana(player),
+          this.maxMana(player),
+          this.items(player),
+          this.levelId(player),
+          this.roomId(player),
+          this.weaponId(player),
+          this.position(player),
+          this.viewingDirection(player),
+          this.savePointRoomId(player),
+          this.savePointPosition(player)
+        );
+      } else {
+        return player;
+      }
+    }
 
-    public MoveTransform (Player player, int xDelta, int yDelta) {
-      this.id = player.getId();
-      this.xDelta = xDelta;
-      this.yDelta = yDelta;
+    protected int id (Player player) {
+      return player.id;
+    }
+
+    protected String name (Player player) {
+      return player.name;
+    }
+
+    protected int lives (Player player) {
+      return player.lives;
+    }
+
+    protected int hitPoints (Player player) {
+      return player.hitPoints;
+    }
+
+    protected int maxHitPoints (Player player) {
+      return player.maxHitPoints;
+    }
+
+    protected int money (Player player) {
+      return player.money;
+    }
+
+    protected int mana (Player player) {
+      return player.mana;
+    }
+
+    protected int maxMana (Player player) {
+      return player.maxMana;
+    }
+
+    protected List<Item> items (Player player) {
+      return player.items;
+    }
+
+    protected String levelId (Player player) {
+      return player.levelId;
+    }
+
+    protected String roomId (Player player) {
+      return player.roomId;
+    }
+
+    protected int weaponId (Player player) {
+      return player.weaponId;
+    }
+
+    protected Position position (Player player) {
+      return player.position;
+    }
+
+    protected Direction viewingDirection (Player player) {
+      return player.viewingDirection;
+    }
+
+    protected String savePointRoomId (Player player) {
+      return player.savePointRoomId;
+    }
+
+    protected Position savePointPosition (Player player) {
+      return player.savePointPosition;
+    }
+  }
+
+  public static class MoveTransform extends PlayerTransform {
+    private final Vector delta;
+
+    public MoveTransform (Player player, Vector delta) {
+      super(player);
+
+      this.delta = delta;
+    }
+
+    @Override
+    protected Position position (Player player) {
+      return new Position(player.position.getVector().plus(this.delta));
     }
   }
 
@@ -504,6 +600,7 @@ public class Player implements Spatial, Identifiable, Serializable {
         return player;
       }
     }
+
   }
 
   @Override
