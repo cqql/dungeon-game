@@ -250,7 +250,7 @@ public class Player implements Spatial, Identifiable, Serializable {
   }
 
   public Projectile castSpell (int id, DamageType damageType) {
-    return this.createProjectile(id, 7000, 2, damageType);
+    return this.createProjectile(id, 7000, 5, damageType);
   }
 
   public Player apply (Transform transform) {

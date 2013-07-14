@@ -464,7 +464,7 @@ public class GameLogic {
 
         for (Enemy enemy : room.getEnemies()) {
           if (this.touch(enemy, projectile) && !enemy.equals(projectile.getSource())) {
-            this.damageEnemy(transaction, enemy, projectile.getDamage());
+            this.hitEnemy(transaction, enemy, projectile);
             transaction.pushAndCommit(new Enemy.MoveTransform(enemy, projectile.getVelocity().normalize().times(100)));
             transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
             break;
@@ -781,10 +781,20 @@ public class GameLogic {
   }
 
   /**
-   * Inflict {@code amount} damage on {@code enemy}.
+   * Collides an {@code enemy} with a {@code projectile}.
    */
-  private void damageEnemy (Transaction transaction, Enemy enemy, int amount) {
-    transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -amount));
+  private void hitEnemy (Transaction transaction, Enemy enemy, Projectile projectile) {
+    if (projectile.getType() == DamageType.NORMAL) {
+      transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -projectile.getDamage()));
+    } else {
+      if (projectile.getType().isStrongAgainst(enemy.getType())) {
+        transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -(projectile.getDamage() + 2)));
+      } else if (enemy.getType().isStrongAgainst(projectile.getType())) {
+        transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, +2));
+      } else {
+        transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -1));
+      }
+    }
   }
 
   /**
