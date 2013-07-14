@@ -3,6 +3,10 @@ package dungeon.ui;
 import dungeon.client.Client;
 import dungeon.messages.Mailman;
 import dungeon.ui.screens.*;
+import dungeon.ui.sound.SoundListener;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
 
 /**
  * A swing GUI to play the game.
@@ -32,7 +36,11 @@ public class GUI {
 
   private final MainFrame mainFrame = new MainFrame(this.client, this.uiManager);
 
-  public GUI () {
+  private final SoundListener soundListener;
+
+  public GUI () throws UnsupportedAudioFileException, IOException {
+    this.soundListener = new SoundListener();
+
     this.canvas.addKeyListener(this.converter);
 
     this.mailman.addMailbox(new SwingMailbox(this.client));
@@ -42,6 +50,7 @@ public class GUI {
     this.mailman.addMailbox(new SwingMailbox(this.inventoryScreen));
     this.mailman.addMailbox(new SwingMailbox(this.shopScreen));
     this.mailman.addMailbox(new SwingMailbox(this.lobbyScreen));
+    this.mailman.addHandler(this.soundListener);
   }
 
   public void run () {
