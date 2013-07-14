@@ -59,6 +59,14 @@
 - gelb - Geld
 
 
+## Das Typsystem
+
+Gegner haben einen der drei Typen Stein, Schere oder Papier.
+Man kann jeden von ihnen mit dem Basispfeil verwunden, aber für maximale Effektivität sollte man versuchen die magischen Pfeile anzuwenden.
+Aber aufgepasst!
+Wenn man zum Beispiel einen Stein-Gegner mit Papier beschießt, wird es sein Leben sogar verlängern, während Stein ihm kaum etwas anhaben kann und nur Schere ihm so richtig den Gar aus macht.
+
+
 ## Das Spiel
 
 Du bist in einem alten Schloss und, weil du unbedingt mal die Aussicht genießen möchtest, musst du dich in den obersten Stock vorkämpfen, wo der Balkon von einem besonders langlebigen Geist bewacht wird.
