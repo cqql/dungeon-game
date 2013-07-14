@@ -70,3 +70,13 @@ Insbesondere wurden folgende Stücke verwendet
 - [Normaler Schuss](http://www.freesound.org/people/jobro/sounds/35686/)
 - [Teleportation](http://www.freesound.org/people/qubodup/sounds/174366/) von [Iwan Gabovitch](http://qubodup.net/)
 - [Münzenklimpern](http://www.freesound.org/people/monotraum/sounds/162192/)
+
+
+# Icons
+
+Alle Icons stehen unter der [Creative Commons-Lizenz](http://creativecommons.org/licenses/by/3.0/).
+Insbesondere wurden folgende Icons verwendet
+
+- [Stein](http://thenounproject.com/noun/rock/#icon-No5846) von [Anuar Zhumaev](http://thenounproject.com/yxorama)
+- [Schere](http://thenounproject.com/noun/scissors/#icon-No178)
+- [Papier](http://thenounproject.com/noun/paper/#icon-No1313) von [John Caserta](http://thenounproject.com/johncaserta)

@@ -7,11 +7,10 @@ import dungeon.messages.MessageHandler;
 import dungeon.models.*;
 import dungeon.ui.messages.ChatMessage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.logging.Logger;
@@ -60,11 +59,15 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private final Color projectileColor = new Color(118, 77, 0);
 
-  private final Color iceBoltProjectileColor = new Color(0, 200, 255);
-
   private final Font font = new Font("Arial", Font.PLAIN, 20);
 
   private final Font infoFont = new Font("Arial", Font.PLAIN, 12);
+
+  private final Image rock;
+
+  private final Image paper;
+
+  private final Image scissors;
 
   private final Deque<ChatMessage> chatMessages = new ArrayDeque<>();
 
@@ -81,8 +84,12 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private double yPixelPerUnit;
 
-  public Canvas (Client client) {
+  public Canvas (Client client) throws IOException {
     this.client = client;
+
+    this.rock = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("icons/rock.png"));
+    this.paper = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("icons/paper.png"));
+    this.scissors = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("icons/scissors.png"));
 
     this.setFocusable(true);
   }
@@ -210,11 +217,24 @@ public class Canvas extends JPanel implements MessageHandler {
     for (Projectile projectile : room.getProjectiles()) {
       if (projectile.getType() == DamageType.NORMAL) {
         g.setColor(this.projectileColor);
-      } else if (projectile.getType() == DamageType.ICE) {
-        g.setColor(this.iceBoltProjectileColor);
-      }
+        this.drawSquare(g, projectile.getPosition(), Projectile.SIZE);
+      } else {
+        Image image;
 
-      this.drawSquare(g, projectile.getPosition(), Projectile.SIZE);
+        switch (projectile.getType()) {
+          case ROCK:
+            image = this.rock;
+            break;
+          case PAPER:
+            image = this.paper;
+            break;
+          case SCISSORS:
+          default:
+            image = this.scissors;
+        }
+
+        g.drawImage(image, (int)(projectile.getPosition().getX() * this.xPixelPerUnit), (int)(projectile.getPosition().getY() * this.yPixelPerUnit), null);
+      }
     }
   }
 
