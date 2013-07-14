@@ -53,7 +53,7 @@ public class StartMenu extends JPanel {
         StartMenu.this.client.setPlayerName(StartMenu.this.nameField.getText());
 
         try {
-          StartMenu.this.client.startServer(6077);
+          StartMenu.this.client.startGame(6077);
 
           StartMenu.this.client.sendReady();
         } catch (Client.ServerStartException ex) {
@@ -95,7 +95,7 @@ public class StartMenu extends JPanel {
         StartMenu.this.client.setPlayerName(StartMenu.this.nameField.getText());
 
         try {
-          StartMenu.this.client.startServer(6077);
+          StartMenu.this.client.startGame(6077);
 
           StartMenu.this.client.send(new ShowLobby(StartMenu.this.client.getPlayerId()));
         } catch (Client.ServerStartException ex) {
@@ -120,7 +120,7 @@ public class StartMenu extends JPanel {
         }
 
         try {
-          StartMenu.this.client.connect(server, 6077);
+          StartMenu.this.client.joinServer(server, 6077);
 
           StartMenu.this.client.send(new ShowLobby(StartMenu.this.client.getPlayerId()));
         } catch (Client.ConnectException ex) {

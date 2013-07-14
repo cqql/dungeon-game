@@ -136,6 +136,11 @@ public class Client implements MessageHandler {
     this.playerName = playerName;
   }
 
+  public void joinServer (String host, int port) throws ConnectException {
+    this.connect(host, port);
+    this.joinGame();
+  }
+
   public void connect (String host, int port) throws ConnectException {
     try {
       this.serverConnection = new ServerConnection(host, port);
@@ -168,16 +173,6 @@ public class Client implements MessageHandler {
       throw new ConnectException();
     }
 
-    LOGGER.info("Join player");
-    Player player = new Player(this.playerId.get(), this.playerName);
-
-    try {
-      this.serverConnection.write(new PlayerJoinCommand(player));
-    } catch (IOException e) {
-      LOGGER.log(Level.WARNING, "Could not join", e);
-      throw new ConnectException();
-    }
-
     this.messageForwarder = new MessageForwarder(this);
     this.messageForwarder.start();
   }
@@ -187,6 +182,7 @@ public class Client implements MessageHandler {
    */
   public void loadWorld (World world, int port) throws ServerStartException, ConnectException {
     this.startServer(port);
+    this.connect("localhost", port);
 
     Player player = world.getPlayers().get(0);
     this.playerName = player.getName();
@@ -208,6 +204,12 @@ public class Client implements MessageHandler {
     this.send(new PlayerReadyCommand(this.playerId.get()));
   }
 
+  public void startGame (int port) throws ServerStartException, ConnectException {
+    this.startServer(port);
+    this.connect("localhost", port);
+    this.joinGame();
+  }
+
   public void startServer (int port) throws ServerStartException, ConnectException {
     try {
       this.server = new Server(port);
@@ -223,8 +225,6 @@ public class Client implements MessageHandler {
     } catch (InterruptedException e) {
       // Ignore
     }
-
-    this.connect("localhost", port);
   }
 
   /**
@@ -234,6 +234,21 @@ public class Client implements MessageHandler {
     this.send(new World.RemovePlayerTransform(this.getPlayerId()));
 
     this.stop();
+  }
+
+  /**
+   * Join the player in the game.
+   */
+  private void joinGame () throws ConnectException {
+    LOGGER.info("Join player");
+    Player player = new Player(this.playerId.get(), this.playerName);
+
+    try {
+      this.serverConnection.write(new PlayerJoinCommand(player));
+    } catch (IOException e) {
+      LOGGER.log(Level.WARNING, "Could not join", e);
+      throw new ConnectException();
+    }
   }
 
   private void stop () {
