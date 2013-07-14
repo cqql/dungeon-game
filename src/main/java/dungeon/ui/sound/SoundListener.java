@@ -5,6 +5,8 @@ import dungeon.game.messages.StartGame;
 import dungeon.game.messages.WinEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
+import dungeon.models.Player;
+import dungeon.models.messages.Transform;
 import dungeon.ui.messages.AttackCommand;
 import dungeon.ui.messages.StartCommand;
 
@@ -19,20 +21,21 @@ public class SoundListener implements MessageHandler {
 
   public SoundListener () throws UnsupportedAudioFileException, IOException {
     this.soundManager.loadSound("sounds/shot.wav");
+    this.soundManager.loadSound("sounds/teleportation.wav");
   }
 
   @Override
   public void handleMessage (Message message) {
     if (message instanceof StartCommand && ((StartCommand)message).getCommand() instanceof AttackCommand) {
-      this.playShotSound();
+      this.soundManager.playSound("sounds/shot.wav");
+    } else if (message instanceof Transform) {
+      if (message instanceof Player.TeleportTransform) {
+        this.soundManager.playSound("sounds/teleportation.wav");
+      }
     } else if (message instanceof StartGame) {
       this.soundManager.startBackgroundMusic();
     } else if (message instanceof WinEvent || message instanceof DefeatEvent) {
       this.soundManager.stopBackgroundMusic();
     }
-  }
-
-  private void playShotSound () {
-    this.soundManager.playSound("sounds/shot.wav");
   }
 }
