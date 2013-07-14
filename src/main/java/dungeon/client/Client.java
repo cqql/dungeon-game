@@ -13,6 +13,7 @@ import dungeon.models.Room;
 import dungeon.models.World;
 import dungeon.models.messages.Transform;
 import dungeon.server.Server;
+import dungeon.server.commands.LoadWorld;
 import dungeon.ui.ServerConnection;
 import dungeon.ui.messages.ChatMessage;
 import dungeon.ui.messages.PlayerMessage;
@@ -179,6 +180,26 @@ public class Client implements MessageHandler {
 
     this.messageForwarder = new MessageForwarder(this);
     this.messageForwarder.start();
+  }
+
+  /**
+   * Loads a saved world into a server on port {@code port} and connects to it.
+   */
+  public void loadWorld (World world, int port) throws ServerStartException, ConnectException {
+    this.startServer(port);
+
+    Player player = world.getPlayers().get(0);
+    this.playerName = player.getName();
+    this.playerId.set(player.getId());
+    this.world.set(world);
+
+    try {
+      this.serverConnection.write(new LoadWorld(this.playerId.get(), this.world.get()));
+    } catch (IOException e) {
+      throw new ConnectException();
+    }
+
+    this.sendReady();
   }
 
   public void sendReady () {

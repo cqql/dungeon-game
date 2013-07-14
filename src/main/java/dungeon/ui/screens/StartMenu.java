@@ -78,8 +78,11 @@ public class StartMenu extends JPanel {
           try {
             World world = new WorldLoader().loadFromFile(selectedFile);
 
+            StartMenu.this.client.loadWorld(world, 6077);
+
             JOptionPane.showMessageDialog(StartMenu.this, "Los gehts");
           } catch (Exception ex) {
+            JOptionPane.showMessageDialog(StartMenu.this, "Die Welt konnte nicht geladen werden. Vielleicht ist die Datei beschädigt.");
             LOGGER.log(Level.INFO, "Error while loading world", ex);
           }
         }
