@@ -154,7 +154,7 @@ public class World implements Serializable {
     @Override
     protected List<Player> players (World world) {
       List<Player> players = new ArrayList<>(world.players);
-      players.add(player);
+      players.add(this.player);
       return players;
     }
   }

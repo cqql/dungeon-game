@@ -89,7 +89,7 @@ public class Projectile implements Spatial, Serializable {
 
     Projectile that = (Projectile)o;
 
-    if (id != that.id) {
+    if (this.id != that.id) {
       return false;
     }
 
@@ -98,7 +98,7 @@ public class Projectile implements Spatial, Serializable {
 
   @Override
   public int hashCode () {
-    return id;
+    return this.id;
   }
 
   public static class MoveTransform implements Transform {
