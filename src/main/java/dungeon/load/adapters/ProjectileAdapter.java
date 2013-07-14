@@ -16,6 +16,7 @@ public class ProjectileAdapter extends XmlAdapter<ProjectileAdapter, Projectile>
   @XmlJavaTypeAdapter(PositionAdapter.class)
   public Position position;
 
+  @XmlJavaTypeAdapter(VectorAdapter.class)
   public Vector direction;
 
   @XmlAttribute

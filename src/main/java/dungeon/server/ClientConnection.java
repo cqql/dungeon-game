@@ -5,6 +5,7 @@ import dungeon.game.messages.PlayerLeaveCommand;
 import dungeon.messages.Mailman;
 import dungeon.messages.Message;
 import dungeon.server.commands.CloseConnection;
+import dungeon.server.commands.LoadWorld;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,7 +37,7 @@ public class ClientConnection implements Runnable {
   /**
    * The player ID that will be assigned to the client.
    */
-  private final int playerId;
+  private int playerId;
 
   /**
    * Is the connection still open?
@@ -128,6 +129,9 @@ public class ClientConnection implements Runnable {
         LOGGER.info("Client disconnected");
 
         this.closedByClient();
+      } else if (received instanceof LoadWorld) {
+        this.playerId = ((LoadWorld)received).getPlayerId();
+        this.logicHandler.setWorld(((LoadWorld)received).getWorld());
       }
     }
   }

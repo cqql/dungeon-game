@@ -71,7 +71,7 @@ public class LobbyScreen extends JPanel implements MessageHandler {
     this.messageButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
-        String message = JOptionPane.showInputDialog("Nachricht");
+        String message = JOptionPane.showInputDialog(this, "Nachricht");
 
         if (message != null) {
           LobbyScreen.this.client.sendChatMessage(message);

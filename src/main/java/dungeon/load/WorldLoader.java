@@ -4,15 +4,26 @@ import dungeon.load.adapters.WorldAdapter;
 import dungeon.models.World;
 
 import javax.xml.bind.JAXB;
+import java.io.File;
 
 /**
  * Loads the world from an XML file.
  */
 public class WorldLoader {
-  public World load () throws Exception {
-    WorldAdapter worldAdapter = new WorldAdapter();
+  private final WorldAdapter worldAdapter = new WorldAdapter();
 
-    World world = worldAdapter.unmarshal(JAXB.unmarshal(getClass().getClassLoader().getResourceAsStream("world.xml"), WorldAdapter.class));
+  public void saveToFile (World world, File file) {
+    JAXB.marshal(this.worldAdapter.marshal(world), file);
+  }
+
+  public World loadFromFile (File file) throws Exception {
+    World world = this.worldAdapter.unmarshal(JAXB.unmarshal(file, WorldAdapter.class));
+
+    return world;
+  }
+
+  public World load () throws Exception {
+    World world = this.worldAdapter.unmarshal(JAXB.unmarshal(getClass().getClassLoader().getResourceAsStream("world.xml"), WorldAdapter.class));
 
     return world;
   }

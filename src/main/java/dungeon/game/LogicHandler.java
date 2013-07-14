@@ -53,6 +53,21 @@ public class LogicHandler implements MessageHandler {
     return this.logic.getWorld();
   }
 
+  /**
+   * Replaces the world.
+   *
+   * This only happens when someone is loading a save file.
+   */
+  public void setWorld (World world) {
+    this.playersReady = new HashMap<>();
+
+    for (Player player : world.getPlayers()) {
+      this.playersReady.put(player.getId(), false);
+    }
+
+    this.logic.setWorld(world);
+  }
+
   public int nextId () {
     return this.logic.nextId();
   }

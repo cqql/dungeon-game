@@ -1,11 +1,15 @@
 package dungeon.ui.screens;
 
 import dungeon.client.Client;
+import dungeon.load.WorldLoader;
+import dungeon.models.World;
 import dungeon.ui.messages.*;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 /**
  * This converts input events like key presses in internal messages that can then be interpreted by the other modules.
@@ -15,8 +19,11 @@ import java.awt.event.KeyListener;
 public class InputToMessageConverter implements KeyListener {
   private final Client client;
 
-  public InputToMessageConverter (Client client) {
+  private final Canvas canvas;
+
+  public InputToMessageConverter (Client client, Canvas canvas) {
     this.client = client;
+    this.canvas = canvas;
   }
 
   @Override
@@ -26,14 +33,18 @@ public class InputToMessageConverter implements KeyListener {
 
   @Override
   public void keyPressed (KeyEvent keyEvent) {
-    Command command = this.commandForKey(keyEvent.getKeyChar());
-
-    if (command != null) {
-      this.client.send(new StartCommand(this.client.getPlayerId(), command));
-    }  else if (keyEvent.getKeyChar() == 'i') {
+    if (keyEvent.getKeyChar() == 'i') {
       this.client.send(new ShowInventory(this.client.getPlayerId()));
+    } else if (keyEvent.getKeyChar() == 't') {
+      this.saveGame();
     } else if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
       this.sendChatMessage();
+    } else {
+      Command command = this.commandForKey(keyEvent.getKeyChar());
+
+      if (command != null) {
+        this.client.send(new StartCommand(this.client.getPlayerId(), command));
+      }
     }
   }
 
@@ -78,10 +89,32 @@ public class InputToMessageConverter implements KeyListener {
    * Lets the user enter a chat message and sends it.
    */
   private void sendChatMessage () {
-    String message = JOptionPane.showInputDialog("Nachricht");
+    String message = JOptionPane.showInputDialog(this.canvas, "Nachricht");
 
     if (message != null) {
       this.client.sendChatMessage(message);
+    }
+  }
+
+  private void saveGame () {
+    World world = this.client.getWorld();
+
+    if (world.getPlayers().size() > 1) {
+      JOptionPane.showMessageDialog(this.canvas, "Man kann im Mehrspielermodus nicht speichern.");
+      return;
+    }
+
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Dungeon Game Speicherstand", "dungeon"));
+
+    int button = fileChooser.showSaveDialog(this.canvas);
+
+    if (button == JFileChooser.APPROVE_OPTION) {
+      File selectedFile = fileChooser.getSelectedFile();
+
+      new WorldLoader().saveToFile(this.client.getWorld(), selectedFile);
+
+      JOptionPane.showMessageDialog(this.canvas, "Gespeichert");
     }
   }
 }

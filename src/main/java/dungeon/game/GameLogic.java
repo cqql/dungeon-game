@@ -52,6 +52,20 @@ public class GameLogic {
   }
 
   /**
+   * Injects a given world into the game logic.
+   *
+   * This is used to load save files.
+   */
+  public void setWorld (World world) {
+    this.world = world;
+    this.playerStates = new HashMap<>();
+
+    for (Player player : this.world.getPlayers()) {
+      this.playerStates.put(player.getId(), new PlayerState());
+    }
+  }
+
+  /**
    * Set a move flag.
    */
   public void activateMoveDirection (int playerId, MoveCommand command) {
