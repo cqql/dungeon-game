@@ -125,8 +125,8 @@ public class LogicHandler implements MessageHandler {
       this.logic.activateMoveDirection(playerId, (MoveCommand)command);
     } else if (command instanceof AttackCommand) {
       this.logic.activateAttack(playerId);
-    } else if (command instanceof IceBoltAttackCommand) {
-      this.logic.activateIceBolt(playerId);
+    } else if (command instanceof CastSpellCommand) {
+      this.logic.activateSpell(playerId, ((CastSpellCommand)command).getDamageType());
     } else if (command instanceof HealthPotionCommand) {
       this.logic.useHealthPotion(playerId);
     } else if (command instanceof ManaPotionCommand) {
@@ -148,8 +148,8 @@ public class LogicHandler implements MessageHandler {
       this.logic.deactivateMoveDirection(playerId, (MoveCommand)command);
     } else if (command instanceof AttackCommand) {
       this.logic.deactivateAttack(playerId);
-    } else if (command instanceof IceBoltAttackCommand) {
-      this.logic.deactivateIceBoltAttack(playerId);
+    } else if (command instanceof CastSpellCommand) {
+      this.logic.deactivateSpell(playerId);
     }
   }
 

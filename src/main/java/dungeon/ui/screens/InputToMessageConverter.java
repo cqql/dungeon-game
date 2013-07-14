@@ -2,6 +2,7 @@ package dungeon.ui.screens;
 
 import dungeon.client.Client;
 import dungeon.load.WorldLoader;
+import dungeon.models.DamageType;
 import dungeon.models.World;
 import dungeon.ui.messages.*;
 
@@ -72,11 +73,15 @@ public class InputToMessageConverter implements KeyListener {
         return MoveCommand.DOWN;
       case 'd':
         return MoveCommand.RIGHT;
-      case 'j':
-        return new AttackCommand();
-      case 'k':
-        return new IceBoltAttackCommand();
       case 'h':
+        return new AttackCommand();
+      case 'j':
+        return new CastSpellCommand(DamageType.ROCK);
+      case 'k':
+        return new CastSpellCommand(DamageType.PAPER);
+      case 'l':
+        return new CastSpellCommand(DamageType.SCISSORS);
+      case 'n':
         return new HealthPotionCommand();
       case 'm':
         return new ManaPotionCommand();

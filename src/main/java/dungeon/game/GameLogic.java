@@ -28,6 +28,8 @@ public class GameLogic {
 
   private static final int SPEED = 3000;
 
+  private static final int MANA_DELAY = 2000;
+
   /**
    * The next available ID.
    *
@@ -139,21 +141,21 @@ public class GameLogic {
   }
 
   /**
-   * Set the ice bolt attacking flag.
+   * Cast spell of given type.
    */
-  public void activateIceBolt (int playerId) {
+  public void activateSpell (int playerId, DamageType damageType) {
     PlayerState state = this.getPlayerState(playerId);
 
-    state.useIceBolt = true;
+    state.castSpell = damageType;
   }
 
   /**
-   * Reset the ice bolt attacking flag.
+   * Stop casting spells.
    */
-  public void deactivateIceBoltAttack (int playerId) {
+  public void deactivateSpell (int playerId) {
     PlayerState state = this.getPlayerState(playerId);
 
-    state.useIceBolt = false;
+    state.castSpell = null;
   }
 
   /**
@@ -252,7 +254,7 @@ public class GameLogic {
     this.handleRespawn(transaction);
     this.handleMana(transaction);
     this.handleAttack(transaction);
-    this.handleIceBolt(transaction);
+    this.handleSpellCasting(transaction);
     this.handleInteractionWithNpcs(transaction);
     this.joinPlayers(transaction);
     this.removePlayers(transaction);
@@ -462,7 +464,7 @@ public class GameLogic {
 
         for (Enemy enemy : room.getEnemies()) {
           if (this.touch(enemy, projectile) && !enemy.equals(projectile.getSource())) {
-            this.damageEnemy(transaction, enemy, projectile.getDamage());
+            this.hitEnemy(transaction, enemy, projectile);
             transaction.pushAndCommit(new Enemy.MoveTransform(enemy, projectile.getVelocity().normalize().times(100)));
             transaction.pushAndCommit(new Room.RemoveProjectileTransform(room.getId(), projectile));
             break;
@@ -627,8 +629,8 @@ public class GameLogic {
       PlayerState state = this.getPlayerState(player);
 
       if (player.getMana() < player.getMaxMana()
-        && System.currentTimeMillis() - state.lastManaRestoreTime > 5000
-        && System.currentTimeMillis() - state.lastManaUsedTime > 5000) {
+        && System.currentTimeMillis() - state.lastManaRestoreTime > MANA_DELAY
+        && System.currentTimeMillis() - state.lastManaUsedTime > MANA_DELAY) {
         state.lastManaRestoreTime = System.currentTimeMillis();
 
         transaction.pushAndCommit(new Player.ManaTransform(player, 1));
@@ -666,21 +668,22 @@ public class GameLogic {
   }
 
   /**
-   * Create a new projectile if the player is attacking with ice bolts.
+   * Create projectiles of activated type.
    */
-  private void handleIceBolt (Transaction transaction) {
+  private void handleSpellCasting (Transaction transaction) {
     for (Player player : transaction.getWorld().getPlayers()) {
       PlayerState state = this.getPlayerState(player);
 
-      if (state.useIceBolt && player.getMana() > 0) {
+      if (state.castSpell != null && player.getMana() > 0) {
         state.lastManaUsedTime = System.currentTimeMillis();
-        state.useIceBolt = false;
 
-        Projectile projectile = player.iceBoltAttack(this.nextId());
+        Projectile projectile = player.castSpell(this.nextId(), state.castSpell);
         Room currentRoom = transaction.getWorld().getCurrentRoom(player);
 
         transaction.pushAndCommit(new Player.ManaTransform(player, -1));
         transaction.pushAndCommit(new Room.AddProjectileTransform(currentRoom.getId(), projectile));
+
+        state.castSpell = null;
       }
     }
   }
@@ -778,10 +781,20 @@ public class GameLogic {
   }
 
   /**
-   * Inflict {@code amount} damage on {@code enemy}.
+   * Collides an {@code enemy} with a {@code projectile}.
    */
-  private void damageEnemy (Transaction transaction, Enemy enemy, int amount) {
-    transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -amount));
+  private void hitEnemy (Transaction transaction, Enemy enemy, Projectile projectile) {
+    if (projectile.getType() == DamageType.NORMAL) {
+      transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -projectile.getDamage()));
+    } else {
+      if (projectile.getType().isStrongAgainst(enemy.getType())) {
+        transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -(projectile.getDamage() + 2)));
+      } else if (enemy.getType().isStrongAgainst(projectile.getType())) {
+        transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, +2));
+      } else {
+        transaction.pushAndCommit(new Enemy.HitPointTransform(enemy, -1));
+      }
+    }
   }
 
   /**

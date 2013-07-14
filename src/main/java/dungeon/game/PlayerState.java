@@ -1,5 +1,6 @@
 package dungeon.game;
 
+import dungeon.models.DamageType;
 import dungeon.models.Direction;
 import dungeon.models.Item;
 import dungeon.models.Merchant;
@@ -18,7 +19,7 @@ public class PlayerState {
 
   boolean attacking;
 
-  boolean useIceBolt;
+  DamageType castSpell;
 
   boolean useHealthPotion;
 

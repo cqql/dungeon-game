@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 public class Projectile implements Spatial, Serializable {
-  public static final int SIZE = 100;
+  public static final int SIZE = 250;
 
   private final int id;
 
