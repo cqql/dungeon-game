@@ -18,7 +18,7 @@ public class ChatMessage implements Message, Serializable {
   }
 
   public String getAuthor () {
-    return author;
+    return this.author;
   }
 
   /**
@@ -31,6 +31,6 @@ public class ChatMessage implements Message, Serializable {
   }
 
   public String getText () {
-    return text;
+    return this.text;
   }
 }

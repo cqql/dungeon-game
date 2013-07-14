@@ -87,7 +87,7 @@ public class StartMenu extends JPanel {
           StartMenu.this.client.connect(server, 6077);
 
           StartMenu.this.client.send(new ShowLobby(StartMenu.this.client.getPlayerId()));
-        } catch (Client.ConnectException e1) {
+        } catch (Client.ConnectException ex) {
           JOptionPane.showMessageDialog(null, "Es konnte keine Verbindung hergestellt werden");
         }
       }

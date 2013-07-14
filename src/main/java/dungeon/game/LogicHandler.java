@@ -204,7 +204,7 @@ public class LogicHandler implements MessageHandler {
     boolean allReady = true;
 
     for (Boolean readyStatus : this.playersReady.values()) {
-      if (readyStatus == false) {
+      if (!readyStatus) {
         allReady = false;
       }
     }

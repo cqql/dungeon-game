@@ -10,6 +10,6 @@ public class PlayerLeaveCommand implements Message {
   }
 
   public int getPlayerId () {
-    return playerId;
+    return this.playerId;
   }
 }
