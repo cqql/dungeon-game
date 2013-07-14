@@ -2,8 +2,8 @@
 
 ## Generelle Informationen
 
-- **Version**: 1.0.0
-- **Erstelldatum**: 14.07.2013
+- `Version`: 1.0.0
+- `Erstelldatum`: 14.07.2013
 
 ## Entwickler
 
@@ -29,17 +29,20 @@
 
 ### Steuerung
 
-- **W** - hoch
-- **A** - links
-- **S** - runter
-- **D** - rechts
-- **H** - Heiltrank benutzen
-- **J** - Schießen
-- **K** - Eispfeil schießen
-- **Z** - mit NPC sprechen
-- **I** - Inventar öffnen
-- **T** - Speichern im Einzelspielermodus
-- **G** - Spiel beenden
+- `W` - hoch
+- `A` - links
+- `S` - runter
+- `D` - rechts
+- `N` - Heiltrank benutzen
+- `M` - Manatrank benutzen
+- `H` - Normalen Pfeil verschießen
+- `J` - Stein verschießen
+- `K` - Papier verschießen
+- `L` - Scheren verschießen
+- `Z` - mit NPC sprechen
+- `I` - Inventar öffnen
+- `T` - Speichern im Einzelspielermodus
+- `G` - Spiel beenden
 
 
 ## Was ist was?
