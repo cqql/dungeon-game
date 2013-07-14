@@ -77,6 +77,30 @@ public class Projectile implements Spatial, Serializable {
     return new Position(this.position.getVector().plus(new Vector(SIZE / 2, SIZE / 2)));
   }
 
+  @Override
+  public boolean equals (Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Projectile that = (Projectile)o;
+
+    if (id != that.id) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode () {
+    return id;
+  }
+
   public static class MoveTransform implements Transform {
     private final int projectileId;
 

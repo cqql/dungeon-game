@@ -169,114 +169,168 @@ public class Room implements Serializable {
   }
 
   public Room apply (Transform transform) {
-    String id = this.id;
-    List<Enemy> enemies = this.enemies;
-    List<Tile> tiles = this.tiles;
-    List<SavePoint> savePoints = this.savePoints;
-    List<Drop> drops = this.drops;
-    List<Projectile> projectiles = this.projectiles;
-    List<NPC> npcs = this.npcs;
-    List<Merchant> merchants = this.merchants;
-
-    if (transform instanceof AddDropTransform && this.id.equals(((AddDropTransform)transform).roomId)) {
-      drops = new ArrayList<>(drops);
-      drops.add(((AddDropTransform)transform).drop);
-    } else if (transform instanceof RemoveDropTransform) {
-      drops = new ArrayList<>();
-
-      for (Drop drop : this.drops) {
-        if (drop.getId() != ((RemoveDropTransform)transform).dropId) {
-          drops.add(drop);
-        }
-      }
-    } else if (transform instanceof AddProjectileTransform && this.id.equals(((AddProjectileTransform)transform).roomId)) {
-      projectiles = new ArrayList<>(projectiles);
-      projectiles.add(((AddProjectileTransform)transform).projectile);
-    } else if (transform instanceof RemoveProjectileTransform && this.id.equals(((RemoveProjectileTransform)transform).roomId)) {
-      projectiles = new ArrayList<>();
+    if (transform instanceof RoomTransform) {
+      return ((RoomTransform)transform).apply(this);
+    } else {
+      List<Enemy> enemies = new ArrayList<>();
+      List<Projectile> projectiles = new ArrayList<>();
+      List<Merchant> merchants = new ArrayList<>();
 
       for (Projectile projectile : this.projectiles) {
-        if (projectile.getId() != ((RemoveProjectileTransform)transform).projectile.getId()) {
-          projectiles.add(projectile);
-        }
+        projectiles.add(projectile.apply(transform));
       }
-    } else if (transform instanceof RemoveEnemyTransform) {
-      enemies = new ArrayList<>();
 
       for (Enemy enemy : this.enemies) {
-        if (!enemy.equals(((RemoveEnemyTransform)transform).enemy)) {
-          enemies.add(enemy);
-        }
+        enemies.add(enemy.apply(transform));
+      }
+
+      for (Merchant merchant : this.merchants) {
+        merchants.add(merchant.apply(transform));
+      }
+
+      return new Room(this.id, enemies, this.savePoints, this.tiles, this.drops, projectiles, this.npcs, merchants);
+    }
+  }
+
+  private static class RoomTransform implements Transform {
+    private final String roomId;
+
+    public RoomTransform (String roomId) {
+      this.roomId = roomId;
+    }
+
+    public Room apply (Room room) {
+      if (this.roomId.equals(room.getId())) {
+        return new Room(
+          this.id(room),
+          this.enemies(room),
+          this.savePoints(room),
+          this.tiles(room),
+          this.drops(room),
+          this.projectiles(room),
+          this.npcs(room),
+          this.merchants(room)
+        );
+      } else {
+        return room;
       }
     }
 
-    List<Projectile> tempProjectiles = projectiles;
-    projectiles = new ArrayList<>();
-    for (Projectile projectile : tempProjectiles) {
-      projectiles.add(projectile.apply(transform));
+    protected String id (Room room) {
+      return room.id;
     }
 
-    List<Enemy> tempEnemies = enemies;
-    enemies = new ArrayList<>();
-    for (Enemy enemy : tempEnemies) {
-      enemies.add(enemy.apply(transform));
+    protected List<Enemy> enemies (Room room) {
+      return room.enemies;
     }
 
-    List<Merchant> tempMerchants = merchants;
-    merchants = new ArrayList<>();
-    for (Merchant merchant : tempMerchants) {
-      merchants.add(merchant.apply(transform));
+    protected List<SavePoint> savePoints (Room room) {
+      return room.savePoints;
     }
 
-    return new Room(id, enemies, savePoints, tiles, drops, projectiles, npcs, merchants);
+    protected List<Tile> tiles (Room room) {
+      return room.tiles;
+    }
+
+    protected List<Drop> drops (Room room) {
+      return room.drops;
+    }
+
+    protected List<Projectile> projectiles (Room room) {
+      return room.projectiles;
+    }
+
+    protected List<NPC> npcs (Room room) {
+      return room.npcs;
+    }
+
+    protected List<Merchant> merchants (Room room) {
+      return room.merchants;
+    }
   }
 
-  public static class AddDropTransform implements Transform {
-    private final String roomId;
-
+  public static class AddDropTransform extends RoomTransform {
     private final Drop drop;
 
     public AddDropTransform (String roomId, Drop drop) {
-      this.roomId = roomId;
+      super(roomId);
+
       this.drop = drop;
     }
-  }
 
-  public static class RemoveDropTransform implements Transform {
-    private final int dropId;
-
-    public RemoveDropTransform (int dropId) {
-      this.dropId = dropId;
+    @Override
+    protected List<Drop> drops (Room room) {
+      List<Drop> drops = new ArrayList<>(room.drops);
+      drops.add(this.drop);
+      return drops;
     }
   }
 
-  public static class AddProjectileTransform implements Transform {
-    private final String roomId;
+  public static class RemoveDropTransform extends RoomTransform {
+    private final Drop drop;
 
+    public RemoveDropTransform (Room room, Drop drop) {
+      super(room.getId());
+
+      this.drop = drop;
+    }
+
+    @Override
+    protected List<Drop> drops (Room room) {
+      List<Drop> drops = new ArrayList<>(room.drops);
+      drops.remove(this.drop);
+      return drops;
+    }
+  }
+
+  public static class AddProjectileTransform extends RoomTransform {
     private final Projectile projectile;
 
     public AddProjectileTransform (String roomId, Projectile projectile) {
-      this.roomId = roomId;
+      super(roomId);
+
       this.projectile = projectile;
+    }
+
+    @Override
+    protected List<Projectile> projectiles (Room room) {
+      List<Projectile> projectiles = new ArrayList<>(room.projectiles);
+      projectiles.add(this.projectile);
+      return projectiles;
     }
   }
 
-  public static class RemoveProjectileTransform implements Transform {
-    private final String roomId;
-
+  public static class RemoveProjectileTransform extends RoomTransform {
     private final Projectile projectile;
 
     public RemoveProjectileTransform (String roomId, Projectile projectile) {
-      this.roomId = roomId;
+      super(roomId);
+
       this.projectile = projectile;
+    }
+
+    @Override
+    protected List<Projectile> projectiles (Room room) {
+      List<Projectile> projectiles = new ArrayList<>(room.projectiles);
+      projectiles.remove(this.projectile);
+      return projectiles;
     }
   }
 
-  public static class RemoveEnemyTransform implements Transform {
+  public static class RemoveEnemyTransform extends RoomTransform {
     private final Enemy enemy;
 
-    public RemoveEnemyTransform (Enemy enemy) {
+    public RemoveEnemyTransform (Room room, Enemy enemy) {
+      super(room.getId());
+
       this.enemy = enemy;
+    }
+
+    @Override
+    protected List<Enemy> enemies (Room room) {
+      List<Enemy> enemies = new ArrayList<>(room.enemies);
+      enemies.remove(this.enemy);
+      return enemies;
     }
   }
 }

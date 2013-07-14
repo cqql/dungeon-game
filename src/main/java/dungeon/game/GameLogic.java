@@ -484,11 +484,13 @@ public class GameLogic {
    */
   private void handleDrops (Transaction transaction) {
     for (Player player : transaction.getWorld().getPlayers()) {
-      for (Drop drop : transaction.getWorld().getCurrentRoom(player).getDrops()) {
+      Room currentRoom = transaction.getWorld().getCurrentRoom(player);
+
+      for (Drop drop : currentRoom.getDrops()) {
         if (this.touch(player, drop)) {
           LOGGER.info("Pick up " + drop);
 
-          transaction.push(new Room.RemoveDropTransform(drop.getId()));
+          transaction.push(new Room.RemoveDropTransform(currentRoom, drop));
 
           if (drop.isMoney()) {
             transaction.push(new Player.MoneyTransform(player, drop.getMoney()));
@@ -524,7 +526,7 @@ public class GameLogic {
     for (Room room : transaction.getWorld().getCurrentRooms()) {
       for (Enemy enemy : room.getEnemies()) {
         if (enemy.getHitPoints() <= 0) {
-          transaction.pushAndCommit(new Room.RemoveEnemyTransform(enemy));
+          transaction.pushAndCommit(new Room.RemoveEnemyTransform(room, enemy));
 
           ItemType[] itemTypes = ItemType.values();
           ItemType itemType = itemTypes[(new Random()).nextInt(itemTypes.length)];

@@ -76,4 +76,21 @@ public class Drop implements Spatial, Serializable {
       return "Drop#" + this.id + " with " + this.item;
     }
   }
+
+  @Override
+  public boolean equals (Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Drop drop = (Drop)o;
+
+    if (id != drop.id) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode () {
+    return id;
+  }
 }
