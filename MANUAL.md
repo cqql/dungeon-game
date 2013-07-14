@@ -57,3 +57,12 @@
 ## Das Spiel
 
 Du bist in einem alten Schloss und, weil du unbedingt mal die Aussicht genießen möchtest, musst du dich in den obersten Stock vorkämpfen, wo der Balkon von einem besonders langlebigen Geist bewacht wird.
+
+
+# Musik
+
+Die gesamte verwendete Musik steht unter der [Creative Commons-Lizenz](http://creativecommons.org/licenses/by/3.0/).
+Insbesondere wurden folgende Stücke verwendet
+
+- [Hintergrundmusik](http://www.freesound.org/people/suonho/sounds/58962/)
+- [Normaler Schuss](http://www.freesound.org/people/jobro/sounds/35686/)
