@@ -29,16 +29,17 @@
 
 ### Steuerung
 
-- W - hoch
-- A - links
-- S - runter
-- D - rechts
-- H - Heiltrank benutzen
-- J - Schießen
-- K - Eispfeil schießen
-- Z - mit NPC sprechen
-- I - Inventar öffnen
-- T - Speichern im Einzelspielermodus
+- **W** - hoch
+- **A** - links
+- **S** - runter
+- **D** - rechts
+- **H** - Heiltrank benutzen
+- **J** - Schießen
+- **K** - Eispfeil schießen
+- **Z** - mit NPC sprechen
+- **I** - Inventar öffnen
+- **T** - Speichern im Einzelspielermodus
+- **G** - Spiel beenden
 
 
 ## Was ist was?

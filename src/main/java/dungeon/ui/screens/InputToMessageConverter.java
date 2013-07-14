@@ -39,6 +39,8 @@ public class InputToMessageConverter implements KeyListener {
       this.saveGame();
     } else if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
       this.sendChatMessage();
+    } else if (keyEvent.getKeyChar() == 'g') {
+      this.quitGame();
     } else {
       Command command = this.commandForKey(keyEvent.getKeyChar());
 
@@ -115,6 +117,14 @@ public class InputToMessageConverter implements KeyListener {
       new WorldLoader().saveToFile(this.client.getWorld(), selectedFile);
 
       JOptionPane.showMessageDialog(this.canvas, "Gespeichert");
+    }
+  }
+
+  private void quitGame () {
+    int yes = JOptionPane.showConfirmDialog(this.canvas, "Soll das Spiel wirklich beendet werden?", "Beenden", JOptionPane.YES_NO_OPTION);
+
+    if (yes == JOptionPane.YES_OPTION) {
+      this.client.disconnect();
     }
   }
 }
