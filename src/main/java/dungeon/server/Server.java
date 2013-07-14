@@ -128,6 +128,12 @@ public class Server implements Runnable {
         LOGGER.log(Level.WARNING, "Failed while connecting", e);
       }
     }
+
+    try {
+      serverSocket.close();
+    } catch (IOException e) {
+      LOGGER.info("Could not close server socket");
+    }
   }
 
   private void handleConnection (Socket socket) {
