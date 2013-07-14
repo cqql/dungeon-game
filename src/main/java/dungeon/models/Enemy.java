@@ -77,22 +77,11 @@ public class Enemy implements Spatial, Identifiable, Serializable {
   }
 
   public Enemy apply (Transform transform) {
-    int id = this.id;
-    int hitPoints = this.hitPoints;
-    int speed = this.speed;
-    Position position = this.position;
-    MoveStrategy moveStrategy = this.moveStrategy;
-    String onDeath = this.onDeath;
-
-    if (transform instanceof HitPointTransform && this.equals(((HitPointTransform)transform).enemy)) {
-      hitPoints += ((HitPointTransform)transform).delta;
-    } else if (transform instanceof MoveTransform && this.equals(((MoveTransform)transform).enemy)) {
-      position = new Position(position.getVector().plus(((MoveTransform)transform).delta));
-    } else if (transform instanceof TeleportTransform && this.equals(((TeleportTransform)transform).enemy)) {
-      position = ((TeleportTransform)transform).position;
+    if (transform instanceof EnemyTransform) {
+      return ((EnemyTransform)transform).apply(this);
+    } else {
+      return this;
     }
-
-    return new Enemy(id, hitPoints, speed, position, moveStrategy, onDeath);
   }
 
   @Override
@@ -129,36 +118,99 @@ public class Enemy implements Spatial, Identifiable, Serializable {
     return this.id;
   }
 
-  public static class HitPointTransform implements Transform {
+  private static class EnemyTransform implements Transform {
     private final Enemy enemy;
 
+    private EnemyTransform (Enemy enemy) {
+      this.enemy = enemy;
+    }
+
+    public Enemy apply (Enemy enemy) {
+      if (this.enemy.equals(enemy)) {
+        return new Enemy(
+          this.id(enemy),
+          this.hitPoints(enemy),
+          this.speed(enemy),
+          this.position(enemy),
+          this.moveStrategy(enemy),
+          this.onDeath(enemy)
+        );
+      } else {
+        return enemy;
+      }
+    }
+
+    protected int id (Enemy enemy) {
+      return enemy.id;
+    }
+
+    protected int hitPoints (Enemy enemy) {
+      return enemy.hitPoints;
+    }
+
+    protected int strength (Enemy enemy) {
+      return enemy.strength;
+    }
+
+    protected int speed (Enemy enemy) {
+      return enemy.speed;
+    }
+
+    protected Position position (Enemy enemy) {
+      return enemy.position;
+    }
+
+    protected MoveStrategy moveStrategy (Enemy enemy) {
+      return enemy.moveStrategy;
+    }
+
+    protected String onDeath (Enemy enemy) {
+      return enemy.onDeath;
+    }
+  }
+
+  public static class HitPointTransform extends EnemyTransform {
     private final int delta;
 
     public HitPointTransform (Enemy enemy, int delta) {
-      this.enemy = enemy;
+      super(enemy);
+
       this.delta = delta;
+    }
+
+    @Override
+    protected int hitPoints (Enemy enemy) {
+      return Math.max(0, enemy.hitPoints + this.delta);
     }
   }
 
-  public static class MoveTransform implements Transform {
-    private final Enemy enemy;
-
+  public static class MoveTransform extends EnemyTransform {
     private final Vector delta;
 
     public MoveTransform (Enemy enemy, Vector delta) {
-      this.enemy = enemy;
+      super(enemy);
+
       this.delta = delta;
+    }
+
+    @Override
+    protected Position position (Enemy enemy) {
+      return new Position(enemy.getPosition().getVector().plus(this.delta));
     }
   }
 
-  public static class TeleportTransform implements Transform {
-    private final Enemy enemy;
-
+  public static class TeleportTransform extends EnemyTransform {
     private final Position position;
 
     public TeleportTransform (Enemy enemy, Position position) {
-      this.enemy = enemy;
+      super(enemy);
+
       this.position = position;
+    }
+
+    @Override
+    protected Position position (Enemy enemy) {
+      return this.position;
     }
   }
 
@@ -195,8 +247,7 @@ public class Enemy implements Spatial, Identifiable, Serializable {
     /**
      * Move the enemy.
      *
-     * @param transaction
-     * @param room The room in which the enemy
+     * @param room  The room in which the enemy is
      * @param enemy The enemy to move
      * @param delta How long to move
      */
