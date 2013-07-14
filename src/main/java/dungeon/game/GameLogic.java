@@ -28,6 +28,8 @@ public class GameLogic {
 
   private static final int SPEED = 3000;
 
+  private static final int MANA_DELAY = 2000;
+
   /**
    * The next available ID.
    *
@@ -627,8 +629,8 @@ public class GameLogic {
       PlayerState state = this.getPlayerState(player);
 
       if (player.getMana() < player.getMaxMana()
-        && System.currentTimeMillis() - state.lastManaRestoreTime > 5000
-        && System.currentTimeMillis() - state.lastManaUsedTime > 5000) {
+        && System.currentTimeMillis() - state.lastManaRestoreTime > MANA_DELAY
+        && System.currentTimeMillis() - state.lastManaUsedTime > MANA_DELAY) {
         state.lastManaRestoreTime = System.currentTimeMillis();
 
         transaction.pushAndCommit(new Player.ManaTransform(player, 1));
