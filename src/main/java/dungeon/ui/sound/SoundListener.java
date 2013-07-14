@@ -22,6 +22,7 @@ public class SoundListener implements MessageHandler {
   public SoundListener () throws UnsupportedAudioFileException, IOException {
     this.soundManager.loadSound("sounds/shot.wav");
     this.soundManager.loadSound("sounds/teleportation.wav");
+    this.soundManager.loadSound("sounds/coins.wav");
   }
 
   @Override
@@ -31,6 +32,8 @@ public class SoundListener implements MessageHandler {
     } else if (message instanceof Transform) {
       if (message instanceof Player.TeleportTransform) {
         this.soundManager.playSound("sounds/teleportation.wav");
+      } else if (message instanceof Player.MoneyTransform) {
+        this.soundManager.playSound("sounds/coins.wav");
       }
     } else if (message instanceof StartGame) {
       this.soundManager.startBackgroundMusic();

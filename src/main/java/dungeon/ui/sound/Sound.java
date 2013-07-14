@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 /**
  * A sound that can be played/looped.
  */
-class Sound {
+public class Sound {
   private static final Logger LOGGER = Logger.getLogger(Sound.class.getName());
 
   private final long size;
