@@ -16,7 +16,7 @@ public class SoundManager {
   private Sound.Control backgroundMusicControl;
 
   public SoundManager () throws IOException, UnsupportedAudioFileException {
-    this.backgroundMusic = new Sound("sounds/shot.wav");
+    this.backgroundMusic = new Sound("sounds/background.wav");
   }
 
   /**
