@@ -22,7 +22,7 @@ public class ItemAdapter extends XmlAdapter<ItemAdapter, Item> {
   public ItemAdapter marshal (Item item) throws Exception {
     ItemAdapter adapter = new ItemAdapter();
     adapter.id = item.getId();
-    adapter.type = item.getType().toString();
+    adapter.type = item.getType().getName();
 
     return adapter;
   }
