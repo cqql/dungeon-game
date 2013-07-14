@@ -1,5 +1,8 @@
 package dungeon.ui.sound;
 
+import dungeon.game.messages.DefeatEvent;
+import dungeon.game.messages.StartGame;
+import dungeon.game.messages.WinEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.ui.messages.AttackCommand;
@@ -22,6 +25,10 @@ public class SoundListener implements MessageHandler {
   public void handleMessage (Message message) {
     if (message instanceof StartCommand && ((StartCommand)message).getCommand() instanceof AttackCommand) {
       this.playShotSound();
+    } else if (message instanceof StartGame) {
+      this.soundManager.startBackgroundMusic();
+    } else if (message instanceof WinEvent || message instanceof DefeatEvent) {
+      this.soundManager.stopBackgroundMusic();
     }
   }
 

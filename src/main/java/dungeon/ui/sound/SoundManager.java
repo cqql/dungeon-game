@@ -11,6 +11,14 @@ import java.util.Map;
 public class SoundManager {
   private final Map<String, Sound> sounds = new HashMap<>();
 
+  private final Sound backgroundMusic;
+
+  private Sound.Control backgroundMusicControl;
+
+  public SoundManager () throws IOException, UnsupportedAudioFileException {
+    this.backgroundMusic = new Sound("sounds/shot.wav");
+  }
+
   /**
    * Loads a sound file from the resources folder.
    */
@@ -29,4 +37,13 @@ public class SoundManager {
     }
   }
 
+  public void startBackgroundMusic () {
+    this.backgroundMusicControl = this.backgroundMusic.loop();
+  }
+
+  public void stopBackgroundMusic () {
+    if (this.backgroundMusicControl != null) {
+      this.backgroundMusicControl.stop();
+    }
+  }
 }

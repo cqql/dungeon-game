@@ -35,14 +35,64 @@ class Sound {
     fileStream.close();
   }
 
+  /**
+   * Plays the sound once.
+   */
   public void play () {
+    Clip clip = this.toClip();
+
+    if (clip != null) {
+      clip.start();
+    }
+  }
+
+  /**
+   * Plays the sound until stopped.
+   *
+   * @return Allows you to control the playing.
+   */
+  public Control loop () {
+    Clip clip = this.toClip();
+
+    if (clip != null) {
+      clip.loop(Clip.LOOP_CONTINUOUSLY);
+      clip.start();
+
+      return new Control(clip);
+    }
+
+    return null;
+  }
+
+  /**
+   * Create a playable clip from this sound's audio data.
+   */
+  private Clip toClip () {
+    Clip clip = null;
+
     try {
-      Clip clip = (Clip)AudioSystem.getLine(this.info);
+      clip = (Clip)AudioSystem.getLine(this.info);
       clip.open(this.format, this.data, 0, (int)this.size);
       clip.addLineListener(new CloseAfterPlayListener());
-      clip.start();
     } catch (LineUnavailableException e) {
-      LOGGER.log(Level.INFO, "Could allocate line. Probably to many open sounds.", e);
+      LOGGER.log(Level.INFO, "Could not allocate line. Probably to many open sounds.", e);
+    }
+
+    return clip;
+  }
+
+  /**
+   * Gives callers control over the sound without exposing the clip object.
+   */
+  public static class Control {
+    private final Clip clip;
+
+    public Control (Clip clip) {
+      this.clip = clip;
+    }
+
+    public void stop () {
+      this.clip.stop();
     }
   }
 
