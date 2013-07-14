@@ -54,29 +54,11 @@ public class Merchant implements Spatial, Serializable {
   }
 
   public Merchant apply (Transform transform) {
-    int id = this.id;
-    Position position = this.position;
-    int money = this.money;
-    List<Item> items = this.items;
-
-    if (transform instanceof BuyItemTransform && this.equals(((BuyItemTransform)transform).merchant)) {
-      money -= ((BuyItemTransform)transform).item.getValue();
-
-      items = new ArrayList<>(items);
-      items.add(((BuyItemTransform)transform).item);
-    } else if (transform instanceof SellItemTransform && this.equals(((SellItemTransform)transform).merchant)) {
-      money += ((SellItemTransform)transform).item.getValue();
-
-      items = new ArrayList<>();
-
-      for (Item item : this.items) {
-        if (!item.equals(((SellItemTransform)transform).item)) {
-          items.add(item);
-        }
-      }
+    if (transform instanceof MerchantTransform) {
+      return ((MerchantTransform)transform).apply(this);
+    } else {
+      return this;
     }
-
-    return new Merchant(id, position, money, items);
   }
 
   @Override
@@ -103,25 +85,90 @@ public class Merchant implements Spatial, Serializable {
     return this.id;
   }
 
-  public static class BuyItemTransform implements Transform {
+  private static class MerchantTransform implements Transform {
     private final Merchant merchant;
 
-    private final Item item;
-
-    public BuyItemTransform (Merchant merchant, Item item) {
+    private MerchantTransform (Merchant merchant) {
       this.merchant = merchant;
-      this.item = item;
+    }
+
+    public Merchant apply (Merchant merchant) {
+      if (this.merchant.equals(merchant)) {
+        return new Merchant(
+          this.id(merchant),
+          this.position(merchant),
+          this.money(merchant),
+          this.items(merchant)
+        );
+      } else {
+        return merchant;
+      }
+    }
+
+    protected int id (Merchant merchant) {
+      return merchant.id;
+    }
+
+    protected Position position (Merchant merchant) {
+      return merchant.position;
+    }
+
+    protected int money (Merchant merchant) {
+      return merchant.money;
+    }
+
+    protected List<Item> items (Merchant merchant) {
+      return merchant.items;
     }
   }
 
-  public static class SellItemTransform implements Transform {
-    private final Merchant merchant;
+  public static class BuyItemTransform extends MerchantTransform {
+    private final Item item;
 
+    public BuyItemTransform (Merchant merchant, Item item) {
+      super(merchant);
+
+      this.item = item;
+    }
+
+    @Override
+    protected int money (Merchant merchant) {
+      return merchant.money - this.item.getValue();
+    }
+
+    @Override
+    protected List<Item> items (Merchant merchant) {
+      List<Item> items = new ArrayList<>(merchant.items);
+      items.add(this.item);
+      return items;
+    }
+  }
+
+  public static class SellItemTransform extends MerchantTransform {
     private final Item item;
 
     public SellItemTransform (Merchant merchant, Item item) {
-      this.merchant = merchant;
+      super(merchant);
+
       this.item = item;
+    }
+
+    @Override
+    protected int money (Merchant merchant) {
+      return merchant.money + this.item.getValue();
+    }
+
+    @Override
+    protected List<Item> items (Merchant merchant) {
+      List<Item> items = new ArrayList<>();
+
+      for (Item item : merchant.items) {
+        if (!item.equals(this.item)) {
+          items.add(item);
+        }
+      }
+
+      return items;
     }
   }
 }
