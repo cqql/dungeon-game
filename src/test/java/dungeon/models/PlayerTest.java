@@ -1,5 +1,6 @@
 package dungeon.models;
 
+import dungeon.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +41,7 @@ public class PlayerTest {
 
   @Test
   public void moveTransformUpdatesPosition () {
-    Player transformed = this.player.apply(new Player.MoveTransform(this.player, 1200, 2000));
+    Player transformed = this.player.apply(new Player.MoveTransform(this.player, new Vector(1200, 2000)));
 
     assertEquals(3200, transformed.getPosition().getX());
     assertEquals(4000, transformed.getPosition().getY());
