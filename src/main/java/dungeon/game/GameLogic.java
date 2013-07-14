@@ -139,21 +139,21 @@ public class GameLogic {
   }
 
   /**
-   * Set the ice bolt attacking flag.
+   * Cast spell of given type.
    */
-  public void activateIceBolt (int playerId) {
+  public void activateSpell (int playerId, DamageType damageType) {
     PlayerState state = this.getPlayerState(playerId);
 
-    state.useIceBolt = true;
+    state.castSpell = damageType;
   }
 
   /**
-   * Reset the ice bolt attacking flag.
+   * Stop casting spells.
    */
-  public void deactivateIceBoltAttack (int playerId) {
+  public void deactivateSpell (int playerId) {
     PlayerState state = this.getPlayerState(playerId);
 
-    state.useIceBolt = false;
+    state.castSpell = null;
   }
 
   /**
@@ -252,7 +252,7 @@ public class GameLogic {
     this.handleRespawn(transaction);
     this.handleMana(transaction);
     this.handleAttack(transaction);
-    this.handleIceBolt(transaction);
+    this.handleSpellCasting(transaction);
     this.handleInteractionWithNpcs(transaction);
     this.joinPlayers(transaction);
     this.removePlayers(transaction);
@@ -666,21 +666,22 @@ public class GameLogic {
   }
 
   /**
-   * Create a new projectile if the player is attacking with ice bolts.
+   * Create projectiles of activated type.
    */
-  private void handleIceBolt (Transaction transaction) {
+  private void handleSpellCasting (Transaction transaction) {
     for (Player player : transaction.getWorld().getPlayers()) {
       PlayerState state = this.getPlayerState(player);
 
-      if (state.useIceBolt && player.getMana() > 0) {
+      if (state.castSpell != null && player.getMana() > 0) {
         state.lastManaUsedTime = System.currentTimeMillis();
-        state.useIceBolt = false;
 
-        Projectile projectile = player.iceBoltAttack(this.nextId());
+        Projectile projectile = player.castSpell(this.nextId(), state.castSpell);
         Room currentRoom = transaction.getWorld().getCurrentRoom(player);
 
         transaction.pushAndCommit(new Player.ManaTransform(player, -1));
         transaction.pushAndCommit(new Room.AddProjectileTransform(currentRoom.getId(), projectile));
+
+        state.castSpell = null;
       }
     }
   }

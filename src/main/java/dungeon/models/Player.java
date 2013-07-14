@@ -249,8 +249,8 @@ public class Player implements Spatial, Identifiable, Serializable {
     return this.createProjectile(id, 5000 + speedBonus, 1 + damageBonus, DamageType.NORMAL);
   }
 
-  public Projectile iceBoltAttack (int id) {
-    return this.createProjectile(id, 7000, 2, DamageType.SCISSORS);
+  public Projectile castSpell (int id, DamageType damageType) {
+    return this.createProjectile(id, 7000, 2, damageType);
   }
 
   public Player apply (Transform transform) {
