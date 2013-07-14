@@ -1,5 +1,6 @@
 package dungeon.ui.sound;
 
+import dungeon.client.ServerDisconnected;
 import dungeon.game.messages.DefeatEvent;
 import dungeon.game.messages.StartGame;
 import dungeon.game.messages.WinEvent;
@@ -37,7 +38,7 @@ public class SoundListener implements MessageHandler {
       }
     } else if (message instanceof StartGame) {
       this.soundManager.startBackgroundMusic();
-    } else if (message instanceof WinEvent || message instanceof DefeatEvent) {
+    } else if (message instanceof WinEvent || message instanceof DefeatEvent || message instanceof ServerDisconnected) {
       this.soundManager.stopBackgroundMusic();
     }
   }
