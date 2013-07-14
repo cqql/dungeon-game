@@ -239,7 +239,7 @@
         elsif column == 0
           tiles << { x: x * 1000, y: y * 1000, blocking: false }
         elsif column == 2
-          enemies << { id: next_id(), x: x * 1000, y: y * 1000, hp: Random.rand(8) + 2, speed: 1000, move_strategy: "NORMAL" }
+          enemies << { id: next_id(), x: x * 1000, y: y * 1000, hp: Random.rand(15) + 5, speed: 1000, move_strategy: "NORMAL", type: ["ROCK", "PAPER", "SCISSORS"][Random.rand(3)] }
           tiles << { x: x * 1000, y: y * 1000, blocking: false }
         elsif column == 3
           save_points << { x: x * 1000, y: y * 1000 }
@@ -266,7 +266,7 @@
   end
 
   def boss room, x, y, hp, speed, on_death
-    room[:enemies] << { id: next_id(), x: x * 1000, y: y * 1000, hp: hp, speed: speed, move_strategy: "TELEPORT", on_death: on_death }
+    room[:enemies] << { id: next_id(), x: x * 1000, y: y * 1000, hp: hp, speed: speed, move_strategy: "TELEPORT", on_death: on_death, type: ["ROCK", "PAPER", "SCISSORS"][Random.rand(3)] }
 
     room
   end
@@ -289,7 +289,7 @@
       rooms: [
         npc(teleporter(room("room-1", string_to_map(room1)), 19, 19, "room-2", 0, 0), 3, 0, "Wächter", "Willkommen im alten Schloss"),
         merchant(teleporter(room("room-2", string_to_map(room2)), 19, 19, "room-3", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "HEALTH_POTION"}]),
-        boss(room("room-3", string_to_map(room3)), 15, 7, 15, 1500, "level-2#room-4")
+        boss(room("room-3", string_to_map(room3)), 15, 7, 30, 1500, "level-2#room-4")
       ]
     },
     {
@@ -297,7 +297,7 @@
       rooms: [
         npc(teleporter(room("room-4", string_to_map(room4)), 19, 19, "room-5", 0, 0), 3, 0, "Wächter", "Oh, du hast es ja sogar bis in den zweiten Stock geschafft"),
         merchant(teleporter(room("room-5", string_to_map(room5)), 19, 19, "room-6", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "WEAK_BOW"}]),
-        boss(room("room-6", string_to_map(room6)), 15, 7, 30, 1500, "level-3#room-7")
+        boss(room("room-6", string_to_map(room6)), 15, 7, 50, 1500, "level-3#room-7")
       ]
     },
     {
@@ -305,33 +305,34 @@
       rooms: [
         npc(teleporter(room("room-7", string_to_map(room7)), 19, 19, "room-8", 0, 0), 3, 0, "Wächter", "Man sagt, dass im hintersten Zimmer ein Geist den Schlüssel zu großen Ruhm bewacht"),
         merchant(teleporter(room("room-8", string_to_map(room8)), 19, 19, "room-9", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "STRONG_BOW"}]),
-        boss(room("room-9", string_to_map(room9)), 15, 7, 40, 1500, "VICTORY")
+        boss(room("room-9", string_to_map(room9)), 15, 7, 80, 1500, "VICTORY")
       ]
     }
   ]
 
-- levels.each do |level|
-  %level{id: level[:id]}
-    - level[:rooms].each do |room|
-      %room{id: room[:id]}
-        - room[:tiles].each do |tile|
-          %tile{blocking: tile[:blocking] ? "true" : "false"}
-            %position{x: tile[:x], y: tile[:y]}
-        - room[:enemies].each do |enemy|
-          %enemy{id: enemy[:id], hitPoints: enemy[:hp], speed: enemy[:speed], moveStrategy: enemy[:move_strategy], onDeath: enemy[:on_death]}
-            %position{x: enemy[:x], y: enemy[:y]}
-        - room[:teleporters].each do |teleporter|
-          %teleporter{blocking: "false"}
-            %position{x: teleporter[:x], y: teleporter[:y]}
-            %target{roomId: teleporter[:target_id], x: teleporter[:target_x], y: teleporter[:target_y]}
-        - room[:save_points].each do |save_point|
-          %save-point
-            %position{x: save_point[:x], y: save_point[:y]}
-        - room[:merchants].each do |merchant|
-          %merchant{id: merchant[:id], money: merchant[:money]}
-            %position{x: merchant[:x], y: merchant[:y]}
-            - merchant[:items].each do |item|
-              %item{id: item[:id], type: item[:type]}
-        - room[:npcs].each do |npc|
-          %npc{id: npc[:id], name: npc[:name], saying: npc[:saying]}
-            %position{x: npc[:x], y: npc[:y]}
+%world
+  - levels.each do |level|
+    %level{id: level[:id]}
+      - level[:rooms].each do |room|
+        %room{id: room[:id]}
+          - room[:tiles].each do |tile|
+            %tile{blocking: tile[:blocking] ? "true" : "false"}
+              %position{x: tile[:x], y: tile[:y]}
+          - room[:enemies].each do |enemy|
+            %enemy{id: enemy[:id], hitPoints: enemy[:hp], speed: enemy[:speed], moveStrategy: enemy[:move_strategy], onDeath: enemy[:on_death], type: enemy[:type] }
+              %position{x: enemy[:x], y: enemy[:y]}
+          - room[:teleporters].each do |teleporter|
+            %teleporter{blocking: "false"}
+              %position{x: teleporter[:x], y: teleporter[:y]}
+              %target{roomId: teleporter[:target_id], x: teleporter[:target_x], y: teleporter[:target_y]}
+          - room[:save_points].each do |save_point|
+            %save-point
+              %position{x: save_point[:x], y: save_point[:y]}
+          - room[:merchants].each do |merchant|
+            %merchant{id: merchant[:id], money: merchant[:money]}
+              %position{x: merchant[:x], y: merchant[:y]}
+              - merchant[:items].each do |item|
+                %item{id: item[:id], type: item[:type]}
+          - room[:npcs].each do |npc|
+            %npc{id: npc[:id], name: npc[:name], saying: npc[:saying]}
+              %position{x: npc[:x], y: npc[:y]}
