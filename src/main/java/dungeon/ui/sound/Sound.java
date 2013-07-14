@@ -3,6 +3,7 @@ package dungeon.ui.sound;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 /**
  * A sound that can be played/looped.
@@ -26,9 +27,14 @@ class Sound {
     this.data = new byte[(int)this.size];
 
     audioStream.read(this.data, 0, (int)this.size);
+
+    audioStream.close();
+    fileStream.close();
   }
 
   public void play () {
+    Logger.getAnonymousLogger().info(this.format.toString());
+
     try {
       Clip clip = (Clip)AudioSystem.getLine(this.info);
       clip.open(this.format, this.data, 0, (int)this.size);
