@@ -4,6 +4,7 @@ import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
 import dungeon.models.Item;
+import dungeon.models.Player;
 import dungeon.client.Client;
 import dungeon.ui.messages.EquipWeaponCommand;
 import dungeon.ui.messages.ShowGame;
@@ -42,6 +43,8 @@ public class InventoryScreen extends JPanel implements MessageHandler {
     if (message == LifecycleEvent.INITIALIZE) {
       this.initialize();
     } else if (message instanceof ShowInventory) {
+      this.reset();
+    } else if (message instanceof Player.AddItemTransform || message instanceof Player.RemoveItemTransform) {
       this.reset();
     }
   }
