@@ -38,6 +38,10 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
   @XmlJavaTypeAdapter(ItemAdapter.class)
   public List<Item> items = new ArrayList<>();
 
+  @XmlElement(name = "quest")
+  @XmlJavaTypeAdapter(QuestAdapter.class)
+  public List<Quest> quests = new ArrayList<>();
+
   @XmlAttribute
   public String levelId;
 
@@ -61,7 +65,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
 
   @Override
   public Player unmarshal (PlayerAdapter adapter) throws Exception {
-    return new Player(adapter.id, adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.mana, adapter.maxMana, adapter.items, adapter.levelId, adapter.roomId, adapter.weaponId, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
+    return new Player(adapter.id, adapter.name, adapter.lives, adapter.hitPoints, adapter.maxHitPoints, adapter.money, adapter.mana, adapter.maxMana, adapter.items, adapter.quests, adapter.levelId, adapter.roomId, adapter.weaponId, adapter.position, Direction.valueOf(adapter.viewingDirection), adapter.savePointRoomId, adapter.savePointPosition);
   }
 
   @Override
@@ -76,6 +80,7 @@ public class PlayerAdapter extends XmlAdapter<PlayerAdapter, Player> {
     adapter.mana = player.getMana();
     adapter.maxMana = player.getMaxMana();
     adapter.items = player.getItems();
+    adapter.quests = player.getQuests();
     adapter.levelId = player.getLevelId();
     adapter.roomId = player.getRoomId();
     adapter.weaponId = player.getWeaponId();
