@@ -8,6 +8,8 @@ import java.io.Serializable;
 public class Quest implements Serializable {
   private final int id;
 
+  private final String name;
+
   private final String text;
 
   /**
@@ -15,14 +17,19 @@ public class Quest implements Serializable {
    */
   private final boolean done;
 
-  public Quest (int id, String text, boolean done) {
+  public Quest (int id, String name, String text, boolean done) {
     this.id = id;
+    this.name = name;
     this.text = text;
     this.done = done;
   }
 
   public int getId () {
     return id;
+  }
+
+  public String getName () {
+    return name;
   }
 
   public String getText () {

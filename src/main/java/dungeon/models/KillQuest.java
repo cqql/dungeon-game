@@ -8,8 +8,8 @@ import dungeon.game.Transaction;
 public class KillQuest extends Quest {
   private final String roomId;
 
-  public KillQuest (int id, String text, boolean done, String roomId) {
-    super(id, text, done);
+  public KillQuest (int id, String name, String text, boolean done, String roomId) {
+    super(id, name, text, done);
 
     this.roomId = roomId;
   }

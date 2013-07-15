@@ -10,6 +10,8 @@ public class QuestAdapter extends XmlAdapter<QuestAdapter, Quest> {
 
   public int id;
 
+  public String name;
+
   public String text;
 
   public boolean done;
@@ -19,7 +21,7 @@ public class QuestAdapter extends XmlAdapter<QuestAdapter, Quest> {
   @Override
   public Quest unmarshal (QuestAdapter adapter) throws Exception {
     if (adapter.type.equals("KILL_QUEST")) {
-      return new KillQuest(adapter.id, adapter.text, adapter.done, adapter.roomId);
+      return new KillQuest(adapter.id, adapter.name, adapter.text, adapter.done, adapter.roomId);
     }
 
     return null;
@@ -29,6 +31,7 @@ public class QuestAdapter extends XmlAdapter<QuestAdapter, Quest> {
   public QuestAdapter marshal (Quest quest) throws Exception {
     QuestAdapter adapter = new QuestAdapter();
     adapter.id = quest.getId();
+    adapter.name = quest.getName();
     adapter.text = quest.getText();
     adapter.done = quest.isDone();
 

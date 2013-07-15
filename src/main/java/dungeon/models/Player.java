@@ -147,6 +147,18 @@ public class Player implements Spatial, Identifiable, Serializable {
     return quests;
   }
 
+  public List<Quest> getOpenQuests () {
+    List<Quest> quests = new ArrayList<>();
+
+    for (Quest quest : this.quests) {
+      if (!quest.isDone()) {
+        quests.add(quest);
+      }
+    }
+
+    return quests;
+  }
+
   public boolean hasQuest (Quest quest) {
     for (Quest q : this.quests) {
       if (q.getId() == quest.getId()) {
