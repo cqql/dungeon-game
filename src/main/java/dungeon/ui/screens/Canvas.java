@@ -77,6 +77,10 @@ public class Canvas extends JPanel implements MessageHandler {
 
   private NPC dialogNpc;
 
+  private long questTimeout;
+
+  private Quest quest;
+
   /**
    * The unit to pixel conversion factors for the current room.
    */
@@ -101,6 +105,9 @@ public class Canvas extends JPanel implements MessageHandler {
       this.dialogNpc = ((TalkToNpc)message).getNpc();
     } else if (message instanceof ChatMessage) {
       this.chatMessages.addFirst((ChatMessage)message);
+    } else if (message instanceof Player.AddQuestTransform && ((Player.AddQuestTransform)message).getPlayerId() == this.client.getPlayerId()) {
+      this.quest = ((Player.AddQuestTransform)message).getQuest();
+      this.questTimeout = System.currentTimeMillis() + DIALOG_TIME;
     }
 
     repaint();
@@ -139,6 +146,7 @@ public class Canvas extends JPanel implements MessageHandler {
     this.drawWeaponIndicator(g, player);
     this.drawChat(g);
     this.drawDialog(g);
+    this.drawQuestAcquisition(g);
   }
 
   private void drawTiles (Graphics g, Room room) {
@@ -312,6 +320,23 @@ public class Canvas extends JPanel implements MessageHandler {
 
       g.setColor(Color.WHITE);
       g.drawString(this.dialogNpc.getSaying(), 20, 80);
+    }
+  }
+
+  private void drawQuestAcquisition (Graphics g) {
+    if (System.currentTimeMillis() < this.questTimeout) {
+      Rectangle bounds = g.getClipBounds();
+
+      g.setColor(Color.BLACK);
+      g.fillRect(10, bounds.height - 150, bounds.width - 20, 140);
+
+      g.setFont(this.font);
+
+      g.setColor(Color.YELLOW);
+      g.drawString(String.format("Neuer Quest: %s", this.quest.getName()), 20, bounds.height - 120);
+
+      g.setColor(Color.WHITE);
+      g.drawString(this.quest.getText(), 20, bounds.height - 80);
     }
   }
 

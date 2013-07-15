@@ -340,6 +340,10 @@ public class Player implements Spatial, Identifiable, Serializable {
       }
     }
 
+    public int getPlayerId () {
+      return playerId;
+    }
+
     protected int id (Player player) {
       return player.id;
     }
@@ -557,6 +561,10 @@ public class Player implements Spatial, Identifiable, Serializable {
       super(player);
 
       this.quest = quest;
+    }
+
+    public Quest getQuest () {
+      return quest;
     }
 
     @Override
