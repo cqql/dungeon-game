@@ -575,6 +575,31 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
+  public static class SolveQuestTransform extends PlayerTransform {
+    private final Quest quest;
+
+    public SolveQuestTransform (Player player, Quest quest) {
+      super(player);
+
+      this.quest = quest;
+    }
+
+    @Override
+    protected List<Quest> quests (Player player) {
+      List<Quest> quests = new ArrayList<>();
+
+      for (Quest quest : player.quests) {
+        if (quest.getId() == quest.getId()) {
+          quests.add(quest.apply(new Quest.SolveTransform(quest.getId())));
+        } else {
+          quests.add(quest);
+        }
+      }
+
+      return quests;
+    }
+  }
+
   public static class ManaTransform extends PlayerTransform {
     private final int delta;
 

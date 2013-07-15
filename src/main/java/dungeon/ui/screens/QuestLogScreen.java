@@ -54,7 +54,7 @@ public class QuestLogScreen extends JPanel implements MessageHandler {
   @Override
   public void handleMessage (Message message) {
     if (message instanceof ShowQuestLog) {
-      this.questList.setItems(this.client.getPlayer().getQuests());
+      this.questList.setItems(this.client.getPlayer().getOpenQuests());
     }
   }
 }

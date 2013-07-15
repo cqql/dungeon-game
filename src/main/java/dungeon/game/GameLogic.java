@@ -258,6 +258,7 @@ public class GameLogic {
     this.handleInteractionWithNpcs(transaction);
     this.joinPlayers(transaction);
     this.removePlayers(transaction);
+    this.handleQuests(transaction);
 
     this.world = transaction.getWorld();
 
@@ -755,6 +756,17 @@ public class GameLogic {
     }
 
     this.leavingPlayerIds.clear();
+  }
+
+  private void handleQuests (Transaction transaction) {
+    for (Player player : this.world.getPlayers()) {
+      for (Quest quest : player.getOpenQuests()) {
+        if (quest.isSolved(transaction.getWorld())) {
+          transaction.pushAndCommit(new Player.SolveQuestTransform(player, quest));
+          quest.giveReward(transaction, player);
+        }
+      }
+    }
   }
 
   private PlayerState getPlayerState (int playerId) {

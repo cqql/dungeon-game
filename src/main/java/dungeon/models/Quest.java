@@ -55,6 +55,22 @@ public class Quest implements Serializable {
   }
 
   public Quest apply (Transform transform) {
-    return this;
+    if (transform instanceof SolveTransform && this.id == ((SolveTransform)transform).id) {
+      return new Quest(this.id, this.name, this.text, true);
+    } else {
+      return this;
+    }
+  }
+
+  public static class SolveTransform implements Transform {
+    private final int id;
+
+    public SolveTransform (int id) {
+      this.id = id;
+    }
+
+    public int getId () {
+      return id;
+    }
   }
 }
