@@ -147,6 +147,16 @@ public class Player implements Spatial, Identifiable, Serializable {
     return quests;
   }
 
+  public boolean hasQuest (Quest quest) {
+    for (Quest q : this.quests) {
+      if (q.getId() == quest.getId()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public String getLevelId () {
     return this.levelId;
   }
@@ -525,6 +535,23 @@ public class Player implements Spatial, Identifiable, Serializable {
       List<Item> items = new ArrayList<>(player.items);
       items.add(this.item);
       return items;
+    }
+  }
+
+  public static class AddQuestTransform extends PlayerTransform {
+    private final Quest quest;
+
+    public AddQuestTransform (Player player, Quest quest) {
+      super(player);
+
+      this.quest = quest;
+    }
+
+    @Override
+    protected List<Quest> quests (Player player) {
+      List<Quest> quests = new ArrayList<>(player.quests);
+      quests.add(this.quest);
+      return quests;
     }
   }
 

@@ -711,6 +711,11 @@ public class GameLogic {
 
         if (distance < (NPC.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
           transaction.pushAndCommit(new TalkToNpc(player, npc));
+          Quest quest = npc.getQuest();
+
+          if (quest != null && !player.hasQuest(quest)) {
+            transaction.pushAndCommit(new Player.AddQuestTransform(player, quest));
+          }
           break;
         }
       }
