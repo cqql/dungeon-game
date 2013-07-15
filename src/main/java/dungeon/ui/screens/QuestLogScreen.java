@@ -24,7 +24,7 @@ public class QuestLogScreen extends JPanel implements MessageHandler {
   private final JButton backButton = new JButton("Zurück");
 
   public QuestLogScreen (Client client) {
-    super(new GridLayout(1, 3));
+    super(new GridLayout(3, 1));
 
     this.client = client;
 
@@ -54,7 +54,7 @@ public class QuestLogScreen extends JPanel implements MessageHandler {
   @Override
   public void handleMessage (Message message) {
     if (message instanceof ShowQuestLog) {
-      this.questList.setItems(this.client.getPlayer().getOpenQuests());
+      this.questList.setItems(this.client.getPlayer().getQuests());
     }
   }
 }

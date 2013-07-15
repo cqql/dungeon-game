@@ -3,24 +3,31 @@ package dungeon.load.adapters;
 import dungeon.models.KillQuest;
 import dungeon.models.Quest;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class QuestAdapter extends XmlAdapter<QuestAdapter, Quest> {
+  @XmlAttribute
   public String type;
 
+  @XmlAttribute
   public int id;
 
+  @XmlAttribute
   public String name;
 
+  @XmlAttribute
   public String text;
 
+  @XmlAttribute
   public boolean done;
 
+  @XmlAttribute
   public String roomId;
 
   @Override
   public Quest unmarshal (QuestAdapter adapter) throws Exception {
-    if (adapter.type.equals("KILL_QUEST")) {
+    if ("KILL_QUEST".equals(adapter.type)) {
       return new KillQuest(adapter.id, adapter.name, adapter.text, adapter.done, adapter.roomId);
     }
 

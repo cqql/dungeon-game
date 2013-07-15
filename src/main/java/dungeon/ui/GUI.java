@@ -52,6 +52,7 @@ public class GUI {
     this.mailman.addMailbox(new SwingMailbox(this.inventoryScreen));
     this.mailman.addMailbox(new SwingMailbox(this.shopScreen));
     this.mailman.addMailbox(new SwingMailbox(this.lobbyScreen));
+    this.mailman.addMailbox(new SwingMailbox(this.questLogScreen));
     this.mailman.addHandler(this.soundListener);
   }
 

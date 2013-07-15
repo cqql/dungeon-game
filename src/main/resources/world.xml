@@ -1235,8 +1235,9 @@
         <position x='19000' y='19000'></position>
         <target roomId='room-2' x='0' y='0'></target>
       </teleporter>
-      <npc id='111' name='Wächter' saying='Willkommen im alten Schloss'>
+      <npc id='111' name='Wächter' saying='Willkommen im alten Schloss\n\njklwjlwer'>
         <position x='3000' y='0'></position>
+        <quest id="12452" type="KILL_QUEST" name="Die Befreiung" text="Txte\nSie\nAlle\n!" done="false" roomId="room-1"></quest>
       </npc>
     </room>
     <room id='room-2'>
