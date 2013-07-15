@@ -26,10 +26,10 @@ public class QuestList extends JList<Quest> {
   }
 
   public void setItems (List<Quest> quests) {
+    this.listModel.clear();
+
     for (Quest quest : quests) {
-      if (!this.listModel.contains(quest)) {
-        this.listModel.addElement(quest);
-      }
+      this.listModel.addElement(quest);
     }
   }
 }

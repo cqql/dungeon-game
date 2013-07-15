@@ -9,10 +9,7 @@ import dungeon.game.messages.WinEvent;
 import dungeon.messages.LifecycleEvent;
 import dungeon.messages.Message;
 import dungeon.messages.MessageHandler;
-import dungeon.ui.messages.MenuCommand;
-import dungeon.ui.messages.ShowGame;
-import dungeon.ui.messages.ShowInventory;
-import dungeon.ui.messages.ShowLobby;
+import dungeon.ui.messages.*;
 import dungeon.ui.screens.*;
 
 import javax.swing.*;
@@ -41,13 +38,15 @@ public class UiManager extends JPanel implements MessageHandler {
 
   private static final String LOBBY_SCREEN = "LOBBY_SCREEN";
 
+  private static final String QUEST_LOG_SCREEN = "QUEST_LOG_SCREEN";
+
   private final Client client;
 
   private final Map<String, JPanel> screens = new LinkedHashMap<>();
 
   private final CardLayout layout;
 
-  public UiManager (Client client, Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen, LobbyScreen lobbyScreen) {
+  public UiManager (Client client, Canvas canvas, StartMenu startMenu, WinScreen winScreen, DefeatScreen defeatScreen, InventoryScreen inventoryScreen, ShopScreen shopScreen, LobbyScreen lobbyScreen, QuestLogScreen questLogScreen) {
     super(new CardLayout());
 
     this.client = client;
@@ -61,6 +60,7 @@ public class UiManager extends JPanel implements MessageHandler {
     this.screens.put(INVENTORY_SCREEN, inventoryScreen);
     this.screens.put(SHOP_SCREEN, shopScreen);
     this.screens.put(LOBBY_SCREEN, lobbyScreen);
+    this.screens.put(QUEST_LOG_SCREEN, questLogScreen);
   }
 
   @Override
@@ -85,6 +85,8 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(START_MENU);
     } else if (message instanceof ShowLobby && ((ShowLobby)message).getPlayerId() == this.client.getPlayerId()) {
       this.showScreen(LOBBY_SCREEN);
+    } else if (message instanceof ShowQuestLog) {
+      this.showScreen(QUEST_LOG_SCREEN);
     }
   }
 

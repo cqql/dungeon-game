@@ -1,8 +1,11 @@
 package dungeon.ui.screens;
 
 import dungeon.client.Client;
+import dungeon.messages.Message;
+import dungeon.messages.MessageHandler;
 import dungeon.models.Quest;
 import dungeon.ui.messages.ShowGame;
+import dungeon.ui.messages.ShowQuestLog;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,7 +14,7 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 
-public class QuestLogScreen extends JPanel {
+public class QuestLogScreen extends JPanel implements MessageHandler {
   private final Client client;
 
   private final QuestList questList = new QuestList();
@@ -31,8 +34,6 @@ public class QuestLogScreen extends JPanel {
     this.add(this.questText);
     this.add(this.backButton);
 
-    this.questList.setItems(this.client.getPlayer().getOpenQuests());
-
     this.backButton.addMouseListener(new MouseInputAdapter() {
       @Override
       public void mouseClicked (MouseEvent e) {
@@ -48,5 +49,12 @@ public class QuestLogScreen extends JPanel {
         QuestLogScreen.this.questText.setText(quest.getText());
       }
     });
+  }
+
+  @Override
+  public void handleMessage (Message message) {
+    if (message instanceof ShowQuestLog) {
+      this.questList.setItems(this.client.getPlayer().getOpenQuests());
+    }
   }
 }
