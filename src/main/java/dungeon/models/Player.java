@@ -584,6 +584,10 @@ public class Player implements Spatial, Identifiable, Serializable {
       this.quest = quest;
     }
 
+    public Quest getQuest () {
+      return quest;
+    }
+
     @Override
     protected List<Quest> quests (Player player) {
       List<Quest> quests = new ArrayList<>();
