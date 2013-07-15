@@ -4,6 +4,7 @@ import dungeon.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -29,6 +30,7 @@ public class PlayerTest {
         new Item(1, ItemType.HEALTH_POTION),
         new Item(2, ItemType.HEALTH_POTION)
       ),
+      new ArrayList<Quest>(),
       "level",
       ROOM_ID,
       1,

@@ -258,6 +258,7 @@ public class GameLogic {
     this.handleInteractionWithNpcs(transaction);
     this.joinPlayers(transaction);
     this.removePlayers(transaction);
+    this.handleQuests(transaction);
 
     this.world = transaction.getWorld();
 
@@ -711,6 +712,11 @@ public class GameLogic {
 
         if (distance < (NPC.SIZE + Player.SIZE) * Math.sqrt(2) / 2) {
           transaction.pushAndCommit(new TalkToNpc(player, npc));
+          Quest quest = npc.getQuest();
+
+          if (quest != null && !player.hasQuest(quest)) {
+            transaction.pushAndCommit(new Player.AddQuestTransform(player, quest));
+          }
           break;
         }
       }
@@ -750,6 +756,17 @@ public class GameLogic {
     }
 
     this.leavingPlayerIds.clear();
+  }
+
+  private void handleQuests (Transaction transaction) {
+    for (Player player : this.world.getPlayers()) {
+      for (Quest quest : player.getOpenQuests()) {
+        if (quest.isSolved(transaction.getWorld())) {
+          transaction.pushAndCommit(new Player.SolveQuestTransform(player, quest));
+          quest.giveReward(transaction, player);
+        }
+      }
+    }
   }
 
   private PlayerState getPlayerState (int playerId) {

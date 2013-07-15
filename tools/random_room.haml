@@ -271,8 +271,8 @@
     room
   end
 
-  def npc room, x, y, name, saying
-    room[:npcs] << { id: next_id(), x: x * 1000, y: y * 1000, name: name, saying: saying}
+  def npc room, x, y, name, saying, quest
+    room[:npcs] << { id: next_id(), x: x * 1000, y: y * 1000, name: name, saying: saying, quest: quest}
 
     room
   end
@@ -287,7 +287,7 @@
     {
       id: "level-1",
       rooms: [
-        npc(teleporter(room("room-1", string_to_map(room1)), 19, 19, "room-2", 0, 0), 3, 0, "Wächter", "Willkommen im alten Schloss"),
+        npc(teleporter(room("room-1", string_to_map(room1)), 19, 19, "room-2", 0, 0), 3, 0, "Wächter", "Willkommen im alten Schloss. Wo ihr schonmal hier seid, könnt ihr auch gleich mal aufräumen.", { id: next_id(), type: "KILL_QUEST", name: "Aufräumen", text: "Verscheuche alle Quälgeister in diesem Zimmer.", room_id: "room-1" }),
         merchant(teleporter(room("room-2", string_to_map(room2)), 19, 19, "room-3", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "HEALTH_POTION"}]),
         boss(room("room-3", string_to_map(room3)), 15, 7, 30, 1500, "level-2#room-4")
       ]
@@ -295,7 +295,7 @@
     {
       id: "level-2",
       rooms: [
-        npc(teleporter(room("room-4", string_to_map(room4)), 19, 19, "room-5", 0, 0), 3, 0, "Wächter", "Oh, du hast es ja sogar bis in den zweiten Stock geschafft"),
+        npc(teleporter(room("room-4", string_to_map(room4)), 19, 19, "room-5", 0, 0), 3, 0, "Wächter", "Oh, du hast es ja sogar bis in den zweiten Stock geschafft", { id: next_id(), type: "KILL_QUEST", name: "Aufräumen", text: "Verscheuche alle Quälgeister in diesem Zimmer.", room_id: "room-4" }),
         merchant(teleporter(room("room-5", string_to_map(room5)), 19, 19, "room-6", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "WEAK_BOW"}]),
         boss(room("room-6", string_to_map(room6)), 15, 7, 50, 1500, "level-3#room-7")
       ]
@@ -303,7 +303,7 @@
     {
       id: "level-3",
       rooms: [
-        npc(teleporter(room("room-7", string_to_map(room7)), 19, 19, "room-8", 0, 0), 3, 0, "Wächter", "Man sagt, dass im hintersten Zimmer ein Geist den Schlüssel zu großen Ruhm bewacht"),
+        npc(teleporter(room("room-7", string_to_map(room7)), 19, 19, "room-8", 0, 0), 3, 0, "Wächter", "Man sagt, dass im hintersten Zimmer ein Geist den Schlüssel zu großen Ruhm bewacht", { id: next_id(), type: "KILL_QUEST", name: "Aufräumen", text: "Verscheuche alle Quälgeister im nächsten Zimmer.", room_id: "room-8" }),
         merchant(teleporter(room("room-8", string_to_map(room8)), 19, 19, "room-9", 0, 0), 16, 19, 10, [{id: next_id(), type: "HEALTH_POTION"}, {id: next_id(), type: "STRONG_BOW"}]),
         boss(room("room-9", string_to_map(room9)), 15, 7, 80, 1500, "VICTORY")
       ]
@@ -336,3 +336,4 @@
           - room[:npcs].each do |npc|
             %npc{id: npc[:id], name: npc[:name], saying: npc[:saying]}
               %position{x: npc[:x], y: npc[:y]}
+              %quest{id: npc[:quest][:id], type: npc[:quest][:type], name: npc[:quest][:name], text: npc[:quest][:text], done: "false", roomId: npc[:quest][:room_id]}

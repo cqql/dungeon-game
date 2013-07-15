@@ -42,6 +42,8 @@ public class InputToMessageConverter implements KeyListener {
       this.sendChatMessage();
     } else if (keyEvent.getKeyChar() == 'g') {
       this.quitGame();
+    } else if (keyEvent.getKeyChar() == 'u') {
+      this.client.send(new ShowQuestLog(this.client.getPlayerId()));
     } else {
       Command command = this.commandForKey(keyEvent.getKeyChar());
 

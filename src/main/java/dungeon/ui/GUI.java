@@ -30,9 +30,11 @@ public class GUI {
 
   private final LobbyScreen lobbyScreen = new LobbyScreen(this.client);
 
+  private final QuestLogScreen questLogScreen = new QuestLogScreen(this.client);
+
   private final InputToMessageConverter converter = new InputToMessageConverter(this.client, this.canvas);
 
-  private final UiManager uiManager = new UiManager(this.client, this.canvas, this.startMenu, this.winScreen, this.defeatScreen, this.inventoryScreen, this.shopScreen, this.lobbyScreen);
+  private final UiManager uiManager = new UiManager(this.client, this.canvas, this.startMenu, this.winScreen, this.defeatScreen, this.inventoryScreen, this.shopScreen, this.lobbyScreen, this.questLogScreen);
 
   private final MainFrame mainFrame = new MainFrame(this.client, this.uiManager);
 
@@ -50,6 +52,7 @@ public class GUI {
     this.mailman.addMailbox(new SwingMailbox(this.inventoryScreen));
     this.mailman.addMailbox(new SwingMailbox(this.shopScreen));
     this.mailman.addMailbox(new SwingMailbox(this.lobbyScreen));
+    this.mailman.addMailbox(new SwingMailbox(this.questLogScreen));
     this.mailman.addHandler(this.soundListener);
   }
 

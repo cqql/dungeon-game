@@ -37,6 +37,11 @@ public class Player implements Spatial, Identifiable, Serializable {
   private final List<Item> items;
 
   /**
+   * The active and resolved quests, that the player has taken on.
+   */
+  private final List<Quest> quests;
+
+  /**
    * Which level is the player currently in?
    */
   private final String levelId;
@@ -75,7 +80,7 @@ public class Player implements Spatial, Identifiable, Serializable {
    */
   private final Position savePointPosition;
 
-  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, int mana, int maxMana, List<Item> items, String levelId, String roomId, int weaponId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
+  public Player (int id, String name, int lives, int hitPoints, int maxHitPoints, int money, int mana, int maxMana, List<Item> items, List<Quest> quests, String levelId, String roomId, int weaponId, Position position, Direction viewingDirection, String savePointRoomId, Position savePointPosition) {
     this.id = id;
     this.name = name;
     this.lives = lives;
@@ -84,6 +89,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     this.money = money;
     this.mana = mana;
     this.maxMana = maxMana;
+    this.quests = quests;
     this.items = Collections.unmodifiableList(new ArrayList<>(items));
     this.levelId = levelId;
     this.roomId = roomId;
@@ -98,7 +104,7 @@ public class Player implements Spatial, Identifiable, Serializable {
    * Creates a new level 1 player with default values.
    */
   public Player (int id, String name) {
-    this(id, name, 3, 5, 5, 0, 10, 10, new ArrayList<Item>(), "level-1", "room-1", 0, new Position(0, 0), Direction.RIGHT, "room-1", new Position(0, 0));
+    this(id, name, 3, 5, 5, 0, 10, 10, new ArrayList<Item>(), new ArrayList<Quest>(), "level-1", "room-1", 0, new Position(0, 0), Direction.RIGHT, "room-1", new Position(0, 0));
   }
 
   public int getId () {
@@ -135,6 +141,32 @@ public class Player implements Spatial, Identifiable, Serializable {
 
   public List<Item> getItems () {
     return this.items;
+  }
+
+  public List<Quest> getQuests () {
+    return this.quests;
+  }
+
+  public List<Quest> getOpenQuests () {
+    List<Quest> quests = new ArrayList<>();
+
+    for (Quest quest : this.quests) {
+      if (!quest.isDone()) {
+        quests.add(quest);
+      }
+    }
+
+    return quests;
+  }
+
+  public boolean hasQuest (Quest quest) {
+    for (Quest q : this.quests) {
+      if (q.getId() == quest.getId()) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public String getLevelId () {
@@ -294,6 +326,7 @@ public class Player implements Spatial, Identifiable, Serializable {
           this.mana(player),
           this.maxMana(player),
           this.items(player),
+          this.quests(player),
           this.levelId(player),
           this.roomId(player),
           this.weaponId(player),
@@ -305,6 +338,10 @@ public class Player implements Spatial, Identifiable, Serializable {
       } else {
         return player;
       }
+    }
+
+    public int getPlayerId () {
+      return this.playerId;
     }
 
     protected int id (Player player) {
@@ -341,6 +378,10 @@ public class Player implements Spatial, Identifiable, Serializable {
 
     protected List<Item> items (Player player) {
       return player.items;
+    }
+
+    protected List<Quest> quests (Player player) {
+      return player.quests;
     }
 
     protected String levelId (Player player) {
@@ -399,6 +440,21 @@ public class Player implements Spatial, Identifiable, Serializable {
     @Override
     protected int hitPoints (Player player) {
       return Math.max(Math.min(player.hitPoints + this.delta, player.maxHitPoints), 0);
+    }
+  }
+
+  public static class MaxHitPointTransform extends PlayerTransform {
+    private final int delta;
+
+    public MaxHitPointTransform (Player player, int delta) {
+      super(player);
+
+      this.delta = delta;
+    }
+
+    @Override
+    protected int maxHitPoints (Player player) {
+      return Math.max(0, player.maxHitPoints + this.delta);
     }
   }
 
@@ -498,6 +554,56 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
+  public static class AddQuestTransform extends PlayerTransform {
+    private final Quest quest;
+
+    public AddQuestTransform (Player player, Quest quest) {
+      super(player);
+
+      this.quest = quest;
+    }
+
+    public Quest getQuest () {
+      return this.quest;
+    }
+
+    @Override
+    protected List<Quest> quests (Player player) {
+      List<Quest> quests = new ArrayList<>(player.quests);
+      quests.add(this.quest);
+      return quests;
+    }
+  }
+
+  public static class SolveQuestTransform extends PlayerTransform {
+    private final Quest quest;
+
+    public SolveQuestTransform (Player player, Quest quest) {
+      super(player);
+
+      this.quest = quest;
+    }
+
+    public Quest getQuest () {
+      return this.quest;
+    }
+
+    @Override
+    protected List<Quest> quests (Player player) {
+      List<Quest> quests = new ArrayList<>();
+
+      for (Quest quest : player.quests) {
+        if (quest.getId() == quest.getId()) {
+          quests.add(quest.apply(new Quest.SolveTransform(quest.getId())));
+        } else {
+          quests.add(quest);
+        }
+      }
+
+      return quests;
+    }
+  }
+
   public static class ManaTransform extends PlayerTransform {
     private final int delta;
 
@@ -510,6 +616,21 @@ public class Player implements Spatial, Identifiable, Serializable {
     @Override
     protected int mana (Player player) {
       return Math.max(Math.min(player.mana + this.delta, player.maxMana), 0);
+    }
+  }
+
+  public static class MaxManaTransform extends PlayerTransform {
+    private final int delta;
+
+    public MaxManaTransform (Player player, int delta) {
+      super(player);
+
+      this.delta = delta;
+    }
+
+    @Override
+    protected int maxMana (Player player) {
+      return Math.max(0, player.maxMana + this.delta);
     }
   }
 
