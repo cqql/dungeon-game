@@ -402,6 +402,21 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
   }
 
+  public static class MaxHitPointTransform extends PlayerTransform {
+    private final int delta;
+
+    public MaxHitPointTransform (Player player, int delta) {
+      super(player);
+
+      this.delta = delta;
+    }
+
+    @Override
+    protected int maxHitPoints (Player player) {
+      return Math.max(0, player.maxHitPoints + this.delta);
+    }
+  }
+
   public static class LivesTransform extends PlayerTransform {
     private final int delta;
 
@@ -510,6 +525,21 @@ public class Player implements Spatial, Identifiable, Serializable {
     @Override
     protected int mana (Player player) {
       return Math.max(Math.min(player.mana + this.delta, player.maxMana), 0);
+    }
+  }
+
+  public static class MaxManaTransform extends PlayerTransform {
+    private final int delta;
+
+    public MaxManaTransform (Player player, int delta) {
+      super(player);
+
+      this.delta = delta;
+    }
+
+    @Override
+    protected int maxMana (Player player) {
+      return Math.max(0, player.maxMana + this.delta);
     }
   }
 
