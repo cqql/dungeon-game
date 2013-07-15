@@ -144,7 +144,7 @@ public class Player implements Spatial, Identifiable, Serializable {
   }
 
   public List<Quest> getQuests () {
-    return quests;
+    return this.quests;
   }
 
   public List<Quest> getOpenQuests () {
@@ -341,7 +341,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
 
     public int getPlayerId () {
-      return playerId;
+      return this.playerId;
     }
 
     protected int id (Player player) {
@@ -564,7 +564,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
 
     public Quest getQuest () {
-      return quest;
+      return this.quest;
     }
 
     @Override
@@ -585,7 +585,7 @@ public class Player implements Spatial, Identifiable, Serializable {
     }
 
     public Quest getQuest () {
-      return quest;
+      return this.quest;
     }
 
     @Override

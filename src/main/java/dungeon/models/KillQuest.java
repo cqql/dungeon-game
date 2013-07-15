@@ -16,7 +16,7 @@ public class KillQuest extends Quest {
   }
 
   public String getRoomId () {
-    return roomId;
+    return this.roomId;
   }
 
   @Override

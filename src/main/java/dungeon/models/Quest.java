@@ -25,19 +25,19 @@ public class Quest implements Serializable {
   }
 
   public int getId () {
-    return id;
+    return this.id;
   }
 
   public String getName () {
-    return name;
+    return this.name;
   }
 
   public String getText () {
-    return text;
+    return this.text;
   }
 
   public boolean isDone () {
-    return done;
+    return this.done;
   }
 
   /**
@@ -70,7 +70,7 @@ public class Quest implements Serializable {
     }
 
     public int getId () {
-      return id;
+      return this.id;
     }
   }
 }
