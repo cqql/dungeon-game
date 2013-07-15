@@ -333,4 +333,28 @@ public class Room implements Serializable {
       return enemies;
     }
   }
+
+  @Override
+  public boolean equals (Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Room room = (Room)o;
+
+    if (this.id != null ? !this.id.equals(room.id) : room.id != null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode () {
+    return this.id != null ? this.id.hashCode() : 0;
+  }
 }

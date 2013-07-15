@@ -67,8 +67,8 @@ public class World implements Serializable {
     return null;
   }
 
-  public List<Room> getCurrentRooms () {
-    List<Room> rooms = new ArrayList<>();
+  public Set<Room> getCurrentRooms () {
+    Set<Room> rooms = new HashSet<>();
 
     for (Player player : this.players) {
       rooms.add(this.getCurrentRoom(player));

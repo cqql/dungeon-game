@@ -270,10 +270,11 @@ public class Enemy implements Spatial, Identifiable, Serializable {
      */
     Player getClosestPlayer (Enemy enemy, List<Player> players) {
       Player closest = players.get(0);
-      double shortestDistance = closest.getPosition().getVector().minus(enemy.getPosition().getVector()).length();
+      Vector enemyPosition = enemy.getPosition().getVector();
+      double shortestDistance = closest.getPosition().getVector().minus(enemyPosition).length();
 
       for (Player player : players) {
-        double distance = player.getPosition().getVector().minus(enemy.getPosition().getVector()).length();
+        double distance = player.getPosition().getVector().minus(enemyPosition).length();
 
         if (distance < shortestDistance) {
           shortestDistance = distance;

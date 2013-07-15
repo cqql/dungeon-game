@@ -437,7 +437,7 @@ public class GameLogic {
    * Move the projectiles and collide it with walls and borders.
    */
   private void handleProjectiles (Transaction transaction, double delta) {
-    List<Room> rooms = transaction.getWorld().getCurrentRooms();
+    Set<Room> rooms = transaction.getWorld().getCurrentRooms();
 
     for (Room room : rooms) {
       for (Projectile projectile : room.getProjectiles()) {
