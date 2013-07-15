@@ -1,8 +1,11 @@
 package dungeon.ui.screens;
 
+import dungeon.game.messages.WinEvent;
 import dungeon.load.WorldLoader;
 import dungeon.messages.LifecycleEvent;
 import dungeon.client.Client;
+import dungeon.messages.Message;
+import dungeon.messages.MessageHandler;
 import dungeon.models.World;
 import dungeon.ui.messages.ShowLobby;
 
@@ -18,7 +21,7 @@ import java.util.logging.Logger;
 /**
  * The start menu that shows things like a start and quit button.
  */
-public class StartMenu extends JPanel {
+public class StartMenu extends JPanel implements MessageHandler {
   private static final Logger LOGGER = Logger.getLogger(StartMenu.class.getName());
 
   private final JTextField nameField = new JTextField("Link");
@@ -135,5 +138,12 @@ public class StartMenu extends JPanel {
         StartMenu.this.client.send(LifecycleEvent.SHUTDOWN);
       }
     });
+  }
+
+  @Override
+  public void handleMessage (Message message) {
+    if (message instanceof WinEvent) {
+      JOptionPane.showMessageDialog(this, "Du hast gewonnen");
+    }
   }
 }

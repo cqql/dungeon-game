@@ -73,8 +73,6 @@ public class UiManager extends JPanel implements MessageHandler {
       this.showScreen(START_MENU);
     } else if (message instanceof StartGame || (message instanceof ShowGame && ((ShowGame)message).getPlayerId() == this.client.getPlayerId())) {
       this.showScreen(CANVAS);
-    } else if (message instanceof WinEvent) {
-      this.showScreen(WIN_SCREEN);
     } else if (message instanceof DefeatEvent) {
       this.showScreen(DEFEAT_SCREEN);
     } else if (message instanceof ShowInventory) {
